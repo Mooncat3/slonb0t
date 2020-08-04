@@ -57,13 +57,13 @@ def main():
 
             if respon.find('+help') != -1:
                 buffer = username
-                mess(s, buffer + ", Привет, я бот по имени слон catJAM Можешь использовать следующие команды: +test, +me, +do [nickname], +iq, +temp, +love [nickname], +бубу [something], +steal [nickname], +привет [nickname], +try [something], +time, +когда [something] catJAM")
+                mess(s, buffer + ", Привет, я бот по имени слон catJAM Можешь использовать следующие команды: +test, +me, +do [nickname], +iq, +temp, +love [nickname], +бубу [something], +steal [nickname], +привет [nickname], +try [something], +time, +когда [something], +hug [nickname] catJAM")
                 buffer = ''
 
 
             if respon.find('@slonb0t') != -1:
                 buffer = username
-                mess(s, buffer + ", Привет, я бот по имени слон catJAM Можешь использовать следующие команды: +test, +me, +do [nickname], +iq, +temp, +love [nickname], +бубу [something], +steal [nickname], +привет [nickname], +try [something], +time, +когда [something] catJAM")
+                mess(s, buffer + ", Привет, я бот по имени слон catJAM Можешь использовать следующие команды: +test, +me, +do [nickname], +iq, +temp, +love [nickname], +бубу [something], +steal [nickname], +привет [nickname], +try [something], +time, +когда [something], +hug [nickname] catJAM")
                 buffer = ''
 
 
@@ -118,7 +118,7 @@ def main():
             if respon.find('+do') != -1:
                 buffer = username
                 if respon.find('http') != -1 or respon.find('www') != -1 or respon.find('!') != -1 or respon.find('\.') != -1 or respon.find('suicide') != -1:
-                    mess(s, "думал забанить меня? WeirdChamp ")
+                    mess(s, buffer + ", думал забанить меня? WeirdChamp ")
                 else:
                     with open('do.txt', 'r', encoding='utf-8') as c:
                         listme = list(c)
@@ -134,7 +134,7 @@ def main():
 
             if respon.find('+бубу') != -1:
                 if respon.find('http') != -1 or respon.find('www') != -1 or respon.find('!') != -1 or respon.find('\.') != -1 or respon.find('suicide') != -1:
-                    mess(s, "думал забанить меня? WeirdChamp ")
+                    mess(s, buffer + ", думал забанить меня? WeirdChamp ")
                 else:
                     bubu = str.replace(respon, '+бубу ', '')
                     bubu = re.sub("\n", '', bubu)
@@ -144,7 +144,7 @@ def main():
             if respon.find('+love ') != -1:
                 buffer = username
                 if respon.find('http') != -1 or respon.find('www') != -1 or respon.find('!') != -1 or respon.find('\.') != -1 or respon.find('suicide') != -1:
-                    mess(s, "думал забанить меня? WeirdChamp ")
+                    mess(s, buffer + ", думал забанить меня? WeirdChamp ")
                 else:
                     love = str.replace(respon, '+love ', '')
                     love = re.sub("\n", '', love)
@@ -155,7 +155,7 @@ def main():
             if respon.find('+steal ') != -1:
                 buffer = username
                 if respon.find('http') != -1 or respon.find('www') != -1 or respon.find('!') != -1 or respon.find('\.') != -1 or respon.find('suicide') != -1:
-                    mess(s, "думал забанить меня? WeirdChamp ")
+                    mess(s, buffer + ", думал забанить меня? WeirdChamp ")
                 else:
                     steal = str.replace(respon, '+steal ', '')
                     steal = re.sub("\n", '', steal)
@@ -166,7 +166,7 @@ def main():
             if respon.find('+try ') != -1:
                 buffer = username
                 if respon.find('http') != -1 or respon.find('www') != -1 or respon.find('!') != -1 or respon.find('\.') != -1 or respon.find('suicide') != -1:
-                    mess(s, "думал забанить меня? WeirdChamp ")
+                    mess(s, buffer + ", думал забанить меня? WeirdChamp ")
                 else:
                     tryy = str.replace(respon, '+try ', '')
                     tryy = re.sub("\n", '', tryy)
@@ -187,7 +187,7 @@ def main():
             if respon.find('+hug') != -1:
                 buffer = username
                 if respon.find('http') != -1 or respon.find('www') != -1 or respon.find('!') != -1 or respon.find('\.') != -1 or respon.find('suicide') != -1:
-                    mess(s, "думал забанить меня? WeirdChamp ")
+                    mess(s, buffer + ", думал забанить меня? WeirdChamp ")
                 else:
                     with open('hug.txt', 'r', encoding='utf-8') as j:
                         hugg = list(j)
@@ -195,7 +195,7 @@ def main():
                         randomhug = re.sub("\n", '', randomhug)
                         hug = str.replace(respon, '+hug ', '')
                         hug = re.sub("\n", '', hug)
-                        mess(s, buffer + " " + str(randomhug) + " обнимает " + str(hug) + " hehCat ")
+                        mess(s, buffer + " " + str(randomhug) + " обнимает " + str(hug) + " VoHiYo")
                 
                 
                 
@@ -228,7 +228,7 @@ def main():
             if respon.find('+привет') != -1:
                 buffer = username
                 if respon.find('http') != -1 or respon.find('www') != -1 or respon.find('!') != -1 or respon.find('\.') != -1 or respon.find('suicide') != -1:
-                    mess(s, "думал забанить меня? WeirdChamp ")
+                    mess(s, buffer + ", думал забанить меня? WeirdChamp ")
                 else:
                     with open('privet.txt', 'r', encoding='utf-8') as c:
                         privit = list(c)
