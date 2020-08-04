@@ -39,7 +39,7 @@ def main():
 
 
 
-            print(username+': '+ respon)
+            #print(username+': '+ respon)
 
 
 
@@ -91,11 +91,13 @@ def main():
 
 
             if respon.find('+me') != -1:
+                buffer = username
                 with open('me.txt', 'r', encoding='utf-8') as b:
                     listme = list(b)
                     randomm = random.choice(listme)
                     randomm = re.sub("\n", '', randomm)
-                mess(s, username + ' ' + randomm)
+                mess(s, buffer + ' ' + randomm)
+                buffer = ''
 
 
             if respon.find('+do') != -1:
