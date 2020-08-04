@@ -9,7 +9,6 @@ HOST = "irc.twitch.tv"
 PORT = 6667
 NICK = "SLONB0T"
 PASS = "oauth:1jfryqh0pt9e4uyvhvdl22hk2v9w7a"
-#PASS = "oauth:p4b8xlg6twwgs7izeooy57or9fxlza" #mooncat3
 CHAN = "jesusavgn"
 #CHAN = "mooncat3"
 
