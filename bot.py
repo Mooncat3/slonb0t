@@ -239,8 +239,9 @@ class VBot(SingleServerIRCBot):
                     privet = re.sub("\n", '', privet)
                     self.connection.privmsg(event.target, buffer + " передаёт " + randommm + " привет " + privet + " peepoHey peepoLove")
                     buffer = ''
-                    
+        time.sleep(1)           
         print(nick+': '+message)
+       
 
 
     @staticmethod
