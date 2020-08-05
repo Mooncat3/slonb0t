@@ -108,6 +108,7 @@ class VBot(SingleServerIRCBot):
             buffer = nick
             if message.find('.') != -1 or message.find('suicide') != -1:
                 self.connection.privmsg(event.target, buffer + ", думал забанить меня? WeirdChamp ")
+                buffer = ''
             else:
                 with open('do.txt', 'r', encoding='utf-8') as c:
                     listme = list(c)
@@ -176,6 +177,7 @@ class VBot(SingleServerIRCBot):
             buffer = nick
             if message.find('.') != -1 or message.find('suicide') != -1:
                 self.connection.privmsg(event.target, buffer + ", думал забанить меня? WeirdChamp ")
+                buffer = ''
             else:
                 with open('hug.txt', 'r', encoding='utf-8') as j:
                     hugg = list(j)
@@ -184,6 +186,7 @@ class VBot(SingleServerIRCBot):
                     hug = str.replace(message, '+обнять ', '')
                     hug = re.sub("\n", '', hug)
                     self.connection.privmsg(event.target, buffer + " " + randomhug + " обнимает " + hug + " VoHiYo")
+                    buffer = ''
                     
         if message.find('+COCK') != -1:
             buffer = nick
@@ -209,14 +212,18 @@ class VBot(SingleServerIRCBot):
             buffer = nick
             with open('kogda.txt', 'r', encoding='utf-8') as m:
                 listkogda = list(m)
+                koogda = str.replace(message, '+когда ', '')
+                koogda = re.sub("\n", '', koogda)
                 kogda = random.choice(listkogda)
                 kogda = re.sub("\n", '', kogda)
-            self.connection.privmsg(event.target, buffer + ", " + kogda)
+            self.connection.privmsg(event.target, buffer + ", " + koogda + kogda)
+            buffer = ''
 
         if message.find('+привет') != -1:
             buffer = nick
             if message.find('.') != -1 or message.find('suicide') != -1:
                 self.connection.privmsg(event.target, buffer + ", думал забанить меня? WeirdChamp ")
+                buffer = ''
             else:
                 with open('privet.txt', 'r', encoding='utf-8') as c:
                     privit = list(c)
@@ -225,6 +232,7 @@ class VBot(SingleServerIRCBot):
                     privet = str.replace(message, '+привет ', '')
                     privet = re.sub("\n", '', privet)
                     self.connection.privmsg(event.target, buffer + " передаёт " + randommm + " привет " + privet + " peepoHey peepoLove")
+                    buffer = ''
 
 
     @staticmethod
