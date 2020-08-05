@@ -37,12 +37,14 @@ class VBot(SingleServerIRCBot):
         cock = random.randrange(1, 36, 1)
 
 
-        if message.strip() == '+надежда':
+        if message.strip() == '+паста':
             with open('nadya.txt', 'r', encoding='utf-8') as n:
                     nadyaa = list(n)
                     randomnadya = random.choice(nadyaa)
                     randomnadya = re.sub("\n", '', randomnadya)
-                    hh = re.sub(r'^(.{253}).*$', '\g<1>...', randomnadya)
+                    hh = re.sub(r'^(.{250}).*$', '\g<1>...', randomnadya)
+                    self.connection.privmsg(event.target, hh)
+                    time.sleep(1)
                     self.connection.privmsg(event.target, hh)
 
         if message.strip() == '+help':
