@@ -37,7 +37,7 @@ class VBot(SingleServerIRCBot):
         ruble = random.randrange(0, 2000, 1)
         cock = random.randrange(1, 36, 1)
         
-        print(nick+': '+message)
+        #print(nick+': '+message)
 
 
         if message.strip() == '+паста':
