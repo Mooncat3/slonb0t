@@ -102,7 +102,7 @@ class VBot(SingleServerIRCBot):
                 with open('do.txt', 'r', encoding='utf-8') as c:
                     listme = list(c)
                     randomdo = random.choice(listme)
-                    #randomdo = re.sub("\n", '', randomdo)
+                    randomdo = re.sub("\n", '', randomdo)
                     do = str.replace(message, '+do ', '')
                     do = re.sub("\n", '', do)
                     self.connection.privmsg(event.target, buffer + str(randomdo))
