@@ -94,21 +94,6 @@ class VBot(SingleServerIRCBot):
             self.connection.privmsg(event.target, buffer + ' ' + randomm)
             buffer = ''
 
-        if message.find('+послать') != -1:
-            buffer = nick
-            if message.find('.') != -1 or message.find('suicide') != -1:
-                self.connection.privmsg(event.target, buffer + ", думал забанить меня? WeirdChamp ")
-            else:
-                listme = list("")
-                randomdo = random.choice(listme)
-                randomdo = re.sub("\n", '', randomdo)
-                # randomdo = message[message.index("+do") + len("+do") + 1:len(message)]
-                do = str.replace(message, '+do ', '')
-                do = re.sub("\n", '', do)
-                # self.connection.privmsg(event.target, buffer + randomdo)
-                self.connection.privmsg(event.target, buffer + " послал " + do + " нахуй EZ")
-                buffer = ''
-
         if message.find('+do') != -1:
             buffer = nick
             if message.find('.') != -1 or message.find('suicide') != -1:
