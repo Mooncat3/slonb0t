@@ -105,7 +105,7 @@ class VBot(SingleServerIRCBot):
                     #randomdo = re.sub("\n", '', randomdo)
                     do = str.replace(message, '+do ', '')
                     do = re.sub("\n", '', do)
-                    self.connection.privmsg(event.target, buffer + randomdo)
+                    self.connection.privmsg(event.target, buffer + str(randomdo))
                     #self.connection.privmsg(event.target, buffer + " посадил " + do + " на бутылку YEP")
                     buffer = ''
 
