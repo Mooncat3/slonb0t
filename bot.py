@@ -36,17 +36,21 @@ class VBot(SingleServerIRCBot):
         ruble = random.randrange(0, 2000, 1)
 
 
-        if message.find('+test') != -1:
-            self.connection.privmsg(event.target, 'и лыбится дурачок. чо ты лыбишься, урод? гавно своё на винтилятор кидает а дети патом бегают как бешеные по улице с белыми волосами ломают всё. из калонак всякое аоаоаоаоа доносица. вас запрещать законами надо, психи')
+        if message.find('+надежда') != -1:
+            with open('nadya.txt', 'r', encoding='utf-8') as n:
+                    nadyaa = list(n)
+                    randomnadya = random.choice(nadyaa)
+                    randomnadya = re.sub("\n", '', randomnadya)
+                    self.connection.privmsg(event.target, randomnadya)
 
         if message.find('+help') != -1:
             buffer = nick
-            self.connection.privmsg(event.target, buffer + ", Привет, я бот по имени слон catJAM Можешь использовать следующие команды: +test, +me, +do [nickname], +iq, +temp, +love [nickname], +бубу [something], +steal [nickname], +привет [nickname], +try [something], +time, +когда [something], +обнять [nickname] catJAM")
+            self.connection.privmsg(event.target, buffer + ", Привет, я бот по имени слон. Можешь использовать следующие команды (страница 1): +надежда, +me, +do [nickname], +iq, +temp, +love [nickname], +бубу [something], +steal [nickname] Чтобы перейти на следующую страницу введите +help1 catJAM")
             buffer = ''
-
-        if message.find('@slonb0t') != -1:
+            
+        if message.find('+help1') != -1:
             buffer = nick
-            self.connection.privmsg(event.target, buffer + ", Привет, я бот по имени слон catJAM Можешь использовать следующие команды: +test, +me, +do [nickname], +iq, +temp, +love [nickname], +бубу [something], +steal [nickname], +привет [nickname], +try [something], +time, +когда [something], +обнять [nickname] catJAM")
+            self.connection.privmsg(event.target, buffer + ", Привет, я бот по имени слон catJAM Можешь использовать следующие команды (страница 2): +привет [nickname], +try [something], +time, +когда [something], +обнять [nickname] catJAM")
             buffer = ''
 
         if message.find('+iq') != -1:
@@ -106,7 +110,7 @@ class VBot(SingleServerIRCBot):
                     do = str.replace(message, '+do ', '')
                     do = re.sub("\n", '', do)
                     self.connection.privmsg(event.target, "Пока что в разработке... HACKERMANS")
-                    self.connection.privmsg(event.target, buffer + randomdo)
+                    #self.connection.privmsg(event.target, buffer + randomdo)
                     #self.connection.privmsg(event.target, buffer + " посадил " + do + " на бутылку YEP")
                     buffer = ''
 
@@ -135,11 +139,11 @@ class VBot(SingleServerIRCBot):
             else:
                 steal = str.replace(message, '+steal ', '')
                 steal = re.sub("\n", '', steal)
-                if procent >= 33.3:
+                if procent >= 33:
                     self.connection.privmsg(event.target, buffer + " украл у " + str(steal) + " " + str(ruble) + " руб. BOP")
                     buffer = ''
                 else:
-                    self.connection.privmsg(event.target, buffer + " ничего не украл у " + str(steal) + " Lohich")
+                    self.connection.privmsg(event.target, buffer + " ничего не украл у " + str(steal) + " KeK Lohich")
                     buffer = ''
 
         if message.find('+try ') != -1:
