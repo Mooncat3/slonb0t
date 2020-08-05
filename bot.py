@@ -42,8 +42,8 @@ class VBot(SingleServerIRCBot):
                     nadyaa = list(n)
                     randomnadya = random.choice(nadyaa)
                     randomnadya = re.sub("\n", '', randomnadya)
-                    if len(randomnadya) > 256:
-                        randya = randomnadya[:256] + (randomnadya[256:] and '...')
+                    if len(randomnadya) > 255:
+                        randya = randomnadya[:255] + (randomnadya[255:] and '...')
                         self.connection.privmsg(event.target, randya)
                     else:
                         self.connection.privmsg(event.target, randomnadya)
@@ -194,6 +194,9 @@ class VBot(SingleServerIRCBot):
 
         if message.find('peepoLeave') != -1:
             self.connection.privmsg(event.target, "peepoLeave")
+            
+        if message.find('мав') != -1:
+            self.connection.privmsg(event.target, "мав")
 
         if message.find('catJAM') != -1:
             self.connection.privmsg(event.target, "catJAM")
