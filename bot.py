@@ -55,7 +55,7 @@ class VBot(SingleServerIRCBot):
             
         if message.find('+help1') != -1:
             buffer = nick
-            self.connection.privmsg(event.target, buffer + ", Привет, я бот по имени слон catJAM Можешь использовать следующие команды (страница 2): +привет [nickname], +try [something], +time, +когда [something], +обнять [nickname] catJAM")
+            self.connection.privmsg(event.target, buffer + ", Привет, я бот по имени слон catJAM Можешь использовать следующие команды (страница 2): +привет [nickname], +try [something], +time, +когда [something], +обнять [nickname], +COCK catJAM")
             buffer = ''
 
         if message.find('+iq') != -1:
