@@ -196,7 +196,7 @@ class VBot(SingleServerIRCBot):
             
         if message.find('+BOOBS') != -1:
             buffer = nick
-            self.connection.privmsg(event.target, buffer + ", твой размер BOOBS " + str(boobs) + " размер YEP")
+            self.connection.privmsg(event.target, buffer + ", твой BOOBS " + str(boobs) + " размера YEP")
             buffer = ''
         
         if message.find('blushW') != -1:
