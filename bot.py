@@ -42,7 +42,7 @@ class VBot(SingleServerIRCBot):
                     randomnadya = random.choice(nadyaa)
                     randomnadya = re.sub("\n", '', randomnadya)
                     if len(randomnadya) > 128:
-                        randya = data[:128] + (data[128:] and '..')
+                        randya = randomnadya[:128] + (randomnadya[128:] and '..')
                         self.connection.privmsg(event.target, randya)
                     else:
                         self.connection.privmsg(event.target, randomnadya)
