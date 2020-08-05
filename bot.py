@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from irc.bot import SingleServerIRCBot
 import re
 import random
@@ -9,7 +8,7 @@ HOST = 'irc.twitch.tv'
 PORT = 6667
 USERNAME = 'SLONB0T'
 PASSWORD = 'oauth:1jfryqh0pt9e4uyvhvdl22hk2v9w7a'
-CHANNEL = '#jesusavgn'
+CHANNEL = '#mooncat3'
 
 
 
@@ -36,22 +35,22 @@ class VBot(SingleServerIRCBot):
         procent = random.randrange(0, 100, 1)
         ruble = random.randrange(0, 2000, 1)
         cock = random.randrange(1, 36, 1)
+        
+        print(nick+': '+message)
 
 
         if message.strip() == '+паста':
-            with open('nadya.txt', 'r', encoding='unicode') as n:
+            with open('nadya.txt', 'r', encoding='utf-8') as n:
                     nadyaa = list(n)
                     randomnadya = random.choice(nadyaa)
                     randomnadya = re.sub("\n", '', randomnadya)
+                    hh = re.sub(r'^(.{230}).*$', '\g<1>...', randomnadya)
+                    self.connection.privmsg(event.target, hh)
 
-                    #hh = re.sub(r'^(.{250}).*$', '\g<1>...', randomnadya)
-                    self.connection.privmsg(event.target, randomnadya)
-                    #time.sleep(1)
-                    #self.connection.privmsg(event.target, randomnadya)
 
         if message.strip() == '+help':
             buffer = nick
-            self.connection.privmsg(event.target, buffer + ", Привет, я бот по имени слон. Можешь использовать следующие команды (страница 1): +надежда, +me, +do [nickname], +iq, +temp, +love [nickname], +бубу [something], +steal [nickname] Чтобы перейти на следующую страницу введите +help1 catJAM")
+            self.connection.privmsg(event.target, buffer + ", Привет, я бот по имени слон. Можешь использовать следующие команды (страница 1): +паста, +me, +do [nickname], +iq, +temp, +love [nickname], +бубу [something], +steal [nickname] Чтобы перейти на следующую страницу введите +help1 catJAM")
             buffer = ''
             
         if message.strip() == '+help1':
