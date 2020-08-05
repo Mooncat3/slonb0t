@@ -1,4 +1,3 @@
 irc.bot
-random
 datetime
 time
