@@ -102,12 +102,11 @@ class VBot(SingleServerIRCBot):
                 with open('do.txt', 'r', encoding='utf-8') as c:
                     listme = list(c)
                     randomdo = random.choice(listme)
-                    randomdo = re.sub("\n", '', randomdo)
-                    #randomdo = message[message.index("+do") + len("+do") + 1:len(message)]
+                    #randomdo = re.sub("\n", '', randomdo)
                     do = str.replace(message, '+do ', '')
                     do = re.sub("\n", '', do)
-                    #self.connection.privmsg(event.target, buffer + randomdo)
-                    self.connection.privmsg(event.target, buffer + " посадил " + do + " на бутылку YEP")
+                    self.connection.privmsg(event.target, buffer + randomdo)
+                    #self.connection.privmsg(event.target, buffer + " посадил " + do + " на бутылку YEP")
                     buffer = ''
 
         if message.find('+бубу') != -1:
