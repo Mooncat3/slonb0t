@@ -40,13 +40,13 @@ class VBot(SingleServerIRCBot):
         #print(nick+': '+message)
 
 
-        #if message.strip() == '+паста':
-            #with open('nadya.txt', 'r', encoding='utf-8') as n:
-                    #nadyaa = list(n)
-                    #randomnadya = random.choice(nadyaa)
-                    #randomnadya = re.sub("\n", '', randomnadya)
-                    #hh = re.sub(r'^(.{230}).*$', '\g<1>...', randomnadya)
-                    #self.connection.privmsg(event.target, hh)
+        if message.strip() == '+паста':
+            with open('nadya.txt', 'r', encoding='utf-8') as n:
+                    nadyaa = list(n)
+                    randomnadya = random.choice(nadyaa)
+                    randomnadya = re.sub("\n", '', randomnadya)
+                    hh = re.sub(r'^(.{230}).*$', '\g<1>...', randomnadya)
+                    self.connection.privmsg(event.target, hh)
 
 
         if message.strip() == '+help':
@@ -170,7 +170,7 @@ class VBot(SingleServerIRCBot):
         if message.find('+time') != -1:
             self.connection.privmsg(event.target, "Таксс... PepoG ")
             time.sleep(2)
-            tiime = time.strftime("%d.%m.%Y %T")
+            tiime = time.strftime("%d.%m.%Y %I:%M:%S")
             self.connection.privmsg(event.target, "Чичас " + str(tiime) + " По МСК Waiting")
 
         if message.find('+обнять') != -1:
@@ -238,7 +238,7 @@ class VBot(SingleServerIRCBot):
                     privet = re.sub("\n", '', privet)
                     self.connection.privmsg(event.target, buffer + " передаёт " + randommm + " привет " + privet + " peepoHey peepoLove")
                     buffer = ''
-        time.sleep(0.07)           
+        time.sleep(0.05)           
         print(nick+': '+message)
        
 
