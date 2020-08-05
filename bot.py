@@ -32,9 +32,6 @@ class VBot(SingleServerIRCBot):
         username = nick
 
 
-        print(nick  + ': ' + message)
-
-
         iq = random.randrange(50, 200, 1)
         tempp = random.uniform(25, 45)
         temp = round(tempp, 1)
