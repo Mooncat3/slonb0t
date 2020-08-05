@@ -42,6 +42,8 @@ class VBot(SingleServerIRCBot):
                     nadyaa = list(n)
                     randomnadya = random.choice(nadyaa)
                     randomnadya = re.sub("\n", '', randomnadya)
+                    randombytes = randomnadya.encode()
+                    print(str(randombytes))
                     hh = re.sub(r'^(.{250}).*$', '\g<1>...', randomnadya)
                     self.connection.privmsg(event.target, hh)
                     time.sleep(1)
