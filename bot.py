@@ -103,11 +103,11 @@ class VBot(SingleServerIRCBot):
                     listme = list(c)
                     randomdo = random.choice(listme)
                     randomdo = re.sub("\n", '', randomdo)
-                    #randomdo = message[message.index("+do") + len("+do") + 1:len(message)]
                     do = str.replace(message, '+do ', '')
                     do = re.sub("\n", '', do)
-                    #self.connection.privmsg(event.target, buffer + randomdo)
-                    self.connection.privmsg(event.target, buffer + " посадил " + do + " на бутылку YEP")
+                    self.connection.privmsg(event.target, "Пока что в разработке... HACKERMANS")
+                    self.connection.privmsg(event.target, buffer + randomdo)
+                    #self.connection.privmsg(event.target, buffer + " посадил " + do + " на бутылку YEP")
                     buffer = ''
 
         if message.find('+бубу') != -1:
@@ -133,15 +133,12 @@ class VBot(SingleServerIRCBot):
             if message.find('.') != -1 or message.find('suicide') != -1:
                 self.connection.privmsg(event.target, buffer + ", думал забанить меня? WeirdChamp ")
             else:
+                steal = str.replace(message, '+steal ', '')
+                steal = re.sub("\n", '', steal)
                 if procent >= 33.3:
-                    
-                    steal = str.replace(message, '+steal ', '')
-                    steal = re.sub("\n", '', steal)
                     self.connection.privmsg(event.target, buffer + " украл у " + str(steal) + " " + str(ruble) + " руб. BOP")
                     buffer = ''
                 else:
-                    steal = str.replace(message, '+steal ', '')
-                    steal = re.sub("\n", '', steal)
                     self.connection.privmsg(event.target, buffer + " ничего не украл у " + str(steal) + " Lohich")
                     buffer = ''
 
