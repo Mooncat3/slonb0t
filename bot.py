@@ -34,6 +34,7 @@ class VBot(SingleServerIRCBot):
         temp = round(tempp, 1)
         procent = random.randrange(0, 100, 1)
         ruble = random.randrange(0, 2000, 1)
+        cock = random.randrange(1, 36, 1)
 
 
         if message.find('+надежда') != -1:
@@ -41,8 +42,8 @@ class VBot(SingleServerIRCBot):
                     nadyaa = list(n)
                     randomnadya = random.choice(nadyaa)
                     randomnadya = re.sub("\n", '', randomnadya)
-                    if len(randomnadya) > 128:
-                        randya = randomnadya[:128] + (randomnadya[128:] and '..')
+                    if len(randomnadya) > 256:
+                        randya = randomnadya[:256] + (randomnadya[256:] and '...')
                         self.connection.privmsg(event.target, randya)
                     else:
                         self.connection.privmsg(event.target, randomnadya)
@@ -182,6 +183,11 @@ class VBot(SingleServerIRCBot):
                     hug = str.replace(message, '+обнять ', '')
                     hug = re.sub("\n", '', hug)
                     self.connection.privmsg(event.target, buffer + " " + randomhug + " обнимает " + hug + " VoHiYo")
+                    
+         if message.find('+COCK ') != -1:
+            buffer = nick
+            self.connection.privmsg(event.target, buffer + ", твой COCK равен " + str(cock) + "см! YEP")
+            buffer = ''
 
         if message.find('blushW') != -1:
             self.connection.privmsg(event.target, "blushW")
