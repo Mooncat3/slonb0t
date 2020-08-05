@@ -132,10 +132,17 @@ class VBot(SingleServerIRCBot):
             if message.find('.') != -1 or message.find('suicide') != -1:
                 self.connection.privmsg(event.target, buffer + ", думал забанить меня? WeirdChamp ")
             else:
-                steal = str.replace(message, '+steal ', '')
-                steal = re.sub("\n", '', steal)
-                self.connection.privmsg(event.target, buffer + " украл у " + str(steal) + " " + str(ruble) + " руб. BOP")
-                buffer = ''
+                if procent >= 33.3:
+                    
+                    steal = str.replace(message, '+steal ', '')
+                    steal = re.sub("\n", '', steal)
+                    self.connection.privmsg(event.target, buffer + " украл у " + str(steal) + " " + str(ruble) + " руб. BOP")
+                    buffer = ''
+                else:
+                    steal = str.replace(message, '+steal ', '')
+                    steal = re.sub("\n", '', steal)
+                    self.connection.privmsg(event.target, buffer + " ничего не украл у " + str(steal) + " Lohich")
+                    buffer = ''
 
         if message.find('+try ') != -1:
             buffer = nick
