@@ -37,7 +37,7 @@ class VBot(SingleServerIRCBot):
         cock = random.randrange(1, 36, 1)
 
 
-        if message.strip('+надежда') != -1:
+        if message.strip() == '+надежда':
             with open('nadya.txt', 'r', encoding='utf-8') as n:
                     nadyaa = list(n)
                     randomnadya = random.choice(nadyaa)
@@ -45,12 +45,12 @@ class VBot(SingleServerIRCBot):
                     hh = re.sub(r'^(.{253}).*$', '\g<1>...', randomnadya)
                     self.connection.privmsg(event.target, hh)
 
-        if message.strip('+help') != -1:
+        if message.strip() == '+help':
             buffer = nick
             self.connection.privmsg(event.target, buffer + ", Привет, я бот по имени слон. Можешь использовать следующие команды (страница 1): +надежда, +me, +do [nickname], +iq, +temp, +love [nickname], +бубу [something], +steal [nickname] Чтобы перейти на следующую страницу введите +help1 catJAM")
             buffer = ''
             
-        if message.strip('+help1') != -1:
+        if message.strip() == '+help1':
             buffer = nick
             self.connection.privmsg(event.target, buffer + ", Привет, я бот по имени слон catJAM Можешь использовать следующие команды (страница 2): +привет [nickname], +try [something], +time, +когда [something], +обнять [nickname], +COCK catJAM")
             buffer = ''
