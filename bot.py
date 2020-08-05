@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from irc.bot import SingleServerIRCBot
 import re
 import random
