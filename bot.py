@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from irc.bot import SingleServerIRCBot
 import re
 import random
@@ -8,7 +9,7 @@ HOST = 'irc.twitch.tv'
 PORT = 6667
 USERNAME = 'SLONB0T'
 PASSWORD = 'oauth:1jfryqh0pt9e4uyvhvdl22hk2v9w7a'
-CHANNEL = '#mooncat3'
+CHANNEL = '#jesusavgn'
 
 
 
@@ -45,8 +46,8 @@ class VBot(SingleServerIRCBot):
 
                     #hh = re.sub(r'^(.{250}).*$', '\g<1>...', randomnadya)
                     self.connection.privmsg(event.target, randomnadya)
-                    time.sleep(1)
-                    self.connection.privmsg(event.target, randomnadya)
+                    #time.sleep(1)
+                    #self.connection.privmsg(event.target, randomnadya)
 
         if message.strip() == '+help':
             buffer = nick
