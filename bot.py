@@ -9,7 +9,7 @@ HOST = 'irc.twitch.tv'
 PORT = 6667
 USERNAME = 'SLONB0T'
 PASSWORD = 'oauth:1jfryqh0pt9e4uyvhvdl22hk2v9w7a'
-CHANNEL = '#mooncat3'
+CHANNEL = '#jesusavgn'
 
 
 
@@ -41,13 +41,13 @@ class VBot(SingleServerIRCBot):
         #print(nick+': '+message)
 
 
-        if message.strip() == '+паста':
-            with open('nadya.txt', 'r', encoding='utf-8') as n:
-                    nadyaa = list(n)
-                    randomnadya = random.choice(nadyaa)
-                    randomnadya = re.sub("\n", '', randomnadya)
-                    hh = re.sub(r'^(.{230}).*$', '\g<1>...', randomnadya)
-                    self.connection.privmsg(event.target, hh)
+        #if message.strip() == '+паста':
+            #with open('nadya.txt', 'r', encoding='utf-8') as n:
+                    #nadyaa = list(n)
+                    #randomnadya = random.choice(nadyaa)
+                    #randomnadya = re.sub("\n", '', randomnadya)
+                    #hh = re.sub(r'^(.{230}).*$', '\g<1>...', randomnadya)
+                    #self.connection.privmsg(event.target, hh)
 
 
         if message.strip() == '+help':
