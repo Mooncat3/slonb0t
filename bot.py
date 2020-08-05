@@ -36,6 +36,7 @@ class VBot(SingleServerIRCBot):
         procent = random.randrange(0, 100, 1)
         ruble = random.randrange(0, 2000, 1)
         cock = random.randrange(1, 36, 1)
+        boobs = random.randrange(0, 6, 1)
         
         #print(nick+': '+message)
 
@@ -106,7 +107,7 @@ class VBot(SingleServerIRCBot):
 
         if message.find('+do') != -1:
             buffer = nick
-            if message.find('.') != -1 or message.find('suicide') != -1:
+            if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1:
                 self.connection.privmsg(event.target, buffer + ", думал забанить меня? WeirdChamp ")
                 buffer = ''
             else:
@@ -122,7 +123,7 @@ class VBot(SingleServerIRCBot):
                     buffer = ''
 
         if message.find('+бубу') != -1:
-            if message.find('.') != -1 or message.find('suicide') != -1:
+            if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1:
                 self.connection.privmsg(event.target, buffer + ", думал забанить меня? WeirdChamp ")
             else:
                 bubu = str.replace(message, '+бубу ', '')
@@ -131,7 +132,7 @@ class VBot(SingleServerIRCBot):
 
         if message.find('+love ') != -1:
             buffer = nick
-            if message.find('.') != -1 or message.find('suicide') != -1:
+            if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1:
                 self.connection.privmsg(event.target, buffer + ", думал забанить меня? WeirdChamp ")
             else:
                 love = str.replace(message, '+love ', '')
@@ -141,7 +142,7 @@ class VBot(SingleServerIRCBot):
 
         if message.find('+steal ') != -1:
             buffer = nick
-            if message.find('.') != -1 or message.find('suicide') != -1:
+            if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1:
                 self.connection.privmsg(event.target, buffer + ", думал забанить меня? WeirdChamp ")
             else:
                 steal = str.replace(message, '+steal ', '')
@@ -155,7 +156,7 @@ class VBot(SingleServerIRCBot):
 
         if message.find('+try ') != -1:
             buffer = nick
-            if message.find('.') != -1 or message.find('suicide') != -1:
+            if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1:
                 self.connection.privmsg(event.target, buffer + ", думал забанить меня? WeirdChamp ")
             else:
                 tryy = str.replace(message, '+try ', '')
@@ -175,7 +176,7 @@ class VBot(SingleServerIRCBot):
 
         if message.find('+обнять') != -1:
             buffer = nick
-            if message.find('.') != -1 or message.find('suicide') != -1:
+            if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1:
                 self.connection.privmsg(event.target, buffer + ", думал забанить меня? WeirdChamp ")
                 buffer = ''
             else:
@@ -191,6 +192,11 @@ class VBot(SingleServerIRCBot):
         if message.find('+COCK') != -1:
             buffer = nick
             self.connection.privmsg(event.target, buffer + ", твой COCK равен " + str(cock) + " см! YEP")
+            buffer = ''
+            
+        if message.find('+BOOBS') != -1:
+            buffer = nick
+            self.connection.privmsg(event.target, buffer + ", твой размер BOOBS " + str(boobs) + " YEP")
             buffer = ''
         
         if message.find('blushW') != -1:
@@ -216,12 +222,12 @@ class VBot(SingleServerIRCBot):
                 koogda = re.sub("\n", '', koogda)
                 kogda = random.choice(listkogda)
                 kogda = re.sub("\n", '', kogda)
-            self.connection.privmsg(event.target, buffer + ", " + koogda + kogda)
+            self.connection.privmsg(event.target, buffer + ", " + koogda + ' ' + kogda)
             buffer = ''
 
         if message.find('+привет') != -1:
             buffer = nick
-            if message.find('.') != -1 or message.find('suicide') != -1:
+            if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1:
                 self.connection.privmsg(event.target, buffer + ", думал забанить меня? WeirdChamp ")
                 buffer = ''
             else:
