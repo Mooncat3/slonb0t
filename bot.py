@@ -8,7 +8,7 @@ HOST = 'irc.twitch.tv'
 PORT = 6667
 USERNAME = 'SLONB0T'
 PASSWORD = 'oauth:1jfryqh0pt9e4uyvhvdl22hk2v9w7a'
-CHANNEL = '#mooncat3'
+CHANNEL = '#mooncat13'
 
 
 
@@ -28,6 +28,7 @@ class VBot(SingleServerIRCBot):
     def on_pubmsg(self, connection, event):
         nick = event.source.nick
         message = event.arguments[0]
+        s = event.target
 
         iq = random.randrange(55, 180, 1)
         tempp = random.uniform(25, 45)
@@ -51,21 +52,21 @@ class VBot(SingleServerIRCBot):
 
         if message.strip() == '+help':
             buffer = nick
-            self.connection.privmsg(event.target, buffer + ", Привет, я бот по имени слон. Можешь использовать следующие команды (страница 1): +паста, +me, +do [nickname], +iq, +temp, +love [nickname], +бубу [something], +steal [nickname] Чтобы перейти на следующую страницу введите +help1 catJAM")
+            self.connection.privmsg(s, buffer + ", Привет, я бот по имени слон. Можешь использовать следующие команды (страница 1): +паста, +me, +do [nickname], +iq, +temp, +love [nickname], +бубу [something], +steal [nickname] Чтобы перейти на следующую страницу введите +help1 catJAM")
             buffer = ''
             
         if message.strip() == '+help1':
             buffer = nick
-            self.connection.privmsg(event.target, buffer + ", Привет, я бот по имени слон catJAM Можешь использовать следующие команды (страница 2): +привет [nickname], +try [something], +time, +когда [something], +обнять [nickname], +COCK catJAM")
+            self.connection.privmsg(s, buffer + ", Привет, я бот по имени слон catJAM Можешь использовать следующие команды (страница 2): +привет [nickname], +try [something], +time, +когда [something], +обнять [nickname], +COCK catJAM")
             buffer = ''
 
         if message.find('+iq') != -1:
             buffer = nick
             if iq == 110:
-                self.connection.privmsg(event.target, buffer + ", ваш IQ = " + str(iq) + "! Вы Хесус?! PogU")
+                self.connection.privmsg(s.target, buffer + ", ваш IQ = " + str(iq) + "! Вы Хесус?! PogU")
                 buffer = ''
             if iq == 89:
-                self.connection.privmsg(event.target, buffer + ", ваш IQ = " + str(iq) + "! Вы Братишкин?! PogU")
+                self.connection.privmsg(s.target, buffer + ", ваш IQ = " + str(iq) + "! Вы Братишкин?! PogU")
                 buffer = ''
             else:
                 if iq < 110 and iq > 70:
