@@ -2,14 +2,13 @@
 from irc.bot import SingleServerIRCBot
 import re
 import random
-import datetime
 import time
 
 HOST = 'irc.twitch.tv'
 PORT = 6667
 USERNAME = 'SLONB0T'
 PASSWORD = 'oauth:1jfryqh0pt9e4uyvhvdl22hk2v9w7a'
-CHANNEL = '#jesusavgn'
+CHANNEL = '#mooncat3'
 
 
 
@@ -171,8 +170,8 @@ class VBot(SingleServerIRCBot):
         if message.find('+time') != -1:
             self.connection.privmsg(event.target, "Таксс... PepoG ")
             time.sleep(2)
-            data = datetime.datetime.today().strftime("%d.%m.%Y %H:%M:%S")
-            self.connection.privmsg(event.target, "Чичас " + data + " По МСК Waiting")
+            tiime = time.strftime("%d.%m.%Y %T")
+            self.connection.privmsg(event.target, "Чичас " + str(tiime) + " По МСК Waiting")
 
         if message.find('+обнять') != -1:
             buffer = nick
@@ -196,7 +195,7 @@ class VBot(SingleServerIRCBot):
             
         if message.find('+BOOBS') != -1:
             buffer = nick
-            self.connection.privmsg(event.target, buffer + ", твой BOOBS " + str(boobs) + " размера YEP")
+            self.connection.privmsg(event.target, buffer + ", твои BOOBS " + str(boobs) + " размера YEP")
             buffer = ''
         
         if message.find('blushW') != -1:
@@ -239,7 +238,7 @@ class VBot(SingleServerIRCBot):
                     privet = re.sub("\n", '', privet)
                     self.connection.privmsg(event.target, buffer + " передаёт " + randommm + " привет " + privet + " peepoHey peepoLove")
                     buffer = ''
-        time.sleep(1)           
+        time.sleep(0.07)           
         print(nick+': '+message)
        
 
