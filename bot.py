@@ -41,7 +41,11 @@ class VBot(SingleServerIRCBot):
                     nadyaa = list(n)
                     randomnadya = random.choice(nadyaa)
                     randomnadya = re.sub("\n", '', randomnadya)
-                    self.connection.privmsg(event.target, randomnadya)
+                    if len(randomnadya) > 128:
+                        randya = data[:128] + (data[128:] and '..')
+                        self.connection.privmsg(event.target, randya)
+                    else:
+                        self.connection.privmsg(event.target, randomnadya)
 
         if message.find('+help') != -1:
             buffer = nick
