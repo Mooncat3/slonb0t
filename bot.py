@@ -8,7 +8,7 @@ HOST = 'irc.twitch.tv'
 PORT = 6667
 USERNAME = 'SLONB0T'
 PASSWORD = 'oauth:1jfryqh0pt9e4uyvhvdl22hk2v9w7a'
-CHANNEL = '#mooncat3'
+CHANNEL = '#jesusavgn'
 
 
 
@@ -137,7 +137,7 @@ class VBot(SingleServerIRCBot):
             else:
                 bubu = str.replace(message, '+бубу ', '')
                 bubu = re.sub("\n", '', bubu)
-                self.connection.privmsg(s, "Ну " + str(bubu) + " и " + str(bubu) + " . Чё бубнить-то? ThumbUp")
+                self.connection.privmsg(s, "Ну " + str(bubu) + " и " + str(bubu) + " Чё бубнить-то? ThumbUp")
             print(nick+': '+message)
 
         if message.find('+love ') != -1:
