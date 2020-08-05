@@ -38,16 +38,15 @@ class VBot(SingleServerIRCBot):
 
 
         if message.strip() == '+паста':
-            with open('nadya.txt', 'r', encoding='utf-8') as n:
+            with open('nadya.txt', 'r', encoding='unicode') as n:
                     nadyaa = list(n)
                     randomnadya = random.choice(nadyaa)
                     randomnadya = re.sub("\n", '', randomnadya)
-                    randombytes = randomnadya.encode()
-                    print(str(randombytes))
-                    hh = re.sub(r'^(.{250}).*$', '\g<1>...', randomnadya)
-                    self.connection.privmsg(event.target, hh)
+
+                    #hh = re.sub(r'^(.{250}).*$', '\g<1>...', randomnadya)
+                    self.connection.privmsg(event.target, randomnadya)
                     time.sleep(1)
-                    self.connection.privmsg(event.target, hh)
+                    self.connection.privmsg(event.target, randomnadya)
 
         if message.strip() == '+help':
             buffer = nick
