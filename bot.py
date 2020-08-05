@@ -15,14 +15,6 @@ CHANNEL = '#jesusavgn'
 class VBot(SingleServerIRCBot):
 
 
-    def nick(self, newnick):
-        """Send a NICK command."""
-        self.send_items('NICK', newnick)
-        print(newnick)
-
-
-
-
     def __init__(self, host, port, nickname, password, channel):
         SingleServerIRCBot.__init__(self, [(host, port, password)], nickname, nickname)
         self.channel = channel
