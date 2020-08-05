@@ -186,7 +186,7 @@ class VBot(SingleServerIRCBot):
                     
         if message.find('+COCK') != -1:
             buffer = nick
-            self.connection.privmsg(event.target, buffer + ", твой COCK равен " + str(cock) + "см! YEP")
+            self.connection.privmsg(event.target, buffer + ", твой COCK равен " + str(cock) + " см! YEP")
             buffer = ''
         
         if message.find('blushW') != -1:
