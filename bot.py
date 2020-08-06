@@ -8,7 +8,7 @@ HOST = 'irc.twitch.tv'
 PORT = 6667
 USERNAME = 'SLONB0T'
 PASSWORD = 'oauth:1jfryqh0pt9e4uyvhvdl22hk2v9w7a'
-CHANNEL = '#xqcow'
+CHANNEL = '#jesusavgn'
 
 
 
@@ -219,25 +219,25 @@ class VBot(SingleServerIRCBot):
             buffer = ''
             print(nick+': '+message)
         
-        if message.find('blushW') != -1:
-            self.connection.privmsg(s, "blushW")
-            print(nick+': '+message)
+        #if message.find('blushW') != -1:
+            #self.connection.privmsg(s, "blushW")
+            #print(nick+': '+message)
 
-        if message.find('peepoLeave') != -1:
-            self.connection.privmsg(s, "peepoLeave")
-            print(nick+': '+message)
+        #if message.find('peepoLeave') != -1:
+            #self.connection.privmsg(s, "peepoLeave")
+            #print(nick+': '+message)
             
         if message.find('мав') != -1:
             self.connection.privmsg(s, "мав")
             print(nick+': '+message)
 
-        if message.find('catJAM') != -1:
-            self.connection.privmsg(s, "catJAM")
-            print(nick+': '+message)
+        #if message.find('catJAM') != -1:
+            #self.connection.privmsg(s, "catJAM")
+            #print(nick+': '+message)
 
-        if message.find('ThumbUp') != -1:
-            self.connection.privmsg(s, "ThumbUp")
-            print(nick+': '+message)
+        #if message.find('ThumbUp') != -1:
+            #self.connection.privmsg(s, "ThumbUp")
+            #print(nick+': '+message)
 
         if message.find('+когда') != -1:
             buffer = nick
