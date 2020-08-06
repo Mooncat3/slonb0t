@@ -8,7 +8,7 @@ HOST = 'irc.twitch.tv'
 PORT = 6667
 USERNAME = 'SLONB0T'
 PASSWORD = 'oauth:1jfryqh0pt9e4uyvhvdl22hk2v9w7a'
-CHANNEL = '#jesusavgn'
+CHANNEL = '#mooncat3'
 
 
 
