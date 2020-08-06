@@ -9,7 +9,7 @@ HOST = 'irc.twitch.tv'
 PORT = 6667
 USERNAME = 'SLONB0T'
 PASSWORD = 'oauth:1jfryqh0pt9e4uyvhvdl22hk2v9w7a'
-CHANNEL = '#mooncat3'
+CHANNEL = '#danantur'
 
 
 
@@ -109,7 +109,7 @@ class VBot(SingleServerIRCBot):
                 listme = list(b)
                 randomm = random.choice(listme)
                 randomm = re.sub("\n", '', randomm)
-            self.connection.privmsg(s, buffer + ' ' + randomm)
+            self.connection.privmsg(s, randomm.format(buffer))
             buffer = ''
             print(nick+': '+message)
 
@@ -241,21 +241,23 @@ class VBot(SingleServerIRCBot):
             buffer = nick
             self.connection.privmsg(s, buffer + ", cписок всех мини-игр у бота: +угадать число")
             print(nick+': '+message)
+
+        def func():
+            for i in range(1000, 0, -1):
+                time.sleep(0.01)
+                rubles = random.randrange(0, 2000, 1)
+                print(nick+': '+message)
+                if message.find('loh') != -1:
+                    print(nick+': '+message)
+                    self.connection.privmsg(s, nick + ", поздравляю! Ты победил! Приз " + str(rubles) + " руб. PepoParty ")
+            self.connection.privmsg(s, "Чат проиграл, время вышло Sadge ")
             
             
         if message.find('+угадать число') != -1:
-            buffer = nick
             self.connection.privmsg(s, "Правила: бот загадывает число от 0 до 20. Ваша задача угадать это число. У вас есть минута. Pog нали!")
-            number1 = random.randrange(0, 20, 1)
-            while True:
-                if message.strip() == number1:
-                    self.connection.privmsg(s, buffer + ", поздравляю! Ты победил! Приз " + str(ruble) + " руб. PepoParty ")
-                else:
-                    time.sleep(60)
-                    self.connection.privmsg(s, "Чат проиграл, время вышло Sadge ")
-            buffer = ''
-            print(nick+': '+message)
-            
+            number = random.randrange(0, 20, 1)
+            func()
+            print(nick+': '+message)   
         
 
         if message.find('+когда') != -1:
