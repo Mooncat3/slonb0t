@@ -10,7 +10,7 @@ HOST = 'irc.twitch.tv'
 PORT = 6667
 USERNAME = 'SLONB0T'
 PASSWORD = 'oauth:1jfryqh0pt9e4uyvhvdl22hk2v9w7a'
-CHANNEL = '#danantur'
+CHANNEL = '#mooncat3'
 
 
 class VBot(SingleServerIRCBot):
@@ -33,31 +33,6 @@ class VBot(SingleServerIRCBot):
         nick = event.source.nick
         message = event.arguments[0]
         s = event.target
-
-
-        class myThread (threading.Thread):
-            def __init__(self, down, counter):
-                threading.Thread.__init__(self)
-                self.threadID = counter
-                self.down = down
-                self.counter = counter
-
-            def run(self):
-                downtime = random.randrange(60, 180, 1)
-                time.sleep(downtime)
-                with open('down.txt', 'r', encoding='utf-8') as k:
-                    listme = list(k)
-                    randomdown = random.choice(listme)
-                    randomdown = re.sub("\n", '', randomdown)
-                    self.connection.privmsg(s, "👇 " + randomdown)
-
-
-
-
-        thread1 = myThread("Thread", 1)
-        thread1.start()
-
-
 
 
         if message.strip() == '+паста':
