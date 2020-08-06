@@ -239,17 +239,22 @@ class VBot(SingleServerIRCBot):
             
         if message.find('+игры') != -1:
             buffer = nick
-            self.connection.privmsg(s, buffer + "Список всех мини-игр у бота: +угадать число")
+            self.connection.privmsg(s, buffer + ", cписок всех мини-игр у бота: +угадать число")
             print(nick+': '+message)
             
             
         if message.find('+угадать число') != -1:
             buffer = nick
-            self.connection.privmsg(s, buffer + "Правила: бот загадывает число от 0 до 20. Ваша задача угадать это число. У вас есть минута. Pog нали!")
-            number = random.randrange(0, 20, 1)
-            if message.find(number) != -1:
+            self.connection.privmsg(s, "Правила: бот загадывает число от 0 до 20. Ваша задача угадать это число. У вас есть минута. Pog нали!")
+            number1 = random.randrange(0, 20, 1)
+            if message.strip() == number1:
                 self.connection.privmsg(s, buffer + ", поздравляю! Ты победил! Приз " + str(ruble) + " руб. PepoParty ")
+            else:
+                time.sleep(60)
+                self.connection.privmsg(s, "Чат проиграл, время вышло Sadge ")
+            buffer = ''
             print(nick+': '+message)
+            
         
 
         if message.find('+когда') != -1:
