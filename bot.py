@@ -122,9 +122,9 @@ class VBot(SingleServerIRCBot):
                 with open('do.txt', 'r', encoding='utf-8') as c:
                     listme = list(c)
                     randomdo = random.choice(listme)
-                    re.sub("\n", '', randomdo)
+                    randomdo = re.sub("\n", '', randomdo)
                     do = str.replace(message, '+do ', '')
-                    re.sub("\n", '', do)
+                    do = re.sub("\n", '', do)
                     self.connection.privmsg(s, randomdo.format(buffer,do))
                     buffer = ''
             print(nick+': '+message)
