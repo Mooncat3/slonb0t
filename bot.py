@@ -12,21 +12,15 @@ PASSWORD = 'oauth:1jfryqh0pt9e4uyvhvdl22hk2v9w7a'
 CHANNEL = '#mooncat3'
 
 
-
 class VBot(SingleServerIRCBot):
-
 
     def __init__(self, host, port, nickname, password, channel):
         SingleServerIRCBot.__init__(self, [(host, port, password)], nickname, nickname)
         self.channel = channel
 
-
     def on_welcome(self, connection, event):
         connection.join(self.channel)
         print("Бот " + USERNAME + " запущен на канале " + CHANNEL + "!")
-        
-
-
 
     def on_pubmsg(self, connection, event):
         nick = event.source.nick
@@ -34,39 +28,30 @@ class VBot(SingleServerIRCBot):
         s = event.target
 
 
-        iq = random.randrange(55, 180, 1)
-        tempp = random.uniform(25, 45)
-        temp = round(tempp, 1)
-        procent = random.randrange(0, 100, 1)
-        ruble = random.randrange(0, 2000, 1)
-        cock = random.randrange(1, 36, 1)
-        boobs = random.randrange(0, 7, 1)
-        
-
-
         if message.strip() == '+паста':
             with open('nadya.txt', 'r', encoding='utf-8') as n:
-                    nadyaa = list(n)
-                    randomnadya = random.choice(nadyaa)
-                    randomnadya = re.sub("\n", '', randomnadya)
-                    hh = re.sub(r'^(.{230}).*$', '\g<1>...', randomnadya)
-                    self.connection.privmsg(s, hh)
-            print(nick+': '+message)
+                nadyaa = list(n)
+                randomnadya = random.choice(nadyaa)
+                randomnadya = re.sub("\n", '', randomnadya)
+                hh = re.sub(r'^(.{230}).*$', '\g<1>...', randomnadya)
+                self.connection.privmsg(s, hh)
+            print(nick + ': ' + message)
 
         if message.strip() == '+help':
             buffer = nick
             self.connection.privmsg(s, buffer + ", Привет, я бот по имени слон. Можешь использовать следующие команды (страница 1): +паста, +me, +do [nickname], +iq, +temp, +love [nickname], +бубу [something], +steal [nickname] Чтобы перейти на следующую страницу введите +help1 catJAM")
             buffer = ''
-            print(nick+': '+message)
-            
+            print(nick + ': ' + message)
+
         if message.strip() == '+help1':
             buffer = nick
             self.connection.privmsg(s, buffer + ", Привет, я бот по имени слон catJAM Можешь использовать следующие команды (страница 2): +привет [nickname], +try [something], +time, +когда [something], +обнять [nickname], +COCK catJAM")
             buffer = ''
-            print(nick+': '+message)
+            print(nick + ': ' + message)
 
         if message.find('+iq') != -1:
             buffer = nick
+            iq = random.randrange(55, 180, 1)
             if iq == 110:
                 self.connection.privmsg(s, buffer + ", ваш IQ = " + str(iq) + "! Вы Хесус?! PogU")
                 buffer = ''
@@ -86,12 +71,15 @@ class VBot(SingleServerIRCBot):
                 if iq >= 135:
                     self.connection.privmsg(s, buffer + ", ваш IQ = " + str(iq) + "! Внимание! В чате гений WAYTOOSMART Clap")
                     buffer = ''
-            print(nick+': '+message)
+            print(nick + ': ' + message)
 
         if message.find('+temp') != -1:
             buffer = nick
+            tempp = random.uniform(25, 45)
+            temp = round(tempp, 1)
             if temp >= 35.7 and temp <= 37:
-                self.connection.privmsg(s, buffer + ", ваша температура " + str(temp) + " °C! У вас температура в пределах нормы ThumbUp")
+                self.connection.privmsg(s, buffer + ", ваша температура " + str(
+                    temp) + " °C! У вас температура в пределах нормы ThumbUp")
                 buffer = ''
             else:
                 if temp > 37 and temp < 40 or temp < 35.7 and temp >= 32:
@@ -99,9 +87,10 @@ class VBot(SingleServerIRCBot):
                     buffer = ''
                 else:
                     if temp > 40 or temp < 32:
-                        self.connection.privmsg(s, buffer + ", ваша температура " + str(temp) + " °C! Срочно вызывайте скорую! Durka")
+                        self.connection.privmsg(s, buffer + ", ваша температура " + str(
+                            temp) + " °C! Срочно вызывайте скорую! Durka")
                         buffer = ''
-            print(nick+': '+message)
+            print(nick + ': ' + message)
 
         if message.find('+me') != -1:
             buffer = nick
@@ -111,7 +100,7 @@ class VBot(SingleServerIRCBot):
                 randomm = re.sub("\n", '', randomm)
             self.connection.privmsg(s, randomm.format(buffer))
             buffer = ''
-            print(nick+': '+message)
+            print(nick + ': ' + message)
 
         if message.find('+do') != -1:
             buffer = nick
@@ -125,9 +114,9 @@ class VBot(SingleServerIRCBot):
                     randomdo = re.sub("\n", '', randomdo)
                     do = str.replace(message, '+do ', '')
                     do = re.sub("\n", '', do)
-                    self.connection.privmsg(s, randomdo.format(buffer,do))
+                    self.connection.privmsg(s, randomdo.format(buffer, do))
                     buffer = ''
-            print(nick+': '+message)
+            print(nick + ': ' + message)
 
         if message.find('+бубу') != -1:
             if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1:
@@ -136,10 +125,11 @@ class VBot(SingleServerIRCBot):
                 bubu = str.replace(message, '+бубу ', '')
                 bubu = re.sub("\n", '', bubu)
                 self.connection.privmsg(s, "Ну " + str(bubu) + " и " + str(bubu) + " Чё бубнить-то? ThumbUp")
-            print(nick+': '+message)
+            print(nick + ': ' + message)
 
         if message.find('+love ') != -1:
             buffer = nick
+            procent = random.randrange(0, 100, 1)
             if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1:
                 self.connection.privmsg(s, buffer + ", думал забанить меня? WeirdChamp ")
             else:
@@ -147,10 +137,12 @@ class VBot(SingleServerIRCBot):
                 love = re.sub("\n", '', love)
                 self.connection.privmsg(s, buffer + " любит " + str(love) + " на " + str(procent) + "%!")
                 buffer = ''
-            print(nick+': '+message)
+            print(nick + ': ' + message)
 
         if message.find('+steal ') != -1:
             buffer = nick
+            procent = random.randrange(0, 100, 1)
+            ruble = random.randrange(0, 2000, 1)
             if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1:
                 self.connection.privmsg(s, buffer + ", думал забанить меня? WeirdChamp ")
             else:
@@ -162,7 +154,7 @@ class VBot(SingleServerIRCBot):
                 else:
                     self.connection.privmsg(s, buffer + " ничего не украл у " + str(steal) + " KeK Lohich")
                     buffer = ''
-            print(nick+': '+message)
+            print(nick + ': ' + message)
 
         if message.find('+try ') != -1:
             buffer = nick
@@ -177,13 +169,13 @@ class VBot(SingleServerIRCBot):
                     tryr = re.sub("\n", '', tryr)
                 self.connection.privmsg(s, buffer + " попробовал " + tryy + "... " + tryr)
                 buffer = ''
-            print(nick+': '+message)
+            print(nick + ': ' + message)
 
         if message.find('+time') != -1:
             self.connection.privmsg(event.target, "Таксс... PepoG ")
             time.sleep(2)
-            self.connection.privmsg(s, datetime.strftime(datetime.now()+timedelta(hours=3),"Чичас %H:%M:%S по МСК Waiting"))
-            print(nick+': '+message)
+            self.connection.privmsg(s, datetime.strftime(datetime.now() + timedelta(hours=3), "Чичас %H:%M:%S по МСК Waiting"))
+            print(nick + ': ' + message)
 
         if message.find('+обнять') != -1:
             buffer = nick
@@ -199,66 +191,64 @@ class VBot(SingleServerIRCBot):
                     hug = re.sub("\n", '', hug)
                     self.connection.privmsg(s, buffer + " " + randomhug + " обнимает " + hug + " VoHiYo")
                     buffer = ''
-            print(nick+': '+message)
-                    
+            print(nick + ': ' + message)
+
         if message.find('+COCK') != -1:
             buffer = nick
+            cock = random.randrange(1, 36, 1)
             self.connection.privmsg(s, buffer + ", твой COCK равен " + str(cock) + " см! YEP")
             buffer = ''
-            print(nick+': '+message)
-            
+            print(nick + ': ' + message)
+
         if message.find('+BOOBS') != -1:
             buffer = nick
+            boobs = random.randrange(0, 7, 1)
             if boobs == 7:
                 self.connection.privmsg(s, buffer + ", твои BOOBS 6+ размера YEP PogU")
             else:
                 self.connection.privmsg(s, buffer + ", твои BOOBS " + str(boobs) + " размера YEP")
             buffer = ''
-            print(nick+': '+message)
-        
+            print(nick + ': ' + message)
+
         if message.find('blushW') != -1:
             self.connection.privmsg(s, "blushW")
-            print(nick+': '+message)
+            print(nick + ': ' + message)
 
         if message.find('peepoLeave') != -1:
             self.connection.privmsg(s, "peepoLeave")
-            print(nick+': '+message)
-            
+            print(nick + ': ' + message)
+
         if message.find('мав') != -1:
             self.connection.privmsg(s, "мав")
-            print(nick+': '+message)
+            print(nick + ': ' + message)
 
         if message.find('catJAM') != -1:
             self.connection.privmsg(s, "catJAM")
-            print(nick+': '+message)
+            print(nick + ': ' + message)
 
         if message.find('ThumbUp') != -1:
             self.connection.privmsg(s, "ThumbUp")
-            print(nick+': '+message)
-            
-            
+            print(nick + ': ' + message)
+
         if message.find('+игры') != -1:
             buffer = nick
             self.connection.privmsg(s, buffer + ", cписок всех мини-игр у бота: +угадать число")
-            print(nick+': '+message)
+            print(nick + ': ' + message)
 
-        def func():
-            for i in range(1000, 0, -1):
-                time.sleep(0.01)
-                rubles = random.randrange(0, 2000, 1)
-                print(nick+': '+message)
-                if message.find('loh') != -1:
-                    print(nick+': '+message)
-                    self.connection.privmsg(s, nick + ", поздравляю! Ты победил! Приз " + str(rubles) + " руб. PepoParty ")
-            self.connection.privmsg(s, "Чат проиграл, время вышло Sadge ")
-            
-            
         if message.find('+угадать число') != -1:
             self.connection.privmsg(s, "Правила: бот загадывает число от 0 до 20. Ваша задача угадать это число. У вас есть минута. Pog нали!")
             number = random.randrange(0, 20, 1)
-            func()
-            print(nick+': '+message)   
-        
+            for i in range(600, 0, -1):
+                time.sleep(0.1)
+                rubles = random.randrange(0, 2000, 1)
+                if message.find(str(number)) != -1:
+                    buffer = nick
+                    print(nick + ': ' + message)
+                    self.connection.privmsg(s, buffer + ", поздравляю! Ты победил! Приз " + str(
+                        rubles) + " руб. PepoParty ")
+                    buffer = ''
+            self.connection.privmsg(s, "Чат проиграл, время вышло Sadge ")
+            print(nick + ': ' + message)
 
         if message.find('+когда') != -1:
             buffer = nick
@@ -270,7 +260,7 @@ class VBot(SingleServerIRCBot):
                 kogda = re.sub("\n", '', kogda)
             self.connection.privmsg(s, buffer + ", " + koogda + ' ' + kogda)
             buffer = ''
-            print(nick+': '+message)
+            print(nick + ': ' + message)
 
         if message.find('+привет') != -1:
             buffer = nick
@@ -286,10 +276,8 @@ class VBot(SingleServerIRCBot):
                     privet = re.sub("\n", '', privet)
                     self.connection.privmsg(s, buffer + " передаёт " + randommm + " привет " + privet + " peepoHey peepoLove")
                     buffer = ''
-            print(nick+': '+message)
+            print(nick + ': ' + message)
         time.sleep(0.05)
-       
-
 
     @staticmethod
     def _parse_nickname_from_twitch_user_id(user_id):
