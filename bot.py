@@ -3,7 +3,7 @@ from irc.bot import SingleServerIRCBot
 import re
 import random
 from datetime import datetime, timedelta
-from time
+import time
 
 HOST = 'irc.twitch.tv'
 PORT = 6667
