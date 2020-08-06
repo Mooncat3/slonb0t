@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from irc.bot import SingleServerIRCBot
 from datetime import datetime, timedelta
+import threading
 import re
 import random
 import time
@@ -9,7 +10,7 @@ HOST = 'irc.twitch.tv'
 PORT = 6667
 USERNAME = 'SLONB0T'
 PASSWORD = 'oauth:1jfryqh0pt9e4uyvhvdl22hk2v9w7a'
-CHANNEL = '#mooncat3'
+CHANNEL = '#danantur'
 
 
 class VBot(SingleServerIRCBot):
@@ -19,6 +20,12 @@ class VBot(SingleServerIRCBot):
         self.channel = channel
 
     def on_welcome(self, connection, event):
+
+
+
+
+
+
         connection.join(self.channel)
         print("Бот " + USERNAME + " запущен на канале " + CHANNEL + "!")
 
@@ -26,6 +33,31 @@ class VBot(SingleServerIRCBot):
         nick = event.source.nick
         message = event.arguments[0]
         s = event.target
+
+
+        class myThread (threading.Thread):
+            def __init__(self, down, counter):
+                threading.Thread.__init__(self)
+                self.threadID = counter
+                self.down = down
+                self.counter = counter
+
+            def run(self):
+                downtime = random.randrange(60, 180, 1)
+                time.sleep(downtime)
+                with open('down.txt', 'r', encoding='utf-8') as k:
+                    listme = list(k)
+                    randomdown = random.choice(listme)
+                    randomdown = re.sub("\n", '', randomdown)
+                    self.connection.privmsg(s, "👇 " + randomdown)
+
+
+
+
+        thread1 = myThread("Thread", 1)
+        thread1.start()
+
+
 
 
         if message.strip() == '+паста':
@@ -240,12 +272,11 @@ class VBot(SingleServerIRCBot):
             number = random.randrange(0, 20, 1)
             for i in range(600, 0, -1):
                 time.sleep(0.1)
-                rubles = random.randrange(0, 2000, 1)
+                rubles = random.randrange(0, 5000, 1)
                 if message.find(str(number)) != -1:
                     buffer = nick
                     print(nick + ': ' + message)
-                    self.connection.privmsg(s, buffer + ", поздравляю! Ты победил! Приз " + str(
-                        rubles) + " руб. PepoParty ")
+                    self.connection.privmsg(s, buffer + ", поздравляю! Ты победил! Приз " + str(rubles) + " руб. PepoParty ")
                     buffer = ''
             self.connection.privmsg(s, "Чат проиграл, время вышло Sadge ")
             print(nick + ': ' + message)
