@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 from irc.bot import SingleServerIRCBot
+from datetime import datetime, timedelta
 import re
 import random
-from datetime import datetime, timedelta
 import time
 
 HOST = 'irc.twitch.tv'
 PORT = 6667
 USERNAME = 'SLONB0T'
 PASSWORD = 'oauth:1jfryqh0pt9e4uyvhvdl22hk2v9w7a'
-CHANNEL = '#jesusavgn'
+CHANNEL = '#mooncat3'
 
 
 
@@ -68,10 +68,10 @@ class VBot(SingleServerIRCBot):
         if message.find('+iq') != -1:
             buffer = nick
             if iq == 110:
-                self.connection.privmsg(s.target, buffer + ", ваш IQ = " + str(iq) + "! Вы Хесус?! PogU")
+                self.connection.privmsg(s, buffer + ", ваш IQ = " + str(iq) + "! Вы Хесус?! PogU")
                 buffer = ''
             if iq == 89:
-                self.connection.privmsg(s.target, buffer + ", ваш IQ = " + str(iq) + "! Вы Братишкин?! PogU")
+                self.connection.privmsg(s, buffer + ", ваш IQ = " + str(iq) + "! Вы Братишкин?! PogU")
                 buffer = ''
             else:
                 if iq < 110 and iq > 70:
@@ -122,9 +122,9 @@ class VBot(SingleServerIRCBot):
                 with open('do.txt', 'r', encoding='utf-8') as c:
                     listme = list(c)
                     randomdo = random.choice(listme)
-                    randomdo = re.sub("\n", '', randomdo)
+                    re.sub("\n", '', randomdo)
                     do = str.replace(message, '+do ', '')
-                    do = re.sub("\n", '', do)
+                    re.sub("\n", '', do)
                     self.connection.privmsg(s, randomdo.format(buffer,do))
                     buffer = ''
             print(nick+': '+message)
@@ -182,7 +182,7 @@ class VBot(SingleServerIRCBot):
         if message.find('+time') != -1:
             self.connection.privmsg(event.target, "Таксс... PepoG ")
             time.sleep(2)
-            self.connection.privmsg(s, datetime.strftime(datetime.now()+timedelta(hours=3),"Чичас %H:%M по МСК Waiting"))
+            self.connection.privmsg(s, datetime.strftime(datetime.now()+timedelta(hours=3),"Чичас %H:%M:%S по МСК Waiting"))
             print(nick+': '+message)
 
         if message.find('+обнять') != -1:
@@ -216,25 +216,25 @@ class VBot(SingleServerIRCBot):
             buffer = ''
             print(nick+': '+message)
         
-        #if message.find('blushW') != -1:
-            #self.connection.privmsg(s, "blushW")
-            #print(nick+': '+message)
+        if message.find('blushW') != -1:
+            self.connection.privmsg(s, "blushW")
+            print(nick+': '+message)
 
-        #if message.find('peepoLeave') != -1:
-            #self.connection.privmsg(s, "peepoLeave")
-            #print(nick+': '+message)
+        if message.find('peepoLeave') != -1:
+            self.connection.privmsg(s, "peepoLeave")
+            print(nick+': '+message)
             
         if message.find('мав') != -1:
             self.connection.privmsg(s, "мав")
             print(nick+': '+message)
 
-        #if message.find('catJAM') != -1:
-            #self.connection.privmsg(s, "catJAM")
-            #print(nick+': '+message)
+        if message.find('catJAM') != -1:
+            self.connection.privmsg(s, "catJAM")
+            print(nick+': '+message)
 
-        #if message.find('ThumbUp') != -1:
-            #self.connection.privmsg(s, "ThumbUp")
-            #print(nick+': '+message)
+        if message.find('ThumbUp') != -1:
+            self.connection.privmsg(s, "ThumbUp")
+            print(nick+': '+message)
 
         if message.find('+когда') != -1:
             buffer = nick
