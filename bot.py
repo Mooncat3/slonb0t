@@ -247,11 +247,12 @@ class VBot(SingleServerIRCBot):
             buffer = nick
             self.connection.privmsg(s, "Правила: бот загадывает число от 0 до 20. Ваша задача угадать это число. У вас есть минута. Pog нали!")
             number1 = random.randrange(0, 20, 1)
-            if message.strip() == number1:
-                self.connection.privmsg(s, buffer + ", поздравляю! Ты победил! Приз " + str(ruble) + " руб. PepoParty ")
-            else:
-                time.sleep(60)
-                self.connection.privmsg(s, "Чат проиграл, время вышло Sadge ")
+            While True:
+                if message.strip() == number1:
+                    self.connection.privmsg(s, buffer + ", поздравляю! Ты победил! Приз " + str(ruble) + " руб. PepoParty ")
+                else:
+                    time.sleep(60)
+                    self.connection.privmsg(s, "Чат проиграл, время вышло Sadge ")
             buffer = ''
             print(nick+': '+message)
             
