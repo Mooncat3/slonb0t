@@ -2,6 +2,7 @@
 from irc.bot import SingleServerIRCBot
 import re
 import random
+from datetime import datetime, timedelta
 import time
 
 HOST = 'irc.twitch.tv'
@@ -183,9 +184,8 @@ class VBot(SingleServerIRCBot):
 
         if message.find('+time') != -1:
             self.connection.privmsg(event.target, "Таксс... PepoG ")
-            tiime = time.strftime("%d.%m.%Y %T")
             time.sleep(2)
-            self.connection.privmsg(s, "Чичас " + str(tiime) + " По UTC Waiting")
+            self.connection.privmsg(s, datetime.strftime(datetime.now()+timedelta(hours=3),"Чичас %H:%M по МСК Waiting"))
             print(nick+': '+message)
 
         if message.find('+обнять') != -1:
