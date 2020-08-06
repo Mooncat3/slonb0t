@@ -10,7 +10,7 @@ HOST = 'irc.twitch.tv'
 PORT = 6667
 USERNAME = 'SLONB0T'
 PASSWORD = 'oauth:1jfryqh0pt9e4uyvhvdl22hk2v9w7a'
-CHANNEL = '#mooncat3'
+CHANNEL = '#danantur'
 
 
 class VBot(SingleServerIRCBot):
@@ -20,12 +20,6 @@ class VBot(SingleServerIRCBot):
         self.channel = channel
 
     def on_welcome(self, connection, event):
-
-
-
-
-
-
         connection.join(self.channel)
         print("Бот " + USERNAME + " запущен на канале " + CHANNEL + "!")
 
@@ -33,6 +27,7 @@ class VBot(SingleServerIRCBot):
         nick = event.source.nick
         message = event.arguments[0]
         s = event.target
+
 
 
         if message.strip() == '+паста':
@@ -52,7 +47,7 @@ class VBot(SingleServerIRCBot):
 
         if message.strip() == '+help1':
             buffer = nick
-            self.connection.privmsg(s, buffer + ", Привет, я бот по имени слон catJAM Можешь использовать следующие команды (страница 2): +привет [nickname], +try [something], +time, +когда [something], +обнять [nickname], +COCK catJAM")
+            self.connection.privmsg(s, buffer + ", Привет, я бот по имени слон catJAM Можешь использовать следующие команды (страница 2): +привет [nickname], +try [something], +time, +когда [something], +обнять [nickname], +COCK, +вверх catJAM")
             buffer = ''
             print(nick + ': ' + message)
 
@@ -85,8 +80,7 @@ class VBot(SingleServerIRCBot):
             tempp = random.uniform(25, 45)
             temp = round(tempp, 1)
             if temp >= 35.7 and temp <= 37:
-                self.connection.privmsg(s, buffer + ", ваша температура " + str(
-                    temp) + " °C! У вас температура в пределах нормы ThumbUp")
+                self.connection.privmsg(s, buffer + ", ваша температура " + str(temp) + " °C! У вас температура в пределах нормы ThumbUp")
                 buffer = ''
             else:
                 if temp > 37 and temp < 40 or temp < 35.7 and temp >= 32:
@@ -94,8 +88,7 @@ class VBot(SingleServerIRCBot):
                     buffer = ''
                 else:
                     if temp > 40 or temp < 32:
-                        self.connection.privmsg(s, buffer + ", ваша температура " + str(
-                            temp) + " °C! Срочно вызывайте скорую! Durka")
+                        self.connection.privmsg(s, buffer + ", ваша температура " + str(temp) + " °C! Срочно вызывайте скорую! Durka")
                         buffer = ''
             print(nick + ': ' + message)
 
@@ -236,6 +229,16 @@ class VBot(SingleServerIRCBot):
         if message.find('ThumbUp') != -1:
             self.connection.privmsg(s, "ThumbUp")
             print(nick + ': ' + message)
+
+
+        if message.strip() == '+вверх':
+            with open('down.txt', 'r', encoding='utf-8') as n:
+                downn = list(n)
+                randomdown = random.choice(downn)
+                randomdown = re.sub("\n", '', randomdown)
+                self.connection.privmsg(s, ":point_up_2: " +str(randomdown))
+            print(nick + ': ' + message)
+
 
         if message.find('+игры') != -1:
             buffer = nick
