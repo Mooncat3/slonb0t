@@ -183,9 +183,8 @@ class VBot(SingleServerIRCBot):
 
         if message.find('+time') != -1:
             self.connection.privmsg(event.target, "Таксс... PepoG ")
-            tiime = time.strftime("%d.%m.%Y %T")
             time.sleep(2)
-            self.connection.privmsg(s, "Чичас " + str(tiime) + " По UTC Waiting")
+            self.connection.privmsg(s, "чичас " + str(time.strftime("%H:%M", time.localtime())) + " по МСК Waiting")
             print(nick+': '+message)
 
         if message.find('+обнять') != -1:
