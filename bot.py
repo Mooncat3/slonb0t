@@ -53,7 +53,6 @@ class VBot(SingleServerIRCBot):
                     self.connection.privmsg(s, hh)
             print(nick+': '+message)
 
-
         if message.strip() == '+help':
             buffer = nick
             self.connection.privmsg(s, buffer + ", Привет, я бот по имени слон. Можешь использовать следующие команды (страница 1): +паста, +me, +do [nickname], +iq, +temp, +love [nickname], +бубу [something], +steal [nickname] Чтобы перейти на следующую страницу введите +help1 catJAM")
@@ -126,9 +125,7 @@ class VBot(SingleServerIRCBot):
                     randomdo = re.sub("\n", '', randomdo)
                     do = str.replace(message, '+do ', '')
                     do = re.sub("\n", '', do)
-                    #self.connection.privmsg(s, "Пока что в разработке... HACKERMANS")
-                    #self.connection.privmsg(s, buffer + randomdo)
-                    self.connection.privmsg(s, buffer + " посадил " + do + " на бутылку YEP")
+                    self.connection.privmsg(s, randomdo.format(buffer,do))
                     buffer = ''
             print(nick+': '+message)
 
