@@ -9,7 +9,7 @@ HOST = 'irc.twitch.tv'
 PORT = 6667
 USERNAME = 'SLONB0T'
 PASSWORD = 'oauth:1jfryqh0pt9e4uyvhvdl22hk2v9w7a'
-CHANNEL = '#danantur'
+CHANNEL = '#mooncat3'
 
 
 
@@ -247,7 +247,7 @@ class VBot(SingleServerIRCBot):
             buffer = nick
             self.connection.privmsg(s, "Правила: бот загадывает число от 0 до 20. Ваша задача угадать это число. У вас есть минута. Pog нали!")
             number1 = random.randrange(0, 20, 1)
-            While True:
+            while True:
                 if message.strip() == number1:
                     self.connection.privmsg(s, buffer + ", поздравляю! Ты победил! Приз " + str(ruble) + " руб. PepoParty ")
                 else:
