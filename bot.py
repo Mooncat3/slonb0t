@@ -118,7 +118,7 @@ class VBot(SingleServerIRCBot):
                     buffer = ''
             print(nick + ': ' + message)
         else:
-            if message.find('+do ') != -1 and message.index('+do ') == 0 and message[len('+do '):len(message)] == "":
+            if message.find('+do') != -1 and message.index('+do') == 0 and message[len('+do'):len(message)] == "":
                 self.connection.privmsg(s, "И чё я должен сделать? шизик? WeirdChamp ") 
 
         if message.find('+бубу ') != -1 and message.index('+бубу ') == 0 and message[len('+бубу '):len(message)] != "":
@@ -130,7 +130,7 @@ class VBot(SingleServerIRCBot):
                 self.connection.privmsg(s, "Ну " + str(bubu) + " и " + str(bubu) + " Чё бубнить-то? ThumbUp")
             print(nick + ': ' + message)
         else:
-            if message.find('+бубу ') != -1 and message.index('+бубу ') == 0 and message[len('+бубу '):len(message)] == "":
+            if message.find('+бубу') != -1 and message.index('+бубу') == 0 and message[len('+бубу'):len(message)] == "":
                 self.connection.privmsg(s, "И чё я должен бубу? шизик? WeirdChamp ") 
 
         if message.find('+love ') != -1 and message.index('+love ') == 0 and message[len('+love '):len(message)] != "":
@@ -145,7 +145,7 @@ class VBot(SingleServerIRCBot):
                 buffer = ''
             print(nick + ': ' + message)
         else:
-            if message.find('+love ') != -1 and message.index('+love ') == 0 and message[len('+love '):len(message)] == "":
+            if message.find('+love') != -1 and message.index('+love') == 0 and message[len('+love'):len(message)] == "":
                 self.connection.privmsg(s, "И чё я должен бубу? шизик? WeirdChamp ") 
 
         if message.find('+steal ') != -1 and message.index('+steal ') == 0 and message[len('+steal '):len(message)] != "":
@@ -165,7 +165,7 @@ class VBot(SingleServerIRCBot):
                     buffer = ''
             print(nick + ': ' + message)
         else:
-            if message.find('+steal ') != -1 and message.index('+steal ') == 0 and message[len('+steal '):len(message)] == "":
+            if message.find('+steal') != -1 and message.index('+steal') == 0 and message[len('+steal'):len(message)] == "":
                 self.connection.privmsg(s, "И у кого ты крадёшь? шизик? WeirdChamp ") 
 
         if message.find('+try ') != -1 and message.index('+try ') == 0 and message[len('+try '):len(message)] != "":
@@ -183,7 +183,7 @@ class VBot(SingleServerIRCBot):
                 buffer = ''
             print(nick + ': ' + message)
         else:
-            if message.find('+try ') != -1 and message.index('+try ') == 0 and message[len('+try '):len(message)] == "":
+            if message.find('+try') != -1 and message.index('+try') == 0 and message[len('+try'):len(message)] == "":
                 self.connection.privmsg(s, "И чё ты пробуешь? шизик? WeirdChamp ") 
 
         if message.find('+time') != -1:
@@ -208,7 +208,7 @@ class VBot(SingleServerIRCBot):
                     buffer = ''
             print(nick + ': ' + message)
         else:
-            if message.find('+обнять ') != -1 and message.index('+обнять ') == 0 and message[len('+обнять '):len(message)] == "":
+            if message.find('+обнять') != -1 and message.index('+обнять') == 0 and message[len('+обнять'):len(message)] == "":
                 self.connection.privmsg(s, "И чё ты пробуешь обнять? шизик? WeirdChamp ") 
 
         if message.find('+COCK') != -1:
@@ -290,7 +290,7 @@ class VBot(SingleServerIRCBot):
             buffer = ''
             print(nick + ': ' + message)
         else:
-            if message.find('+когда ') != -1 and message.index('+когда ') == 0 and message[len('+когда '):len(message)] == "":
+            if message.find('+когда') != -1 and message.index('+когда') == 0 and message[len('+когда'):len(message)] == "":
                 self.connection.privmsg(s, "И чё я должен сделать? шизик? WeirdChamp ") 
 
         if message.find('+привет ') != -1 and message.index('+привет ') == 0 and message[len('+привет '):len(message)] != "":
@@ -309,7 +309,7 @@ class VBot(SingleServerIRCBot):
                     buffer = ''
             print(nick + ': ' + message)
         else:
-            if message.find('+привет ') != -1 and message.index('+привет ') == 0 and message[len('+привет '):len(message)] == "":
+            if message.find('+привет') != -1 and message.index('+привет') == 0 and message[len('+привет'):len(message)] == "":
                 self.connection.privmsg(s, "И кого я должен приветствовать? шизик? WeirdChamp ") 
         time.sleep(0.05)
 
