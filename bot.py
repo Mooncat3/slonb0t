@@ -109,22 +109,14 @@ class VBot(SingleServerIRCBot):
             
         if self.ischanging:
             if self.changingInt == self.maxInt and self.changingInt > 0:
-                    self.ischanging = False
-                    self.changingInt = 0
-                    self.maxInt = 0
-                    self.connection.privmsg(s, ":point_up_2: @{} - {} PogU ".format(buffer, self.whois))
-                    buffer = ''
-                else:
-                    if self.changingInt == self.maxInt:
-                        who = str.replace(message, '+кто ', '')
-                        who = re.sub("\n", '', who)
-                        self.whois = who
-                        self.ischanging = True
-                        self.connection.privmsg(s, "хммм, кто же MonkaHmm ....")
-                        self.maxInt = random.randint(5, 15)
-                        self.changingInt += 1
-                    else:
-                        self.changingInt += 1
+                buffer = nick
+                self.ischanging = False
+                self.changingInt = 0
+                self.maxInt = 0
+                self.connection.privmsg(s, ":point_up_2: @{} - {} PogU ".format(buffer, self.whois))
+                buffer = ''
+            else:
+                self.changingInt += 1
             
         if message.find('+кто ') != -1 and message.index('+кто ') == 0 and message[len('+кто '):len(message)] != "":
             buffer = nick
