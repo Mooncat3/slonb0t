@@ -10,7 +10,7 @@ HOST = 'irc.twitch.tv'
 PORT = 6667
 USERNAME = 'SLONB0T'
 PASSWORD = 'oauth:1jfryqh0pt9e4uyvhvdl22hk2v9w7a'
-CHANNEL = '#danantur'
+CHANNEL = '#jesusavgn'
 
 
 class VBot(SingleServerIRCBot):
@@ -51,7 +51,7 @@ class VBot(SingleServerIRCBot):
             buffer = ''
             print(nick + ': ' + message)
 
-        if message.find('+iq') != -1:
+        if message.strip() == '+iq':
             buffer = nick
             iq = random.randrange(55, 180, 1)
             if iq == 110:
@@ -75,7 +75,7 @@ class VBot(SingleServerIRCBot):
                     buffer = ''
             print(nick + ': ' + message)
 
-        if message.find('+temp') != -1:
+        if message.strip() == '+temp':
             buffer = nick
             tempp = random.uniform(25, 45)
             temp = round(tempp, 1)
@@ -92,7 +92,7 @@ class VBot(SingleServerIRCBot):
                         buffer = ''
             print(nick + ': ' + message)
 
-        if message.find('+me') != -1:
+        if message.strip() == '+me':
             buffer = nick
             with open('me.txt', 'r', encoding='utf-8') as b:
                 listme = list(b)
@@ -102,7 +102,7 @@ class VBot(SingleServerIRCBot):
             buffer = ''
             print(nick + ': ' + message)
 
-        if message.find('+do') != -1:
+        if message.find('+do ') != -1 and message.index('+do ') == 0 and message[len('+do '):len(message)] != "":
             buffer = nick
             if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1:
                 self.connection.privmsg(s, buffer + ", думал забанить меня? WeirdChamp ")
@@ -117,8 +117,11 @@ class VBot(SingleServerIRCBot):
                     self.connection.privmsg(s, randomdo.format(buffer, do))
                     buffer = ''
             print(nick + ': ' + message)
+        else:
+            if message[len('+do '):len(message)] == "":
+                self.connection.privmsg(s, "И чё я должен сделать? шизик? WeirdChamp ") 
 
-        if message.find('+бубу') != -1:
+        if message.find('+бубу ') != -1 and message.index('+бубу ') == 0 and message[len('+бубу '):len(message)] != "":
             if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1:
                 self.connection.privmsg(s, buffer + ", думал забанить меня? WeirdChamp ")
             else:
@@ -126,8 +129,11 @@ class VBot(SingleServerIRCBot):
                 bubu = re.sub("\n", '', bubu)
                 self.connection.privmsg(s, "Ну " + str(bubu) + " и " + str(bubu) + " Чё бубнить-то? ThumbUp")
             print(nick + ': ' + message)
+        else:
+            if message[len('+бубу '):len(message)] == "":
+                self.connection.privmsg(s, "И чё я должен бубу? шизик? WeirdChamp ") 
 
-        if message.find('+love ') != -1:
+        if message.find('+love ') != -1 and message.index('+love ') == 0 and message[len('+love '):len(message)] != "":
             buffer = nick
             procent = random.randrange(0, 100, 1)
             if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1:
@@ -138,8 +144,11 @@ class VBot(SingleServerIRCBot):
                 self.connection.privmsg(s, buffer + " любит " + str(love) + " на " + str(procent) + "%!")
                 buffer = ''
             print(nick + ': ' + message)
+        else:
+            if message[len('+love '):len(message)] == "":
+                self.connection.privmsg(s, "И чё я должен бубу? шизик? WeirdChamp ") 
 
-        if message.find('+steal ') != -1:
+        if message.find('+steal ') != -1 and message.index('+steal ') == 0 and message[len('+steal '):len(message)] != "":
             buffer = nick
             procent = random.randrange(0, 100, 1)
             ruble = random.randrange(0, 2000, 1)
@@ -155,8 +164,11 @@ class VBot(SingleServerIRCBot):
                     self.connection.privmsg(s, buffer + " ничего не украл у " + str(steal) + " KeK Lohich")
                     buffer = ''
             print(nick + ': ' + message)
+        else:
+            if message[len('+steal '):len(message)] == "":
+                self.connection.privmsg(s, "И у кого ты крадёшь? шизик? WeirdChamp ") 
 
-        if message.find('+try ') != -1:
+        if message.find('+try ') != -1 and message.index('+try ') == 0 and message[len('+try '):len(message)] != "":
             buffer = nick
             if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1:
                 self.connection.privmsg(s, buffer + ", думал забанить меня? WeirdChamp ")
@@ -170,14 +182,17 @@ class VBot(SingleServerIRCBot):
                 self.connection.privmsg(s, buffer + " попробовал " + tryy + "... " + tryr)
                 buffer = ''
             print(nick + ': ' + message)
+        else:
+            if message[len('+try '):len(message)] == "":
+                self.connection.privmsg(s, "И чё ты пробуешь? шизик? WeirdChamp ") 
 
         if message.find('+time') != -1:
             self.connection.privmsg(event.target, "Таксс... PepoG ")
             time.sleep(2)
-            self.connection.privmsg(s, datetime.strftime(datetime.now() + timedelta(hours=3), "Чичас %H:%M:%S по МСК Waiting"))
+            self.connection.privmsg(s, datetime.strftime(datetime.now() + timedelta(hours=3), "Чичас %H:%M по МСК Waiting"))
             print(nick + ': ' + message)
 
-        if message.find('+обнять') != -1:
+        if message.find('+обнять ') != -1 and message.index('+обнять ') == 0 and message[len('+обнять '):len(message)] != "":
             buffer = nick
             if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1:
                 self.connection.privmsg(s, buffer + ", думал забанить меня? WeirdChamp ")
@@ -192,6 +207,9 @@ class VBot(SingleServerIRCBot):
                     self.connection.privmsg(s, buffer + " " + randomhug + " обнимает " + hug + " VoHiYo")
                     buffer = ''
             print(nick + ': ' + message)
+        else:
+            if message[len('+обнять '):len(message)] == "":
+                self.connection.privmsg(s, "И чё ты пробуешь обнять? шизик? WeirdChamp ") 
 
         if message.find('+COCK') != -1:
             buffer = nick
@@ -230,7 +248,7 @@ class VBot(SingleServerIRCBot):
             self.connection.privmsg(s, "ThumbUp")
             print(nick + ': ' + message)
 
-
+        """"
         if message.strip() == '+вверх':
             with open('down.txt', 'r', encoding='utf-8') as n:
                 downn = list(n)
@@ -258,8 +276,9 @@ class VBot(SingleServerIRCBot):
                     buffer = ''
             self.connection.privmsg(s, "Чат проиграл, время вышло Sadge ")
             print(nick + ': ' + message)
+        """""
 
-        if message.find('+когда') != -1:
+        if message.find('+когда ') != -1 and message.index('+когда ') == 0 and message[len('+когда '):len(message)] != "":
             buffer = nick
             with open('kogda.txt', 'r', encoding='utf-8') as m:
                 listkogda = list(m)
@@ -270,8 +289,11 @@ class VBot(SingleServerIRCBot):
             self.connection.privmsg(s, buffer + ", " + koogda + ' ' + kogda)
             buffer = ''
             print(nick + ': ' + message)
+        else:
+            if message[len('+когда '):len(message)] == "":
+                self.connection.privmsg(s, "И чё я должен сделать? шизик? WeirdChamp ") 
 
-        if message.find('+привет') != -1:
+        if message.find('+привет ') != -1 and message.index('+привет ') == 0 and message[len('+привет '):len(message)] != "":
             buffer = nick
             if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1:
                 self.connection.privmsg(s, buffer + ", думал забанить меня? WeirdChamp ")
@@ -286,6 +308,9 @@ class VBot(SingleServerIRCBot):
                     self.connection.privmsg(s, buffer + " передаёт " + randommm + " привет " + privet + " peepoHey peepoLove")
                     buffer = ''
             print(nick + ': ' + message)
+        else:
+            if message[len('+привет '):len(message)] == "":
+                self.connection.privmsg(s, "И кого я должен приветствовать? шизик? WeirdChamp ") 
         time.sleep(0.05)
 
     @staticmethod
