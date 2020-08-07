@@ -148,7 +148,7 @@ class VBot(SingleServerIRCBot):
 
             if message.find('+do ') != -1 and message.index('+do ') == 0 and message[len('+do '):len(message)] != "":
                 buffer = nick
-                if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1:
+                if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find('заходите к'):
                     self.connection.privmsg(s, buffer + ", думал забанить меня? WeirdChamp ")
                     buffer = ''
                 else:
@@ -166,7 +166,7 @@ class VBot(SingleServerIRCBot):
                     self.connection.privmsg(s, "И чё я должен сделать? шизик? WeirdChamp ") 
 
             if message.find('+бубу ') != -1 and message.index('+бубу ') == 0 and message[len('+бубу '):len(message)] != "":
-                if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1:
+                if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find('заходите к'):
                     self.connection.privmsg(s, buffer + ", думал забанить меня? WeirdChamp ")
                 else:
                     bubu = str.replace(message, '+бубу ', '')
@@ -180,7 +180,7 @@ class VBot(SingleServerIRCBot):
             if message.find('+love ') != -1 and message.index('+love ') == 0 and message[len('+love '):len(message)] != "":
                 buffer = nick
                 procent = random.randrange(0, 100, 1)
-                if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1:
+                if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find('заходите к'):
                     self.connection.privmsg(s, buffer + ", думал забанить меня? WeirdChamp ")
                 else:
                     love = str.replace(message, '+love ', '')
@@ -196,7 +196,7 @@ class VBot(SingleServerIRCBot):
                 buffer = nick
                 procent = random.randrange(0, 100, 1)
                 ruble = random.randrange(0, 2000, 1)
-                if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1:
+                if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find('заходите к'):
                     self.connection.privmsg(s, buffer + ", думал забанить меня? WeirdChamp ")
                 else:
                     steal = str.replace(message, '+steal ', '')
@@ -214,7 +214,7 @@ class VBot(SingleServerIRCBot):
 
             if message.find('+try ') != -1 and message.index('+try ') == 0 and message[len('+try '):len(message)] != "":
                 buffer = nick
-                if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1:
+                if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find('заходите к'):
                     self.connection.privmsg(s, buffer + ", думал забанить меня? WeirdChamp ")
                 else:
                     tryy = str.replace(message, '+try ', '')
@@ -238,7 +238,7 @@ class VBot(SingleServerIRCBot):
 
             if message.find('+обнять ') != -1 and message.index('+обнять ') == 0 and message[len('+обнять '):len(message)] != "":
                 buffer = nick
-                if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1:
+                if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find('заходите к'):
                     self.connection.privmsg(s, buffer + ", думал забанить меня? WeirdChamp ")
                     buffer = ''
                 else:
@@ -324,22 +324,27 @@ class VBot(SingleServerIRCBot):
 
             if message.find('+когда ') != -1 and message.index('+когда ') == 0 and message[len('+когда '):len(message)] != "":
                 buffer = nick
-                with open('kogda.txt', 'r', encoding='utf-8') as m:
-                    listkogda = list(m)
-                    koogda = str.replace(message, '+когда ', '')
-                    koogda = re.sub("\n", '', koogda)
-                    kogda = random.choice(listkogda)
-                    kogda = re.sub("\n", '', kogda)
-                self.connection.privmsg(s, buffer + ", " + koogda + ' ' + kogda)
-                buffer = ''
-                print(nick + ': ' + message)
+                if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find('заходите к'):
+                    self.connection.privmsg(s, buffer + ", думал забанить меня? WeirdChamp ")
+                    buffer = ''
+                else:
+                    with open('kogda.txt', 'r', encoding='utf-8') as m:
+                        listkogda = list(m)
+                        koogda = str.replace(message, '+когда ', '')
+                        koogda = re.sub("\n", '', koogda)
+                        kogda = random.choice(listkogda)
+                        kogda = re.sub("\n", '', kogda)
+                    self.connection.privmsg(s, buffer + ", " + koogda + ' ' + kogda)
+                    buffer = ''
+                    print(nick + ': ' + message)
+                    
             else:
                 if message.find('+когда') != -1 and message.index('+когда') == 0 and message[len('+когда'):len(message)] == "":
                     self.connection.privmsg(s, "И чё я должен сделать? шизик? WeirdChamp ") 
 
             if message.find('+привет ') != -1 and message.index('+привет ') == 0 and message[len('+привет '):len(message)] != "":
                 buffer = nick
-                if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1:
+                if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find('заходите к'):
                     self.connection.privmsg(s, buffer + ", думал забанить меня? WeirdChamp ")
                     buffer = ''
                 else:
