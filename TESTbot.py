@@ -7,7 +7,7 @@ import time
 class Bot(commands.Bot):
 
     def __init__(self):
-        super().__init__(irc_token='oauth:1jfryqh0pt9e4uyvhvdl22hk2v9w7a', client_id='...', nick='SLONB0T', prefix='+',initial_channels=['mooncat3'])
+        super().__init__(irc_token='oauth:1jfryqh0pt9e4uyvhvdl22hk2v9w7a', client_id='9qmki7jzmtz6qnjj4z35yucfn29xb9', nick='SLONB0T', prefix='+',initial_channels=['mooncat3'])
 
 
 
