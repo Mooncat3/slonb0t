@@ -14,6 +14,11 @@ CHANNEL = '#jesusavgn'
 
 
 class VBot(SingleServerIRCBot):
+    
+    changingInt = 0
+    maxInt = 0
+    whois = ""
+    ischanging = False
 
     def __init__(self, host, port, nickname, password, channel):
         SingleServerIRCBot.__init__(self, [(host, port, password)], nickname, nickname)
@@ -101,6 +106,34 @@ class VBot(SingleServerIRCBot):
             self.connection.privmsg(s, randomm.format(buffer))
             buffer = ''
             print(nick + ': ' + message)
+            
+        if message.find('+кто ') != -1 and message.index('+кто ') == 0 and message[len('+кто '):len(message)] != "" or self.ischanging:
+            buffer = nick
+            if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1:
+                self.connection.privmsg(s, buffer + ", думал забанить меня? WeirdChamp ")
+                buffer = ''
+            else:
+                if self.changingInt == self.maxInt and self.changingInt > 0:
+                    self.ischanging = False
+                    self.changingInt = 0
+                    self.maxInt = 0
+                    self.connection.privmsg(s, ":point_up_2: @{} - {} PogU ".format(buffer, self.whois))
+                    buffer = ''
+                else:
+                    if self.changingInt == self.maxInt:
+                        who = str.replace(message, '+кто ', '')
+                        who = re.sub("\n", '', who)
+                        self.whois = who
+                        self.ischanging = True
+                        self.connection.privmsg(s, "хммм, кто же MonkaHmm ....")
+                        self.maxInt = random.randint(5, 15)
+                        self.changingInt += 1
+                    else:
+                        self.changingInt += 1
+            print(nick + ': ' + message)
+        else:
+            if message.find('+кто') != -1 and message.index('+кто') == 0 and message[len('+кто'):len(message)] == "":
+                self.connection.privmsg(s, "И как я должен его обозвать? шизик? WeirdChamp ")
 
         if message.find('+do ') != -1 and message.index('+do ') == 0 and message[len('+do '):len(message)] != "":
             buffer = nick
