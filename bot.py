@@ -117,7 +117,7 @@ class VBot(SingleServerIRCBot):
                 buffer = ''
             else:
                 self.changingInt += 1
-                print(self.changingInt + " " + self.maxInt)
+                print(str(self.changingInt) + " " + str(self.maxInt))
             
         if message.find('+кто ') != -1 and message.index('+кто ') == 0 and message[len('+кто '):len(message)] != "":
             buffer = nick
