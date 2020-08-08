@@ -12,7 +12,7 @@ class Bot(commands.Bot):
 
     def __init__(self):
         super().__init__(irc_token='oauth:2ed7e435kk3dm1tpgo73gnu7xcjczy', client_id='9qmki7jzmtz6qnjj4z35yucfn29xb9',
-                         nick='SLONB0T', prefix='+', initial_channels=['danantur'])
+                         nick='SLONB0T', prefix='+', initial_channels='danantur')
 
     async def event_ready(self):
         print(f'Ready | {self.nick} on {self.initial_channels}')
@@ -36,39 +36,24 @@ class Bot(commands.Bot):
             soup = BeautifulSoup(html, 'html.parser')
             global anekdot
             anekdot = soup.find('div', class_='item_text').get_text()
-            anekdot = re.sub(r'^(.{493}).*$', '\g<1>...', anekdot)
 
         def parse():
             html = get_html(URL)
             get_content(html.text)
 
         parse()
-        await s(anekdot + " KeK")
+        anekdott = (anekdot[:493] + '...') if len(anekdot) > 493 else anekdot
+        await s(anekdott + " KeK")
 
     @commands.command(name='гороскоп')
     async def goroskop(self, ctx):
+        nickname = ctx.author.name
         message = ctx.message.content
         s = ctx.send
         
-        if message.strip() == "+гороскоп":
-            URL = 'https://www.wday.ru/horoscope/common/#thematic'
-            HEADERS = {}
-            def get_html(url, params=None):
-                r = requests.get(url, headers=HEADERS, params=params)
-                return r
-            def get_content(html):
-                soup = BeautifulSoup(html, 'html.parser')
-                global goroskop
-                global goroskop_day
-                goroskop = soup.find('div',class_='tab-panel text active').get_text()
-                goroskop_day = soup.find('h1', class_='horo-title').get_text()
-                
-            def parse():
-                html = get_html(URL)
-                get_content(html.text)
-            parse()
-            goroskop = goroskop[:495]
-            await s(goroskop_day + ' - ' + goroskop)
+        if message == "+гороскоп":
+            await s(nickname+", введите +гороскоп [знак зодиака]")
+            
         
         
         
