@@ -278,9 +278,7 @@ class Bot(commands.Bot):
 
         if message.find('+гороскоп рыба') != -1:
             URL = 'https://www.wday.ru/horoscope/common/ryby/daily/'
-            HEADERS = {
-                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36',
-                'accept': '*/*'}
+            HEADERS = {}
 
             def get_html(url, params=None):
                 r = requests.get(url, headers=HEADERS, params=params)
