@@ -18,7 +18,7 @@ class Bot(commands.Bot):
     async def event_message(self, message):
         await self.handle_commands(message)
 
-    @commands.command(name='anekdot')
+    @commands.command(name='анекдот')
     async def anekdot(self, ctx):
         s = ctx.send
         URL = 'http://anecdotica.ru/'
@@ -36,7 +36,7 @@ class Bot(commands.Bot):
             html = get_html(URL)
             get_content(html.text)
         parse()
-        await s(anekdot)
+        await s(anekdot+"KeK")
 
     @commands.command(name='topclipever')
     async def topclipever(self, ctx):
@@ -146,7 +146,7 @@ class Bot(commands.Bot):
     async def help2(self, ctx):
         nickname = ctx.author.name
         s = ctx.send
-        await s(nickname + ", страница 3: +topclipever [category], +topclipyear [category], +topclipmonth [category], +topclipday [category]")
+        await s(nickname + ", страница 3: +анекдот, +topclipever [category], +topclipyear [category], +topclipmonth [category], +topclipday [category]")
 
     @commands.command(name='temp')
     async def temp(self, ctx):
