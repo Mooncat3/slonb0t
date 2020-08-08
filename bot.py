@@ -18,6 +18,10 @@ class Bot(commands.Bot):
     async def event_message(self, message):
         await self.handle_commands(message)
 
+        
+        
+        
+        
     @commands.command(name='анекдот')
     async def anekdot(self, ctx):
         s = ctx.send
@@ -37,7 +41,40 @@ class Bot(commands.Bot):
             get_content(html.text)
         parse()
         await s(anekdot+" KeK")
+        
+        
+    @commands.command(name='гороскоп')
+    async def goroskop(self, ctx):
+        s = ctx.send
+        URL = 'https://horo.mail.ru/'
+        HEADERS = {
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36',
+            'accept': '*/*'}
+        def get_html(url, params=None):
+            r = requests.get(url, headers=HEADERS, params=params)
+            return r
+        def get_content(html):
+            soup = BeautifulSoup(html, 'html.parser')
+            global goroskop
+            global goroskop_day
+            global goroskop_month
+            goroskop = soup.find('div', class_='article__item article__item_alignment_left article__item_html').get_text()
+            goroskop_day = soup.find('div', class_='p-prediction__date-day').get_text()
+            goroskop_month = soup.find('span', class_='p-prediction__date__text__inner').get_text()
+        def parse():
+            html = get_html(URL)
+            get_content(html.text)
+        parse()
+        await s('Гороскоп на '+goroskop_day +' '+goroskop_month+' для всех знаков - '+goroskop)
 
+        
+        
+        
+        
+        
+        
+        
+        
     @commands.command(name='topclipever')
     async def topclipever(self, ctx):
         nickname = ctx.author.name
@@ -146,7 +183,7 @@ class Bot(commands.Bot):
     async def help2(self, ctx):
         nickname = ctx.author.name
         s = ctx.send
-        await s(nickname + ", страница 3: +анекдот, +topclipever [category], +topclipyear [category], +topclipmonth [category], +topclipday [category]")
+        await s(nickname + ", страница 3: +анекдот, +гороскоп, +topclipever [category], +topclipyear [category], +topclipmonth [category], +topclipday [category]")
 
     @commands.command(name='temp')
     async def temp(self, ctx):
