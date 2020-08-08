@@ -36,6 +36,7 @@ class Bot(commands.Bot):
             soup = BeautifulSoup(html, 'html.parser')
             global anekdot
             anekdot = soup.find('div', class_='item_text').get_text()
+            anekdot = re.sub(r'^(.{493}).*$', '\g<1>...', anekdot)
 
         def parse():
             html = get_html(URL)
