@@ -50,7 +50,7 @@ class Bot(commands.Bot):
         s = ctx.send
         if message.find('+гороскоп овен') != -1:
             URL = 'https://www.wday.ru/horoscope/common/oven/daily/'
-            HEADERS = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36','accept': '*/*'}
+            HEADERS = {}
             def get_html(url, params=None):
                 r = requests.get(url, headers=HEADERS, params=params)
                 return r
@@ -68,7 +68,7 @@ class Bot(commands.Bot):
 
         if message.find('+гороскоп телец') != -1:
             URL = 'https://www.wday.ru/horoscope/common/telec/daily/'
-            HEADERS = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36','accept': '*/*'}
+            HEADERS = {}
             def get_html(url, params=None):
                 r = requests.get(url, headers=HEADERS, params=params)
                 return r
@@ -86,7 +86,7 @@ class Bot(commands.Bot):
 
         if message.find('+гороскоп близнецы') != -1:
             URL = 'https://www.wday.ru/horoscope/common/bliznecy/daily/'
-            HEADERS = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36','accept': '*/*'}
+            HEADERS = {}
             def get_html(url, params=None):
                 r = requests.get(url, headers=HEADERS, params=params)
                 return r
@@ -104,7 +104,7 @@ class Bot(commands.Bot):
 
         if message.find('+гороскоп рак') != -1:
             URL = 'https://www.wday.ru/horoscope/common/rak/daily/'
-            HEADERS = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36','accept': '*/*'}
+            HEADERS = {}
             def get_html(url, params=None):
                 r = requests.get(url, headers=HEADERS, params=params)
                 return r
@@ -122,7 +122,7 @@ class Bot(commands.Bot):
 
         if message.find('+гороскоп лев') != -1:
             URL = 'https://www.wday.ru/horoscope/common/lev/daily/'
-            HEADERS = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36','accept': '*/*'}
+            HEADERS = {}
             def get_html(url, params=None):
                 r = requests.get(url, headers=HEADERS, params=params)
                 return r
@@ -140,7 +140,7 @@ class Bot(commands.Bot):
 
         if message.find('+гороскоп дева') != -1:
             URL = 'https://www.wday.ru/horoscope/common/deva/daily/'
-            HEADERS = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36','accept': '*/*'}
+            HEADERS = {}
             def get_html(url, params=None):
                 r = requests.get(url, headers=HEADERS, params=params)
                 return r
@@ -158,9 +158,7 @@ class Bot(commands.Bot):
 
         if message.find('+гороскоп весы') != -1:
             URL = 'https://www.wday.ru/horoscope/common/vesy/daily/'
-            HEADERS = {
-                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36',
-                'accept': '*/*'}
+            HEADERS = {}
 
             def get_html(url, params=None):
                 r = requests.get(url, headers=HEADERS, params=params)
@@ -182,9 +180,7 @@ class Bot(commands.Bot):
 
         if message.find('+гороскоп скорпион') != -1:
             URL = 'https://www.wday.ru/horoscope/common/skorpion/daily/'
-            HEADERS = {
-                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36',
-                'accept': '*/*'}
+            HEADERS = {}
 
             def get_html(url, params=None):
                 r = requests.get(url, headers=HEADERS, params=params)
@@ -206,9 +202,7 @@ class Bot(commands.Bot):
 
         if message.find('+гороскоп стрелец') != -1:
             URL = 'https://www.wday.ru/horoscope/common/strelec/daily/'
-            HEADERS = {
-                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36',
-                'accept': '*/*'}
+            HEADERS = {}
 
             def get_html(url, params=None):
                 r = requests.get(url, headers=HEADERS, params=params)
@@ -230,9 +224,7 @@ class Bot(commands.Bot):
 
         if message.find('+гороскоп козерог') != -1:
             URL = 'https://www.wday.ru/horoscope/common/kozerog/daily/'
-            HEADERS = {
-                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36',
-                'accept': '*/*'}
+            HEADERS = {}
 
             def get_html(url, params=None):
                 r = requests.get(url, headers=HEADERS, params=params)
@@ -254,9 +246,7 @@ class Bot(commands.Bot):
 
         if message.find('+гороскоп водолей') != -1:
             URL = 'https://www.wday.ru/horoscope/common/vodolej/daily/'
-            HEADERS = {
-                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36',
-                'accept': '*/*'}
+            HEADERS = {}
 
             def get_html(url, params=None):
                 r = requests.get(url, headers=HEADERS, params=params)
@@ -408,7 +398,7 @@ class Bot(commands.Bot):
     async def help2(self, ctx):
         nickname = ctx.author.name
         s = ctx.send
-        await s(nickname + ", страница 3: +анекдот, +гороскоп, +topclipever [category], +topclipyear [category], +topclipmonth [category], +topclipday [category]")
+        await s(nickname + ", страница 3: +анекдот, +гороскоп [знак зодиака], +topclipever [category], +topclipyear [category], +topclipmonth [category], +topclipday [category]")
 
     @commands.command(name='temp')
     async def temp(self, ctx):
