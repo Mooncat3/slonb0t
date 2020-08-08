@@ -61,7 +61,7 @@ class Bot(commands.Bot):
                 global goroskop
                 global goroskop_day
                 goroskop = soup.find('div',class_='tab-panel text active').get_text()
-                goroskop = goroskop[:497] + (goroskop[497:] and '...')
+                goroskop = goroskop[:499]
                 goroskop_day = soup.find('h1', class_='horo-title').get_text()
                 
             def parse():
