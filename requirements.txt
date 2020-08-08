@@ -1,3 +1,5 @@
 datetime
 twitchio
 rfc3339
+requests
+bs4
