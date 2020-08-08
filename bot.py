@@ -7,10 +7,12 @@ import re
 import random
 import time
 
+
 class Bot(commands.Bot):
 
     def __init__(self):
-        super().__init__(irc_token='oauth:2ed7e435kk3dm1tpgo73gnu7xcjczy', client_id='9qmki7jzmtz6qnjj4z35yucfn29xb9', nick='SLONB0T', prefix='+',initial_channels=['danantur'])
+        super().__init__(irc_token='oauth:2ed7e435kk3dm1tpgo73gnu7xcjczy', client_id='9qmki7jzmtz6qnjj4z35yucfn29xb9',
+                         nick='SLONB0T', prefix='+', initial_channels=['mooncat3'])
 
     async def event_ready(self):
         print(f'Ready | {self.nick} on {self.initial_channels}')
@@ -18,12 +20,9 @@ class Bot(commands.Bot):
     async def event_message(self, message):
         await self.handle_commands(message)
 
-        
-        
-        
-        
     @commands.command(name='анекдот')
     async def anekdot(self, ctx):
+        message = ctx.message.content
         s = ctx.send
         URL = 'http://anecdotica.ru/'
         HEADERS = {
@@ -32,49 +31,275 @@ class Bot(commands.Bot):
         def get_html(url, params=None):
             r = requests.get(url, headers=HEADERS, params=params)
             return r
+
         def get_content(html):
             soup = BeautifulSoup(html, 'html.parser')
             global anekdot
             anekdot = soup.find('div', class_='item_text').get_text()
+
         def parse():
             html = get_html(URL)
             get_content(html.text)
+
         parse()
-        await s(anekdot+" KeK")
-        
-        
+        await s(anekdot + " KeK")
+
     @commands.command(name='гороскоп')
     async def goroskop(self, ctx):
+        message = ctx.message.content
         s = ctx.send
-        URL = 'https://horo.mail.ru/'
-        HEADERS = {
-            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36',
-            'accept': '*/*'}
-        def get_html(url, params=None):
-            r = requests.get(url, headers=HEADERS, params=params)
-            return r
-        def get_content(html):
-            soup = BeautifulSoup(html, 'html.parser')
-            global goroskop
-            global goroskop_day
-            global goroskop_month
-            goroskop = soup.find('div', class_='article__item article__item_alignment_left article__item_html').get_text()
-            goroskop_day = soup.find('div', class_='p-prediction__date-day').get_text()
-            goroskop_month = soup.find('span', class_='p-prediction__date__text__inner').get_text()
-        def parse():
-            html = get_html(URL)
-            get_content(html.text)
-        parse()
-        await s('Гороскоп на '+goroskop_day +' '+goroskop_month+' для всех знаков - '+goroskop)
+        if message.find('+гороскоп овен') != -1:
+            URL = 'https://www.wday.ru/horoscope/common/oven/daily/'
+            HEADERS = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36','accept': '*/*'}
+            def get_html(url, params=None):
+                r = requests.get(url, headers=HEADERS, params=params)
+                return r
+            def get_content(html):
+                soup = BeautifulSoup(html, 'html.parser')
+                global goroskop
+                global goroskop_day
+                goroskop = soup.find('div',class_='tab-panel text active').get_text()
+                goroskop_day = soup.find('h2', class_='horo-title').get_text()
+            def parse():
+                html = get_html(URL)
+                get_content(html.text)
+            parse()
+            await s(goroskop_day + ' для овенов - ' + goroskop)
 
-        
-        
-        
-        
-        
-        
-        
-        
+        if message.find('+гороскоп телец') != -1:
+            URL = 'https://www.wday.ru/horoscope/common/telec/daily/'
+            HEADERS = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36','accept': '*/*'}
+            def get_html(url, params=None):
+                r = requests.get(url, headers=HEADERS, params=params)
+                return r
+            def get_content(html):
+                soup = BeautifulSoup(html, 'html.parser')
+                global goroskop
+                global goroskop_day
+                goroskop = soup.find('div',class_='tab-panel text active').get_text()
+                goroskop_day = soup.find('h2', class_='horo-title').get_text()
+            def parse():
+                html = get_html(URL)
+                get_content(html.text)
+            parse()
+            await s(goroskop_day + ' для тельцов - ' + goroskop)
+
+        if message.find('+гороскоп близнецы') != -1:
+            URL = 'https://www.wday.ru/horoscope/common/bliznecy/daily/'
+            HEADERS = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36','accept': '*/*'}
+            def get_html(url, params=None):
+                r = requests.get(url, headers=HEADERS, params=params)
+                return r
+            def get_content(html):
+                soup = BeautifulSoup(html, 'html.parser')
+                global goroskop
+                global goroskop_day
+                goroskop = soup.find('div',class_='tab-panel text active').get_text()
+                goroskop_day = soup.find('h2', class_='horo-title').get_text()
+            def parse():
+                html = get_html(URL)
+                get_content(html.text)
+            parse()
+            await s(goroskop_day + ' для близнецов - ' + goroskop)
+
+        if message.find('+гороскоп рак') != -1:
+            URL = 'https://www.wday.ru/horoscope/common/rak/daily/'
+            HEADERS = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36','accept': '*/*'}
+            def get_html(url, params=None):
+                r = requests.get(url, headers=HEADERS, params=params)
+                return r
+            def get_content(html):
+                soup = BeautifulSoup(html, 'html.parser')
+                global goroskop
+                global goroskop_day
+                goroskop = soup.find('div',class_='tab-panel text active').get_text()
+                goroskop_day = soup.find('h2', class_='horo-title').get_text()
+            def parse():
+                html = get_html(URL)
+                get_content(html.text)
+            parse()
+            await s(goroskop_day + ' для раков - ' + goroskop)
+
+        if message.find('+гороскоп лев') != -1:
+            URL = 'https://www.wday.ru/horoscope/common/lev/daily/'
+            HEADERS = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36','accept': '*/*'}
+            def get_html(url, params=None):
+                r = requests.get(url, headers=HEADERS, params=params)
+                return r
+            def get_content(html):
+                soup = BeautifulSoup(html, 'html.parser')
+                global goroskop
+                global goroskop_day
+                goroskop = soup.find('div',class_='tab-panel text active').get_text()
+                goroskop_day = soup.find('h2', class_='horo-title').get_text()
+            def parse():
+                html = get_html(URL)
+                get_content(html.text)
+            parse()
+            await s(goroskop_day + ' для львов - ' + goroskop)
+
+        if message.find('+гороскоп дева') != -1:
+            URL = 'https://www.wday.ru/horoscope/common/deva/daily/'
+            HEADERS = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36','accept': '*/*'}
+            def get_html(url, params=None):
+                r = requests.get(url, headers=HEADERS, params=params)
+                return r
+            def get_content(html):
+                soup = BeautifulSoup(html, 'html.parser')
+                global goroskop
+                global goroskop_day
+                goroskop = soup.find('div',class_='tab-panel text active').get_text()
+                goroskop_day = soup.find('h2', class_='horo-title').get_text()
+            def parse():
+                html = get_html(URL)
+                get_content(html.text)
+            parse()
+            await s(goroskop_day + ' для дев - ' + goroskop)
+
+        if message.find('+гороскоп весы') != -1:
+            URL = 'https://www.wday.ru/horoscope/common/vesy/daily/'
+            HEADERS = {
+                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36',
+                'accept': '*/*'}
+
+            def get_html(url, params=None):
+                r = requests.get(url, headers=HEADERS, params=params)
+                return r
+
+            def get_content(html):
+                soup = BeautifulSoup(html, 'html.parser')
+                global goroskop
+                global goroskop_day
+                goroskop = soup.find('div', class_='tab-panel text active').get_text()
+                goroskop_day = soup.find('h2', class_='horo-title').get_text()
+
+            def parse():
+                html = get_html(URL)
+                get_content(html.text)
+
+            parse()
+            await s(goroskop_day + ' для весов - ' + goroskop)
+
+        if message.find('+гороскоп скорпион') != -1:
+            URL = 'https://www.wday.ru/horoscope/common/skorpion/daily/'
+            HEADERS = {
+                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36',
+                'accept': '*/*'}
+
+            def get_html(url, params=None):
+                r = requests.get(url, headers=HEADERS, params=params)
+                return r
+
+            def get_content(html):
+                soup = BeautifulSoup(html, 'html.parser')
+                global goroskop
+                global goroskop_day
+                goroskop = soup.find('div', class_='tab-panel text active').get_text()
+                goroskop_day = soup.find('h2', class_='horo-title').get_text()
+
+            def parse():
+                html = get_html(URL)
+                get_content(html.text)
+
+            parse()
+            await s(goroskop_day + ' для скорпионов - ' + goroskop)
+
+        if message.find('+гороскоп стрелец') != -1:
+            URL = 'https://www.wday.ru/horoscope/common/strelec/daily/'
+            HEADERS = {
+                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36',
+                'accept': '*/*'}
+
+            def get_html(url, params=None):
+                r = requests.get(url, headers=HEADERS, params=params)
+                return r
+
+            def get_content(html):
+                soup = BeautifulSoup(html, 'html.parser')
+                global goroskop
+                global goroskop_day
+                goroskop = soup.find('div', class_='tab-panel text active').get_text()
+                goroskop_day = soup.find('h2', class_='horo-title').get_text()
+
+            def parse():
+                html = get_html(URL)
+                get_content(html.text)
+
+            parse()
+            await s(goroskop_day + ' для стрельцов - ' + goroskop)
+
+        if message.find('+гороскоп козерог') != -1:
+            URL = 'https://www.wday.ru/horoscope/common/kozerog/daily/'
+            HEADERS = {
+                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36',
+                'accept': '*/*'}
+
+            def get_html(url, params=None):
+                r = requests.get(url, headers=HEADERS, params=params)
+                return r
+
+            def get_content(html):
+                soup = BeautifulSoup(html, 'html.parser')
+                global goroskop
+                global goroskop_day
+                goroskop = soup.find('div', class_='tab-panel text active').get_text()
+                goroskop_day = soup.find('h2', class_='horo-title').get_text()
+
+            def parse():
+                html = get_html(URL)
+                get_content(html.text)
+
+            parse()
+            await s(goroskop_day + ' для козерогов - ' + goroskop)
+
+        if message.find('+гороскоп водолей') != -1:
+            URL = 'https://www.wday.ru/horoscope/common/vodolej/daily/'
+            HEADERS = {
+                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36',
+                'accept': '*/*'}
+
+            def get_html(url, params=None):
+                r = requests.get(url, headers=HEADERS, params=params)
+                return r
+
+            def get_content(html):
+                soup = BeautifulSoup(html, 'html.parser')
+                global goroskop
+                global goroskop_day
+                goroskop = soup.find('div', class_='tab-panel text active').get_text()
+                goroskop_day = soup.find('h2', class_='horo-title').get_text()
+
+            def parse():
+                html = get_html(URL)
+                get_content(html.text)
+
+            parse()
+            await s(goroskop_day + ' для водолеев - ' + goroskop)
+
+        if message.find('+гороскоп рыба') != -1:
+            URL = 'https://www.wday.ru/horoscope/common/ryby/daily/'
+            HEADERS = {
+                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36',
+                'accept': '*/*'}
+
+            def get_html(url, params=None):
+                r = requests.get(url, headers=HEADERS, params=params)
+                return r
+
+            def get_content(html):
+                soup = BeautifulSoup(html, 'html.parser')
+                global goroskop
+                global goroskop_day
+                goroskop = soup.find('div', class_='tab-panel text active').get_text()
+                goroskop_day = soup.find('h2', class_='horo-title').get_text()
+
+            def parse():
+                html = get_html(URL)
+                get_content(html.text)
+
+            parse()
+            await s(goroskop_day + ' для рыб - ' + goroskop)
+
     @commands.command(name='topclipever')
     async def topclipever(self, ctx):
         nickname = ctx.author.name
@@ -85,11 +310,12 @@ class Bot(commands.Bot):
         result = forApiCalls.gettopclip(0, top)
         if result["code"] != "2":
             if result["code"] == "0":
-                await s(nickname+", самый топовый клип за всё время PogU {} ".format(result["url"]))
+                await s(nickname + ", самый топовый клип за всё время PogU {} ".format(result["url"]))
             else:
-                await s(nickname+", самый топовый клип по категории {} за всё время PogU {} ".format(top, result["url"]))
+                await s(
+                    nickname + ", самый топовый клип по категории {} за всё время PogU {} ".format(top, result["url"]))
         else:
-            await s(nickname+", в топе 100 за этот период такой категории нет Sadge")
+            await s(nickname + ", в топе 100 за этот период такой категории нет Sadge")
 
     @commands.command(name='topclipyear')
     async def topclipyear(self, ctx):
@@ -101,11 +327,11 @@ class Bot(commands.Bot):
         result = forApiCalls.gettopclip(1, top)
         if result["code"] != "2":
             if result["code"] == "0":
-                await s(nickname+", самый топовый клип за год PogU {} ".format(result["url"]))
+                await s(nickname + ", самый топовый клип за год PogU {} ".format(result["url"]))
             else:
-                await s(nickname+", самый топовый клип по категории {} за год PogU {} ".format(top, result["url"]))
+                await s(nickname + ", самый топовый клип по категории {} за год PogU {} ".format(top, result["url"]))
         else:
-            await s(nickname+", в топе 100 за этот период такой категории нет Sadge")
+            await s(nickname + ", в топе 100 за этот период такой категории нет Sadge")
 
     @commands.command(name='topclipmonth')
     async def topclipmonth(self, ctx):
@@ -117,11 +343,11 @@ class Bot(commands.Bot):
         result = forApiCalls.gettopclip(2, top)
         if result["code"] != "2":
             if result["code"] == "0":
-                await s(nickname+", самый топовый клип за месяц PogU {} ".format(result["url"]))
+                await s(nickname + ", самый топовый клип за месяц PogU {} ".format(result["url"]))
             else:
-                await s(nickname+", самый топовый клип по категории {} за месяц PogU {} ".format(top, result["url"]))
+                await s(nickname + ", самый топовый клип по категории {} за месяц PogU {} ".format(top, result["url"]))
         else:
-            await s(nickname+", в топе 100 за этот период такой категории нет Sadge")
+            await s(nickname + ", в топе 100 за этот период такой категории нет Sadge")
 
     @commands.command(name='topclipday')
     async def topclipday(self, ctx):
@@ -135,7 +361,8 @@ class Bot(commands.Bot):
             if result["code"] == "0":
                 await s("{}, самый топовый клип за 24 часа PogU {} ".format(nickname, result["url"]))
             else:
-                await s("{}, самый топовый клип по категории {} за 24 часа PogU {} ".format(nickname, top, result["url"]))
+                await s(
+                    "{}, самый топовый клип по категории {} за 24 часа PogU {} ".format(nickname, top, result["url"]))
         else:
             await s("{}, в топе 100 за этот период такой категории нет Sadge".format(nickname))
 
@@ -145,16 +372,16 @@ class Bot(commands.Bot):
         s = ctx.send
         iq = random.randrange(55, 180, 1)
         if iq == 110:
-            await s(nickname+", ваш IQ = " + str(iq) + "! Вы Хесус?! PogU")
+            await s(nickname + ", ваш IQ = " + str(iq) + "! Вы Хесус?! PogU")
         if iq == 89:
-            await s(nickname+", ваш IQ = " + str(iq) + "! Вы Братишкин?! PogU")
+            await s(nickname + ", ваш IQ = " + str(iq) + "! Вы Братишкин?! PogU")
         else:
             if iq < 110 and iq > 70:
-                await s(nickname+", ваш IQ = " + str(iq) + "! Надо же, у стримера больше IQ чем у вас KeK")
+                await s(nickname + ", ваш IQ = " + str(iq) + "! Надо же, у стримера больше IQ чем у вас KeK")
             if iq > 110 and iq < 135:
-                await s(nickname+", ваш IQ = " + str(iq) + "! Ого, а вы не глупый человек ThumbUp")
+                await s(nickname + ", ваш IQ = " + str(iq) + "! Ого, а вы не глупый человек ThumbUp")
             if iq < 70:
-                await s(nickname+", ваш IQ = " + str(iq) + "! Чел... сходи книгу почитай WeirdChamp")
+                await s(nickname + ", ваш IQ = " + str(iq) + "! Чел... сходи книгу почитай WeirdChamp")
             if iq >= 135:
                 await s(nickname + ", ваш IQ = " + str(iq) + "! Внимание! В чате гений WAYTOOSMART Clap")
 
@@ -210,7 +437,6 @@ class Bot(commands.Bot):
             randomm = re.sub("\n", '', randomm)
             await s(randomm.format(nickname))
 
-
     @commands.command(name='do')
     async def do(self, ctx):
         message = ctx.message.content
@@ -229,7 +455,6 @@ class Bot(commands.Bot):
                     do = str.replace(message, '+do ', '')
                     do = re.sub("\n", '', do)
                     await s(randomdo.format(nickname, do))
-
 
     @commands.command(name='бубу')
     async def bubu(self, ctx):
@@ -252,7 +477,8 @@ class Bot(commands.Bot):
             await s(nickname + ", введите +love [nickname]")
         else:
             procent = random.randrange(0, 100, 1)
-            if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find('заходите') != -1:
+            if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find(
+                    'заходите') != -1:
                 await s(nickname + ", думал забанить меня? WeirdChamp ")
             else:
                 love = str.replace(message, '+love ', '')
@@ -269,7 +495,8 @@ class Bot(commands.Bot):
         else:
             procent = random.randrange(0, 100, 1)
             ruble = random.randrange(0, 2000, 1)
-            if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find('заходите') != -1:
+            if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find(
+                    'заходите') != -1:
                 await s(nickname + ", думал забанить меня? WeirdChamp ")
             else:
                 steal = str.replace(message, '+steal ', '')
@@ -287,7 +514,8 @@ class Bot(commands.Bot):
         if message[len('+try'):len(message)] == "":
             await s(nickname + ", введите +try [something]")
         else:
-            if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find('заходите') != -1:
+            if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find(
+                    'заходите') != -1:
                 await s(nickname + ", думал забанить меня? WeirdChamp ")
             else:
                 tryy = str.replace(message, '+try ', '')
@@ -311,7 +539,8 @@ class Bot(commands.Bot):
         if message[len('+обнять'):len(message)] == "":
             await s(nickname + ", введите +обнять [nickname]")
         else:
-            if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find('заходите') != -1:
+            if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find(
+                    'заходите') != -1:
                 await s(nickname + ", думал забанить меня? WeirdChamp ")
 
             else:
@@ -347,7 +576,7 @@ class Bot(commands.Bot):
             downn = list(n)
             randomdown = random.choice(downn)
             randomdown = re.sub("\n", '', randomdown)
-            await s(":point_up_2: " +str(randomdown))
+            await s(":point_up_2: " + str(randomdown))
 
         """
     @commands.command(name='игры')
@@ -378,7 +607,8 @@ class Bot(commands.Bot):
         if message[len('+когда'):len(message)] == "":
             await s(nickname + ", введите +когда [something]")
         else:
-            if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find('заходите') != -1:
+            if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find(
+                    'заходите') != -1:
                 await s(nickname + ", думал забанить меня? WeirdChamp ")
             else:
                 with open('kogda.txt', 'r', encoding='utf-8') as m:
@@ -397,7 +627,8 @@ class Bot(commands.Bot):
         if message[len('+привет'):len(message)] == "":
             await s(nickname + ", введите +привет [nickname]")
         else:
-            if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find('заходите') != -1:
+            if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find(
+                    'заходите') != -1:
                 await s(nickname + ", думал забанить меня? WeirdChamp ")
             else:
                 with open('privet.txt', 'r', encoding='utf-8') as c:
