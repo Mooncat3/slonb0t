@@ -36,7 +36,7 @@ class Bot(commands.Bot):
             html = get_html(URL)
             get_content(html.text)
         parse()
-        await s(anekdot+"KeK")
+        await s(anekdot+" KeK")
 
     @commands.command(name='topclipever')
     async def topclipever(self, ctx):
