@@ -49,6 +49,28 @@ class Bot(commands.Bot):
     async def goroskop(self, ctx):
         message = ctx.message.content
         s = ctx.send
+        
+        if message == "+гороскоп":
+            URL = 'https://www.wday.ru/horoscope/common/#thematic'
+            HEADERS = {}
+            def get_html(url, params=None):
+                r = requests.get(url, headers=HEADERS, params=params)
+                return r
+            def get_content(html):
+                soup = BeautifulSoup(html, 'html.parser')
+                global goroskop
+                global goroskop_day
+                goroskop = soup.find('div',class_='tab-panel text active').get_text()
+                goroskop_day = soup.find('h2', class_='horo-title').get_text()
+                goroskop = re.sub(r'^(.{497}).*$', '\g<1>...', goroskop)
+            def parse():
+                html = get_html(URL)
+                get_content(html.text)
+            parse()
+            await s(goroskop_day + ' - ' + goroskop)
+        
+        
+        
         if message.find('+гороскоп овен') != -1:
             URL = 'https://www.wday.ru/horoscope/common/oven/daily/'
             HEADERS = {}
