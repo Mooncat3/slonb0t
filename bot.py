@@ -1,5 +1,7 @@
 from twitchio.ext import commands
 from datetime import datetime, timedelta
+import requests
+from bs4 import BeautifulSoup
 import forApiCalls
 import re
 import random
@@ -8,14 +10,34 @@ import time
 class Bot(commands.Bot):
 
     def __init__(self):
-        super().__init__(irc_token='oauth:2ed7e435kk3dm1tpgo73gnu7xcjczy', client_id='9qmki7jzmtz6qnjj4z35yucfn29xb9', nick='SLONB0T', prefix='+',initial_channels=['mooncat3'])
+        super().__init__(irc_token='oauth:2ed7e435kk3dm1tpgo73gnu7xcjczy', client_id='9qmki7jzmtz6qnjj4z35yucfn29xb9', nick='SLONB0T', prefix='+',initial_channels=['danantur'])
 
     async def event_ready(self):
-        print(f'Ready | {self.nick}')
+        print(f'Ready | {self.nick} on {self.initial_channels}')
 
     async def event_message(self, message):
         await self.handle_commands(message)
-        
+
+    @commands.command(name='anekdot')
+    async def anekdot(self, ctx):
+        s = ctx.send
+        URL = 'http://anecdotica.ru/'
+        HEADERS = {
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36',
+            'accept': '*/*'}
+        def get_html(url, params=None):
+            r = requests.get(url, headers=HEADERS, params=params)
+            return r
+        def get_content(html):
+            soup = BeautifulSoup(html, 'html.parser')
+            global anekdot
+            anekdot = soup.find('div', class_='item_text').get_text()
+        def parse():
+            html = get_html(URL)
+            get_content(html.text)
+        parse()
+        await s(anekdot)
+
     @commands.command(name='topclipever')
     async def topclipever(self, ctx):
         nickname = ctx.author.name
