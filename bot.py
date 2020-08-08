@@ -50,7 +50,7 @@ class Bot(commands.Bot):
         message = ctx.message.content
         s = ctx.send
         
-        if message == "+гороскоп":
+        if message.strip() == "+гороскоп":
             URL = 'https://www.wday.ru/horoscope/common/#thematic'
             HEADERS = {}
             def get_html(url, params=None):
@@ -62,7 +62,7 @@ class Bot(commands.Bot):
                 global goroskop_day
                 goroskop = soup.find('div',class_='tab-panel text active').get_text()
                 goroskop_day = soup.find('h1', class_='horo-title').get_text()
-                goroskop = re.sub(r'^(.{497}).*$', '\g<1>...', goroskop)
+                goroskop = re.sub(r'^(.{490}).*$', '\g<1>...', goroskop)
             def parse():
                 html = get_html(URL)
                 get_content(html.text)
