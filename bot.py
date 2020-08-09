@@ -43,7 +43,7 @@ class Bot(commands.Bot):
         parse()
         receptt = 'Способ приготовления:'.join(recept.split('Способ приготовления:')[:-1])
         recept1 = recept[recept.find("Способ приготовления:") + 1:]
-        recept1 = (recept1[:495] + '...') if recept1 > 495 else recept1
+        recept1 = (recept1[:495] + '...') if len(recept1) > 495 else recept1
         await s(name + " - " + receptt)
         time.sleep(2)
         await s("С"+recept1)
