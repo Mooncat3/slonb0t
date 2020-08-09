@@ -148,7 +148,7 @@ class Bot(commands.Bot):
                 html = get_html(URL)
                 get_content(html.text)
             parse()
-            await s(goroskop_day + ' для овенов - ' + goroskop)
+            await s(goroskop_day + ' для овнов - ' + goroskop)
 
         if message.find('+гороскоп телец') != -1:
             URL = 'https://www.wday.ru/horoscope/common/telec/daily/'
