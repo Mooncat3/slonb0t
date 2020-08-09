@@ -524,7 +524,7 @@ class Bot(commands.Bot):
             await s(nickname + ", ваша температура " + str(temp) + " °C! У вас температура в пределах нормы ThumbUp")
         else:
             if temp > 37 and temp < 40 or temp < 35.7 and temp >= 32:
-                await s(nickname + ", ваша температура " + str(temp) + " °C! Вы больны? coronaS")
+                await s(nickname + ", ваша температура " + str(temp) + " °C! Вы больны? PepeS")
             else:
                 if temp > 40 or temp < 32:
                     await s(nickname + ", ваша температура " + str(temp) + " °C! Срочно вызывайте скорую! Durka")
