@@ -25,7 +25,7 @@ class Bot(commands.Bot):
         
     @commands.command(name='SLONB0T')
     async def slonb0t(self, ctx):
-        randomtime = random.randrange(10, 20, 1)
+        randomtime = random.randrange(3, 8, 1)
         time.sleep(randomtime)
         message = ctx.message.content
         nickname = ctx.author.name
