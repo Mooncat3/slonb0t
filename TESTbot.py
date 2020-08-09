@@ -25,7 +25,7 @@ class Bot(commands.Bot):
         response = requests.post(url=url, data={"query": jsonquery})
         content = response.content.decode('utf8').replace("'", '"')
         data = json.loads(content)
-        await s(nickname + ", " + data['aiml'])
+        await s("@"+nickname + ", " + data['aiml'])
         
     @commands.command(name='slonb0t,')
     async def privet1(self, ctx):
