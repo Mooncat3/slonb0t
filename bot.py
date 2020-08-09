@@ -12,8 +12,7 @@ import time
 class Bot(commands.Bot):
 
     def __init__(self):
-        super().__init__(irc_token='oauth:2ed7e435kk3dm1tpgo73gnu7xcjczy', client_id='9qmki7jzmtz6qnjj4z35yucfn29xb9',
-                         nick='SLONB0T', prefix=['@', '+'], initial_channels=['danantur'])
+        super().__init__(irc_token='oauth:2ed7e435kk3dm1tpgo73gnu7xcjczy', client_id='9qmki7jzmtz6qnjj4z35yucfn29xb9', nick='SLONB0T', prefix=['@', '+'], initial_channels=['danantur'])
 
     async def event_ready(self):
         print(f'Ready | {self.nick} on {self.initial_channels}')
@@ -25,7 +24,7 @@ class Bot(commands.Bot):
         
         
     @commands.command(name='SLONB0T')
-    async def privet(self, ctx):
+    async def slonb0t(self, ctx):
         randomtime = random.randrange(10, 20, 1)
         time.sleep(randomtime)
         message = ctx.message.content
@@ -522,7 +521,7 @@ class Bot(commands.Bot):
     async def help2(self, ctx):
         nickname = ctx.author.name
         s = ctx.send
-        await s(nickname + ", страница 3: +анекдот, +гороскоп [знак зодиака], +рецепт, +topclipever [category], +topclipyear [category], +topclipmonth [category], +topclipday [category]")
+        await s(nickname + ", страница 3: +анекдот, +гороскоп [знак зодиака], +рецепт, +курс (рубль-евро, евро-рубль, рубль-доллар, доллар-рубль (значение)) +topclipever [category], +topclipyear [category], +topclipmonth [category], +topclipday [category]")
 
     @commands.command(name='temp')
     async def temp(self, ctx):
