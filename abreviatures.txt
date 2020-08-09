@@ -17,5 +17,6 @@
     "SCP": "SCP Containment Breach",
     "TWDNF": "The Walking Dead: A New Frontier",
     "DOKI": "Doki Doki Literature Club",
-    "G&D": "Games + Demos"
+    "G&D": "Games + Demos",
+    "TABS": "Totally Accurate Battle Simulator"
 }
