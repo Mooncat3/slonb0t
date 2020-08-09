@@ -12,7 +12,7 @@ import time
 class Bot(commands.Bot):
 
     def __init__(self):
-        super().__init__(irc_token='oauth:2ed7e435kk3dm1tpgo73gnu7xcjczy', client_id='9qmki7jzmtz6qnjj4z35yucfn29xb9', nick='SLONB0T', prefix=['@', '+'], initial_channels=['danantur'])
+        super().__init__(irc_token='oauth:2ed7e435kk3dm1tpgo73gnu7xcjczy', client_id='9qmki7jzmtz6qnjj4z35yucfn29xb9', nick='SLONB0T', prefix=['@', '+'], initial_channels=['mooncat3'])
 
     async def event_ready(self):
         print(f'Ready | {self.nick} on {self.initial_channels}')
@@ -25,8 +25,19 @@ class Bot(commands.Bot):
         
     @commands.command(name='SLONB0T')
     async def slonb0t(self, ctx):
-        randomtime = random.randrange(3, 8, 1)
-        time.sleep(randomtime)
+        message = ctx.message.content
+        nickname = ctx.author.name
+        s = ctx.send
+        url = "https://aiproject.ru/api/"
+        query = {"ask": message, "userid": nickname, "key": ""}
+        jsonquery = json.encoder.JSONEncoder.encode(self=json.encoder.JSONEncoder(), o=query)
+        response = requests.post(url=url, data={"query": jsonquery})
+        content = response.content.decode('utf8').replace("'", '"')
+        data = json.loads(content)
+        await s(nickname + ", " + data['aiml']) 
+        
+    @commands.command(name='slonb0t,')
+    async def slonb0t1(self, ctx):
         message = ctx.message.content
         nickname = ctx.author.name
         s = ctx.send
@@ -521,7 +532,7 @@ class Bot(commands.Bot):
     async def help2(self, ctx):
         nickname = ctx.author.name
         s = ctx.send
-        await s(nickname + ", страница 3: +анекдот, +гороскоп [знак зодиака], +рецепт, +курс (рубль-евро, евро-рубль, рубль-доллар, доллар-рубль (значение)) +topclipever [category], +topclipyear [category], +topclipmonth [category], +topclipday [category]")
+        await s(nickname + ", страница 3: +анекдот, +гороскоп [знак зодиака], +рецепт, +topclipever [category], +topclipyear [category], +topclipmonth [category], +topclipday [category]")
 
     @commands.command(name='temp')
     async def temp(self, ctx):
@@ -575,9 +586,12 @@ class Bot(commands.Bot):
         if message[len('+бубу'):len(message)] == "":
             await s(nickname + ", введите +бубу [something]")
         else:
-            bubu = str.replace(message, '+бубу ', '')
-            bubu = re.sub("\n", '', bubu)
-            await s("Ну " + str(bubu) + " и " + str(bubu) + " Чё бубнить-то? ThumbUp")
+            if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find('заходите') != -1:
+                await s(nickname + ", думал забанить меня? WeirdChamp ")
+            else:
+                bubu = str.replace(message, '+бубу ', '')
+                bubu = re.sub("\n", '', bubu)
+                await s("Ну " + str(bubu) + " и " + str(bubu) + " Чё бубнить-то? ThumbUp")
 
     @commands.command(name='love')
     async def love(self, ctx):
@@ -606,8 +620,7 @@ class Bot(commands.Bot):
         else:
             procent = random.randrange(0, 100, 1)
             ruble = random.randrange(0, 2000, 1)
-            if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find(
-                    'заходите') != -1:
+            if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find('заходите') != -1:
                 await s(nickname + ", думал забанить меня? WeirdChamp ")
             else:
                 steal = str.replace(message, '+steal ', '')
