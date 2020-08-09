@@ -6,7 +6,7 @@ import re
 class Bot(commands.Bot):
 
     def __init__(self):
-        super().__init__(irc_token='oauth:2ed7e435kk3dm1tpgo73gnu7xcjczy', client_id=forApiCalls.CLIENT_ID, nick='SLONB0T', prefix='@', initial_channels=['danantur'])
+        super().__init__(irc_token='oauth:2ed7e435kk3dm1tpgo73gnu7xcjczy', client_id='gp762nuuoqcoxypju8c569th9wz7q5', nick='SLONB0T', prefix='@', initial_channels=['danantur'])
 
     async def event_ready(self):
         print(f'Ready | {self.nick}')
