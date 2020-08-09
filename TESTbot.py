@@ -27,7 +27,7 @@ class Bot(commands.Bot):
         data = json.loads(content)
         await s(nickname + ", " + data['aiml'])
         
-    @commands.command(name='slonb0t, ')
+    @commands.command(name='slonb0t,')
     async def privet1(self, ctx):
         message = ctx.message.content
         nickname = ctx.author.name
