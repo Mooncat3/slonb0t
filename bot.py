@@ -20,6 +20,354 @@ class Bot(commands.Bot):
     async def event_message(self, message):
         await self.handle_commands(message)
 
+    @commands.command(name='рецепт')
+    async def recept(self, ctx):
+        s = ctx.send
+        URL = 'http://culinar.ivest.kz/randomMenu'
+
+        def get_html(url, params=None):
+            r = requests.get(url, params=params)
+            return r
+
+        def get_content(html):
+            soup = BeautifulSoup(html, 'html.parser')
+            global name
+            global recept
+            global recept1
+            name = soup.find('a', class_='rec_name').get_text()
+            recept = soup.find('div', class_='randome_recept_right').get_text()
+
+        def parse():
+            html = get_html(URL)
+            get_content(html.text)
+        parse()
+        receptt = (recept[:400] + '...')
+        await s(name + " - " + receptt)
+
+    @commands.command(name='анекдот')
+    async def anekdot(self, ctx):
+        s = ctx.send
+        URL = 'http://anecdotica.ru/'
+        def get_html(url, params=None):
+            r = requests.get(url, params=params)
+            return r
+
+        def get_content(html):
+            soup = BeautifulSoup(html, 'html.parser')
+            global anekdot
+            anekdot = soup.find('div', class_='item_text').get_text()
+
+        def parse():
+            html = get_html(URL)
+            get_content(html.text)
+
+        parse()
+        anekdott = (anekdot[:493] + '...') if len(anekdot) > 493 else anekdot
+        await s(anekdott + " KeK")
+
+        
+    @commands.command(name='курс')
+    async def kurs(self, ctx):
+        nickname = ctx.author.name
+        s = ctx.send
+        message = ctx.message.content
+        URL = 'https://finance.rambler.ru/currencies/USD/'
+        URL1 = 'https://finance.rambler.ru/currencies/EUR/'
+
+        def get_html(url, params=None):
+            r = requests.get(url, params=params)
+            return r
+        def get_content(html, html1):
+            soup = BeautifulSoup(html, 'html.parser')
+            soup1 = BeautifulSoup(html1, 'html.parser')
+            global dollar
+            global euro
+            dollar = soup.find('div', class_='finance-currency-plate__currency').get_text()
+            euro = soup1.find('div', class_='finance-currency-plate__currency').get_text()
+        def parse():
+            html = get_html(URL)
+            html1 = get_html(URL1)
+            get_content(html.text, html1.text)
+        parse()
+        now = datetime.now()
+
+        if message == "+курс":
+            await s("Курс валют на " + now.strftime("%d.%m") + ": USD - " + dollar + " RUB || EURO - " + euro + " RUB")
+        else:
+            if message.find('+курс доллар-рубль') != -1:
+                kurs = str.replace(message, '+курс доллар-рубль ', '')
+                result = int(kurs) * float(dollar)
+                result = round(result, 2)
+                await s(nickname + ', ' + kurs + " USD = " + str(result) + " RUB")
+
+            if message.find('+курс рубль-доллар') != -1:
+                kurs = str.replace(message, '+курс рубль-доллар ', '')
+                result = float(kurs) / float(dollar)
+                result = round(result, 2)
+                await s(nickname + ', ' + kurs + " RUB = " + str(result) + " USD")
+
+            if message.find('+курс евро-рубль') != -1:
+                kurs = str.replace(message, '+курс евро-рубль ', '')
+                result = int(kurs) * float(euro)
+                result = round(result, 2)
+                await s(nickname + ', ' + kurs + " EURO = " + str(result) + " RUB")
+
+            if message.find('+курс рубль-евро') != -1:
+                kurs = str.replace(message, '+курс рубль-евро ', '')
+                result = float(kurs) / float(euro)
+                result = round(result, 2)
+                await s(nickname + ', ' + kurs + " RUB = " + str(result) + " EURO")
+
+
+    @commands.command(name='гороскоп')
+    async def goroskop(self, ctx):
+        nickname = ctx.author.name
+        message = ctx.message.content
+        s = ctx.send
+        
+        if message == "+гороскоп":
+            await s(nickname+", введите +гороскоп [знак зодиака]")
+                                
+        if message.find('+гороскоп овен') != -1:
+            URL = 'https://www.wday.ru/horoscope/common/oven/daily/'
+
+            def get_html(url, params=None):
+                r = requests.get(url, params=params)
+                return r
+            def get_content(html):
+                soup = BeautifulSoup(html, 'html.parser')
+                global goroskop
+                global goroskop_day
+                goroskop = soup.find('div', class_='tab-panel text active').get_text()
+                goroskop_day = soup.find('h2', class_='horo-title').get_text()
+            def parse():
+                html = get_html(URL)
+                get_content(html.text)
+            parse()
+            await s(goroskop_day + ' для овенов - ' + goroskop)
+
+        if message.find('+гороскоп телец') != -1:
+            URL = 'https://www.wday.ru/horoscope/common/telec/daily/'
+
+            def get_html(url, params=None):
+                r = requests.get(url, params=params)
+                return r
+            def get_content(html):
+                soup = BeautifulSoup(html, 'html.parser')
+                global goroskop
+                global goroskop_day
+                goroskop = soup.find('div',class_='tab-panel text active').get_text()
+                goroskop_day = soup.find('h2', class_='horo-title').get_text()
+            def parse():
+                html = get_html(URL)
+                get_content(html.text)
+            parse()
+            await s(goroskop_day + ' для тельцов - ' + goroskop)
+
+        if message.find('+гороскоп близнецы') != -1:
+            URL = 'https://www.wday.ru/horoscope/common/bliznecy/daily/'
+
+            def get_html(url, params=None):
+                r = requests.get(url, params=params)
+                return r
+            def get_content(html):
+                soup = BeautifulSoup(html, 'html.parser')
+                global goroskop
+                global goroskop_day
+                goroskop = soup.find('div',class_='tab-panel text active').get_text()
+                goroskop_day = soup.find('h2', class_='horo-title').get_text()
+            def parse():
+                html = get_html(URL)
+                get_content(html.text)
+            parse()
+            await s(goroskop_day + ' для близнецов - ' + goroskop)
+
+        if message.find('+гороскоп рак') != -1:
+            URL = 'https://www.wday.ru/horoscope/common/rak/daily/'
+
+            def get_html(url, params=None):
+                r = requests.get(url, params=params)
+                return r
+            def get_content(html):
+                soup = BeautifulSoup(html, 'html.parser')
+                global goroskop
+                global goroskop_day
+                goroskop = soup.find('div',class_='tab-panel text active').get_text()
+                goroskop_day = soup.find('h2', class_='horo-title').get_text()
+            def parse():
+                html = get_html(URL)
+                get_content(html.text)
+            parse()
+            await s(goroskop_day + ' для раков - ' + goroskop)
+
+        if message.find('+гороскоп лев') != -1:
+            URL = 'https://www.wday.ru/horoscope/common/lev/daily/'
+
+            def get_html(url, params=None):
+                r = requests.get(url, params=params)
+                return r
+            def get_content(html):
+                soup = BeautifulSoup(html, 'html.parser')
+                global goroskop
+                global goroskop_day
+                goroskop = soup.find('div',class_='tab-panel text active').get_text()
+                goroskop_day = soup.find('h2', class_='horo-title').get_text()
+            def parse():
+                html = get_html(URL)
+                get_content(html.text)
+            parse()
+            await s(goroskop_day + ' для львов - ' + goroskop)
+
+        if message.find('+гороскоп дева') != -1:
+            URL = 'https://www.wday.ru/horoscope/common/deva/daily/'
+
+            def get_html(url, params=None):
+                r = requests.get(url, params=params)
+                return r
+            def get_content(html):
+                soup = BeautifulSoup(html, 'html.parser')
+                global goroskop
+                global goroskop_day
+                goroskop = soup.find('div',class_='tab-panel text active').get_text()
+                goroskop_day = soup.find('h2', class_='horo-title').get_text()
+            def parse():
+                html = get_html(URL)
+                get_content(html.text)
+            parse()
+            await s(goroskop_day + ' для дев - ' + goroskop)
+
+        if message.find('+гороскоп весы') != -1:
+            URL = 'https://www.wday.ru/horoscope/common/vesy/daily/'
+
+
+            def get_html(url, params=None):
+                r = requests.get(url, params=params)
+                return r
+
+            def get_content(html):
+                soup = BeautifulSoup(html, 'html.parser')
+                global goroskop
+                global goroskop_day
+                goroskop = soup.find('div', class_='tab-panel text active').get_text()
+                goroskop_day = soup.find('h2', class_='horo-title').get_text()
+
+            def parse():
+                html = get_html(URL)
+                get_content(html.text)
+
+            parse()
+            await s(goroskop_day + ' для весов - ' + goroskop)
+
+        if message.find('+гороскоп скорпион') != -1:
+            URL = 'https://www.wday.ru/horoscope/common/skorpion/daily/'
+
+
+            def get_html(url, params=None):
+                r = requests.get(url, params=params)
+                return r
+
+            def get_content(html):
+                soup = BeautifulSoup(html, 'html.parser')
+                global goroskop
+                global goroskop_day
+                goroskop = soup.find('div', class_='tab-panel text active').get_text()
+                goroskop_day = soup.find('h2', class_='horo-title').get_text()
+
+            def parse():
+                html = get_html(URL)
+                get_content(html.text)
+
+            parse()
+            await s(goroskop_day + ' для скорпионов - ' + goroskop)
+
+        if message.find('+гороскоп стрелец') != -1:
+            URL = 'https://www.wday.ru/horoscope/common/strelec/daily/'
+
+
+            def get_html(url, params=None):
+                r = requests.get(url, params=params)
+                return r
+
+            def get_content(html):
+                soup = BeautifulSoup(html, 'html.parser')
+                global goroskop
+                global goroskop_day
+                goroskop = soup.find('div', class_='tab-panel text active').get_text()
+                goroskop_day = soup.find('h2', class_='horo-title').get_text()
+
+            def parse():
+                html = get_html(URL)
+                get_content(html.text)
+
+            parse()
+            await s(goroskop_day + ' для стрельцов - ' + goroskop)
+
+        if message.find('+гороскоп козерог') != -1:
+            URL = 'https://www.wday.ru/horoscope/common/kozerog/daily/'
+
+
+            def get_html(url, params=None):
+                r = requests.get(url, params=params)
+                return r
+
+            def get_content(html):
+                soup = BeautifulSoup(html, 'html.parser')
+                global goroskop
+                global goroskop_day
+                goroskop = soup.find('div', class_='tab-panel text active').get_text()
+                goroskop_day = soup.find('h2', class_='horo-title').get_text()
+
+            def parse():
+                html = get_html(URL)
+                get_content(html.text)
+
+            parse()
+            await s(goroskop_day + ' для козерогов - ' + goroskop)
+
+        if message.find('+гороскоп водолей') != -1:
+            URL = 'https://www.wday.ru/horoscope/common/vodolej/daily/'
+
+
+            def get_html(url, params=None):
+                r = requests.get(url, params=params)
+                return r
+
+            def get_content(html):
+                soup = BeautifulSoup(html, 'html.parser')
+                global goroskop
+                global goroskop_day
+                goroskop = soup.find('div', class_='tab-panel text active').get_text()
+                goroskop_day = soup.find('h2', class_='horo-title').get_text()
+
+            def parse():
+                html = get_html(URL)
+                get_content(html.text)
+
+            parse()
+            await s(goroskop_day + ' для водолеев - ' + goroskop)
+
+        if message.find('+гороскоп рыба') != -1:
+            URL = 'https://www.wday.ru/horoscope/common/ryby/daily/'
+
+
+            def get_html(url, params=None):
+                r = requests.get(url, params=params)
+                return r
+
+            def get_content(html):
+                soup = BeautifulSoup(html, 'html.parser')
+                global goroskop
+                global goroskop_day
+                goroskop = soup.find('div', class_='tab-panel text active').get_text()
+                goroskop_day = soup.find('h2', class_='horo-title').get_text()
+
+            def parse():
+                html = get_html(URL)
+                get_content(html.text)
+
+            parse()
+            await s(goroskop_day + ' для рыб - ' + goroskop)
+
     @commands.command(name='topclipever')
     async def topclipever(self, ctx):
         nickname = ctx.author.name
@@ -34,7 +382,8 @@ class Bot(commands.Bot):
             if result["code"] == "0":
                 await s("@{} самый топовый клип за всё время PogU {} ".format(nickname, result["url"]))
             else:
-                await s("@{} самый топовый клип по категории {} за всё время PogU {} ".format(nickname, top, result["url"]))
+                await s(
+                    "@{} самый топовый клип по категории {} за всё время PogU {} ".format(nickname, top, result["url"]))
         if result['code'] == "2":
             await s("@{} такой категории нет PeepoWeird ".format(nickname))
         if result['code'] == "3":
@@ -102,307 +451,6 @@ class Bot(commands.Bot):
             await s("@{} такой категории нет PeepoWeird ".format(nickname))
         if result['code'] == "3":
             await s("@{} из 3000 клипов не было найдено ни одного с такой категорией DaUj ".format(nickname))
-        
-        
-    @commands.command(name='анекдот')
-    async def anekdot(self, ctx):
-        message = ctx.message.content
-        s = ctx.send
-        URL = 'http://anecdotica.ru/'
-        HEADERS = {
-            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36',
-            'accept': '*/*'}
-        def get_html(url, params=None):
-            r = requests.get(url, headers=HEADERS, params=params)
-            return r
-
-        def get_content(html):
-            soup = BeautifulSoup(html, 'html.parser')
-            global anekdot
-            anekdot = soup.find('div', class_='item_text').get_text()
-
-        def parse():
-            html = get_html(URL)
-            get_content(html.text)
-
-        parse()
-        anekdott = (anekdot[:493] + '...') if len(anekdot) > 493 else anekdot
-        await s(anekdott + " KeK")   
-        
-    @commands.command(name='курс')
-    async def kurs(self, ctx):
-        s = ctx.send
-        URL = 'https://www.val.ru/valdetails.asp?tool=840'
-        URL1 = 'https://www.val.ru/valdetails.asp?tool=978'
-        HEADERS = {}
-        def get_html(url, params=None):
-            r = requests.get(url, headers=HEADERS, params=params)
-            return r
-        def get_content(html, html1):
-            soup = BeautifulSoup(html, 'html.parser')
-            soup1 = BeautifulSoup(html1, 'html.parser')
-            global dollar
-            global euro
-            dollar = soup.find('span', class_='ratebig').get_text()
-            euro = soup1.find('span', class_='ratebig').get_text()
-        def parse():
-            html = get_html(URL)
-            html1 = get_html(URL1)
-            get_content(html.text, html1.text)
-
-        parse()
-        now = datetime.now()
-        await s("Курс валют на " + now.strftime("%d.%m") + ": доллар - " + dollar + " руб. евро - " + euro + " руб.")
-                
-
-    @commands.command(name='гороскоп')
-    async def goroskop(self, ctx):
-        nickname = ctx.author.name
-        message = ctx.message.content
-        s = ctx.send
-        
-        if message == "+гороскоп":
-            await s(nickname+", введите +гороскоп [знак зодиака]")
-                                
-        if message.find('+гороскоп овен') != -1:
-            URL = 'https://www.wday.ru/horoscope/common/oven/daily/'
-            HEADERS = {}
-            def get_html(url, params=None):
-                r = requests.get(url, headers=HEADERS, params=params)
-                return r
-            def get_content(html):
-                soup = BeautifulSoup(html, 'html.parser')
-                global goroskop
-                global goroskop_day
-                goroskop = soup.find('div',class_='tab-panel text active').get_text()
-                goroskop_day = soup.find('h2', class_='horo-title').get_text()
-            def parse():
-                html = get_html(URL)
-                get_content(html.text)
-            parse()
-            await s(goroskop_day + ' для овенов - ' + goroskop)
-
-        if message.find('+гороскоп телец') != -1:
-            URL = 'https://www.wday.ru/horoscope/common/telec/daily/'
-            HEADERS = {}
-            def get_html(url, params=None):
-                r = requests.get(url, headers=HEADERS, params=params)
-                return r
-            def get_content(html):
-                soup = BeautifulSoup(html, 'html.parser')
-                global goroskop
-                global goroskop_day
-                goroskop = soup.find('div',class_='tab-panel text active').get_text()
-                goroskop_day = soup.find('h2', class_='horo-title').get_text()
-            def parse():
-                html = get_html(URL)
-                get_content(html.text)
-            parse()
-            await s(goroskop_day + ' для тельцов - ' + goroskop)
-
-        if message.find('+гороскоп близнецы') != -1:
-            URL = 'https://www.wday.ru/horoscope/common/bliznecy/daily/'
-            HEADERS = {}
-            def get_html(url, params=None):
-                r = requests.get(url, headers=HEADERS, params=params)
-                return r
-            def get_content(html):
-                soup = BeautifulSoup(html, 'html.parser')
-                global goroskop
-                global goroskop_day
-                goroskop = soup.find('div',class_='tab-panel text active').get_text()
-                goroskop_day = soup.find('h2', class_='horo-title').get_text()
-            def parse():
-                html = get_html(URL)
-                get_content(html.text)
-            parse()
-            await s(goroskop_day + ' для близнецов - ' + goroskop)
-
-        if message.find('+гороскоп рак') != -1:
-            URL = 'https://www.wday.ru/horoscope/common/rak/daily/'
-            HEADERS = {}
-            def get_html(url, params=None):
-                r = requests.get(url, headers=HEADERS, params=params)
-                return r
-            def get_content(html):
-                soup = BeautifulSoup(html, 'html.parser')
-                global goroskop
-                global goroskop_day
-                goroskop = soup.find('div',class_='tab-panel text active').get_text()
-                goroskop_day = soup.find('h2', class_='horo-title').get_text()
-            def parse():
-                html = get_html(URL)
-                get_content(html.text)
-            parse()
-            await s(goroskop_day + ' для раков - ' + goroskop)
-
-        if message.find('+гороскоп лев') != -1:
-            URL = 'https://www.wday.ru/horoscope/common/lev/daily/'
-            HEADERS = {}
-            def get_html(url, params=None):
-                r = requests.get(url, headers=HEADERS, params=params)
-                return r
-            def get_content(html):
-                soup = BeautifulSoup(html, 'html.parser')
-                global goroskop
-                global goroskop_day
-                goroskop = soup.find('div',class_='tab-panel text active').get_text()
-                goroskop_day = soup.find('h2', class_='horo-title').get_text()
-            def parse():
-                html = get_html(URL)
-                get_content(html.text)
-            parse()
-            await s(goroskop_day + ' для львов - ' + goroskop)
-
-        if message.find('+гороскоп дева') != -1:
-            URL = 'https://www.wday.ru/horoscope/common/deva/daily/'
-            HEADERS = {}
-            def get_html(url, params=None):
-                r = requests.get(url, headers=HEADERS, params=params)
-                return r
-            def get_content(html):
-                soup = BeautifulSoup(html, 'html.parser')
-                global goroskop
-                global goroskop_day
-                goroskop = soup.find('div',class_='tab-panel text active').get_text()
-                goroskop_day = soup.find('h2', class_='horo-title').get_text()
-            def parse():
-                html = get_html(URL)
-                get_content(html.text)
-            parse()
-            await s(goroskop_day + ' для дев - ' + goroskop)
-
-        if message.find('+гороскоп весы') != -1:
-            URL = 'https://www.wday.ru/horoscope/common/vesy/daily/'
-            HEADERS = {}
-
-            def get_html(url, params=None):
-                r = requests.get(url, headers=HEADERS, params=params)
-                return r
-
-            def get_content(html):
-                soup = BeautifulSoup(html, 'html.parser')
-                global goroskop
-                global goroskop_day
-                goroskop = soup.find('div', class_='tab-panel text active').get_text()
-                goroskop_day = soup.find('h2', class_='horo-title').get_text()
-
-            def parse():
-                html = get_html(URL)
-                get_content(html.text)
-
-            parse()
-            await s(goroskop_day + ' для весов - ' + goroskop)
-
-        if message.find('+гороскоп скорпион') != -1:
-            URL = 'https://www.wday.ru/horoscope/common/skorpion/daily/'
-            HEADERS = {}
-
-            def get_html(url, params=None):
-                r = requests.get(url, headers=HEADERS, params=params)
-                return r
-
-            def get_content(html):
-                soup = BeautifulSoup(html, 'html.parser')
-                global goroskop
-                global goroskop_day
-                goroskop = soup.find('div', class_='tab-panel text active').get_text()
-                goroskop_day = soup.find('h2', class_='horo-title').get_text()
-
-            def parse():
-                html = get_html(URL)
-                get_content(html.text)
-
-            parse()
-            await s(goroskop_day + ' для скорпионов - ' + goroskop)
-
-        if message.find('+гороскоп стрелец') != -1:
-            URL = 'https://www.wday.ru/horoscope/common/strelec/daily/'
-            HEADERS = {}
-
-            def get_html(url, params=None):
-                r = requests.get(url, headers=HEADERS, params=params)
-                return r
-
-            def get_content(html):
-                soup = BeautifulSoup(html, 'html.parser')
-                global goroskop
-                global goroskop_day
-                goroskop = soup.find('div', class_='tab-panel text active').get_text()
-                goroskop_day = soup.find('h2', class_='horo-title').get_text()
-
-            def parse():
-                html = get_html(URL)
-                get_content(html.text)
-
-            parse()
-            await s(goroskop_day + ' для стрельцов - ' + goroskop)
-
-        if message.find('+гороскоп козерог') != -1:
-            URL = 'https://www.wday.ru/horoscope/common/kozerog/daily/'
-            HEADERS = {}
-
-            def get_html(url, params=None):
-                r = requests.get(url, headers=HEADERS, params=params)
-                return r
-
-            def get_content(html):
-                soup = BeautifulSoup(html, 'html.parser')
-                global goroskop
-                global goroskop_day
-                goroskop = soup.find('div', class_='tab-panel text active').get_text()
-                goroskop_day = soup.find('h2', class_='horo-title').get_text()
-
-            def parse():
-                html = get_html(URL)
-                get_content(html.text)
-
-            parse()
-            await s(goroskop_day + ' для козерогов - ' + goroskop)
-
-        if message.find('+гороскоп водолей') != -1:
-            URL = 'https://www.wday.ru/horoscope/common/vodolej/daily/'
-            HEADERS = {}
-
-            def get_html(url, params=None):
-                r = requests.get(url, headers=HEADERS, params=params)
-                return r
-
-            def get_content(html):
-                soup = BeautifulSoup(html, 'html.parser')
-                global goroskop
-                global goroskop_day
-                goroskop = soup.find('div', class_='tab-panel text active').get_text()
-                goroskop_day = soup.find('h2', class_='horo-title').get_text()
-
-            def parse():
-                html = get_html(URL)
-                get_content(html.text)
-
-            parse()
-            await s(goroskop_day + ' для водолеев - ' + goroskop)
-
-        if message.find('+гороскоп рыба') != -1:
-            URL = 'https://www.wday.ru/horoscope/common/ryby/daily/'
-            HEADERS = {}
-
-            def get_html(url, params=None):
-                r = requests.get(url, headers=HEADERS, params=params)
-                return r
-
-            def get_content(html):
-                soup = BeautifulSoup(html, 'html.parser')
-                global goroskop
-                global goroskop_day
-                goroskop = soup.find('div', class_='tab-panel text active').get_text()
-                goroskop_day = soup.find('h2', class_='horo-title').get_text()
-
-            def parse():
-                html = get_html(URL)
-                get_content(html.text)
-
-            parse()
-            await s(goroskop_day + ' для рыб - ' + goroskop)
 
     @commands.command(name='iq')
     async def iq(self, ctx):
@@ -676,7 +724,7 @@ class Bot(commands.Bot):
                     privet = str.replace(message, '+привет ', '')
                     privet = re.sub("\n", '', privet)
                     await s(nickname + " передаёт " + randommm + " привет " + privet + " peepoHey peepoLove")
-        
+
 
 bot = Bot()
 bot.run()
