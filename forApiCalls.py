@@ -77,8 +77,6 @@ def do_request_for_getting_clip(id_game: str = "0", days_before: int = 0, ever: 
 def abreviatur_helper(argument: str) -> str:
     with open('abreviatures.txt') as n:
         ad = json.loads(n.read())
-        print(ad)
         if argument in ad:
-            print(ad[argument])
             return ad[argument]
         return ""
