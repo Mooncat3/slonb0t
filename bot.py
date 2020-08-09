@@ -1,5 +1,5 @@
 from twitchio.ext import commands
-from datetime import datetime, timedelta
+from datetime import timedelta, datetime
 import requests
 from bs4 import BeautifulSoup
 import forApiCalls
@@ -44,6 +44,36 @@ class Bot(commands.Bot):
         parse()
         anekdott = (anekdot[:493] + '...') if len(anekdot) > 493 else anekdot
         await s(anekdott + " KeK")
+        
+        
+        
+        
+        
+    @commands.command(name='курс')
+    async def kurs(self, ctx):
+        s = ctx.send
+        URL = 'https://www.val.ru/valdetails.asp?tool=840'
+        URL1 = 'https://www.val.ru/valdetails.asp?tool=978'
+        HEADERS = {}
+        def get_html(url, params=None):
+            r = requests.get(url, headers=HEADERS, params=params)
+            return r
+        def get_content(html, html1):
+            soup = BeautifulSoup(html, 'html.parser')
+            soup1 = BeautifulSoup(html1, 'html.parser')
+            global dollar
+            global euro
+            dollar = soup.find('span', class_='ratebig').get_text()
+            euro = soup1.find('span', class_='ratebig').get_text()
+        def parse():
+            html = get_html(URL)
+            html1 = get_html(URL1)
+            get_content(html.text, html1.text)
+
+        parse()
+        now = datetime.now()
+        await s("Курс валют на " + now.strftime("%d.%m") + ": доллар - " + dollar + " руб. евро - " + euro + " руб.")
+                
 
     @commands.command(name='гороскоп')
     async def goroskop(self, ctx):
@@ -53,10 +83,7 @@ class Bot(commands.Bot):
         
         if message == "+гороскоп":
             await s(nickname+", введите +гороскоп [знак зодиака]")
-            
-        
-        
-        
+                                
         if message.find('+гороскоп овен') != -1:
             URL = 'https://www.wday.ru/horoscope/common/oven/daily/'
             HEADERS = {}
