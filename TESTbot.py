@@ -6,14 +6,12 @@ import re
 class Bot(commands.Bot):
 
     def __init__(self):
-        super().__init__(irc_token='oauth:2ed7e435kk3dm1tpgo73gnu7xcjczy', client_id='gp762nuuoqcoxypju8c569th9wz7q5', nick='SLONB0T', prefix='@', initial_channels=['danantur'])
+        super().__init__(irc_token='oauth:2ed7e435kk3dm1tpgo73gnu7xcjczy', client_id='9qmki7jzmtz6qnjj4z35yucfn29xb9', nick='SLONB0T', prefix='@', initial_channels=['danantur'])
 
     async def event_ready(self):
         print(f'Ready | {self.nick}')
 
-    async def event_message(self, message):
-        await self.handle_commands(message)
-
+        
     @commands.command(name='SLONB0T')
     async def privet(self, ctx):
         message = ctx.message.content
@@ -25,7 +23,8 @@ class Bot(commands.Bot):
         response = requests.post(url=url, data={"query": jsonquery})
         content = response.content.decode('utf8').replace("'", '"')
         data = json.loads(content)
-        await s("@"+nickname + ", " + data['aiml'])
+        await s(nickname + ", " + data['aiml'])
+        
         
     @commands.command(name='slonb0t,')
     async def privet1(self, ctx):
@@ -38,7 +37,7 @@ class Bot(commands.Bot):
         response = requests.post(url=url, data={"query": jsonquery})
         content = response.content.decode('utf8').replace("'", '"')
         data = json.loads(content)
-        await s("@"+nickname + ", " + data['aiml']) 
+        await s(nickname + ", " + data['aiml']) 
    
 
 bot = Bot()
