@@ -20,7 +20,88 @@ class Bot(commands.Bot):
     async def event_message(self, message):
         await self.handle_commands(message)
 
-        
+    @commands.command(name='topclipever')
+    async def topclipever(self, ctx):
+        nickname = ctx.author.name
+        s = ctx.send
+        message = ctx.message.content
+        top = str.replace(message, '+topclipever ', '')
+        top = re.sub("\n", '', top)
+        if top == "+topclipever":
+            top = ""
+        result = forApiCalls.gettopclip(0, top)
+        if result["code"] != "2" and result['code'] != "3":
+            if result["code"] == "0":
+                await s("@{} самый топовый клип за всё время PogU {} ".format(nickname, result["url"]))
+            else:
+                await s("@{} самый топовый клип по категории {} за всё время PogU {} ".format(nickname, top, result["url"]))
+        if result['code'] == "2":
+            await s("@{} такой категории нет PeepoWeird ".format(nickname))
+        if result['code'] == "3":
+            await s("@{} из 3000 клипов не было найдено ни одного с такой категорией DaUj ".format(nickname))
+
+    @commands.command(name='topclipyear')
+    async def topclipyear(self, ctx):
+        nickname = ctx.author.name
+        s = ctx.send
+        message = ctx.message.content
+        top = str.replace(message, '+topclipyear ', '')
+        top = re.sub("\n", '', top)
+        if top == "+topclipyear":
+            top = ""
+        result = forApiCalls.gettopclip(365, top)
+        if result["code"] != "2" and result['code'] != "3":
+            if result["code"] == "0":
+                await s("@{} самый топовый клип за год PogU {} ".format(nickname, result["url"]))
+            else:
+                await s(
+                    "@{} самый топовый клип по категории {} за год PogU {} ".format(nickname, top, result["url"]))
+        if result['code'] == "2":
+            await s("@{} такой категории нет PeepoWeird ".format(nickname))
+        if result['code'] == "3":
+            await s("@{} из 3000 клипов не было найдено ни одного с такой категорией DaUj ".format(nickname))
+
+    @commands.command(name='topclipmonth')
+    async def topclipmonth(self, ctx):
+        nickname = ctx.author.name
+        s = ctx.send
+        message = ctx.message.content
+        top = str.replace(message, '+topclipmonth ', '')
+        top = re.sub("\n", '', top)
+        if top == "+topclipmonth":
+            top = ""
+        result = forApiCalls.gettopclip(30, top)
+        if result["code"] != "2" and result['code'] != "3":
+            if result["code"] == "0":
+                await s("@{} самый топовый клип за месяц PogU {} ".format(nickname, result["url"]))
+            else:
+                await s(
+                    "@{} самый топовый клип по категории {} за месяц PogU {} ".format(nickname, top, result["url"]))
+        if result['code'] == "2":
+            await s("@{} такой категории нет PeepoWeird ".format(nickname))
+        if result['code'] == "3":
+            await s("@{} из 3000 клипов не было найдено ни одного с такой категорией DaUj ".format(nickname))
+
+    @commands.command(name='topclipday')
+    async def topclipday(self, ctx):
+        nickname = ctx.author.name
+        s = ctx.send
+        message = ctx.message.content
+        top = str.replace(message, '+topclipday ', '')
+        top = re.sub("\n", '', top)
+        if top == "+topclipday":
+            top = ""
+        result = forApiCalls.gettopclip(1, top)
+        if result["code"] != "2" and result['code'] != "3":
+            if result["code"] == "0":
+                await s("@{} самый топовый клип за 24 часа PogU {} ".format(nickname, result["url"]))
+            else:
+                await s(
+                    "@{} самый топовый клип по категории {} за 24 часа PogU {} ".format(nickname, top, result["url"]))
+        if result['code'] == "2":
+            await s("@{} такой категории нет PeepoWeird ".format(nickname))
+        if result['code'] == "3":
+            await s("@{} из 3000 клипов не было найдено ни одного с такой категорией DaUj ".format(nickname))
         
         
     @commands.command(name='анекдот')
@@ -46,11 +127,7 @@ class Bot(commands.Bot):
 
         parse()
         anekdott = (anekdot[:493] + '...') if len(anekdot) > 493 else anekdot
-        await s(anekdott + " KeK")
-        
-        
-        
-        
+        await s(anekdott + " KeK")   
         
     @commands.command(name='курс')
     async def kurs(self, ctx):
@@ -326,72 +403,6 @@ class Bot(commands.Bot):
 
             parse()
             await s(goroskop_day + ' для рыб - ' + goroskop)
-
-    @commands.command(name='topclipever')
-    async def topclipever(self, ctx):
-        nickname = ctx.author.name
-        s = ctx.send
-        message = ctx.message.content
-        top = str.replace(message, '+topclipever ', '')
-        top = re.sub("\n", '', top)
-        result = forApiCalls.gettopclip(0, top)
-        if result["code"] != "2":
-            if result["code"] == "0":
-                await s(nickname + ", самый топовый клип за всё время PogU {} ".format(result["url"]))
-            else:
-                await s(
-                    nickname + ", самый топовый клип по категории {} за всё время PogU {} ".format(top, result["url"]))
-        else:
-            await s(nickname + ", в топе 100 за этот период такой категории нет Sadge")
-
-    @commands.command(name='topclipyear')
-    async def topclipyear(self, ctx):
-        nickname = ctx.author.name
-        s = ctx.send
-        message = ctx.message.content
-        top = str.replace(message, '+topclipyear ', '')
-        top = re.sub("\n", '', top)
-        result = forApiCalls.gettopclip(1, top)
-        if result["code"] != "2":
-            if result["code"] == "0":
-                await s(nickname + ", самый топовый клип за год PogU {} ".format(result["url"]))
-            else:
-                await s(nickname + ", самый топовый клип по категории {} за год PogU {} ".format(top, result["url"]))
-        else:
-            await s(nickname + ", в топе 100 за этот период такой категории нет Sadge")
-
-    @commands.command(name='topclipmonth')
-    async def topclipmonth(self, ctx):
-        nickname = ctx.author.name
-        s = ctx.send
-        message = ctx.message.content
-        top = str.replace(message, '+topclipmonth ', '')
-        top = re.sub("\n", '', top)
-        result = forApiCalls.gettopclip(2, top)
-        if result["code"] != "2":
-            if result["code"] == "0":
-                await s(nickname + ", самый топовый клип за месяц PogU {} ".format(result["url"]))
-            else:
-                await s(nickname + ", самый топовый клип по категории {} за месяц PogU {} ".format(top, result["url"]))
-        else:
-            await s(nickname + ", в топе 100 за этот период такой категории нет Sadge")
-
-    @commands.command(name='topclipday')
-    async def topclipday(self, ctx):
-        nickname = ctx.author.name
-        s = ctx.send
-        message = ctx.message.content
-        top = str.replace(message, '+topclipday ', '')
-        top = re.sub("\n", '', top)
-        result = forApiCalls.gettopclip(3, top)
-        if result["code"] != "2":
-            if result["code"] == "0":
-                await s("{}, самый топовый клип за 24 часа PogU {} ".format(nickname, result["url"]))
-            else:
-                await s(
-                    "{}, самый топовый клип по категории {} за 24 часа PogU {} ".format(nickname, top, result["url"]))
-        else:
-            await s("{}, в топе 100 за этот период такой категории нет Sadge".format(nickname))
 
     @commands.command(name='iq')
     async def iq(self, ctx):
