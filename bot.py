@@ -43,7 +43,7 @@ class Bot(commands.Bot):
         parse()
         receptt = 'Способ приготовления:'.join(recept.split('Способ приготовления:')[:-1])
         recept1 = recept[recept.find("Способ приготовления:") + 1:]
-        recept1 = (recept1[:495] + '...')
+        recept1 = (recept1[:495] + '...') if recept1 > 495 else recept1
         await s(name + " - " + receptt)
         time.sleep(2)
         await s("С"+recept1)
@@ -500,7 +500,7 @@ class Bot(commands.Bot):
     async def help2(self, ctx):
         nickname = ctx.author.name
         s = ctx.send
-        await s(nickname + ", страница 3: +анекдот, +гороскоп [знак зодиака], +topclipever [category], +topclipyear [category], +topclipmonth [category], +topclipday [category]")
+        await s(nickname + ", страница 3: +анекдот, +гороскоп [знак зодиака], +рецепт, +topclipever [category], +topclipyear [category], +topclipmonth [category], +topclipday [category]")
 
     @commands.command(name='temp')
     async def temp(self, ctx):
