@@ -20,6 +20,9 @@ class Bot(commands.Bot):
     async def event_message(self, message):
         await self.handle_commands(message)
 
+        
+        
+        
     @commands.command(name='анекдот')
     async def anekdot(self, ctx):
         message = ctx.message.content
@@ -47,7 +50,7 @@ class Bot(commands.Bot):
         
         
         
-        
+        '''
         
     @commands.command(name='курс')
     async def kurs(self, ctx):
@@ -662,7 +665,7 @@ class Bot(commands.Bot):
                     privet = str.replace(message, '+привет ', '')
                     privet = re.sub("\n", '', privet)
                     await s(nickname + " передаёт " + randommm + " привет " + privet + " peepoHey peepoLove")
-
+        '''
 
 bot = Bot()
 bot.run()
