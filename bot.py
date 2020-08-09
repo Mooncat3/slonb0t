@@ -41,8 +41,12 @@ class Bot(commands.Bot):
             html = get_html(URL)
             get_content(html.text)
         parse()
-        receptt = (recept[:400] + '...')
+        receptt = 'Способ приготовления:'.join(recept.split('Способ приготовления:')[:-1])
+        recept1 = recept[recept.find("Способ приготовления:") + 1:]
+        recept1 = (recept1[:495] + '...')
         await s(name + " - " + receptt)
+        time.sleep(2)
+        await s("С"+recept1)
 
     @commands.command(name='анекдот')
     async def anekdot(self, ctx):
