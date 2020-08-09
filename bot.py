@@ -1,54 +1,22 @@
 from twitchio.ext import commands
 from datetime import timedelta, datetime
 from bs4 import BeautifulSoup
-import json
 import requests
 import forApiCalls
 import re
 import random
 import time
 
-
 class Bot(commands.Bot):
 
+
     def __init__(self):
-        super().__init__(irc_token='oauth:2ed7e435kk3dm1tpgo73gnu7xcjczy', client_id='9qmki7jzmtz6qnjj4z35yucfn29xb9', nick='SLONB0T', prefix=['@', '+'], initial_channels=['danantur'])
+        super().__init__(irc_token='oauth:2ed7e435kk3dm1tpgo73gnu7xcjczy', client_id='9qmki7jzmtz6qnjj4z35yucfn29xb9', nick='SLONB0T', prefix='+', initial_channels=['danantur'])
+
 
     async def event_ready(self):
         print(f'Ready | {self.nick} on {self.initial_channels}')
 
-    async def event_message(self, message):
-        await self.handle_commands(message)
-        
-        
-        
-        
-    @commands.command(name='SLONB0T')
-    async def slonb0t(self, ctx):
-        message = ctx.message.content
-        nickname = ctx.author.name
-        s = ctx.send
-        url = "https://aiproject.ru/api/"
-        query = {"ask": message, "userid": nickname, "key": ""}
-        jsonquery = json.encoder.JSONEncoder.encode(self=json.encoder.JSONEncoder(), o=query)
-        response = requests.post(url=url, data={"query": jsonquery})
-        content = response.content.decode('utf8').replace("'", '"')
-        data = json.loads(content)
-        await s(nickname + ", " + data['aiml']) 
-        
-    @commands.command(name='slonb0t,')
-    async def slonb0t1(self, ctx):
-        message = ctx.message.content
-        nickname = ctx.author.name
-        s = ctx.send
-        url = "https://aiproject.ru/api/"
-        query = {"ask": message, "userid": nickname, "key": ""}
-        jsonquery = json.encoder.JSONEncoder.encode(self=json.encoder.JSONEncoder(), o=query)
-        response = requests.post(url=url, data={"query": jsonquery})
-        content = response.content.decode('utf8').replace("'", '"')
-        data = json.loads(content)
-        await s(nickname + ", " + data['aiml']) 
-        
 
     @commands.command(name='рецепт')
     async def recept(self, ctx):
@@ -76,7 +44,8 @@ class Bot(commands.Bot):
         recept1 = (recept1[:495] + '...') if len(recept1) > 495 else recept1
         await s(name + " - " + receptt)
         time.sleep(2)
-        await s("С"+recept1)
+        await s("С" + recept1)
+
 
     @commands.command(name='анекдот')
     async def anekdot(self, ctx):
@@ -154,6 +123,7 @@ class Bot(commands.Bot):
                     await s(nickname + ', ' + kurs + " RUB = " + str(result) + " EURO")
             except OverflowError:
                 await s("Число слишком большое WeirdChamp")
+
 
     @commands.command(name='гороскоп')
     async def goroskop(self, ctx):
@@ -404,6 +374,7 @@ class Bot(commands.Bot):
             parse()
             await s(goroskop_day + ' для рыб - ' + goroskop)
 
+
     @commands.command(name='topclipever')
     async def topclipever(self, ctx):
         nickname = ctx.author.name
@@ -424,6 +395,7 @@ class Bot(commands.Bot):
             await s("@{} такой категории нет PeepoWeird ".format(nickname))
         if result['code'] == "3":
             await s("@{} из 3000 клипов не было найдено ни одного с такой категорией DaUj ".format(nickname))
+
 
     @commands.command(name='topclipyear')
     async def topclipyear(self, ctx):
@@ -446,6 +418,7 @@ class Bot(commands.Bot):
         if result['code'] == "3":
             await s("@{} из 3000 клипов не было найдено ни одного с такой категорией DaUj ".format(nickname))
 
+
     @commands.command(name='topclipmonth')
     async def topclipmonth(self, ctx):
         nickname = ctx.author.name
@@ -466,6 +439,7 @@ class Bot(commands.Bot):
             await s("@{} такой категории нет PeepoWeird ".format(nickname))
         if result['code'] == "3":
             await s("@{} из 3000 клипов не было найдено ни одного с такой категорией DaUj ".format(nickname))
+
 
     @commands.command(name='topclipday')
     async def topclipday(self, ctx):
@@ -488,6 +462,7 @@ class Bot(commands.Bot):
         if result['code'] == "3":
             await s("@{} из 3000 клипов не было найдено ни одного с такой категорией DaUj ".format(nickname))
 
+
     @commands.command(name='iq')
     async def iq(self, ctx):
         nickname = ctx.author.name
@@ -507,6 +482,7 @@ class Bot(commands.Bot):
             if iq >= 135:
                 await s(nickname + ", ваш IQ = " + str(iq) + "! Внимание! В чате гений WAYTOOSMART Clap")
 
+
     @commands.command(name='паста')
     async def pasta(self, ctx):
         s = ctx.send
@@ -516,11 +492,13 @@ class Bot(commands.Bot):
             randomnadya = re.sub("\n", '', randomnadya)
             await s(randomnadya)
 
+
     @commands.command(name='help')
     async def help(self, ctx):
         nickname = ctx.author.name
         s = ctx.send
         await s(nickname + ", Привет, я бот по имени слон. Можешь использовать следующие команды (страница 1): +паста, +me, +do [nickname], +iq, +temp, +love [nickname], +бубу [something], +steal [nickname] Чтобы перейти на следующую страницу введите +help1 catJAM")
+
 
     @commands.command(name='help1')
     async def help1(self, ctx):
@@ -528,11 +506,13 @@ class Bot(commands.Bot):
         s = ctx.send
         await s(nickname + ", страница 2: +привет [nickname], +try [something], +time, +когда [something], +обнять [nickname], +COCK, +BOOBS, +вверх Чтобы перейти на следующую страницу введите +help2")
 
+
     @commands.command(name='help2')
     async def help2(self, ctx):
         nickname = ctx.author.name
         s = ctx.send
-        await s(nickname + ", страница 3: +анекдот, +гороскоп [знак зодиака], +рецепт, +topclipever [category], +topclipyear [category], +topclipmonth [category], +topclipday [category]")
+        await s(nickname + ", страница 3: +анекдот, +гороскоп [знак зодиака], +курс (доллар-рубль, рубль-доллар, евро-рубль, рубль-евро(значение)), +рецепт, +topclipever [category], +topclipyear [category], +topclipmonth [category], +topclipday [category]")
+
 
     @commands.command(name='temp')
     async def temp(self, ctx):
@@ -549,6 +529,7 @@ class Bot(commands.Bot):
                 if temp > 40 or temp < 32:
                     await s(nickname + ", ваша температура " + str(temp) + " °C! Срочно вызывайте скорую! Durka")
 
+
     @commands.command(name='me')
     async def me(self, ctx):
         nickname = ctx.author.name
@@ -559,12 +540,13 @@ class Bot(commands.Bot):
             randomm = re.sub("\n", '', randomm)
             await s(randomm.format(nickname))
 
+
     @commands.command(name='do')
     async def do(self, ctx):
         message = ctx.message.content
         nickname = ctx.author.name
         s = ctx.send
-        if message[len('+do'):len(message)] == "":
+        if message == "+do":
             await s(nickname + ", введите +do [nickname]")
         else:
             if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find('заходите') != -1:
@@ -578,45 +560,51 @@ class Bot(commands.Bot):
                     do = re.sub("\n", '', do)
                     await s(randomdo.format(nickname, do))
 
+
     @commands.command(name='бубу')
     async def bubu(self, ctx):
         message = ctx.message.content
         nickname = ctx.author.name
         s = ctx.send
-        if message[len('+бубу'):len(message)] == "":
+        if message == "+бубу":
             await s(nickname + ", введите +бубу [something]")
         else:
             if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find('заходите') != -1:
                 await s(nickname + ", думал забанить меня? WeirdChamp ")
             else:
+                
                 bubu = str.replace(message, '+бубу ', '')
                 bubu = re.sub("\n", '', bubu)
-                await s("Ну " + str(bubu) + " и " + str(bubu) + " Чё бубнить-то? ThumbUp")
+                if len(bubu) < 235:
+                    await s("Ну " + str(bubu) + " и " + str(bubu) + " Чё бубнить-то? ThumbUp")
+                else:
+                    await s("Слишком длинное бубу WeirdChamp ")
+
 
     @commands.command(name='love')
     async def love(self, ctx):
         message = ctx.message.content
         nickname = ctx.author.name
         s = ctx.send
-        if message[len('+love'):len(message)] == "":
+        if message == "+love":
             await s(nickname + ", введите +love [nickname]")
         else:
             procent = random.randrange(0, 100, 1)
-            if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find(
-                    'заходите') != -1:
+            if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find('заходите') != -1:
                 await s(nickname + ", думал забанить меня? WeirdChamp ")
             else:
                 love = str.replace(message, '+love ', '')
                 love = re.sub("\n", '', love)
                 await s(nickname + " любит " + str(love) + " на " + str(procent) + "%!")
 
+
     @commands.command(name='steal')
     async def steal(self, ctx):
         message = ctx.message.content
         nickname = ctx.author.name
         s = ctx.send
-        if message[len('+steal'):len(message)] == "":
-            await s(nickname + ", введите +steal [nickame]")
+        if message == "+steal":
+            await s(nickname + ", введите +steal [nickname]")
         else:
             procent = random.randrange(0, 100, 1)
             ruble = random.randrange(0, 2000, 1)
@@ -630,12 +618,13 @@ class Bot(commands.Bot):
                 else:
                     await s(nickname + " ничего не украл у " + str(steal) + " KeK Lohich")
 
+
     @commands.command(name='try')
     async def ttry(self, ctx):
         message = ctx.message.content
         nickname = ctx.author.name
         s = ctx.send
-        if message[len('+try'):len(message)] == "":
+        if message == "+try":
             await s(nickname + ", введите +try [something]")
         else:
             if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find(
@@ -650,21 +639,22 @@ class Bot(commands.Bot):
                     tryr = re.sub("\n", '', tryr)
                 await s(nickname + " попробовал " + tryy + "... " + tryr)
 
+
     @commands.command(name='time')
     async def time(self, ctx):
         s = ctx.send
         await s(datetime.strftime(datetime.now() + timedelta(hours=3), "Чичас %H:%M:%S по МСК Waiting"))
+
 
     @commands.command(name='обнять')
     async def hug(self, ctx):
         message = ctx.message.content
         nickname = ctx.author.name
         s = ctx.send
-        if message[len('+обнять'):len(message)] == "":
+        if message == "+обнять":
             await s(nickname + ", введите +обнять [nickname]")
         else:
-            if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find(
-                    'заходите') != -1:
+            if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find('заходите') != -1:
                 await s(nickname + ", думал забанить меня? WeirdChamp ")
 
             else:
@@ -676,12 +666,14 @@ class Bot(commands.Bot):
                     hug = re.sub("\n", '', hug)
                     await s(nickname + " " + randomhug + " обнимает " + hug + " VoHiYo")
 
+
     @commands.command(name='COCK')
     async def cock(self, ctx):
         nickname = ctx.author.name
         s = ctx.send
         cock = random.randrange(1, 36, 1)
         await s(nickname + ", твой COCK равен " + str(cock) + " см! YEP")
+
 
     @commands.command(name='BOOBS')
     async def boobs(self, ctx):
@@ -693,6 +685,7 @@ class Bot(commands.Bot):
         else:
             await s(nickname + ", твои BOOBS " + str(boobs) + " размера YEP")
 
+
     @commands.command(name='вверх')
     async def vverh(self, ctx):
         s = ctx.send
@@ -702,12 +695,14 @@ class Bot(commands.Bot):
             randomdown = re.sub("\n", '', randomdown)
             await s(":point_up_2: " + str(randomdown))
 
+
         """
     @commands.command(name='игры')
     async def hug(self, ctx):
         nickname = ctx.author.name
         s = ctx.send
         await s(nickname + ", cписок всех мини-игр у бота: +угадать число")
+
 
     @commands.command(name='угадать число')
     async def chislo(self, ctx):
@@ -723,16 +718,16 @@ class Bot(commands.Bot):
         await s("Чат проиграл, время вышло Sadge ")
         """
 
+
     @commands.command(name='когда')
     async def kogda(self, ctx):
         message = ctx.message.content
         nickname = ctx.author.name
         s = ctx.send
-        if message[len('+когда'):len(message)] == "":
+        if message == "+когда":
             await s(nickname + ", введите +когда [something]")
         else:
-            if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find(
-                    'заходите') != -1:
+            if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find('заходите') != -1:
                 await s(nickname + ", думал забанить меня? WeirdChamp ")
             else:
                 with open('kogda.txt', 'r', encoding='utf-8') as m:
@@ -743,16 +738,16 @@ class Bot(commands.Bot):
                     kogda = re.sub("\n", '', kogda)
                     await s(nickname + ", " + koogda + ' ' + kogda)
 
+
     @commands.command(name='привет')
     async def privet(self, ctx):
         message = ctx.message.content
         nickname = ctx.author.name
         s = ctx.send
-        if message[len('+привет'):len(message)] == "":
+        if message == "+привет":
             await s(nickname + ", введите +привет [nickname]")
         else:
-            if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find(
-                    'заходите') != -1:
+            if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find('заходите') != -1:
                 await s(nickname + ", думал забанить меня? WeirdChamp ")
             else:
                 with open('privet.txt', 'r', encoding='utf-8') as c:
