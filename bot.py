@@ -12,7 +12,7 @@ class Bot(commands.Bot):
 
     def __init__(self):
         super().__init__(irc_token='oauth:2ed7e435kk3dm1tpgo73gnu7xcjczy', client_id='9qmki7jzmtz6qnjj4z35yucfn29xb9',
-                         nick='SLONB0T', prefix='+', initial_channels=['danantur'])
+                         nick='SLONB0T', prefix='+', initial_channels=['jesusavgn'])
 
     async def event_ready(self):
         print(f'Ready | {self.nick} on {self.initial_channels}')
