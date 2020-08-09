@@ -12,7 +12,7 @@ class Bot(commands.Bot):
 
     def __init__(self):
         super().__init__(irc_token='oauth:2ed7e435kk3dm1tpgo73gnu7xcjczy', client_id='9qmki7jzmtz6qnjj4z35yucfn29xb9',
-                         nick='SLONB0T', prefix='+', initial_channels=['danantur'])
+                         nick='SLONB0T', prefix='+', initial_channels=['mooncat3'])
 
     async def event_ready(self):
         print(f'Ready | {self.nick} on {self.initial_channels}')
@@ -98,30 +98,32 @@ class Bot(commands.Bot):
         if message == "+курс":
             await s("Курс валют на " + now.strftime("%d.%m") + ": USD - " + dollar + " RUB || EURO - " + euro + " RUB")
         else:
-            if message.find('+курс доллар-рубль') != -1:
-                kurs = str.replace(message, '+курс доллар-рубль ', '')
-                result = int(kurs) * float(dollar)
-                result = round(result, 2)
-                await s(nickname + ', ' + kurs + " USD = " + str(result) + " RUB")
+            try:
+                if message.find('+курс доллар-рубль') != -1:
+                    kurs = str.replace(message, '+курс доллар-рубль ', '')
+                    result = int(kurs) * float(dollar)
+                    result = round(result, 2)
+                    await s(nickname + ', ' + kurs + " USD = " + str(result) + " RUB")
 
-            if message.find('+курс рубль-доллар') != -1:
-                kurs = str.replace(message, '+курс рубль-доллар ', '')
-                result = float(kurs) / float(dollar)
-                result = round(result, 2)
-                await s(nickname + ', ' + kurs + " RUB = " + str(result) + " USD")
+                if message.find('+курс рубль-доллар') != -1:
+                    kurs = str.replace(message, '+курс рубль-доллар ', '')
+                    result = float(kurs) / float(dollar)
+                    result = round(result, 2)
+                    await s(nickname + ', ' + kurs + " RUB = " + str(result) + " USD")
 
-            if message.find('+курс евро-рубль') != -1:
-                kurs = str.replace(message, '+курс евро-рубль ', '')
-                result = int(kurs) * float(euro)
-                result = round(result, 2)
-                await s(nickname + ', ' + kurs + " EURO = " + str(result) + " RUB")
+                if message.find('+курс евро-рубль') != -1:
+                    kurs = str.replace(message, '+курс евро-рубль ', '')
+                    result = int(kurs) * float(euro)
+                    result = round(result, 2)
+                    await s(nickname + ', ' + kurs + " EURO = " + str(result) + " RUB")
 
-            if message.find('+курс рубль-евро') != -1:
-                kurs = str.replace(message, '+курс рубль-евро ', '')
-                result = float(kurs) / float(euro)
-                result = round(result, 2)
-                await s(nickname + ', ' + kurs + " RUB = " + str(result) + " EURO")
-
+                if message.find('+курс рубль-евро') != -1:
+                    kurs = str.replace(message, '+курс рубль-евро ', '')
+                    result = float(kurs) / float(euro)
+                    result = round(result, 2)
+                    await s(nickname + ', ' + kurs + " RUB = " + str(result) + " EURO")
+            except OverflowError:
+                await s("Число слишком большое WeirdChamp")
 
     @commands.command(name='гороскоп')
     async def goroskop(self, ctx):
