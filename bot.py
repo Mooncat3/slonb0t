@@ -1,5 +1,3 @@
-from abc import ABC
-
 from twitchio.ext import commands
 from datetime import timedelta, datetime
 from bs4 import BeautifulSoup
@@ -12,17 +10,16 @@ import random
 import time
 
 
-def classicbot():
-    class Bot(commands.Bot, ABC):
-
+class myThread (threading.Thread):
+    class Bot(commands.Bot):
 
         def __init__(self):
-            super().__init__(irc_token='oauth:2ed7e435kk3dm1tpgo73gnu7xcjczy', client_id='9qmki7jzmtz6qnjj4z35yucfn29xb9', nick='SLONB0T', prefix='+', initial_channels=['mooncat3'])
-
+            super().__init__(irc_token='oauth:2ed7e435kk3dm1tpgo73gnu7xcjczy',
+                             client_id='9qmki7jzmtz6qnjj4z35yucfn29xb9', nick='SLONB0T', prefix='+',
+                             initial_channels=['mooncat3'])
 
         async def event_ready(self):
             print(f'Ready CommandsBot | {self.nick} on {self.initial_channels}')
-
 
         @commands.command(name='рецепт')
         async def recept(self, ctx):
@@ -44,6 +41,7 @@ def classicbot():
             def parse():
                 html = get_html(URL)
                 get_content(html.text)
+
             parse()
             receptt = 'Способ приготовления:'.join(recept.split('Способ приготовления:')[:-1])
             recept1 = recept[recept.find("Способ приготовления:") + 1:]
@@ -52,11 +50,11 @@ def classicbot():
             time.sleep(2)
             await s("С" + recept1)
 
-
         @commands.command(name='анекдот')
         async def anekdot(self, ctx):
             s = ctx.send
             URL = 'http://anecdotica.ru/'
+
             def get_html(url, params=None):
                 r = requests.get(url, params=params)
                 return r
@@ -74,7 +72,6 @@ def classicbot():
             anekdott = (anekdot[:493] + '...') if len(anekdot) > 493 else anekdot
             await s(anekdott + " KeK")
 
-
         @commands.command(name='курс')
         async def kurs(self, ctx):
             nickname = ctx.author.name
@@ -86,6 +83,7 @@ def classicbot():
             def get_html(url, params=None):
                 r = requests.get(url, params=params)
                 return r
+
             def get_content(html, html1):
                 soup = BeautifulSoup(html, 'html.parser')
                 soup1 = BeautifulSoup(html1, 'html.parser')
@@ -93,15 +91,18 @@ def classicbot():
                 global euro
                 dollar = soup.find('div', class_='finance-currency-plate__currency').get_text()
                 euro = soup1.find('div', class_='finance-currency-plate__currency').get_text()
+
             def parse():
                 html = get_html(URL)
                 html1 = get_html(URL1)
                 get_content(html.text, html1.text)
+
             parse()
             now = datetime.now()
 
             if message == "+курс":
-                await s("Курс валют на " + now.strftime("%d.%m") + ": USD - " + dollar + " RUB || EURO - " + euro + " RUB")
+                await s(
+                    "Курс валют на " + now.strftime("%d.%m") + ": USD - " + dollar + " RUB || EURO - " + euro + " RUB")
             else:
                 try:
                     if message.find('+курс доллар-рубль') != -1:
@@ -130,7 +131,6 @@ def classicbot():
                 except OverflowError:
                     await s("Число слишком большое WeirdChamp")
 
-
         @commands.command(name='гороскоп')
         async def goroskop(self, ctx):
             nickname = ctx.author.name
@@ -138,7 +138,7 @@ def classicbot():
             s = ctx.send
 
             if message == "+гороскоп":
-                await s(nickname+", введите +гороскоп [знак зодиака]")
+                await s(nickname + ", введите +гороскоп [знак зодиака]")
 
             if message.find('+гороскоп овен') != -1:
                 URL = 'https://www.wday.ru/horoscope/common/oven/daily/'
@@ -146,15 +146,18 @@ def classicbot():
                 def get_html(url, params=None):
                     r = requests.get(url, params=params)
                     return r
+
                 def get_content(html):
                     soup = BeautifulSoup(html, 'html.parser')
                     global goroskop
                     global goroskop_day
                     goroskop = soup.find('div', class_='tab-panel text active').get_text()
                     goroskop_day = soup.find('h2', class_='horo-title').get_text()
+
                 def parse():
                     html = get_html(URL)
                     get_content(html.text)
+
                 parse()
                 await s(goroskop_day + ' для овнов - ' + goroskop)
 
@@ -164,15 +167,18 @@ def classicbot():
                 def get_html(url, params=None):
                     r = requests.get(url, params=params)
                     return r
+
                 def get_content(html):
                     soup = BeautifulSoup(html, 'html.parser')
                     global goroskop
                     global goroskop_day
-                    goroskop = soup.find('div',class_='tab-panel text active').get_text()
+                    goroskop = soup.find('div', class_='tab-panel text active').get_text()
                     goroskop_day = soup.find('h2', class_='horo-title').get_text()
+
                 def parse():
                     html = get_html(URL)
                     get_content(html.text)
+
                 parse()
                 await s(goroskop_day + ' для тельцов - ' + goroskop)
 
@@ -182,15 +188,18 @@ def classicbot():
                 def get_html(url, params=None):
                     r = requests.get(url, params=params)
                     return r
+
                 def get_content(html):
                     soup = BeautifulSoup(html, 'html.parser')
                     global goroskop
                     global goroskop_day
-                    goroskop = soup.find('div',class_='tab-panel text active').get_text()
+                    goroskop = soup.find('div', class_='tab-panel text active').get_text()
                     goroskop_day = soup.find('h2', class_='horo-title').get_text()
+
                 def parse():
                     html = get_html(URL)
                     get_content(html.text)
+
                 parse()
                 await s(goroskop_day + ' для близнецов - ' + goroskop)
 
@@ -200,15 +209,18 @@ def classicbot():
                 def get_html(url, params=None):
                     r = requests.get(url, params=params)
                     return r
+
                 def get_content(html):
                     soup = BeautifulSoup(html, 'html.parser')
                     global goroskop
                     global goroskop_day
-                    goroskop = soup.find('div',class_='tab-panel text active').get_text()
+                    goroskop = soup.find('div', class_='tab-panel text active').get_text()
                     goroskop_day = soup.find('h2', class_='horo-title').get_text()
+
                 def parse():
                     html = get_html(URL)
                     get_content(html.text)
+
                 parse()
                 await s(goroskop_day + ' для раков - ' + goroskop)
 
@@ -218,15 +230,18 @@ def classicbot():
                 def get_html(url, params=None):
                     r = requests.get(url, params=params)
                     return r
+
                 def get_content(html):
                     soup = BeautifulSoup(html, 'html.parser')
                     global goroskop
                     global goroskop_day
-                    goroskop = soup.find('div',class_='tab-panel text active').get_text()
+                    goroskop = soup.find('div', class_='tab-panel text active').get_text()
                     goroskop_day = soup.find('h2', class_='horo-title').get_text()
+
                 def parse():
                     html = get_html(URL)
                     get_content(html.text)
+
                 parse()
                 await s(goroskop_day + ' для львов - ' + goroskop)
 
@@ -236,21 +251,23 @@ def classicbot():
                 def get_html(url, params=None):
                     r = requests.get(url, params=params)
                     return r
+
                 def get_content(html):
                     soup = BeautifulSoup(html, 'html.parser')
                     global goroskop
                     global goroskop_day
-                    goroskop = soup.find('div',class_='tab-panel text active').get_text()
+                    goroskop = soup.find('div', class_='tab-panel text active').get_text()
                     goroskop_day = soup.find('h2', class_='horo-title').get_text()
+
                 def parse():
                     html = get_html(URL)
                     get_content(html.text)
+
                 parse()
                 await s(goroskop_day + ' для дев - ' + goroskop)
 
             if message.find('+гороскоп весы') != -1:
                 URL = 'https://www.wday.ru/horoscope/common/vesy/daily/'
-
 
                 def get_html(url, params=None):
                     r = requests.get(url, params=params)
@@ -273,7 +290,6 @@ def classicbot():
             if message.find('+гороскоп скорпион') != -1:
                 URL = 'https://www.wday.ru/horoscope/common/skorpion/daily/'
 
-
                 def get_html(url, params=None):
                     r = requests.get(url, params=params)
                     return r
@@ -294,7 +310,6 @@ def classicbot():
 
             if message.find('+гороскоп стрелец') != -1:
                 URL = 'https://www.wday.ru/horoscope/common/strelec/daily/'
-
 
                 def get_html(url, params=None):
                     r = requests.get(url, params=params)
@@ -317,7 +332,6 @@ def classicbot():
             if message.find('+гороскоп козерог') != -1:
                 URL = 'https://www.wday.ru/horoscope/common/kozerog/daily/'
 
-
                 def get_html(url, params=None):
                     r = requests.get(url, params=params)
                     return r
@@ -338,7 +352,6 @@ def classicbot():
 
             if message.find('+гороскоп водолей') != -1:
                 URL = 'https://www.wday.ru/horoscope/common/vodolej/daily/'
-
 
                 def get_html(url, params=None):
                     r = requests.get(url, params=params)
@@ -361,7 +374,6 @@ def classicbot():
             if message.find('+гороскоп рыба') != -1:
                 URL = 'https://www.wday.ru/horoscope/common/ryby/daily/'
 
-
                 def get_html(url, params=None):
                     r = requests.get(url, params=params)
                     return r
@@ -380,7 +392,6 @@ def classicbot():
                 parse()
                 await s(goroskop_day + ' для рыб - ' + goroskop)
 
-
         @commands.command(name='topclipever')
         async def topclipever(self, ctx):
             nickname = ctx.author.name
@@ -396,12 +407,12 @@ def classicbot():
                     await s("@{} самый топовый клип за всё время PogU {} ".format(nickname, result["url"]))
                 else:
                     await s(
-                        "@{} самый топовый клип по категории {} за всё время PogU {} ".format(nickname, top, result["url"]))
+                        "@{} самый топовый клип по категории {} за всё время PogU {} ".format(nickname, top,
+                                                                                              result["url"]))
             if result['code'] == "2":
                 await s("@{} такой категории нет PeepoWeird ".format(nickname))
             if result['code'] == "3":
                 await s("@{} из 3000 клипов не было найдено ни одного с такой категорией DaUj ".format(nickname))
-
 
         @commands.command(name='topclipyear')
         async def topclipyear(self, ctx):
@@ -424,7 +435,6 @@ def classicbot():
             if result['code'] == "3":
                 await s("@{} из 3000 клипов не было найдено ни одного с такой категорией DaUj ".format(nickname))
 
-
         @commands.command(name='topclipmonth')
         async def topclipmonth(self, ctx):
             nickname = ctx.author.name
@@ -446,7 +456,6 @@ def classicbot():
             if result['code'] == "3":
                 await s("@{} из 3000 клипов не было найдено ни одного с такой категорией DaUj ".format(nickname))
 
-
         @commands.command(name='topclipday')
         async def topclipday(self, ctx):
             nickname = ctx.author.name
@@ -462,12 +471,12 @@ def classicbot():
                     await s("@{} самый топовый клип за 24 часа PogU {} ".format(nickname, result["url"]))
                 else:
                     await s(
-                        "@{} самый топовый клип по категории {} за 24 часа PogU {} ".format(nickname, top, result["url"]))
+                        "@{} самый топовый клип по категории {} за 24 часа PogU {} ".format(nickname, top,
+                                                                                            result["url"]))
             if result['code'] == "2":
                 await s("@{} такой категории нет PeepoWeird ".format(nickname))
             if result['code'] == "3":
                 await s("@{} из 3000 клипов не было найдено ни одного с такой категорией DaUj ".format(nickname))
-
 
         @commands.command(name='iq')
         async def iq(self, ctx):
@@ -488,7 +497,6 @@ def classicbot():
                 if iq >= 135:
                     await s(nickname + ", ваш IQ = " + str(iq) + "! Внимание! В чате гений WAYTOOSMART Clap")
 
-
         @commands.command(name='паста')
         async def pasta(self, ctx):
             s = ctx.send
@@ -498,27 +506,26 @@ def classicbot():
                 randomnadya = re.sub("\n", '', randomnadya)
                 await s(randomnadya)
 
-
         @commands.command(name='help')
         async def help(self, ctx):
             nickname = ctx.author.name
             s = ctx.send
-            await s(nickname + ", Привет, я бот по имени слон. Можешь использовать следующие команды (страница 1): +паста, +me, +do [nickname], +iq, +temp, +love [nickname], +бубу [something], +steal [nickname] Чтобы перейти на следующую страницу введите +help1 catJAM")
-
+            await s(
+                nickname + ", Привет, я бот по имени слон. Можешь использовать следующие команды (страница 1): +паста, +me, +do [nickname], +iq, +temp, +love [nickname], +бубу [something], +steal [nickname] Чтобы перейти на следующую страницу введите +help1 catJAM")
 
         @commands.command(name='help1')
         async def help1(self, ctx):
             nickname = ctx.author.name
             s = ctx.send
-            await s(nickname + ", страница 2: +привет [nickname], +try [something], +time, +когда [something], +обнять [nickname], +COCK, +BOOBS, +вверх Чтобы перейти на следующую страницу введите +help2")
-
+            await s(
+                nickname + ", страница 2: +привет [nickname], +try [something], +time, +когда [something], +обнять [nickname], +COCK, +BOOBS, +вверх Чтобы перейти на следующую страницу введите +help2")
 
         @commands.command(name='help2')
         async def help2(self, ctx):
             nickname = ctx.author.name
             s = ctx.send
-            await s(nickname + ", страница 3: +анекдот, +гороскоп [знак зодиака], +курс (доллар-рубль, рубль-доллар, евро-рубль, рубль-евро(значение)), +рецепт, +topclipever [category], +topclipyear [category], +topclipmonth [category], +topclipday [category]")
-
+            await s(
+                nickname + ", страница 3: +анекдот, +гороскоп [знак зодиака], +курс (доллар-рубль, рубль-доллар, евро-рубль, рубль-евро(значение)), +рецепт, +topclipever [category], +topclipyear [category], +topclipmonth [category], +topclipday [category]")
 
         @commands.command(name='temp')
         async def temp(self, ctx):
@@ -527,14 +534,14 @@ def classicbot():
             tempp = random.uniform(25, 45)
             temp = round(tempp, 1)
             if temp >= 35.7 and temp <= 37:
-                await s(nickname + ", ваша температура " + str(temp) + " °C! У вас температура в пределах нормы ThumbUp")
+                await s(
+                    nickname + ", ваша температура " + str(temp) + " °C! У вас температура в пределах нормы ThumbUp")
             else:
                 if temp > 37 and temp < 40 or temp < 35.7 and temp >= 32:
                     await s(nickname + ", ваша температура " + str(temp) + " °C! Вы больны? PepeS")
                 else:
                     if temp > 40 or temp < 32:
                         await s(nickname + ", ваша температура " + str(temp) + " °C! Срочно вызывайте скорую! Durka")
-
 
         @commands.command(name='me')
         async def me(self, ctx):
@@ -546,7 +553,6 @@ def classicbot():
                 randomm = re.sub("\n", '', randomm)
                 await s(randomm.format(nickname))
 
-
         @commands.command(name='do')
         async def do(self, ctx):
             message = ctx.message.content
@@ -555,7 +561,8 @@ def classicbot():
             if message == "+do":
                 await s(nickname + ", введите +do [nickname]")
             else:
-                if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find('заходите') != -1:
+                if message.find('.') != -1 or message.find('suicide') != -1 or message.find(
+                        'kill') != -1 or message.find('заходите') != -1:
                     await s(nickname + ", думал забанить меня? WeirdChamp ")
                 else:
                     with open('do.txt', 'r', encoding='utf-8') as c:
@@ -566,7 +573,6 @@ def classicbot():
                         do = re.sub("\n", '', do)
                         await s(randomdo.format(nickname, do))
 
-
         @commands.command(name='бубу')
         async def bubu(self, ctx):
             message = ctx.message.content
@@ -575,7 +581,8 @@ def classicbot():
             if message == "+бубу":
                 await s(nickname + ", введите +бубу [something]")
             else:
-                if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find('заходите') != -1:
+                if message.find('.') != -1 or message.find('suicide') != -1 or message.find(
+                        'kill') != -1 or message.find('заходите') != -1:
                     await s(nickname + ", думал забанить меня? WeirdChamp ")
                 else:
 
@@ -586,7 +593,6 @@ def classicbot():
                     else:
                         await s("Слишком длинное бубу WeirdChamp ")
 
-
         @commands.command(name='love')
         async def love(self, ctx):
             message = ctx.message.content
@@ -596,13 +602,13 @@ def classicbot():
                 await s(nickname + ", введите +love [nickname]")
             else:
                 procent = random.randrange(0, 100, 1)
-                if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find('заходите') != -1:
+                if message.find('.') != -1 or message.find('suicide') != -1 or message.find(
+                        'kill') != -1 or message.find('заходите') != -1:
                     await s(nickname + ", думал забанить меня? WeirdChamp ")
                 else:
                     love = str.replace(message, '+love ', '')
                     love = re.sub("\n", '', love)
                     await s(nickname + " любит " + str(love) + " на " + str(procent) + "%!")
-
 
         @commands.command(name='steal')
         async def steal(self, ctx):
@@ -614,7 +620,8 @@ def classicbot():
             else:
                 procent = random.randrange(0, 100, 1)
                 ruble = random.randrange(0, 2000, 1)
-                if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find('заходите') != -1:
+                if message.find('.') != -1 or message.find('suicide') != -1 or message.find(
+                        'kill') != -1 or message.find('заходите') != -1:
                     await s(nickname + ", думал забанить меня? WeirdChamp ")
                 else:
                     steal = str.replace(message, '+steal ', '')
@@ -624,7 +631,6 @@ def classicbot():
                     else:
                         await s(nickname + " ничего не украл у " + str(steal) + " KeK Lohich")
 
-
         @commands.command(name='try')
         async def ttry(self, ctx):
             message = ctx.message.content
@@ -633,7 +639,8 @@ def classicbot():
             if message == "+try":
                 await s(nickname + ", введите +try [something]")
             else:
-                if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find(
+                if message.find('.') != -1 or message.find('suicide') != -1 or message.find(
+                        'kill') != -1 or message.find(
                         'заходите') != -1:
                     await s(nickname + ", думал забанить меня? WeirdChamp ")
                 else:
@@ -645,12 +652,10 @@ def classicbot():
                         tryr = re.sub("\n", '', tryr)
                     await s(nickname + " попробовал " + tryy + "... " + tryr)
 
-
         @commands.command(name='time')
         async def time(self, ctx):
             s = ctx.send
             await s(datetime.strftime(datetime.now() + timedelta(hours=3), "Чичас %H:%M:%S по МСК Waiting"))
-
 
         @commands.command(name='обнять')
         async def hug(self, ctx):
@@ -660,7 +665,8 @@ def classicbot():
             if message == "+обнять":
                 await s(nickname + ", введите +обнять [nickname]")
             else:
-                if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find('заходите') != -1:
+                if message.find('.') != -1 or message.find('suicide') != -1 or message.find(
+                        'kill') != -1 or message.find('заходите') != -1:
                     await s(nickname + ", думал забанить меня? WeirdChamp ")
 
                 else:
@@ -672,14 +678,12 @@ def classicbot():
                         hug = re.sub("\n", '', hug)
                         await s(nickname + " " + randomhug + " обнимает " + hug + " VoHiYo")
 
-
         @commands.command(name='COCK')
         async def cock(self, ctx):
             nickname = ctx.author.name
             s = ctx.send
             cock = random.randrange(1, 36, 1)
             await s(nickname + ", твой COCK равен " + str(cock) + " см! YEP")
-
 
         @commands.command(name='BOOBS')
         async def boobs(self, ctx):
@@ -691,7 +695,6 @@ def classicbot():
             else:
                 await s(nickname + ", твои BOOBS " + str(boobs) + " размера YEP")
 
-
         @commands.command(name='вверх')
         async def vverh(self, ctx):
             s = ctx.send
@@ -700,7 +703,6 @@ def classicbot():
                 randomdown = random.choice(downn)
                 randomdown = re.sub("\n", '', randomdown)
                 await s(":point_up_2: " + str(randomdown))
-
 
             """
         @commands.command(name='игры')
@@ -724,7 +726,6 @@ def classicbot():
             await s("Чат проиграл, время вышло Sadge ")
             """
 
-
         @commands.command(name='когда')
         async def kogda(self, ctx):
             message = ctx.message.content
@@ -733,7 +734,8 @@ def classicbot():
             if message == "+когда":
                 await s(nickname + ", введите +когда [something]")
             else:
-                if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find('заходите') != -1:
+                if message.find('.') != -1 or message.find('suicide') != -1 or message.find(
+                        'kill') != -1 or message.find('заходите') != -1:
                     await s(nickname + ", думал забанить меня? WeirdChamp ")
                 else:
                     with open('kogda.txt', 'r', encoding='utf-8') as m:
@@ -744,7 +746,6 @@ def classicbot():
                         kogda = re.sub("\n", '', kogda)
                         await s(nickname + ", " + koogda + ' ' + kogda)
 
-
         @commands.command(name='привет')
         async def privet(self, ctx):
             message = ctx.message.content
@@ -753,7 +754,8 @@ def classicbot():
             if message == "+привет":
                 await s(nickname + ", введите +привет [nickname]")
             else:
-                if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find('заходите') != -1:
+                if message.find('.') != -1 or message.find('suicide') != -1 or message.find(
+                        'kill') != -1 or message.find('заходите') != -1:
                     await s(nickname + ", думал забанить меня? WeirdChamp ")
                 else:
                     with open('privet.txt', 'r', encoding='utf-8') as c:
@@ -764,54 +766,51 @@ def classicbot():
                         privet = re.sub("\n", '', privet)
                         await s(nickname + " передаёт " + randommm + " привет " + privet + " peepoHey peepoLove")
 
+    class myThread1(threading.Thread):
+        class ChatBot(commands.Bot):
+
+            def __init__(self):
+                super().__init__(irc_token='oauth:2ed7e435kk3dm1tpgo73gnu7xcjczy',client_id='9qmki7jzmtz6qnjj4z35yucfn29xb9',nick='SLONB0T', prefix='@', initial_channels=['mooncat3'])
+
+            async def event_ready(self):
+                print(f'Ready ChatBot | {self.nick} on {self.initial_channels}')
+
+            @commands.command(name='SLONB0T')
+            async def privet(self, ctx):
+                message = ctx.message.content
+                nickname = ctx.author.name
+                s = ctx.send
+                mess = str.replace(message, '@SLONB0T ', '')
+                mess = re.sub("\n", '', mess)
+                url = "https://aiproject.ru/api/"
+                query = {"ask": mess, "userid": nickname, "key": ""}
+                jsonquery = json.encoder.JSONEncoder.encode(self=json.encoder.JSONEncoder(), o=query)
+                response = requests.post(url=url, data={"query": jsonquery})
+                content = response.content.decode('utf8').replace("'", '"')
+                data = json.loads(content)
+                await s(nickname + ", " + forApiCalls.parse_response_query(data))
+
+            @commands.command(name='slonb0t,')
+            async def privet1(self, ctx):
+                message = ctx.message.content
+                nickname = ctx.author.name
+                s = ctx.send
+                mess = str.replace(message, '@slonb0t ', '')
+                mess = re.sub("\n", '', mess)
+                url = "https://aiproject.ru/api/"
+                query = {"ask": mess, "userid": nickname, "key": ""}
+                jsonquery = json.encoder.JSONEncoder.encode(self=json.encoder.JSONEncoder(), o=query)
+                response = requests.post(url=url, data={"query": jsonquery})
+                content = response.content.decode('utf8').replace("'", '"')
+                data = json.loads(content)
+                await s(nickname + ", " + forApiCalls.parse_response_query(data))
+
+        сhatBot = ChatBot()
+        сhatBot.run()
+
     bot = Bot()
     bot.run()
 
+    myThread1().start()
 
-def botchat():
-    class ChatBot(commands.Bot, ABC):
-
-        def __init__(self):
-            super().__init__(irc_token='oauth:2ed7e435kk3dm1tpgo73gnu7xcjczy', client_id='9qmki7jzmtz6qnjj4z35yucfn29xb9',
-                             nick='SLONB0T', prefix='@', initial_channels=['mooncat3'])
-
-        async def event_ready(self):
-            print(f'Ready ChatBot | {self.nick} on {self.initial_channels}')
-
-
-        @commands.command(name='SLONB0T')
-        async def privet(self, ctx):
-            message = ctx.message.content
-            nickname = ctx.author.name
-            s = ctx.send
-            mess = str.replace(message, '@SLONB0T ', '')
-            mess = re.sub("\n", '', mess)
-            url = "https://aiproject.ru/api/"
-            query = {"ask": mess, "userid": nickname, "key": ""}
-            jsonquery = json.encoder.JSONEncoder.encode(self=json.encoder.JSONEncoder(), o=query)
-            response = requests.post(url=url, data={"query": jsonquery})
-            content = response.content.decode('utf8').replace("'", '"')
-            data = json.loads(content)
-            await s(nickname + ", " + forApiCalls.parse_response_query(data))
-
-
-        @commands.command(name='slonb0t,')
-        async def privet1(self, ctx):
-            message = ctx.message.content
-            nickname = ctx.author.name
-            s = ctx.send
-            mess = str.replace(message, '@slonb0t ', '')
-            mess = re.sub("\n", '', mess)
-            url = "https://aiproject.ru/api/"
-            query = {"ask": mess, "userid": nickname, "key": ""}
-            jsonquery = json.encoder.JSONEncoder.encode(self=json.encoder.JSONEncoder(), o=query)
-            response = requests.post(url=url, data={"query": jsonquery})
-            content = response.content.decode('utf8').replace("'", '"')
-            data = json.loads(content)
-            await s(nickname + ", " + forApiCalls.parse_response_query(data))
-
-    chatBot = ChatBot()
-    chatBot.run()
-
-threading.Thread(target=classicbot()).start()
-threading.Thread(target=botchat()).start()
+myThread(daemon=True).start()
