@@ -13,7 +13,7 @@ class Bot(commands.Bot):
     def __init__(self):
         super().__init__(irc_token='oauth:2ed7e435kk3dm1tpgo73gnu7xcjczy',
                          client_id='9qmki7jzmtz6qnjj4z35yucfn29xb9', nick='SLONB0T', prefix='+',
-                         initial_channels=['danantur'])
+                         initial_channels=['mooncat3'])
 
     async def event_ready(self):
         print(f'Ready CommandsBot | {self.nick} on {self.initial_channels}')
@@ -74,8 +74,8 @@ class Bot(commands.Bot):
         nickname = ctx.author.name
         s = ctx.send
         message = ctx.message.content
-        URL = 'https://finance.rambler.ru/currencies/USD/'
-        URL1 = 'https://finance.rambler.ru/currencies/EUR/'
+        URL = 'https://fortrader.org/quotes/usdrur'
+        URL1 = 'https://fortrader.org/quotes/eurrur'
 
         def get_html(url, params=None):
             r = requests.get(url, params=params)
@@ -86,8 +86,8 @@ class Bot(commands.Bot):
             soup1 = BeautifulSoup(html1, 'html.parser')
             global dollar
             global euro
-            dollar = soup.find('div', class_='finance-currency-plate__currency').get_text()
-            euro = soup1.find('div', class_='finance-currency-plate__currency').get_text()
+            dollar = soup.find('p', class_='rates_box1_inner pid-USDRUR-bid').get_text()
+            euro = soup1.find('p', class_='rates_box1_inner pid-EURRUR-bid').get_text()
 
         def parse():
             html = get_html(URL)
@@ -99,7 +99,7 @@ class Bot(commands.Bot):
 
         if message == "+курс":
             await s(
-                "Курс валют на " + now.strftime("%d.%m") + ": USD - " + dollar + " RUB || EURO - " + euro + " RUB")
+                "Курс валют на " + now.strftime("%d.%m") + ": USD - " + dollar + " RUB | EURO - " + euro + " RUB")
         else:
             try:
                 if message.find('+курс доллар-рубль') != -1:
@@ -530,15 +530,14 @@ class Bot(commands.Bot):
         s = ctx.send
         tempp = random.uniform(25, 45)
         temp = round(tempp, 1)
-        if temp >= 35.7 and temp <= 37:
-            await s(
-                nickname + ", ваша температура " + str(temp) + " °C! У вас температура в пределах нормы ThumbUp")
+        if 35.7 <= temp <= 37:
+            await s(nickname + ", ваша температура " + str(temp) + " °C! У вас температура в норме ThumbUp")
         else:
-            if temp > 37 and temp < 40 or temp < 35.7 and temp >= 32:
-                await s(nickname + ", ваша температура " + str(temp) + " °C! Вы больны? PepeS")
+            if 37 < temp < 40 or 35.7 > temp >= 32:
+                await s(nickname + ", ваша температура " + str(temp) + " °C! У вас вирус? PepeS")
             else:
                 if temp > 40 or temp < 32:
-                    await s(nickname + ", ваша температура " + str(temp) + " °C! Срочно вызывайте скорую! Durka")
+                    await s(nickname + ", ваша температура " + str(temp) + " °C! Вызывайте дурку! Durka")
 
     @commands.command(name='me')
     async def me(self, ctx):
@@ -637,8 +636,7 @@ class Bot(commands.Bot):
             await s(nickname + ", введите +try [something]")
         else:
             if message.find('.') != -1 or message.find('suicide') != -1 or message.find(
-                    'kill') != -1 or message.find(
-                    'заходите') != -1:
+                    'kill') != -1 or message.find('заходите') != -1:
                 await s(nickname + ", думал забанить меня? WeirdChamp ")
             else:
                 tryy = str.replace(message, '+try ', '')
@@ -681,6 +679,21 @@ class Bot(commands.Bot):
         s = ctx.send
         cock = random.randrange(1, 36, 1)
         await s(nickname + ", твой COCK равен " + str(cock) + " см! YEP")
+
+    @commands.command(name='кнб')
+    async def cock(self, ctx):
+        message = ctx.message.content
+        nickname = ctx.author.name
+        s = ctx.send
+        m = ['💎', '✂', '📃']
+        listcnb = list(m)
+        cnb = str.replace(message, '+кмн ', '')
+        cnb = re.sub("\n", '', cnb)
+        rndcnb = random.choice(listcnb)
+        rndcnb = re.sub("\n", '', rndcnb)
+        rndcnb1 = random.choice(listcnb)
+        rndcnb1 = re.sub("\n", '', rndcnb1)
+        await s("{} поставил(а) {} , а {} поставил(а) {} !".format(nickname, rndcnb, cnb, rndcnb1))
 
     @commands.command(name='BOOBS')
     async def boobs(self, ctx):
@@ -762,7 +775,6 @@ class Bot(commands.Bot):
                     privet = str.replace(message, '+привет ', '')
                     privet = re.sub("\n", '', privet)
                     await s(nickname + " передаёт " + randommm + " привет " + privet + " peepoHey peepoLove")
-
 
 
 bot = Bot()
