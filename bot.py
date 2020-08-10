@@ -14,7 +14,7 @@ class Bot(commands.Bot, ABC):
     def __init__(self):
         super().__init__(irc_token='oauth:2ed7e435kk3dm1tpgo73gnu7xcjczy',
                          client_id='9qmki7jzmtz6qnjj4z35yucfn29xb9', nick='SLONB0T', prefix='+',
-                         initial_channels=['danantur'])
+                         initial_channels=['mooncat3'])
 
     async def event_ready(self):
         print(f'Ready CommandsBot | {self.nick} on {self.initial_channels}')
@@ -141,15 +141,15 @@ class Bot(commands.Bot, ABC):
         result = forApiCalls.gettopclip(0, top)
         if result["code"] != "2" and result['code'] != "3":
             if result["code"] == "0":
-                await s("@{} самый топовый клип за всё время PogU {} ".format(nickname, result["url"]))
+                await s("{}, самый топовый клип за всё время PogU {} ".format(nickname, result["url"]))
             else:
                 await s(
-                    "@{} самый топовый клип по категории {} за всё время PogU {} ".format(nickname, top,
+                    "{}, самый топовый клип по категории {} за всё время PogU {} ".format(nickname, top,
                                                                                           result["url"]))
         if result['code'] == "2":
-            await s("@{} такой категории нет PeepoWeird ".format(nickname))
+            await s("{}, такой категории нет PeepoWeird ".format(nickname))
         if result['code'] == "3":
-            await s("@{} из 3000 клипов не было найдено ни одного с такой категорией DaUj ".format(nickname))
+            await s("{}, из 3000 клипов не было найдено ни одного с такой категорией DaUj ".format(nickname))
 
     @commands.command(name='topclipyear')
     async def topclipyear(self, ctx):
@@ -163,14 +163,14 @@ class Bot(commands.Bot, ABC):
         result = forApiCalls.gettopclip(365, top)
         if result["code"] != "2" and result['code'] != "3":
             if result["code"] == "0":
-                await s("@{} самый топовый клип за год PogU {} ".format(nickname, result["url"]))
+                await s("{}, самый топовый клип за год PogU {} ".format(nickname, result["url"]))
             else:
                 await s(
-                    "@{} самый топовый клип по категории {} за год PogU {} ".format(nickname, top, result["url"]))
+                    "{}, самый топовый клип по категории {} за год PogU {} ".format(nickname, top, result["url"]))
         if result['code'] == "2":
-            await s("@{} такой категории нет PeepoWeird ".format(nickname))
+            await s("{}, такой категории нет PeepoWeird ".format(nickname))
         if result['code'] == "3":
-            await s("@{} из 3000 клипов не было найдено ни одного с такой категорией DaUj ".format(nickname))
+            await s("{}, из 3000 клипов не было найдено ни одного с такой категорией DaUj ".format(nickname))
 
     @commands.command(name='topclipmonth')
     async def topclipmonth(self, ctx):
@@ -184,14 +184,14 @@ class Bot(commands.Bot, ABC):
         result = forApiCalls.gettopclip(30, top)
         if result["code"] != "2" and result['code'] != "3":
             if result["code"] == "0":
-                await s("@{} самый топовый клип за месяц PogU {} ".format(nickname, result["url"]))
+                await s("{}, самый топовый клип за месяц PogU {} ".format(nickname, result["url"]))
             else:
                 await s(
-                    "@{} самый топовый клип по категории {} за месяц PogU {} ".format(nickname, top, result["url"]))
+                    "{}, самый топовый клип по категории {} за месяц PogU {} ".format(nickname, top, result["url"]))
         if result['code'] == "2":
-            await s("@{} такой категории нет PeepoWeird ".format(nickname))
+            await s("{}, такой категории нет PeepoWeird ".format(nickname))
         if result['code'] == "3":
-            await s("@{} из 3000 клипов не было найдено ни одного с такой категорией DaUj ".format(nickname))
+            await s("{}, из 3000 клипов не было найдено ни одного с такой категорией DaUj ".format(nickname))
 
     @commands.command(name='topclipday')
     async def topclipday(self, ctx):
@@ -205,15 +205,15 @@ class Bot(commands.Bot, ABC):
         result = forApiCalls.gettopclip(1, top)
         if result["code"] != "2" and result['code'] != "3":
             if result["code"] == "0":
-                await s("@{} самый топовый клип за 24 часа PogU {} ".format(nickname, result["url"]))
+                await s("{}, самый топовый клип за 24 часа PogU {} ".format(nickname, result["url"]))
             else:
                 await s(
-                    "@{} самый топовый клип по категории {} за 24 часа PogU {} ".format(nickname, top,
+                    "{}, самый топовый клип по категории {} за 24 часа PogU {} ".format(nickname, top,
                                                                                         result["url"]))
         if result['code'] == "2":
-            await s("@{} такой категории нет PeepoWeird ".format(nickname))
+            await s("{}, такой категории нет PeepoWeird ".format(nickname))
         if result['code'] == "3":
-            await s("@{} из 3000 клипов не было найдено ни одного с такой категорией DaUj ".format(nickname))
+            await s("{}, из 3000 клипов не было найдено ни одного с такой категорией DaUj ".format(nickname))
 
     @commands.command(name='iq')
     async def iq(self, ctx):
@@ -255,7 +255,7 @@ class Bot(commands.Bot, ABC):
         nickname = ctx.author.name
         s = ctx.send
         await s(
-            nickname + ", страница 2: +привет [nickname], +try [something], +кнб [nickname], +time, +когда [something], +обнять [nickname], +COCK, +BOOBS, +вверх Чтобы перейти на следующую страницу введите +help2")
+            nickname + ", страница 2: +привет [nickname], +try [something], +кнб [nickname], +time, +когда [something], +обнять [nickname], +COCK, +BOOBS, +вниз Чтобы перейти на следующую страницу введите +help2")
 
     @commands.command(name='help2')
     async def help2(self, ctx):
@@ -421,45 +421,47 @@ class Bot(commands.Bot, ABC):
         await s(nickname + ", твой COCK равен " + str(cock) + " см! YEP")
 
     @commands.command(name='кнб')
-    async def cock(self, ctx):
-        message = ctx.message.content
+    async def cnb(self, ctx):
         nickname = ctx.author.name
         s = ctx.send
-        if message == "+кнб":
-            await s(nickname + ", введите +кнб [nickname] 💎-камень, ✂-ножницы, 📃-бумага")
-        else:
-            if message.find('.') != -1 or message.find('suicide') != -1 or message.find(
-                    'kill') != -1 or message.find('заходите') != -1:
-                await s(nickname + ", думал забанить меня? WeirdChamp ")
-            else:
-                m = ['💎', '✂', '📃']
-                listcnb = list(m)
-                cnb = str.replace(message, '+кнб ', '')
-                cnb = re.sub("\n", '', cnb)
-                rndcnb = random.choice(listcnb)
-                rndcnb = re.sub("\n", '', rndcnb)
-                rndcnb1 = random.choice(listcnb)
-                rndcnb1 = re.sub("\n", '', rndcnb1)
-                await s("{} поставил(а) {} , а {} поставил(а) {} !".format(nickname, rndcnb, cnb, rndcnb1))
+        listcnb = ['💎', '✂', '📃']
+        rndcnb = random.choice(listcnb)
+        rndcnb1 = random.choice(listcnb)
+        if rndcnb == '💎' and rndcnb1 == '💎':
+            await s("{} поставил(а) 💎 , а Бот поставил 💎. Ничья! ThumbUp".format(nickname))
+        if rndcnb == '✂' and rndcnb1 == '✂':
+            await s("{} поставил(а) ✂ , а Бот поставил ✂. Ничья! ThumbUp".format(nickname))
+        if rndcnb == '📃' and rndcnb1 == '📃':
+            await s("{} поставил(а) 📃 , а Бот поставил 📃. Ничья! ThumbUp".format(nickname))
+        if rndcnb == '📃' and rndcnb1 == '💎':
+            await s("{} поставил(а) 📃 , а Бот поставил 💎. Победа {} Clap".format(nickname, nickname))
+        if rndcnb == '💎' and rndcnb1 == '📃':
+            await s("{} поставил(а) 💎 , а Бот поставил 📃. Победа Бота Lohich".format(nickname))
+        if rndcnb == '💎' and rndcnb1 == '✂':
+            await s("{} поставил(а) 💎 , а Бот поставил ✂. Победа {} Clap".format(nickname, nickname))
+        if rndcnb == '✂' and rndcnb1 == '💎':
+            await s("{} поставил(а) ✂ , а Бот поставил 💎. Победа Бота Lohich".format(nickname))
+        if rndcnb == '✂' and rndcnb1 == '📃':
+            await s("{} поставил(а) ✂ , а Бот поставил 📃. Победа {} Clap".format(nickname, nickname))
+        if rndcnb == '📃' and rndcnb1 == '✂':
+            await s("{} поставил(а) 📃 , а Бот поставил ✂. Победа Бота Lohich".format(nickname))
+
 
     @commands.command(name='BOOBS')
     async def boobs(self, ctx):
         nickname = ctx.author.name
         s = ctx.send
-        boobs = random.randrange(0, 7, 1)
-        if boobs == 7:
-            await s(nickname + ", твои BOOBS 6+ размера YEP PogU")
-        else:
-            await s(nickname + ", твои BOOBS " + str(boobs) + " размера YEP")
+        boobs = random.randrange(0, 15, 1)
+        await s(nickname + ", твои BOOBS " + str(boobs) + " размера YEP")
 
-    @commands.command(name='вверх')
-    async def vverh(self, ctx):
+    @commands.command(name='вниз')
+    async def vniz(self, ctx):
         s = ctx.send
         with open('down.txt', 'r', encoding='utf-8') as n:
             downn = list(n)
             randomdown = random.choice(downn)
             randomdown = re.sub("\n", '', randomdown)
-            await s(":point_up_2: " + str(randomdown))
+            await s(":point_down: " + str(randomdown))
 
         """
     @commands.command(name='игры')
