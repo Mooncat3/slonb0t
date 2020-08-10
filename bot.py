@@ -1,3 +1,4 @@
+from abc import ABC
 from twitchio.ext import commands
 from datetime import timedelta, datetime
 from bs4 import BeautifulSoup
@@ -8,7 +9,7 @@ import random
 import time
 
 
-class Bot(commands.Bot):
+class Bot(commands.Bot, ABC):
 
     def __init__(self):
         super().__init__(irc_token='oauth:2ed7e435kk3dm1tpgo73gnu7xcjczy',
@@ -127,6 +128,400 @@ class Bot(commands.Bot):
                     await s(nickname + ', ' + kurs + " RUB = " + str(result) + " EURO")
             except OverflowError:
                 await s("Число слишком большое WeirdChamp")
+
+    @commands.command(name='topclipever')
+    async def topclipever(self, ctx):
+        nickname = ctx.author.name
+        s = ctx.send
+        message = ctx.message.content
+        top = str.replace(message, '+topclipever ', '')
+        top = re.sub("\n", '', top)
+        if top == "+topclipever":
+            top = ""
+        result = forApiCalls.gettopclip(0, top)
+        if result["code"] != "2" and result['code'] != "3":
+            if result["code"] == "0":
+                await s("@{} самый топовый клип за всё время PogU {} ".format(nickname, result["url"]))
+            else:
+                await s(
+                    "@{} самый топовый клип по категории {} за всё время PogU {} ".format(nickname, top,
+                                                                                          result["url"]))
+        if result['code'] == "2":
+            await s("@{} такой категории нет PeepoWeird ".format(nickname))
+        if result['code'] == "3":
+            await s("@{} из 3000 клипов не было найдено ни одного с такой категорией DaUj ".format(nickname))
+
+    @commands.command(name='topclipyear')
+    async def topclipyear(self, ctx):
+        nickname = ctx.author.name
+        s = ctx.send
+        message = ctx.message.content
+        top = str.replace(message, '+topclipyear ', '')
+        top = re.sub("\n", '', top)
+        if top == "+topclipyear":
+            top = ""
+        result = forApiCalls.gettopclip(365, top)
+        if result["code"] != "2" and result['code'] != "3":
+            if result["code"] == "0":
+                await s("@{} самый топовый клип за год PogU {} ".format(nickname, result["url"]))
+            else:
+                await s(
+                    "@{} самый топовый клип по категории {} за год PogU {} ".format(nickname, top, result["url"]))
+        if result['code'] == "2":
+            await s("@{} такой категории нет PeepoWeird ".format(nickname))
+        if result['code'] == "3":
+            await s("@{} из 3000 клипов не было найдено ни одного с такой категорией DaUj ".format(nickname))
+
+    @commands.command(name='topclipmonth')
+    async def topclipmonth(self, ctx):
+        nickname = ctx.author.name
+        s = ctx.send
+        message = ctx.message.content
+        top = str.replace(message, '+topclipmonth ', '')
+        top = re.sub("\n", '', top)
+        if top == "+topclipmonth":
+            top = ""
+        result = forApiCalls.gettopclip(30, top)
+        if result["code"] != "2" and result['code'] != "3":
+            if result["code"] == "0":
+                await s("@{} самый топовый клип за месяц PogU {} ".format(nickname, result["url"]))
+            else:
+                await s(
+                    "@{} самый топовый клип по категории {} за месяц PogU {} ".format(nickname, top, result["url"]))
+        if result['code'] == "2":
+            await s("@{} такой категории нет PeepoWeird ".format(nickname))
+        if result['code'] == "3":
+            await s("@{} из 3000 клипов не было найдено ни одного с такой категорией DaUj ".format(nickname))
+
+    @commands.command(name='topclipday')
+    async def topclipday(self, ctx):
+        nickname = ctx.author.name
+        s = ctx.send
+        message = ctx.message.content
+        top = str.replace(message, '+topclipday ', '')
+        top = re.sub("\n", '', top)
+        if top == "+topclipday":
+            top = ""
+        result = forApiCalls.gettopclip(1, top)
+        if result["code"] != "2" and result['code'] != "3":
+            if result["code"] == "0":
+                await s("@{} самый топовый клип за 24 часа PogU {} ".format(nickname, result["url"]))
+            else:
+                await s(
+                    "@{} самый топовый клип по категории {} за 24 часа PogU {} ".format(nickname, top,
+                                                                                        result["url"]))
+        if result['code'] == "2":
+            await s("@{} такой категории нет PeepoWeird ".format(nickname))
+        if result['code'] == "3":
+            await s("@{} из 3000 клипов не было найдено ни одного с такой категорией DaUj ".format(nickname))
+
+    @commands.command(name='iq')
+    async def iq(self, ctx):
+        nickname = ctx.author.name
+        s = ctx.send
+        iq = random.randrange(55, 180, 1)
+        if iq == 110:
+            await s(nickname + ", ваш IQ = " + str(iq) + "! Вы Хесус?! PogU")
+        if iq == 89:
+            await s(nickname + ", ваш IQ = " + str(iq) + "! Вы Братишкин?! PogU")
+        else:
+            if iq < 110 and iq > 70:
+                await s(nickname + ", ваш IQ = " + str(iq) + "! Надо же, у стримера больше IQ чем у вас KeK")
+            if iq > 110 and iq < 135:
+                await s(nickname + ", ваш IQ = " + str(iq) + "! Ого, а вы не глупый человек ThumbUp")
+            if iq < 70:
+                await s(nickname + ", ваш IQ = " + str(iq) + "! Чел... сходи книгу почитай WeirdChamp")
+            if iq >= 135:
+                await s(nickname + ", ваш IQ = " + str(iq) + "! Внимание! В чате гений WAYTOOSMART Clap")
+
+    @commands.command(name='паста')
+    async def pasta(self, ctx):
+        s = ctx.send
+        with open('nadya.txt', 'r', encoding='utf-8') as n:
+            nadyaa = list(n)
+            randomnadya = random.choice(nadyaa)
+            randomnadya = re.sub("\n", '', randomnadya)
+            await s(randomnadya)
+
+    @commands.command(name='help')
+    async def help(self, ctx):
+        nickname = ctx.author.name
+        s = ctx.send
+        await s(
+            nickname + ", Привет, я бот по имени слон. Можешь использовать следующие команды (страница 1): +паста, +me, +do [nickname], +iq, +temp, +love [nickname], +бубу [something], +steal [nickname] Чтобы перейти на следующую страницу введите +help1 catJAM")
+
+    @commands.command(name='help1')
+    async def help1(self, ctx):
+        nickname = ctx.author.name
+        s = ctx.send
+        await s(
+            nickname + ", страница 2: +привет [nickname], +try [something], +кнб [nickname], +time, +когда [something], +обнять [nickname], +COCK, +BOOBS, +вверх Чтобы перейти на следующую страницу введите +help2")
+
+    @commands.command(name='help2')
+    async def help2(self, ctx):
+        nickname = ctx.author.name
+        s = ctx.send
+        await s(
+            nickname + ", страница 3: +анекдот, +гороскоп [знак зодиака], +курс (доллар-рубль, рубль-доллар, евро-рубль, рубль-евро(значение)), +рецепт, +topclipever [category], +topclipyear [category], +topclipmonth [category], +topclipday [category]")
+
+    @commands.command(name='temp')
+    async def temp(self, ctx):
+        nickname = ctx.author.name
+        s = ctx.send
+        tempp = random.uniform(25, 45)
+        temp = round(tempp, 1)
+        if 35.7 <= temp <= 37:
+            await s(nickname + ", ваша температура " + str(temp) + " °C! У вас температура в норме ThumbUp")
+        else:
+            if 37 < temp < 40 or 35.7 > temp >= 32:
+                await s(nickname + ", ваша температура " + str(temp) + " °C! У вас вирус? PepeS")
+            else:
+                if temp > 40 or temp < 32:
+                    await s(nickname + ", ваша температура " + str(temp) + " °C! Вызывайте дурку! Durka")
+
+    @commands.command(name='me')
+    async def me(self, ctx):
+        nickname = ctx.author.name
+        s = ctx.send
+        with open('me.txt', 'r', encoding='utf-8') as b:
+            listme = list(b)
+            randomm = random.choice(listme)
+            randomm = re.sub("\n", '', randomm)
+            await s(randomm.format(nickname))
+
+    @commands.command(name='do')
+    async def do(self, ctx):
+        message = ctx.message.content
+        nickname = ctx.author.name
+        s = ctx.send
+        if message == "+do":
+            await s(nickname + ", введите +do [nickname]")
+        else:
+            if message.find('.') != -1 or message.find('suicide') != -1 or message.find(
+                    'kill') != -1 or message.find('заходите') != -1:
+                await s(nickname + ", думал забанить меня? WeirdChamp ")
+            else:
+                with open('do.txt', 'r', encoding='utf-8') as c:
+                    listme = list(c)
+                    randomdo = random.choice(listme)
+                    randomdo = re.sub("\n", '', randomdo)
+                    do = str.replace(message, '+do ', '')
+                    do = re.sub("\n", '', do)
+                    await s(randomdo.format(nickname, do))
+
+    @commands.command(name='бубу')
+    async def bubu(self, ctx):
+        message = ctx.message.content
+        nickname = ctx.author.name
+        s = ctx.send
+        if message == "+бубу":
+            await s(nickname + ", введите +бубу [something]")
+        else:
+            if message.find('.') != -1 or message.find('suicide') != -1 or message.find(
+                    'kill') != -1 or message.find('заходите') != -1:
+                await s(nickname + ", думал забанить меня? WeirdChamp ")
+            else:
+
+                bubu = str.replace(message, '+бубу ', '')
+                bubu = re.sub("\n", '', bubu)
+                if len(bubu) < 235:
+                    await s("Ну " + str(bubu) + " и " + str(bubu) + " Чё бубнить-то? ThumbUp")
+                else:
+                    await s("Слишком длинное бубу WeirdChamp ")
+
+    @commands.command(name='love')
+    async def love(self, ctx):
+        message = ctx.message.content
+        nickname = ctx.author.name
+        s = ctx.send
+        if message == "+love":
+            await s(nickname + ", введите +love [nickname]")
+        else:
+            procent = random.randrange(0, 100, 1)
+            if message.find('.') != -1 or message.find('suicide') != -1 or message.find(
+                    'kill') != -1 or message.find('заходите') != -1:
+                await s(nickname + ", думал забанить меня? WeirdChamp ")
+            else:
+                love = str.replace(message, '+love ', '')
+                love = re.sub("\n", '', love)
+                await s(nickname + " любит " + str(love) + " на " + str(procent) + "%!")
+
+    @commands.command(name='steal')
+    async def steal(self, ctx):
+        message = ctx.message.content
+        nickname = ctx.author.name
+        s = ctx.send
+        if message == "+steal":
+            await s(nickname + ", введите +steal [nickname]")
+        else:
+            procent = random.randrange(0, 100, 1)
+            ruble = random.randrange(0, 2000, 1)
+            if message.find('.') != -1 or message.find('suicide') != -1 or message.find(
+                    'kill') != -1 or message.find('заходите') != -1:
+                await s(nickname + ", думал забанить меня? WeirdChamp ")
+            else:
+                steal = str.replace(message, '+steal ', '')
+                steal = re.sub("\n", '', steal)
+                if procent >= 33:
+                    await s(nickname + " украл у " + str(steal) + " " + str(ruble) + " руб. BOP")
+                else:
+                    await s(nickname + " ничего не украл у " + str(steal) + " KeK Lohich")
+
+    @commands.command(name='try')
+    async def ttry(self, ctx):
+        message = ctx.message.content
+        nickname = ctx.author.name
+        s = ctx.send
+        if message == "+try":
+            await s(nickname + ", введите +try [something]")
+        else:
+            if message.find('.') != -1 or message.find('suicide') != -1 or message.find(
+                    'kill') != -1 or message.find('заходите') != -1:
+                await s(nickname + ", думал забанить меня? WeirdChamp ")
+            else:
+                tryy = str.replace(message, '+try ', '')
+                tryy = re.sub("\n", '', tryy)
+                with open('try.txt', 'r', encoding='utf-8') as m:
+                    listtry = list(m)
+                    tryr = random.choice(listtry)
+                    tryr = re.sub("\n", '', tryr)
+                await s(nickname + " попробовал " + tryy + "... " + tryr)
+
+    @commands.command(name='time')
+    async def time(self, ctx):
+        s = ctx.send
+        await s(datetime.strftime(datetime.now() + timedelta(hours=3), "Чичас %H:%M:%S по МСК Waiting"))
+
+    @commands.command(name='обнять')
+    async def hug(self, ctx):
+        message = ctx.message.content
+        nickname = ctx.author.name
+        s = ctx.send
+        if message == "+обнять":
+            await s(nickname + ", введите +обнять [nickname]")
+        else:
+            if message.find('.') != -1 or message.find('suicide') != -1 or message.find(
+                    'kill') != -1 or message.find('заходите') != -1:
+                await s(nickname + ", думал забанить меня? WeirdChamp ")
+
+            else:
+                with open('hug.txt', 'r', encoding='utf-8') as j:
+                    hugg = list(j)
+                    randomhug = random.choice(hugg)
+                    randomhug = re.sub("\n", '', randomhug)
+                    hug = str.replace(message, '+обнять ', '')
+                    hug = re.sub("\n", '', hug)
+                    await s(nickname + " " + randomhug + " обнимает " + hug + " VoHiYo")
+
+    @commands.command(name='COCK')
+    async def cock(self, ctx):
+        nickname = ctx.author.name
+        s = ctx.send
+        cock = random.randrange(1, 36, 1)
+        await s(nickname + ", твой COCK равен " + str(cock) + " см! YEP")
+
+    @commands.command(name='кнб')
+    async def cock(self, ctx):
+        message = ctx.message.content
+        nickname = ctx.author.name
+        s = ctx.send
+        if message == "+кнб":
+            await s(nickname + ", введите +кнб [nickname] 💎-камень, ✂-ножницы, 📃-бумага")
+        else:
+            if message.find('.') != -1 or message.find('suicide') != -1 or message.find(
+                    'kill') != -1 or message.find('заходите') != -1:
+                await s(nickname + ", думал забанить меня? WeirdChamp ")
+            else:
+                m = ['💎', '✂', '📃']
+                listcnb = list(m)
+                cnb = str.replace(message, '+кмн ', '')
+                cnb = re.sub("\n", '', cnb)
+                rndcnb = random.choice(listcnb)
+                rndcnb = re.sub("\n", '', rndcnb)
+                rndcnb1 = random.choice(listcnb)
+                rndcnb1 = re.sub("\n", '', rndcnb1)
+                await s("{} поставил(а) {} , а {} поставил(а) {} !".format(nickname, rndcnb, cnb, rndcnb1))
+
+    @commands.command(name='BOOBS')
+    async def boobs(self, ctx):
+        nickname = ctx.author.name
+        s = ctx.send
+        boobs = random.randrange(0, 7, 1)
+        if boobs == 7:
+            await s(nickname + ", твои BOOBS 6+ размера YEP PogU")
+        else:
+            await s(nickname + ", твои BOOBS " + str(boobs) + " размера YEP")
+
+    @commands.command(name='вверх')
+    async def vverh(self, ctx):
+        s = ctx.send
+        with open('down.txt', 'r', encoding='utf-8') as n:
+            downn = list(n)
+            randomdown = random.choice(downn)
+            randomdown = re.sub("\n", '', randomdown)
+            await s(":point_up_2: " + str(randomdown))
+
+        """
+    @commands.command(name='игры')
+    async def hug(self, ctx):
+        nickname = ctx.author.name
+        s = ctx.send
+        await s(nickname + ", cписок всех мини-игр у бота: +угадать число")
+
+
+    @commands.command(name='угадать число')
+    async def chislo(self, ctx):
+        nickname = ctx.author.name
+        s = ctx.send
+        await s("Правила: бот загадывает число от 0 до 20. Ваша задача угадать это число. У вас есть минута. Pog нали!")
+        number = random.randrange(0, 20, 1)
+        for i in range(600, 0, -1):
+            time.sleep(0.1)
+            rubles = random.randrange(0, 5000, 1)
+            if message.find(str(number)) != -1:
+                await s(nickname + ", поздравляю! Ты победил! Приз " + str(rubles) + " руб. PepoParty ")
+        await s("Чат проиграл, время вышло Sadge ")
+        """
+
+    @commands.command(name='когда')
+    async def kogda(self, ctx):
+        message = ctx.message.content
+        nickname = ctx.author.name
+        s = ctx.send
+        if message == "+когда":
+            await s(nickname + ", введите +когда [something]")
+        else:
+            if message.find('.') != -1 or message.find('suicide') != -1 or message.find(
+                    'kill') != -1 or message.find('заходите') != -1:
+                await s(nickname + ", думал забанить меня? WeirdChamp ")
+            else:
+                with open('kogda.txt', 'r', encoding='utf-8') as m:
+                    listkogda = list(m)
+                    koogda = str.replace(message, '+когда ', '')
+                    koogda = re.sub("\n", '', koogda)
+                    kogda = random.choice(listkogda)
+                    kogda = re.sub("\n", '', kogda)
+                    await s(nickname + ", " + koogda + ' ' + kogda)
+
+    @commands.command(name='привет')
+    async def privet(self, ctx):
+        message = ctx.message.content
+        nickname = ctx.author.name
+        s = ctx.send
+        if message == "+привет":
+            await s(nickname + ", введите +привет [nickname]")
+        else:
+            if message.find('.') != -1 or message.find('suicide') != -1 or message.find(
+                    'kill') != -1 or message.find('заходите') != -1:
+                await s(nickname + ", думал забанить меня? WeirdChamp ")
+            else:
+                with open('privet.txt', 'r', encoding='utf-8') as c:
+                    privit = list(c)
+                    randommm = random.choice(privit)
+                    randommm = re.sub("\n", '', randommm)
+                    privet = str.replace(message, '+привет ', '')
+                    privet = re.sub("\n", '', privet)
+                    await s(nickname + " передаёт " + randommm + " привет " + privet + " peepoHey peepoLove")
 
     @commands.command(name='гороскоп')
     async def goroskop(self, ctx):
@@ -388,393 +783,6 @@ class Bot(commands.Bot):
 
             parse()
             await s(goroskop_day + ' для рыб - ' + goroskop)
-
-    @commands.command(name='topclipever')
-    async def topclipever(self, ctx):
-        nickname = ctx.author.name
-        s = ctx.send
-        message = ctx.message.content
-        top = str.replace(message, '+topclipever ', '')
-        top = re.sub("\n", '', top)
-        if top == "+topclipever":
-            top = ""
-        result = forApiCalls.gettopclip(0, top)
-        if result["code"] != "2" and result['code'] != "3":
-            if result["code"] == "0":
-                await s("@{} самый топовый клип за всё время PogU {} ".format(nickname, result["url"]))
-            else:
-                await s(
-                    "@{} самый топовый клип по категории {} за всё время PogU {} ".format(nickname, top,
-                                                                                          result["url"]))
-        if result['code'] == "2":
-            await s("@{} такой категории нет PeepoWeird ".format(nickname))
-        if result['code'] == "3":
-            await s("@{} из 3000 клипов не было найдено ни одного с такой категорией DaUj ".format(nickname))
-
-    @commands.command(name='topclipyear')
-    async def topclipyear(self, ctx):
-        nickname = ctx.author.name
-        s = ctx.send
-        message = ctx.message.content
-        top = str.replace(message, '+topclipyear ', '')
-        top = re.sub("\n", '', top)
-        if top == "+topclipyear":
-            top = ""
-        result = forApiCalls.gettopclip(365, top)
-        if result["code"] != "2" and result['code'] != "3":
-            if result["code"] == "0":
-                await s("@{} самый топовый клип за год PogU {} ".format(nickname, result["url"]))
-            else:
-                await s(
-                    "@{} самый топовый клип по категории {} за год PogU {} ".format(nickname, top, result["url"]))
-        if result['code'] == "2":
-            await s("@{} такой категории нет PeepoWeird ".format(nickname))
-        if result['code'] == "3":
-            await s("@{} из 3000 клипов не было найдено ни одного с такой категорией DaUj ".format(nickname))
-
-    @commands.command(name='topclipmonth')
-    async def topclipmonth(self, ctx):
-        nickname = ctx.author.name
-        s = ctx.send
-        message = ctx.message.content
-        top = str.replace(message, '+topclipmonth ', '')
-        top = re.sub("\n", '', top)
-        if top == "+topclipmonth":
-            top = ""
-        result = forApiCalls.gettopclip(30, top)
-        if result["code"] != "2" and result['code'] != "3":
-            if result["code"] == "0":
-                await s("@{} самый топовый клип за месяц PogU {} ".format(nickname, result["url"]))
-            else:
-                await s(
-                    "@{} самый топовый клип по категории {} за месяц PogU {} ".format(nickname, top, result["url"]))
-        if result['code'] == "2":
-            await s("@{} такой категории нет PeepoWeird ".format(nickname))
-        if result['code'] == "3":
-            await s("@{} из 3000 клипов не было найдено ни одного с такой категорией DaUj ".format(nickname))
-
-    @commands.command(name='topclipday')
-    async def topclipday(self, ctx):
-        nickname = ctx.author.name
-        s = ctx.send
-        message = ctx.message.content
-        top = str.replace(message, '+topclipday ', '')
-        top = re.sub("\n", '', top)
-        if top == "+topclipday":
-            top = ""
-        result = forApiCalls.gettopclip(1, top)
-        if result["code"] != "2" and result['code'] != "3":
-            if result["code"] == "0":
-                await s("@{} самый топовый клип за 24 часа PogU {} ".format(nickname, result["url"]))
-            else:
-                await s(
-                    "@{} самый топовый клип по категории {} за 24 часа PogU {} ".format(nickname, top,
-                                                                                        result["url"]))
-        if result['code'] == "2":
-            await s("@{} такой категории нет PeepoWeird ".format(nickname))
-        if result['code'] == "3":
-            await s("@{} из 3000 клипов не было найдено ни одного с такой категорией DaUj ".format(nickname))
-
-    @commands.command(name='iq')
-    async def iq(self, ctx):
-        nickname = ctx.author.name
-        s = ctx.send
-        iq = random.randrange(55, 180, 1)
-        if iq == 110:
-            await s(nickname + ", ваш IQ = " + str(iq) + "! Вы Хесус?! PogU")
-        if iq == 89:
-            await s(nickname + ", ваш IQ = " + str(iq) + "! Вы Братишкин?! PogU")
-        else:
-            if iq < 110 and iq > 70:
-                await s(nickname + ", ваш IQ = " + str(iq) + "! Надо же, у стримера больше IQ чем у вас KeK")
-            if iq > 110 and iq < 135:
-                await s(nickname + ", ваш IQ = " + str(iq) + "! Ого, а вы не глупый человек ThumbUp")
-            if iq < 70:
-                await s(nickname + ", ваш IQ = " + str(iq) + "! Чел... сходи книгу почитай WeirdChamp")
-            if iq >= 135:
-                await s(nickname + ", ваш IQ = " + str(iq) + "! Внимание! В чате гений WAYTOOSMART Clap")
-
-    @commands.command(name='паста')
-    async def pasta(self, ctx):
-        s = ctx.send
-        with open('nadya.txt', 'r', encoding='utf-8') as n:
-            nadyaa = list(n)
-            randomnadya = random.choice(nadyaa)
-            randomnadya = re.sub("\n", '', randomnadya)
-            await s(randomnadya)
-
-    @commands.command(name='help')
-    async def help(self, ctx):
-        nickname = ctx.author.name
-        s = ctx.send
-        await s(
-            nickname + ", Привет, я бот по имени слон. Можешь использовать следующие команды (страница 1): +паста, +me, +do [nickname], +iq, +temp, +love [nickname], +бубу [something], +steal [nickname] Чтобы перейти на следующую страницу введите +help1 catJAM")
-
-    @commands.command(name='help1')
-    async def help1(self, ctx):
-        nickname = ctx.author.name
-        s = ctx.send
-        await s(
-            nickname + ", страница 2: +привет [nickname], +try [something], +time, +когда [something], +обнять [nickname], +COCK, +BOOBS, +вверх Чтобы перейти на следующую страницу введите +help2")
-
-    @commands.command(name='help2')
-    async def help2(self, ctx):
-        nickname = ctx.author.name
-        s = ctx.send
-        await s(
-            nickname + ", страница 3: +анекдот, +гороскоп [знак зодиака], +курс (доллар-рубль, рубль-доллар, евро-рубль, рубль-евро(значение)), +рецепт, +topclipever [category], +topclipyear [category], +topclipmonth [category], +topclipday [category]")
-
-    @commands.command(name='temp')
-    async def temp(self, ctx):
-        nickname = ctx.author.name
-        s = ctx.send
-        tempp = random.uniform(25, 45)
-        temp = round(tempp, 1)
-        if 35.7 <= temp <= 37:
-            await s(nickname + ", ваша температура " + str(temp) + " °C! У вас температура в норме ThumbUp")
-        else:
-            if 37 < temp < 40 or 35.7 > temp >= 32:
-                await s(nickname + ", ваша температура " + str(temp) + " °C! У вас вирус? PepeS")
-            else:
-                if temp > 40 or temp < 32:
-                    await s(nickname + ", ваша температура " + str(temp) + " °C! Вызывайте дурку! Durka")
-
-    @commands.command(name='me')
-    async def me(self, ctx):
-        nickname = ctx.author.name
-        s = ctx.send
-        with open('me.txt', 'r', encoding='utf-8') as b:
-            listme = list(b)
-            randomm = random.choice(listme)
-            randomm = re.sub("\n", '', randomm)
-            await s(randomm.format(nickname))
-
-    @commands.command(name='do')
-    async def do(self, ctx):
-        message = ctx.message.content
-        nickname = ctx.author.name
-        s = ctx.send
-        if message == "+do":
-            await s(nickname + ", введите +do [nickname]")
-        else:
-            if message.find('.') != -1 or message.find('suicide') != -1 or message.find(
-                    'kill') != -1 or message.find('заходите') != -1:
-                await s(nickname + ", думал забанить меня? WeirdChamp ")
-            else:
-                with open('do.txt', 'r', encoding='utf-8') as c:
-                    listme = list(c)
-                    randomdo = random.choice(listme)
-                    randomdo = re.sub("\n", '', randomdo)
-                    do = str.replace(message, '+do ', '')
-                    do = re.sub("\n", '', do)
-                    await s(randomdo.format(nickname, do))
-
-    @commands.command(name='бубу')
-    async def bubu(self, ctx):
-        message = ctx.message.content
-        nickname = ctx.author.name
-        s = ctx.send
-        if message == "+бубу":
-            await s(nickname + ", введите +бубу [something]")
-        else:
-            if message.find('.') != -1 or message.find('suicide') != -1 or message.find(
-                    'kill') != -1 or message.find('заходите') != -1:
-                await s(nickname + ", думал забанить меня? WeirdChamp ")
-            else:
-
-                bubu = str.replace(message, '+бубу ', '')
-                bubu = re.sub("\n", '', bubu)
-                if len(bubu) < 235:
-                    await s("Ну " + str(bubu) + " и " + str(bubu) + " Чё бубнить-то? ThumbUp")
-                else:
-                    await s("Слишком длинное бубу WeirdChamp ")
-
-    @commands.command(name='love')
-    async def love(self, ctx):
-        message = ctx.message.content
-        nickname = ctx.author.name
-        s = ctx.send
-        if message == "+love":
-            await s(nickname + ", введите +love [nickname]")
-        else:
-            procent = random.randrange(0, 100, 1)
-            if message.find('.') != -1 or message.find('suicide') != -1 or message.find(
-                    'kill') != -1 or message.find('заходите') != -1:
-                await s(nickname + ", думал забанить меня? WeirdChamp ")
-            else:
-                love = str.replace(message, '+love ', '')
-                love = re.sub("\n", '', love)
-                await s(nickname + " любит " + str(love) + " на " + str(procent) + "%!")
-
-    @commands.command(name='steal')
-    async def steal(self, ctx):
-        message = ctx.message.content
-        nickname = ctx.author.name
-        s = ctx.send
-        if message == "+steal":
-            await s(nickname + ", введите +steal [nickname]")
-        else:
-            procent = random.randrange(0, 100, 1)
-            ruble = random.randrange(0, 2000, 1)
-            if message.find('.') != -1 or message.find('suicide') != -1 or message.find(
-                    'kill') != -1 or message.find('заходите') != -1:
-                await s(nickname + ", думал забанить меня? WeirdChamp ")
-            else:
-                steal = str.replace(message, '+steal ', '')
-                steal = re.sub("\n", '', steal)
-                if procent >= 33:
-                    await s(nickname + " украл у " + str(steal) + " " + str(ruble) + " руб. BOP")
-                else:
-                    await s(nickname + " ничего не украл у " + str(steal) + " KeK Lohich")
-
-    @commands.command(name='try')
-    async def ttry(self, ctx):
-        message = ctx.message.content
-        nickname = ctx.author.name
-        s = ctx.send
-        if message == "+try":
-            await s(nickname + ", введите +try [something]")
-        else:
-            if message.find('.') != -1 or message.find('suicide') != -1 or message.find(
-                    'kill') != -1 or message.find('заходите') != -1:
-                await s(nickname + ", думал забанить меня? WeirdChamp ")
-            else:
-                tryy = str.replace(message, '+try ', '')
-                tryy = re.sub("\n", '', tryy)
-                with open('try.txt', 'r', encoding='utf-8') as m:
-                    listtry = list(m)
-                    tryr = random.choice(listtry)
-                    tryr = re.sub("\n", '', tryr)
-                await s(nickname + " попробовал " + tryy + "... " + tryr)
-
-    @commands.command(name='time')
-    async def time(self, ctx):
-        s = ctx.send
-        await s(datetime.strftime(datetime.now() + timedelta(hours=3), "Чичас %H:%M:%S по МСК Waiting"))
-
-    @commands.command(name='обнять')
-    async def hug(self, ctx):
-        message = ctx.message.content
-        nickname = ctx.author.name
-        s = ctx.send
-        if message == "+обнять":
-            await s(nickname + ", введите +обнять [nickname]")
-        else:
-            if message.find('.') != -1 or message.find('suicide') != -1 or message.find(
-                    'kill') != -1 or message.find('заходите') != -1:
-                await s(nickname + ", думал забанить меня? WeirdChamp ")
-
-            else:
-                with open('hug.txt', 'r', encoding='utf-8') as j:
-                    hugg = list(j)
-                    randomhug = random.choice(hugg)
-                    randomhug = re.sub("\n", '', randomhug)
-                    hug = str.replace(message, '+обнять ', '')
-                    hug = re.sub("\n", '', hug)
-                    await s(nickname + " " + randomhug + " обнимает " + hug + " VoHiYo")
-
-    @commands.command(name='COCK')
-    async def cock(self, ctx):
-        nickname = ctx.author.name
-        s = ctx.send
-        cock = random.randrange(1, 36, 1)
-        await s(nickname + ", твой COCK равен " + str(cock) + " см! YEP")
-
-    @commands.command(name='кнб')
-    async def cock(self, ctx):
-        message = ctx.message.content
-        nickname = ctx.author.name
-        s = ctx.send
-        m = ['💎', '✂', '📃']
-        listcnb = list(m)
-        cnb = str.replace(message, '+кмн ', '')
-        cnb = re.sub("\n", '', cnb)
-        rndcnb = random.choice(listcnb)
-        rndcnb = re.sub("\n", '', rndcnb)
-        rndcnb1 = random.choice(listcnb)
-        rndcnb1 = re.sub("\n", '', rndcnb1)
-        await s("{} поставил(а) {} , а {} поставил(а) {} !".format(nickname, rndcnb, cnb, rndcnb1))
-
-    @commands.command(name='BOOBS')
-    async def boobs(self, ctx):
-        nickname = ctx.author.name
-        s = ctx.send
-        boobs = random.randrange(0, 7, 1)
-        if boobs == 7:
-            await s(nickname + ", твои BOOBS 6+ размера YEP PogU")
-        else:
-            await s(nickname + ", твои BOOBS " + str(boobs) + " размера YEP")
-
-    @commands.command(name='вверх')
-    async def vverh(self, ctx):
-        s = ctx.send
-        with open('down.txt', 'r', encoding='utf-8') as n:
-            downn = list(n)
-            randomdown = random.choice(downn)
-            randomdown = re.sub("\n", '', randomdown)
-            await s(":point_up_2: " + str(randomdown))
-
-        """
-    @commands.command(name='игры')
-    async def hug(self, ctx):
-        nickname = ctx.author.name
-        s = ctx.send
-        await s(nickname + ", cписок всех мини-игр у бота: +угадать число")
-
-
-    @commands.command(name='угадать число')
-    async def chislo(self, ctx):
-        nickname = ctx.author.name
-        s = ctx.send
-        await s("Правила: бот загадывает число от 0 до 20. Ваша задача угадать это число. У вас есть минута. Pog нали!")
-        number = random.randrange(0, 20, 1)
-        for i in range(600, 0, -1):
-            time.sleep(0.1)
-            rubles = random.randrange(0, 5000, 1)
-            if message.find(str(number)) != -1:
-                await s(nickname + ", поздравляю! Ты победил! Приз " + str(rubles) + " руб. PepoParty ")
-        await s("Чат проиграл, время вышло Sadge ")
-        """
-
-    @commands.command(name='когда')
-    async def kogda(self, ctx):
-        message = ctx.message.content
-        nickname = ctx.author.name
-        s = ctx.send
-        if message == "+когда":
-            await s(nickname + ", введите +когда [something]")
-        else:
-            if message.find('.') != -1 or message.find('suicide') != -1 or message.find(
-                    'kill') != -1 or message.find('заходите') != -1:
-                await s(nickname + ", думал забанить меня? WeirdChamp ")
-            else:
-                with open('kogda.txt', 'r', encoding='utf-8') as m:
-                    listkogda = list(m)
-                    koogda = str.replace(message, '+когда ', '')
-                    koogda = re.sub("\n", '', koogda)
-                    kogda = random.choice(listkogda)
-                    kogda = re.sub("\n", '', kogda)
-                    await s(nickname + ", " + koogda + ' ' + kogda)
-
-    @commands.command(name='привет')
-    async def privet(self, ctx):
-        message = ctx.message.content
-        nickname = ctx.author.name
-        s = ctx.send
-        if message == "+привет":
-            await s(nickname + ", введите +привет [nickname]")
-        else:
-            if message.find('.') != -1 or message.find('suicide') != -1 or message.find(
-                    'kill') != -1 or message.find('заходите') != -1:
-                await s(nickname + ", думал забанить меня? WeirdChamp ")
-            else:
-                with open('privet.txt', 'r', encoding='utf-8') as c:
-                    privit = list(c)
-                    randommm = random.choice(privit)
-                    randommm = re.sub("\n", '', randommm)
-                    privet = str.replace(message, '+привет ', '')
-                    privet = re.sub("\n", '', privet)
-                    await s(nickname + " передаёт " + randommm + " привет " + privet + " peepoHey peepoLove")
 
 
 bot = Bot()
