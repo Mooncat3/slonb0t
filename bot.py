@@ -434,7 +434,7 @@ class Bot(commands.Bot, ABC):
             else:
                 m = ['💎', '✂', '📃']
                 listcnb = list(m)
-                cnb = str.replace(message, '+кмн ', '')
+                cnb = str.replace(message, '+кнб ', '')
                 cnb = re.sub("\n", '', cnb)
                 rndcnb = random.choice(listcnb)
                 rndcnb = re.sub("\n", '', rndcnb)
