@@ -1,5 +1,5 @@
 datetime
 twitchio
+rfc3339
 requests
 bs4
-rfc3339

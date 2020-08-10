@@ -80,3 +80,18 @@ def abreviatur_helper(argument: str) -> str:
         if argument in ad:
             return ad[argument]
         return ""
+
+def parse_response_query(data: json) -> str:
+    with open(file='aiml.txt', encoding='utf-8') as q:
+        aiml = json.loads(q.read())
+        if data['aiml'] in aiml:
+            return data['aiml'] + " " + aiml[data['aiml']]
+    with open(file='emotions.txt', encoding='utf-8') as q:
+        emotions = json.loads(q.read().replace("'", '"'))
+        if data['emotion'] in emotions:
+            return data['aiml'] + " " + emotions[data['emotion']]
+    with open(file='rubname.txt', encoding='utf-8') as q:
+        newrubname = json.loads(q.read().replace("'", '"'))
+        if data['newrubname'] in emotions:
+            return data['aiml'] + " " + newrubname[data['newrubname']]
+    return data['aiml'] + " P226Smug"
