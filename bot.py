@@ -416,6 +416,5 @@ class Bot(commands.Bot, ABC):
 
 
 
-subprocess.Popen([sys.executable, 'ChatBot.py'])
 bot = Bot()
 bot.run()
