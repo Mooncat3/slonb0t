@@ -424,27 +424,27 @@ class Bot(commands.Bot, ABC):
     async def cnb(self, ctx):
         nickname = ctx.author.name
         s = ctx.send
-        listcnb = ['💎', '✂', '📃']
+        listcnb = ['⛰', '✂️', '📜']
         rndcnb = random.choice(listcnb)
         rndcnb1 = random.choice(listcnb)
-        if rndcnb == '💎' and rndcnb1 == '💎':
-            await s("{} поставил(а) 💎 , а Бот поставил 💎. Ничья! ThumbUp".format(nickname))
-        if rndcnb == '✂' and rndcnb1 == '✂':
-            await s("{} поставил(а) ✂ , а Бот поставил ✂. Ничья! ThumbUp".format(nickname))
-        if rndcnb == '📃' and rndcnb1 == '📃':
-            await s("{} поставил(а) 📃 , а Бот поставил 📃. Ничья! ThumbUp".format(nickname))
-        if rndcnb == '📃' and rndcnb1 == '💎':
-            await s("{} поставил(а) 📃 , а Бот поставил 💎. Победа {} Clap".format(nickname, nickname))
-        if rndcnb == '💎' and rndcnb1 == '📃':
-            await s("{} поставил(а) 💎 , а Бот поставил 📃. Победа Бота Lohich".format(nickname))
-        if rndcnb == '💎' and rndcnb1 == '✂':
-            await s("{} поставил(а) 💎 , а Бот поставил ✂. Победа {} Clap".format(nickname, nickname))
-        if rndcnb == '✂' and rndcnb1 == '💎':
-            await s("{} поставил(а) ✂ , а Бот поставил 💎. Победа Бота Lohich".format(nickname))
-        if rndcnb == '✂' and rndcnb1 == '📃':
-            await s("{} поставил(а) ✂ , а Бот поставил 📃. Победа {} Clap".format(nickname, nickname))
-        if rndcnb == '📃' and rndcnb1 == '✂':
-            await s("{} поставил(а) 📃 , а Бот поставил ✂. Победа Бота Lohich".format(nickname))
+        if rndcnb == '⛰' and rndcnb1 == '⛰':
+            await s("{} поставил(а) ⛰ , а Бот поставил ⛰ . Ничья! ThumbUp".format(nickname))
+        if rndcnb == '✂️' and rndcnb1 == '✂️':
+            await s("{} поставил(а) ✂️ , а Бот поставил ✂️. Ничья! ThumbUp".format(nickname))
+        if rndcnb == '📜' and rndcnb1 == '📜':
+            await s("{} поставил(а) 📜 , а Бот поставил 📜 . Ничья! ThumbUp".format(nickname))
+        if rndcnb == '📜' and rndcnb1 == '⛰':
+            await s("{} поставил(а) 📜 , а Бот поставил ⛰ . Победа {} Clap".format(nickname, nickname))
+        if rndcnb == '⛰' and rndcnb1 == '📜':
+            await s("{} поставил(а) ⛰ , а Бот поставил 📜 . Победа Бота Lohich".format(nickname))
+        if rndcnb == '⛰' and rndcnb1 == '✂️':
+            await s("{} поставил(а) ⛰ , а Бот поставил ✂️. Победа {} Clap".format(nickname, nickname))
+        if rndcnb == '✂️' and rndcnb1 == '⛰':
+            await s("{} поставил(а) ✂️ , а Бот поставил ⛰ . Победа Бота Lohich".format(nickname))
+        if rndcnb == '✂️' and rndcnb1 == '📜':
+            await s("{} поставил(а) ✂️ , а Бот поставил 📜 . Победа {} Clap".format(nickname, nickname))
+        if rndcnb == '📃' and rndcnb1 == '✂️':
+            await s("{} поставил(а) 📃 , а Бот поставил ✂️. Победа Бота Lohich".format(nickname))
 
 
     @commands.command(name='BOOBS')
