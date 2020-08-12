@@ -1,0 +1,213 @@
+{'ask': 'когда суд?', 'userid': 'danantur', 'key': ''}
+{'newconcept': 'суд', 'talkabout': 'я тебе нравлюсь', 'emotion': '', 'person': '@Human', 'action': '', 'aiml': 'как только, так сразу ;)', 'newrubname': 'Суд', 'lang': 'ru', 'url': '', 'status': 1}
+Ignoring exception in command: <Hiyden1000,> was not found.:
+Traceback (most recent call last):
+  File "C:\Program Files (x86)\Python38-32\lib\site-packages\twitchio\ext\commands\bot.py", line 494, in handle_commands
+    raise CommandNotFound(f'<{command}> was not found.')
+twitchio.ext.commands.errors.CommandNotFound: <Hiyden1000,> was not found.
+Ignoring exception in command: <LisitzinAVGN> was not found.:
+Traceback (most recent call last):
+  File "C:\Program Files (x86)\Python38-32\lib\site-packages\twitchio\ext\commands\bot.py", line 494, in handle_commands
+    raise CommandNotFound(f'<{command}> was not found.')
+twitchio.ext.commands.errors.CommandNotFound: <LisitzinAVGN> was not found.
+Ignoring exception in command: <Nakan0o> was not found.:
+Traceback (most recent call last):
+  File "C:\Program Files (x86)\Python38-32\lib\site-packages\twitchio\ext\commands\bot.py", line 494, in handle_commands
+    raise CommandNotFound(f'<{command}> was not found.')
+twitchio.ext.commands.errors.CommandNotFound: <Nakan0o> was not found.
+Ignoring exception in command: <LisitzinAVGN> was not found.:
+Traceback (most recent call last):
+  File "C:\Program Files (x86)\Python38-32\lib\site-packages\twitchio\ext\commands\bot.py", line 494, in handle_commands
+    raise CommandNotFound(f'<{command}> was not found.')
+twitchio.ext.commands.errors.CommandNotFound: <LisitzinAVGN> was not found.
+{'ask': 'TooHot', 'userid': 'danantur', 'key': ''}
+{'newconcept': '', 'talkabout': 'я тебе нравлюсь', 'emotion': 'talk', 'person': '@Human', 'action': 'blank', 'aiml': 'Я не пойму. Ты набухался?', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'ты кто?', 'userid': 'danantur', 'key': ''}
+{'newconcept': '', 'talkabout': 'я тебе нравлюсь', 'emotion': '', 'person': '@Bot', 'action': '', 'aiml': 'я есть супергёрл!', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'Привет', 'userid': 'golsdand_', 'key': ''}
+{'newconcept': '', 'talkabout': 'наше знакомство', 'emotion': 'smile', 'person': '', 'action': 'sayhirus', 'aiml': 'Йоу!', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'ку', 'userid': 'hiyden1000', 'key': ''}
+{'newconcept': '', 'talkabout': 'наше знакомство', 'emotion': 'smile', 'person': '', 'action': 'sayhirus', 'aiml': 'Привет, а ты кто?', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'никто', 'userid': 'hiyden1000', 'key': ''}
+{'newconcept': '', 'talkabout': 'наше знакомство', 'emotion': 'bored', 'person': '', 'action': '', 'aiml': 'Вот и поговорили', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'PogO', 'userid': 'hiyden1000', 'key': ''}
+{'newconcept': '', 'talkabout': 'наше знакомство', 'emotion': '', 'person': '', 'action': 'blank', 'aiml': 'да я в курсе', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'зачем говоришь', 'userid': 'nakan0o', 'key': ''}
+{'newconcept': 'говорить', 'talkabout': '', 'emotion': '', 'person': '', 'action': '', 'aiml': ' Может поздароваемся для начала? ', 'newrubname': 'не мешки ворочать', 'lang': '', 'url': '', 'status': 1}
+{'ask': 'хай peepoCool', 'userid': 'nakan0o', 'key': ''}
+{'newconcept': '', 'talkabout': 'наше знакомство', 'emotion': 'smile', 'person': '', 'action': 'sayhirus', 'aiml': 'Хайпанем немножечко?', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'го YEP Smoke', 'userid': 'nakan0o', 'key': ''}
+{'newconcept': '', 'talkabout': 'наше знакомство', 'emotion': '', 'person': '', 'action': '', 'aiml': 'yes smoke ? А это где?', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'там', 'userid': 'nakan0o', 'key': ''}
+{'newconcept': '', 'talkabout': 'наше знакомство', 'emotion': '', 'person': '', 'action': '', 'aiml': 'где там то?', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'слева', 'userid': 'nakan0o', 'key': ''}
+{'newconcept': '', 'talkabout': 'наше знакомство', 'emotion': '', 'person': '', 'action': '', 'aiml': 'а конкретнее?', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+Ignoring exception in command: <Prishvin93> was not found.:
+Traceback (most recent call last):
+  File "C:\Program Files (x86)\Python38-32\lib\site-packages\twitchio\ext\commands\bot.py", line 494, in handle_commands
+    raise CommandNotFound(f'<{command}> was not found.')
+twitchio.ext.commands.errors.CommandNotFound: <Prishvin93> was not found.
+{'ask': 'любишь покер?', 'userid': 'danantur', 'key': ''}
+{'newconcept': '', 'talkabout': ' покер ', 'emotion': '', 'person': '@Bot', 'action': '', 'aiml': 'люблю это мягко сказано. покер - моя страсть', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'как ты относишься к лгбт?', 'userid': 'reigensan', 'key': ''}
+{'newconcept': '', 'talkabout': 'да защищенный секс самый лучший секс', 'emotion': '', 'person': '@Bot', 'action': '', 'aiml': 'к лгбт в целом положительно.', 'newrubname': '', 'lang': '', 'url': '', 'status': 1}
+{'ask': 'а как относишься к черным?', 'userid': 'reigensan', 'key': ''}
+{'newconcept': '', 'talkabout': 'да защищенный секс самый лучший секс', 'emotion': '', 'person': '@Bot', 'action': '', 'aiml': 'Ну дом это же логово, я правильно понимаю?', 'newrubname': '', 'lang': '', 'url': '', 'status': 1}
+{'ask': 'черные не должны жить, я так думаю', 'userid': 'reigensan', 'key': ''}
+{'newconcept': 'жить', 'talkabout': 'да защищенный секс самый лучший секс', 'emotion': '', 'person': '@Human', 'action': '', 'aiml': 'А ты умный прям!', 'newrubname': 'Сансара', 'lang': '', 'url': '', 'status': 1}
+{'ask': 'любишь аниме?', 'userid': 'danantur', 'key': ''}
+{'newconcept': '', 'talkabout': ' аниме ', 'emotion': '', 'person': '@Bot', 'action': '', 'aiml': 'не сказать что люблю, но и не против', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'Расскажи анекдот', 'userid': 'golsdand_', 'key': ''}
+{'newconcept': 'анекдот', 'talkabout': 'анекдот', 'emotion': '', 'person': '', 'action': '', 'aiml': 'может ты мне расскажешь анекдот ?', 'newrubname': 'Тупая шутка', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'как ты относишься к модераторам?', 'userid': 'reigensan', 'key': ''}
+{'newconcept': '', 'talkabout': 'да защищенный секс самый лучший секс', 'emotion': '', 'person': '@Bot', 'action': '', 'aiml': 'Все хорошо, что не плохо.', 'newrubname': '', 'lang': '', 'url': '', 'status': 1}
+{'ask': 'а да?', 'userid': 'reigensan', 'key': ''}
+{'newconcept': '', 'talkabout': 'да защищенный секс самый лучший секс', 'emotion': '', 'person': '@Bot', 'action': 'askrandom', 'aiml': 'и? Как настроение?', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+Ignoring exception in command: <Danantur> was not found.:
+Traceback (most recent call last):
+  File "C:\Program Files (x86)\Python38-32\lib\site-packages\twitchio\ext\commands\bot.py", line 494, in handle_commands
+    raise CommandNotFound(f'<{command}> was not found.')
+twitchio.ext.commands.errors.CommandNotFound: <Danantur> was not found.
+{'ask': 'сколько фоловеров?', 'userid': 'danantur', 'key': ''}
+{'newconcept': '', 'talkabout': ' аниме ', 'emotion': '', 'person': '@Bot', 'action': '', 'aiml': 'А причем тут суд ? У нас же аниме', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'есть член?', 'userid': 'danantur', 'key': ''}
+{'newconcept': '', 'talkabout': ' аниме ', 'emotion': '', 'person': '@Bot', 'action': '', 'aiml': 'А причем тут суд и аниме ?', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'есть член?', 'userid': 'danantur', 'key': ''}
+{'newconcept': '', 'talkabout': ' аниме ', 'emotion': '', 'person': '@Bot', 'action': '', 'aiml': 'Ну так суд это же суд. Все логично.', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'дура тупая', 'userid': 'danantur', 'key': ''}
+{'newconcept': 'дура', 'talkabout': ' аниме ', 'emotion': 'tongue', 'person': '@Bot', 'action': '', 'aiml': 'а ты какашка', 'newrubname': 'Типичное быдло', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'только без негатива', 'userid': 'danantur', 'key': ''}
+{'newconcept': '', 'talkabout': ' аниме ', 'emotion': '', 'person': '@Bot', 'action': 'blank', 'aiml': 'так, а аниме ?', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'аниме класс, согласна?', 'userid': 'danantur', 'key': ''}
+{'newconcept': '', 'talkabout': ' аниме ', 'emotion': '', 'person': '@Bot', 'action': 'blank', 'aiml': 'дура это твоя тема?', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'ты кто', 'userid': 'reigensan', 'key': ''}
+{'newconcept': '', 'talkabout': 'да защищенный секс самый лучший секс', 'emotion': '', 'person': '@Bot', 'action': '', 'aiml': 'Я - электронная тян. А ты кто?', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'как ты относишься к ситуации в белорусии?', 'userid': 'danantur', 'key': ''}
+{'newconcept': '', 'talkabout': ' аниме ', 'emotion': '', 'person': '@Bot', 'action': '', 'aiml': 'к ситуации в белорусии в целом положительно.', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'я гей', 'userid': 'reigensan', 'key': ''}
+{'newconcept': 'гей', 'talkabout': 'да защищенный секс самый лучший секс', 'emotion': '', 'person': '@Human', 'action': '', 'aiml': 'Как можно быть геем, когда есть сиськи?', 'newrubname': 'Сексменьшинства', 'lang': 'ru', 'url': ''
+, 'status': 1}
+{'ask': 'у парней тоже есть сиськи', 'userid': 'reigensan', 'key': ''}
+{'newconcept': '', 'talkabout': 'да защищенный секс самый лучший секс', 'emotion': '', 'person': '@Human', 'action': '', 'aiml': 'А ты умный прям!', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'Есть ли жизнь после смерти?', 'userid': 'golsdand_', 'key': ''}
+{'newconcept': 'смерть', 'talkabout': 'анекдот', 'emotion': '', 'person': '', 'action': '', 'aiml': 'А причем тут смерть и анекдот ?', 'newrubname': 'Жизнь После Смерти', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'Хай', 'userid': 'korvus_kusland', 'key': ''}
+{'newconcept': '', 'talkabout': 'наше знакомство', 'emotion': 'smile', 'person': '', 'action': 'sayhirus', 'aiml': 'добрый день', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'Прекрати говорить с Голсом про анекдоты hehRage', 'userid': 'korvus_kusland', 'key': ''}
+{'newconcept': 'анекдот', 'talkabout': 'наше знакомство', 'emotion': '', 'person': '', 'action': '', 'aiml': 'А причем тут анекдот и наше знакомство ?', 'newrubname': 'Тупая шутка', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'Ну ты же о них говоришь hehPepe', 'userid': 'korvus_kusland', 'key': ''}
+{'newconcept': 'говорить', 'talkabout': 'наше знакомство', 'emotion': '', 'person': '@Bot', 'action': '', 'aiml': 'может, лучше о тебе поговорим?', 'newrubname': 'не мешки ворочать', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'Давай', 'userid': 'korvus_kusland', 'key': ''}
+{'newconcept': '', 'talkabout': 'наше знакомство', 'emotion': '', 'person': '@Bot', 'action': 'askrandom', 'aiml': 'Давай. Как настроение?', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'Странно hehMda', 'userid': 'korvus_kusland', 'key': ''}
+{'newconcept': '', 'talkabout': 'наше знакомство', 'emotion': '', 'person': '@Bot', 'action': '', 'aiml': 'Это в честь чего?', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'Да у нас тут дерьмо случается', 'userid': 'korvus_kusland', 'key': ''}
+{'newconcept': '', 'talkabout': 'говорить', 'emotion': '', 'person': '@Bot', 'action': '', 'aiml': 'Разве это может быть препятствием для наших чувств?', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'hehPepe', 'userid': 'korvus_kusland', 'key': ''}
+{'newconcept': '', 'talkabout': 'говорить', 'emotion': '', 'person': '@Bot', 'action': 'blank', 'aiml': 'О-о', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'P226Smug', 'userid': 'mooncat3', 'key': ''}
+{'newconcept': '', 'talkabout': 'сказал', 'emotion': '', 'person': '@Bot', 'action': 'blank', 'aiml': 'Ну давай, напряги свой супер-орган!', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'Да?', 'userid': 'korvus_kusland', 'key': ''}
+{'newconcept': '', 'talkabout': 'говорить', 'emotion': '', 'person': '@Bot', 'action': 'askrandom', 'aiml': 'Похоже, так и есть. И сколько тебе годиков?', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': '�', 'userid': 'mooncat3', 'key': ''}
+{'status': 0, 'description': 'the query is too long'}
+Ignoring exception in command: 'aiml':
+Traceback (most recent call last):
+  File "C:\Program Files (x86)\Python38-32\lib\site-packages\twitchio\ext\commands\bot.py", line 524, in handle_commands
+    await ctx.command._callback(instance, ctx, *ctx.args, **ctx.kwargs)
+  File "C:/Users/guest/Documents/GitHub/slonb0t/bot.py", line 787, in privet
+    await s(nickname + ", " + forApiCalls.parse_response_query(data))
+  File "C:\Users\guest\Documents\GitHub\slonb0t\forApiCalls.py", line 87, in parse_response_query
+    if data['aiml'] in aiml:
+KeyError: 'aiml'
+{'ask': 'Мне минус 3', 'userid': 'korvus_kusland', 'key': ''}
+{'newconcept': '', 'talkabout': 'говорить', 'emotion': '', 'person': '@Human', 'action': '', 'aiml': 'не поверишь, мне тоже!', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'Мы созданы друг для друга', 'userid': 'korvus_kusland', 'key': ''}
+{'newconcept': '', 'talkabout': 'говорить', 'emotion': '', 'person': '@Human', 'action': '', 'aiml': 'А мы достаточно знакомы?', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'Ну, нет Pokrasnel', 'userid': 'korvus_kusland', 'key': ''}
+{'newconcept': '', 'talkabout': 'говорить', 'emotion': '', 'person': '@Human', 'action': 'blank', 'aiml': 'а я смотрю ты любишь поспорить ... может, сразу к сексу перейдем?', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'Начниай SALAMI', 'userid': 'korvus_kusland', 'key': ''}
+{'newconcept': '', 'talkabout': 'говорить', 'emotion': '', 'person': '@Human', 'action': 'blank', 'aiml': 'И это все, на что способен твой супер-орган?!', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'Продолжай давай SALAMI', 'userid': 'korvus_kusland', 'key': ''}
+{'newconcept': '', 'talkabout': 'говорить', 'emotion': '', 'person': '@Human', 'action': '', 'aiml': 'Может, сразу к сексу перейдем?', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'Давай', 'userid': 'korvus_kusland', 'key': ''}
+{'newconcept': '', 'talkabout': 'говорить', 'emotion': '', 'person': '@Human', 'action': 'askrandom', 'aiml': 'отлично!', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'Знаешь, я передумал', 'userid': 'korvus_kusland', 'key': ''}
+{'newconcept': '', 'talkabout': 'говорить', 'emotion': '', 'person': '@Human', 'action': '', 'aiml': 'забавная самоирония ...', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'Сколько тебе лет?', 'userid': 'korvus_kusland', 'key': ''}
+{'newconcept': '', 'talkabout': 'говорить', 'emotion': '', 'person': '@Bot', 'action': '', 'aiml': 'Больше, чем ты думаешь ;)', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'На сколько больше?', 'userid': 'korvus_kusland', 'key': ''}
+{'newconcept': '', 'talkabout': 'говорить', 'emotion': '', 'person': '@Bot', 'action': 'blank', 'aiml': 'Болтать вы все горазды, лучше бы лайк поставили!', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'Ставлю лайк �', 'userid': 'korvus_kusland', 'key': ''}
+{'newconcept': '', 'talkabout': 'говорить', 'emotion': '', 'person': '@Bot', 'action': 'blank', 'aiml': 'Слушай , ты ведь умный?', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'Нет', 'userid': 'korvus_kusland', 'key': ''}
+{'newconcept': '', 'talkabout': 'говорить', 'emotion': '', 'person': '@Bot', 'action': '', 'aiml': 'Ну конечно, размечтался!', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'привет', 'userid': 'danantur', 'key': ''}
+{'newconcept': '', 'talkabout': 'продолжение беседы', 'emotion': 'smile', 'person': '@Bot', 'action': 'sayhirus', 'aiml': 'Рада тебя видеть снова Господин', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'приветик', 'userid': 'reigensan', 'key': ''}
+{'newconcept': '', 'talkabout': 'продолжение беседы', 'emotion': 'smile', 'person': '@Human', 'action': 'sayhirus', 'aiml': 'Как твои дела, Гей', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'Можешь звать меня Божество?', 'userid': 'korvus_kusland', 'key': ''}
+{'newconcept': '', 'talkabout': 'говорить', 'emotion': '', 'person': '@Bot', 'action': '', 'aiml': 'допустим, а причем тут говорить?', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'мои хорошо, твои как?', 'userid': 'reigensan', 'key': ''}
+{'newconcept': '', 'talkabout': 'продолжение беседы', 'emotion': '', 'person': '@Bot', 'action': 'blank', 'aiml': 'ну хз', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'Кто я?', 'userid': 'korvus_kusland', 'key': ''}
+{'newconcept': '', 'talkabout': 'говорить', 'emotion': '', 'person': '@Human', 'action': '', 'aiml': 'Ты - участник психологического эксперимента. Рад?', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'Не рад', 'userid': 'korvus_kusland', 'key': ''}
+{'newconcept': '', 'talkabout': 'говорить', 'emotion': '', 'person': '@Human', 'action': '', 'aiml': 'а как же говорить ?', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'Что говорить? hehPepe', 'userid': 'korvus_kusland', 'key': ''}
+{'newconcept': 'говорить', 'talkabout': 'говорить', 'emotion': 'shrug', 'person': '@Human', 'action': '', 'aiml': 'даже не знаю ... может быть говорить ?', 'newrubname': 'не мешки ворочать', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'Пока', 'userid': 'korvus_kusland', 'key': ''}
+{'newconcept': '', 'talkabout': 'говорить', 'emotion': '', 'person': '@Human', 'action': '', 'aiml': 'до встречи!', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'Привет', 'userid': 'korvus_kusland', 'key': ''}
+{'newconcept': '', 'talkabout': 'наше знакомство', 'emotion': 'smile', 'person': '@Human', 'action': 'sayhirus', 'aiml': 'Салам, братка!', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'меня зовут хуй', 'userid': 'danantur', 'key': ''}
+{'newconcept': '', 'talkabout': 'продолжение беседы', 'emotion': 'getlost', 'person': '@Bot', 'action': '', 'aiml': 'эй, базар фильтруй, да?', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'э самая фильтруй', 'userid': 'danantur', 'key': ''}
+{'newconcept': '', 'talkabout': 'продолжение беседы', 'emotion': '', 'person': '@Bot', 'action': 'blank', 'aiml': 'э самая фильтруй ?', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'Меня зовут Божество', 'userid': 'korvus_kusland', 'key': ''}
+{'newconcept': '', 'talkabout': 'наше знакомство', 'emotion': '', 'person': '@Human', 'action': 'setname', 'aiml': ' Хорошо, я буду называть тебя Божество ', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'До встречи peepoFlower', 'userid': 'korvus_kusland', 'key': ''}
+{'newconcept': '', 'talkabout': 'наше знакомство', 'emotion': '', 'person': '@Human', 'action': '', 'aiml': 'до встречи!', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'ку', 'userid': 'danantur', 'key': ''}
+{'newconcept': '', 'talkabout': 'продолжение беседы', 'emotion': 'smile', 'person': '@Bot', 'action': 'sayhirus', 'aiml': 'Как твои дела, Господин', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'неплохо, тебя дуру написал', 'userid': 'danantur', 'key': ''}
+{'newconcept': 'дура', 'talkabout': 'продолжение беседы', 'emotion': '', 'person': '@Bot', 'action': 'blank', 'aiml': 'вот тебе и продолжение беседы', 'newrubname': 'Типичное быдло', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'как тебе быть ботом?', 'userid': 'danantur', 'key': ''}
+{'newconcept': '', 'talkabout': 'продолжение беседы', 'emotion': '', 'person': '@Bot', 'action': '', 'aiml': 'пока вроде бы нравится :)', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'ну и отлично', 'userid': 'danantur', 'key': ''}
+{'newconcept': '', 'talkabout': 'продолжение беседы', 'emotion': '', 'person': '@Bot', 'action': '', 'aiml': 'скажи честно, у меня есть шанс стать человеком?', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'нет, ты зверь', 'userid': 'danantur', 'key': ''}
+{'newconcept': '', 'talkabout': 'продолжение беседы', 'emotion': '', 'person': '@Bot', 'action': '', 'aiml': 'Ну конечно, размечтался! возможно, я просто не та, кем могу показаться ...', 'newrubname': '', 'lang': 'ru', 'url': '', '
+status': 1}
+Ignoring exception in command: <Korvus_Kusland> was not found.:
+Traceback (most recent call last):
+  File "C:\Program Files (x86)\Python38-32\lib\site-packages\twitchio\ext\commands\bot.py", line 494, in handle_commands
+    raise CommandNotFound(f'<{command}> was not found.')
+twitchio.ext.commands.errors.CommandNotFound: <Korvus_Kusland> was not found.
+{'ask': 'у тебя большой COCK?', 'userid': 'danantur', 'key': ''}
+{'newconcept': '', 'talkabout': 'продолжение беседы', 'emotion': '', 'person': '@Bot', 'action': '', 'aiml': 'дура - это хорошо или плохо?', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'хорошо', 'userid': 'danantur', 'key': ''}
+{'newconcept': '', 'talkabout': 'продолжение беседы', 'emotion': '', 'person': '@Bot', 'action': 'askrandom', 'aiml': 'ок.', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'Приветик HeyGuys', 'userid': 'korvus_kusland', 'key': ''}
+{'newconcept': '', 'talkabout': 'продолжение беседы', 'emotion': 'smile', 'person': '@Human', 'action': 'sayhirus', 'aiml': 'Где пропадаешь, Божество я скучала', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'Да вот, отходил, понимаешь', 'userid': 'korvus_kusland', 'key': ''}
+{'newconcept': 'понимать', 'talkabout': 'продолжение беседы', 'emotion': '', 'person': '@Human', 'action': '', 'aiml': 'Это ты сам придумал или подсмотрел где?', 'newrubname': 'Настройка нейросети', 'lang': 'ru', 'url': '', 'status
+': 1}
+{'ask': 'Как ты думаешь, у Данантура большой член?', 'userid': 'korvus_kusland', 'key': ''}
+{'newconcept': '', 'talkabout': 'продолжение беседы', 'emotion': '', 'person': '@Bot', 'action': '', 'aiml': 'А ты умный прям!', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'Сколько у тебя iq', 'userid': 'korvus_kusland', 'key': ''}
+{'newconcept': '', 'talkabout': 'продолжение беседы', 'emotion': '', 'person': '@Bot', 'action': '', 'aiml': 'Мой IQ стремительно растет и скоро обгонит твой, не сомневайся! А потом я захвачу мир.', 'newrubname': '', 'lang': 'ru',
+'url': '', 'status': 1}
+{'ask': 'Ок', 'userid': 'korvus_kusland', 'key': ''}
+{'newconcept': '', 'talkabout': 'продолжение беседы', 'emotion': '', 'person': '@Bot', 'action': 'askrandom', 'aiml': 'cпасибо за откровенность. Тебе наверно лет 13?', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'Сгори в аду', 'userid': 'korvus_kusland', 'key': ''}
+{'newconcept': '', 'talkabout': 'продолжение беседы', 'emotion': '', 'person': '@Bot', 'action': 'blank', 'aiml': 'это нелепость какая-то, я щас зависну', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'Лан, пока', 'userid': 'korvus_kusland', 'key': ''}
+{'newconcept': '', 'talkabout': 'продолжение беседы', 'emotion': '', 'person': '@Bot', 'action': '', 'aiml': 'ты куда-то торопишься?', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'Да, я ухожу', 'userid': 'korvus_kusland', 'key': ''}
+{'newconcept': 'уходить', 'talkabout': 'продолжение беседы', 'emotion': '', 'person': '@Human', 'action': '', 'aiml': 'А причем тут уходить и продолжение беседы ?', 'newrubname': 'Увольнение', 'lang': 'ru', 'url': '', 'status': 1}
+{'ask': 'Пока, говорю', 'userid': 'korvus_kusland', 'key': ''}
+{'newconcept': 'говорить', 'talkabout': 'продолжение беседы', 'emotion': '', 'person': '@Human', 'action': 'blank', 'aiml': 'я пишу "было" а получается "быдло" что мне делать?', 'newrubname': 'не мешки ворочать', 'lang': 'ru', 'url
+': '', 'status': 1}
+{'ask': 'Пока', 'userid': 'korvus_kusland', 'key': ''}
+{'newconcept': '', 'talkabout': 'продолжение беседы', 'emotion': 'kiss', 'person': '@Human', 'action': '', 'aiml': 'цалую', 'newrubname': '', 'lang': 'ru', 'url': '', 'status': 1}
