@@ -426,10 +426,7 @@ class Bot(commands.Bot, ABC):
         message = ctx.message.content
         s = ctx.send
         goroskop = AdditionalMethods.get_goroskop(message, nickname)
-        if goroskop == "":
-            await s(f"{nickname} Введите знак зодиака")
-        else:
-            await s(goroskop)
+        await s(goroskop)
 
 
 subprocess.Popen([sys.executable, 'ChatBot.py'])
