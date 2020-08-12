@@ -105,34 +105,35 @@ class Bot(commands.Bot, ABC):
 
         parse()
         now = datetime.now()
+        today = now.strftime("%d.%m")
 
         if message == "+курс":
-            await s("Курс валют на {}: USD - {} RUB | EURO - {} RUB".format(now.strftime("%d.%m"), dollar, euro))
+            await s(f"Курс валют на {today}: USD = {dollar} RUB | EURO = {euro} RUB")
         else:
             try:
                 if message.find('+курс доллар-рубль') != -1:
                     kurs = str.replace(message, '+курс доллар-рубль ', '')
                     result = int(kurs) * float(dollar)
                     result = round(result, 2)
-                    await s(f"{nickname}, {kurs} USD = {str(result)} RUB")
+                    await s(f"{nickname}, {kurs} USD = {result} RUB")
 
                 if message.find('+курс рубль-доллар') != -1:
                     kurs = str.replace(message, '+курс рубль-доллар ', '')
                     result = float(kurs) / float(dollar)
                     result = round(result, 2)
-                    await s(f"{nickname}, {kurs} RUB = {str(result)} USD")
+                    await s(f"{nickname}, {kurs} RUB = {result} USD")
 
                 if message.find('+курс евро-рубль') != -1:
                     kurs = str.replace(message, '+курс евро-рубль ', '')
                     result = int(kurs) * float(euro)
                     result = round(result, 2)
-                    await s(f"{nickname}, {kurs} EUR = {str(result)} RUB")
+                    await s(f"{nickname}, {kurs} EUR = {result} RUB")
 
                 if message.find('+курс рубль-евро') != -1:
                     kurs = str.replace(message, '+курс рубль-евро ', '')
                     result = float(kurs) / float(euro)
                     result = round(result, 2)
-                    await s(f"{nickname}, {kurs} RUB = {str(result)} EUR")
+                    await s(f"{nickname}, {kurs} RUB = {result} EUR")
             except OverflowError:
                 await s("Число слишком большое WeirdChamp")
 
