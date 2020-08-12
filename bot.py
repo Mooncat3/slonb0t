@@ -186,18 +186,18 @@ class Bot(commands.Bot, ABC):
         s = ctx.send
         iq = random.randrange(55, 180, 1)
         if iq == 110:
-            await s(f"@{nickname}, ваш IQ = {str(iq)}! Вы Хесус?! PogU")
+            await s(f"{nickname}, ваш IQ = {str(iq)}! Вы Хесус?! PogU")
         if iq == 89:
-            await s(f"@{nickname}, ваш IQ = {str(iq)}! Вы Братишкин?! PogU")
+            await s(f"{nickname}, ваш IQ = {str(iq)}! Вы Братишкин?! PogU")
         else:
             if iq < 110 and iq > 70:
-                await s(f"@{nickname}, ваш IQ = {str(iq)}! Надо же, у стримера больше IQ чем у вас KeK")
+                await s(f"{nickname}, ваш IQ = {str(iq)}! Надо же, у стримера больше IQ чем у вас KeK")
             if iq > 110 and iq < 135:
-                await s(f"@{nickname}, ваш IQ = {str(iq)}! Ого, а вы не глупый человек ThumbUp")
+                await s(f"{nickname}, ваш IQ = {str(iq)}! Ого, а вы не глупый человек ThumbUp")
             if iq < 70:
-                await s(f"@{nickname}, ваш IQ = {str(iq)}! Чел... сходи книгу почитай WeirdChamp")
+                await s(f"{nickname}, ваш IQ = {str(iq)}! Чел... сходи книгу почитай WeirdChamp")
             if iq >= 135:
-                await s(f"@{nickname}, ваш IQ = {str(iq)}! Внимание! В чате гений WAYTOOSMART Clap")
+                await s(f"{nickname}, ваш IQ = {str(iq)}! Внимание! В чате гений WAYTOOSMART Clap")
 
     @commands.command(name='паста')
     async def pasta(self, ctx):
@@ -209,21 +209,21 @@ class Bot(commands.Bot, ABC):
         nickname = ctx.author.name
         s = ctx.send
         await s(
-            f"@{nickname}, Привет, я бот по имени слон. Можешь использовать следующие команды (страница 1): +паста, +me, +do [message], +iq, +temp, +love [message], +бубу [message], +steal [message] Чтобы перейти на следующую страницу введите +help1 catJAM")
+            f"{nickname}, Привет, я бот по имени слон. Можешь использовать следующие команды (страница 1): +паста, +me, +do [message], +iq, +temp, +love [message], +бубу [message], +steal [message] Чтобы перейти на следующую страницу введите +help1 catJAM")
 
     @commands.command(name='help1')
     async def help1(self, ctx):
         nickname = ctx.author.name
         s = ctx.send
         await s(
-            f"@{nickname}, страница 2: +привет [message], +try [message], +кнб [message], +time, +когда [message], +обнять [message], +COCK, +BOOBS, +вниз Чтобы перейти на следующую страницу введите +help2")
+            f"{nickname}, страница 2: +привет [message], +try [message], +кнб [message], +time, +когда [message], +обнять [message], +COCK, +BOOBS, +вниз Чтобы перейти на следующую страницу введите +help2")
 
     @commands.command(name='help2')
     async def help2(self, ctx):
         nickname = ctx.author.name
         s = ctx.send
         await s(
-            f"@{nickname}, страница 3: +анекдот, +гороскоп [message], +курс ['изначальная валюта'-'переводимая валюта'(доллар-рубль, евро-рубль и наоборот)] [число], +рецепт, +topclipever [category], +topclipyear [category], +topclipmonth [category], +topclipday [category]")
+            f"{nickname}, страница 3: +анекдот, +гороскоп [message], +курс ['изначальная валюта'-'переводимая валюта'(доллар-рубль, евро-рубль и наоборот)] [число], +рецепт, +topclipever [category], +topclipyear [category], +topclipmonth [category], +topclipday [category]")
 
     @commands.command(name='temp')
     async def temp(self, ctx):
@@ -232,19 +232,19 @@ class Bot(commands.Bot, ABC):
         tempp = random.uniform(25, 45)
         temp = round(tempp, 1)
         if 35.7 <= temp <= 37:
-            await s(f"@{nickname}, ваша температура {str(temp)} °C! У вас температура в норме ThumbUp")
+            await s(f"{nickname}, ваша температура {str(temp)} °C! У вас температура в норме ThumbUp")
         else:
             if 37 < temp < 40 or 35.7 > temp >= 32:
-                await s(f"@{nickname}, ваша температура {str(temp)} °C! У вас вирус? PepeS")
+                await s(f"{nickname}, ваша температура {str(temp)} °C! У вас вирус? PepeS")
             else:
                 if temp > 40 or temp < 32:
-                    await s(f"@{nickname}, ваша температура {str(temp)} °C! Вызывайте дурку! Durka")
+                    await s(f"{nickname}, ваша температура {str(temp)} °C! Вызывайте дурку! Durka")
 
     @commands.command(name='me')
     async def me(self, ctx):
         nickname = ctx.author.name
         s = ctx.send
-        with open('me.txt', 'r', encoding='utf-8') as b:
+        with open('data/me.txt', 'r', encoding='utf-8') as b:
             listme = list(b)
             randomm = random.choice(listme)
             randomm = re.sub("\n", '', randomm)
@@ -256,13 +256,13 @@ class Bot(commands.Bot, ABC):
         nickname = ctx.author.name
         s = ctx.send
         if message == "+do":
-            await s(f"@{nickname}, введите +do [message]")
+            await s(f"{nickname}, введите +do [message]")
         else:
             if message.find('.') != -1 or message.find('suicide') != -1 or message.find(
                     'kill') != -1 or message.find('заходите') != -1:
-                await s(f"@{nickname}, думал забанить меня? WeirdChamp ")
+                await s(f"{nickname}, думал забанить меня? WeirdChamp ")
             else:
-                with open('do.txt', 'r', encoding='utf-8') as c:
+                with open('data/do.txt', 'r', encoding='utf-8') as c:
                     listme = list(c)
                     randomdo = random.choice(listme)
                     randomdo = re.sub("\n", '', randomdo)
@@ -276,11 +276,11 @@ class Bot(commands.Bot, ABC):
         nickname = ctx.author.name
         s = ctx.send
         if message == "+бубу":
-            await s(f"@{nickname}, введите +бубу [something]")
+            await s(f"{nickname}, введите +бубу [something]")
         else:
             if message.find('.') != -1 or message.find('suicide') != -1 or message.find(
                     'kill') != -1 or message.find('заходите') != -1:
-                await s(f"@{nickname}, думал забанить меня? WeirdChamp ")
+                await s(f"{nickname}, думал забанить меня? WeirdChamp ")
             else:
 
                 bubu = str.replace(message, '+бубу ', '')
@@ -301,11 +301,11 @@ class Bot(commands.Bot, ABC):
             procent = random.randrange(0, 100, 1)
             if message.find('.') != -1 or message.find('suicide') != -1 or message.find(
                     'kill') != -1 or message.find('заходите') != -1:
-                await s(f"@{nickname}, думал забанить меня? WeirdChamp ")
+                await s(f"{nickname}, думал забанить меня? WeirdChamp ")
             else:
                 love = str.replace(message, '+love ', '')
                 love = re.sub("\n", '', love)
-                await s(f"@{nickname} любит {str(love)} на {str(procent)} %!")
+                await s(f"{nickname} любит {str(love)} на {str(procent)} %!")
 
     @commands.command(name='steal')
     async def steal(self, ctx):
@@ -324,9 +324,9 @@ class Bot(commands.Bot, ABC):
                 steal = str.replace(message, '+steal ', '')
                 steal = re.sub("\n", '', steal)
                 if procent >= 33:
-                    await s(f"@{nickname} украл у {str(steal)} {str(ruble)} руб. BOP")
+                    await s(f"{nickname} украл у {str(steal)} {str(ruble)} руб. BOP")
                 else:
-                    await s(f"@{nickname} ничего не украл у {str(steal)} KeK Lohich")
+                    await s(f"{nickname} ничего не украл у {str(steal)} KeK Lohich")
 
     @commands.command(name='try')
     async def ttry(self, ctx):
@@ -345,7 +345,7 @@ class Bot(commands.Bot, ABC):
         message = ctx.message.content
         nickname = ctx.author.name
         s = ctx.send
-        await s(AdditionalMethods.parse_standartfile_message(nickname, "@{nickname} {filestr} обнимает {messagestr} VoHiYo",
+        await s(AdditionalMethods.parse_standartfile_message(nickname, "{nickname} {filestr} обнимает {messagestr} VoHiYo",
                                                              message, "+обнять", "hug"))
 
     @commands.command(name='COCK')
@@ -363,23 +363,23 @@ class Bot(commands.Bot, ABC):
         rndcnb = random.choice(listcnb)
         rndcnb1 = random.choice(listcnb)
         if rndcnb == '⛰' and rndcnb1 == '⛰':
-            await s("@{} поставил(а) ⛰ , а Бот поставил ⛰ . Ничья! ThumbUp".format(nickname))
+            await s("{} поставил(а) ⛰ , а Бот поставил ⛰ . Ничья! ThumbUp".format(nickname))
         if rndcnb == '✂️' and rndcnb1 == '✂️':
-            await s("@{} поставил(а) ✂️ , а Бот поставил ✂️. Ничья! ThumbUp".format(nickname))
+            await s("{} поставил(а) ✂️ , а Бот поставил ✂️. Ничья! ThumbUp".format(nickname))
         if rndcnb == '📜' and rndcnb1 == '📜':
-            await s("@{} поставил(а) 📜 , а Бот поставил 📜 . Ничья! ThumbUp".format(nickname))
+            await s("{} поставил(а) 📜 , а Бот поставил 📜 . Ничья! ThumbUp".format(nickname))
         if rndcnb == '📜' and rndcnb1 == '⛰':
-            await s("@{} поставил(а) 📜 , а Бот поставил ⛰ . Победа {} Clap".format(nickname, nickname))
+            await s("{} поставил(а) 📜 , а Бот поставил ⛰ . Победа {} Clap".format(nickname, nickname))
         if rndcnb == '⛰' and rndcnb1 == '📜':
-            await s("@{} поставил(а) ⛰ , а Бот поставил 📜 . Победа Бота Lohich".format(nickname))
+            await s("{} поставил(а) ⛰ , а Бот поставил 📜 . Победа Бота Lohich".format(nickname))
         if rndcnb == '⛰' and rndcnb1 == '✂️':
-            await s("@{} поставил(а) ⛰ , а Бот поставил ✂️. Победа {} Clap".format(nickname, nickname))
+            await s("{} поставил(а) ⛰ , а Бот поставил ✂️. Победа {} Clap".format(nickname, nickname))
         if rndcnb == '✂️' and rndcnb1 == '⛰':
-            await s("@{} поставил(а) ✂️ , а Бот поставил ⛰ . Победа Бота Lohich".format(nickname))
+            await s("{} поставил(а) ✂️ , а Бот поставил ⛰ . Победа Бота Lohich".format(nickname))
         if rndcnb == '✂️' and rndcnb1 == '📜':
-            await s("@{} поставил(а) ✂️ , а Бот поставил 📜 . Победа {} Clap".format(nickname, nickname))
+            await s("{} поставил(а) ✂️ , а Бот поставил 📜 . Победа {} Clap".format(nickname, nickname))
         if rndcnb == '📃' and rndcnb1 == '✂️':
-            await s("@{} поставил(а) 📃 , а Бот поставил ✂️. Победа Бота Lohich".format(nickname))
+            await s("{} поставил(а) 📃 , а Бот поставил ✂️. Победа Бота Lohich".format(nickname))
 
 
     @commands.command(name='BOOBS')
@@ -399,7 +399,7 @@ class Bot(commands.Bot, ABC):
         message = ctx.message.content
         nickname = ctx.author.name
         s = ctx.send
-        await s(AdditionalMethods.parse_standartfile_message(nickname, "@{nickname}, {messagestr} {filestr}",
+        await s(AdditionalMethods.parse_standartfile_message(nickname, "{nickname}, {messagestr} {filestr}",
                                                              message, "+когда", "kogda"))
 
     @commands.command(name='привет')
@@ -407,7 +407,7 @@ class Bot(commands.Bot, ABC):
         message = ctx.message.content
         nickname = ctx.author.name
         s = ctx.send
-        await s(AdditionalMethods.parse_standartfile_message(nickname, "@{nickname} передаёт {filestr} привет {messagestr} peepoHey peepoLove", message, "+привет", "privet"))
+        await s(AdditionalMethods.parse_standartfile_message(nickname, "{nickname} передаёт {filestr} привет {messagestr} peepoHey peepoLove", message, "+привет", "privet"))
 
     @commands.command(name='гороскоп')
     async def goroskop(self, ctx):
@@ -416,7 +416,7 @@ class Bot(commands.Bot, ABC):
         s = ctx.send
         goroskop = AdditionalMethods.get_goroskop(message, nickname)
         if goroskop == "":
-            await s("@{} Введите знак зодиака правильно".format(nickname))
+            await s("{} Введите знак зодиака правильно".format(nickname))
         else:
             await s(goroskop)
 
