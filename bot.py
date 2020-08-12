@@ -373,7 +373,7 @@ class Bot(commands.Bot, ABC):
         usercnb = str.replace(message, '+кнб ', '')
         rndcnb1 = random.choice(listcnb)
         if message == '+кнб':
-            await s(f"{nickname}, введите +кнб [камень, ножницы, бумага])
+            await s(f"{nickname}, введите +кнб [камень, ножницы, бумага]")
         else:
             if usercnb == 'камень' and rndcnb1 == '⛰':
                 await s(f"{nickname} поставил(а) ⛰ , а Бот поставил ⛰ . Ничья! ThumbUp")
