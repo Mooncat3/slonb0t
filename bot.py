@@ -114,25 +114,25 @@ class Bot(commands.Bot, ABC):
                     kurs = str.replace(message, '+курс доллар-рубль ', '')
                     result = int(kurs) * float(dollar)
                     result = round(result, 2)
-                    await s("{}, {} USD = {} RUB".format(nickname, kurs, str(result)))
+                    await s(f"{nickname}, {kurs} USD = {str(result)} RUB")
 
                 if message.find('+курс рубль-доллар') != -1:
                     kurs = str.replace(message, '+курс рубль-доллар ', '')
                     result = float(kurs) / float(dollar)
                     result = round(result, 2)
-                    await s("{}, {} RUB = {} USD".format(nickname, kurs, str(result)))
+                    await s(f"{nickname}, {kurs} RUB = {str(result)} USD")
 
                 if message.find('+курс евро-рубль') != -1:
                     kurs = str.replace(message, '+курс евро-рубль ', '')
                     result = int(kurs) * float(euro)
                     result = round(result, 2)
-                    await s("{}, {} EUR = {} RUB".format(nickname, kurs, str(result)))
+                    await s(f"{nickname}, {kurs} EUR = {str(result)} RUB")
 
                 if message.find('+курс рубль-евро') != -1:
                     kurs = str.replace(message, '+курс рубль-евро ', '')
                     result = float(kurs) / float(euro)
                     result = round(result, 2)
-                    await s("{}, {} RUB = {} EUR".format(nickname, kurs, str(result)))
+                    await s(f"{nickname}, {kurs} RUB = {str(result)} EUR")
             except OverflowError:
                 await s("Число слишком большое WeirdChamp")
 
@@ -190,9 +190,9 @@ class Bot(commands.Bot, ABC):
         if iq == 89:
             await s(f"{nickname}, ваш IQ = {str(iq)}! Вы Братишкин?! PogU")
         else:
-            if iq < 110 and iq > 70:
+            if 110 > iq > 70:
                 await s(f"{nickname}, ваш IQ = {str(iq)}! Надо же, у стримера больше IQ чем у вас KeK")
-            if iq > 110 and iq < 135:
+            if 110 < iq < 135:
                 await s(f"{nickname}, ваш IQ = {str(iq)}! Ого, а вы не глупый человек ThumbUp")
             if iq < 70:
                 await s(f"{nickname}, ваш IQ = {str(iq)}! Чел... сходи книгу почитай WeirdChamp")
@@ -209,21 +209,26 @@ class Bot(commands.Bot, ABC):
         nickname = ctx.author.name
         s = ctx.send
         await s(
-            f"{nickname}, Привет, я бот по имени слон. Можешь использовать следующие команды (страница 1): +паста, +me, +do [message], +iq, +temp, +love [message], +бубу [message], +steal [message] Чтобы перейти на следующую страницу введите +help1 catJAM")
+            f"{nickname}, Привет, я бот по имени слон. Можешь использовать следующие команды (страница 1): +паста, "
+            f"+me, +do [message], +iq, +temp, +love [message], +бубу [message], +steal [message] Чтобы перейти на "
+            f"следующую страницу введите +help1 catJAM")
 
     @commands.command(name='help1')
     async def help1(self, ctx):
         nickname = ctx.author.name
         s = ctx.send
         await s(
-            f"{nickname}, страница 2: +привет [message], +try [message], +кнб [message], +time, +когда [message], +обнять [message], +COCK, +BOOBS, +вниз Чтобы перейти на следующую страницу введите +help2")
+            f"{nickname}, страница 2: +привет [message], +try [message], +кнб, +time, +когда [message], +обнять ["
+            f"message], +COCK, +BOOBS, +вниз Чтобы перейти на следующую страницу введите +help2")
 
     @commands.command(name='help2')
     async def help2(self, ctx):
         nickname = ctx.author.name
         s = ctx.send
         await s(
-            f"{nickname}, страница 3: +анекдот, +гороскоп [message], +курс ['изначальная валюта'-'переводимая валюта'(доллар-рубль, евро-рубль и наоборот)] [число], +рецепт, +topclipever [category], +topclipyear [category], +topclipmonth [category], +topclipday [category]")
+            f"{nickname}, страница 3: +анекдот, +гороскоп [message], +курс ['изначальная валюта'-'переводимая валюта'"
+            f"(доллар-рубль, евро-рубль и наоборот)] [число], +рецепт, +topclipever [category], +topclipyear ["
+            f"category], +topclipmonth [category], +topclipday [category]")
 
     @commands.command(name='temp')
     async def temp(self, ctx):
@@ -333,7 +338,9 @@ class Bot(commands.Bot, ABC):
         message = ctx.message.content
         nickname = ctx.author.name
         s = ctx.send
-        await s(AdditionalMethods.parse_standartfile_message(nickname, "@{nickname} попробовал {messagestr}... {filestr}", message, "+try", "try"))
+        await s(
+            AdditionalMethods.parse_standartfile_message(nickname, "{nickname} попробовал {messagestr}... {filestr}",
+                                                         message, "+try", "try"))
 
     @commands.command(name='time')
     async def time(self, ctx):
@@ -345,7 +352,8 @@ class Bot(commands.Bot, ABC):
         message = ctx.message.content
         nickname = ctx.author.name
         s = ctx.send
-        await s(AdditionalMethods.parse_standartfile_message(nickname, "{nickname} {filestr} обнимает {messagestr} VoHiYo",
+        await s(AdditionalMethods.parse_standartfile_message(nickname, "{nickname} {filestr} обнимает {messagestr} "
+                                                                       "VoHiYo",
                                                              message, "+обнять", "hug"))
 
     @commands.command(name='COCK')
@@ -363,31 +371,30 @@ class Bot(commands.Bot, ABC):
         rndcnb = random.choice(listcnb)
         rndcnb1 = random.choice(listcnb)
         if rndcnb == '⛰' and rndcnb1 == '⛰':
-            await s("{} поставил(а) ⛰ , а Бот поставил ⛰ . Ничья! ThumbUp".format(nickname))
+            await s(f"{nickname} поставил(а) ⛰ , а Бот поставил ⛰ . Ничья! ThumbUp")
         if rndcnb == '✂️' and rndcnb1 == '✂️':
-            await s("{} поставил(а) ✂️ , а Бот поставил ✂️. Ничья! ThumbUp".format(nickname))
+            await s(f"{nickname} поставил(а) ✂️ , а Бот поставил ✂️. Ничья! ThumbUp")
         if rndcnb == '📜' and rndcnb1 == '📜':
-            await s("{} поставил(а) 📜 , а Бот поставил 📜 . Ничья! ThumbUp".format(nickname))
+            await s(f"{nickname} поставил(а) 📜 , а Бот поставил 📜 . Ничья! ThumbUp")
         if rndcnb == '📜' and rndcnb1 == '⛰':
-            await s("{} поставил(а) 📜 , а Бот поставил ⛰ . Победа {} Clap".format(nickname, nickname))
+            await s(f"{nickname} поставил(а) 📜 , а Бот поставил ⛰ . Победа {nickname} Clap")
         if rndcnb == '⛰' and rndcnb1 == '📜':
-            await s("{} поставил(а) ⛰ , а Бот поставил 📜 . Победа Бота Lohich".format(nickname))
+            await s(f"{nickname} поставил(а) ⛰ , а Бот поставил 📜 . Победа Бота Lohich")
         if rndcnb == '⛰' and rndcnb1 == '✂️':
-            await s("{} поставил(а) ⛰ , а Бот поставил ✂️. Победа {} Clap".format(nickname, nickname))
+            await s(f"{nickname} поставил(а) ⛰ , а Бот поставил ✂️. Победа {nickname} Clap")
         if rndcnb == '✂️' and rndcnb1 == '⛰':
-            await s("{} поставил(а) ✂️ , а Бот поставил ⛰ . Победа Бота Lohich".format(nickname))
+            await s(f"{nickname} поставил(а) ✂️ , а Бот поставил ⛰ . Победа Бота Lohich")
         if rndcnb == '✂️' and rndcnb1 == '📜':
-            await s("{} поставил(а) ✂️ , а Бот поставил 📜 . Победа {} Clap".format(nickname, nickname))
+            await s(f"{nickname} поставил(а) ✂️ , а Бот поставил 📜 . Победа {nickname} Clap")
         if rndcnb == '📃' and rndcnb1 == '✂️':
-            await s("{} поставил(а) 📃 , а Бот поставил ✂️. Победа Бота Lohich".format(nickname))
-
+            await s(f"{nickname} поставил(а) 📃 , а Бот поставил ✂️. Победа Бота Lohich")
 
     @commands.command(name='BOOBS')
     async def boobs(self, ctx):
         nickname = ctx.author.name
         s = ctx.send
         boobs = random.randrange(0, 15, 1)
-        await s(f"@{nickname}, твои BOOBS {str(boobs)} размера YEP")
+        await s(f"{nickname}, твои BOOBS {str(boobs)} размера YEP")
 
     @commands.command(name='вниз')
     async def vniz(self, ctx):
@@ -407,7 +414,10 @@ class Bot(commands.Bot, ABC):
         message = ctx.message.content
         nickname = ctx.author.name
         s = ctx.send
-        await s(AdditionalMethods.parse_standartfile_message(nickname, "{nickname} передаёт {filestr} привет {messagestr} peepoHey peepoLove", message, "+привет", "privet"))
+        await s(AdditionalMethods.parse_standartfile_message(nickname,
+                                                             "{nickname} передаёт {filestr} привет {messagestr} "
+                                                             "peepoHey peepoLove",
+                                                             message, "+привет", "privet"))
 
     @commands.command(name='гороскоп')
     async def goroskop(self, ctx):
@@ -416,7 +426,7 @@ class Bot(commands.Bot, ABC):
         s = ctx.send
         goroskop = AdditionalMethods.get_goroskop(message, nickname)
         if goroskop == "":
-            await s("{} Введите знак зодиака правильно".format(nickname))
+            await s(f"{nickname} Введите знак зодиака")
         else:
             await s(goroskop)
 
