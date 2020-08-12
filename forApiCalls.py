@@ -82,6 +82,7 @@ def abreviatur_helper(argument: str) -> str:
         return ""
 
 def parse_response_query(data: json) -> str:
+    print(data)
     with open(file='aiml.txt', encoding='utf-8') as q:
         aiml = json.loads(q.read())
         if data['aiml'] in aiml:
