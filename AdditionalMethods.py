@@ -1,6 +1,7 @@
 import urllib.request
 import urllib.response
 from urllib.parse import quote
+import time
 import json
 import rfc3339
 from datetime import datetime, timedelta
@@ -8,11 +9,55 @@ from bs4 import BeautifulSoup
 import requests
 import random
 import re
+import config
 
-BROADCASTER_ID = "34711476"
-OAUTH = "2ed7e435kk3dm1tpgo73gnu7xcjczy"
-CLIENT_ID = "gp762nuuoqcoxypju8c569th9wz7q5"
-
+def get_last_stream_stat():
+    def summ_times() -> time:
+        timeq: time = 0.0
+        for t in game_mass:
+            if 'time' in t.keys():
+                timeq = timeq + float(t['time'])
+        return timeq
+    with open(file='TRASH.txt', mode='r', encoding='utf-8') as q:
+        TRASHMASSIVE = json.loads(q.read())
+    url = "https://api.twitch.tv/helix/videos?user_id=34711476&first=2"
+    request = urllib.request.Request(url=url, headers={"Authorization": "Bearer {}".format(config.OAUTH),
+                                                       "Client-ID": "{}".format(config.CLIENT_ID)})
+    response = urllib.request.urlopen(request).read()
+    data = json.loads(response)
+    strim_name = data['data'][0]['title']
+    strim_duration = data['data'][0]['duration']
+    viewsummcount = 0
+    id_game = "0"
+    game_mass = []
+    timet = 0.0
+    for dat in TRASHMASSIVE:
+        viewsummcount += dat['ViewerCount']
+        if len(game_mass) > 0 and (id_game != dat['GAME_ID'] or (dat == TRASHMASSIVE[len(TRASHMASSIVE)-1] and dat['GAME_ID'] == TRASHMASSIVE[len(TRASHMASSIVE)-2]['GAME_ID'])):
+            if dat == TRASHMASSIVE[len(TRASHMASSIVE)-1] and dat['GAME_ID'] == TRASHMASSIVE[len(TRASHMASSIVE)-2]['GAME_ID']:
+                print("п")
+            game_mass[len(game_mass) - 1]['time'] = dat['time_of_update'] - timet
+        if id_game != dat['GAME_ID']:
+            id_game = dat['GAME_ID']
+            url = "https://api.twitch.tv/helix/games?id={}".format(id_game)
+            request = urllib.request.Request(url=url, headers={"Authorization": "Bearer {}".format(config.OAUTH),
+                                                               "Client-ID": "{}".format(config.CLIENT_ID)})
+            response = urllib.request.urlopen(request).read()
+            data = json.loads(response)
+            game_mass.append({"name": data['data'][0]['name']})
+            timet = dat['time_of_update']
+            if len(game_mass) == 1:
+                game_mass[len(game_mass) - 1]['time'] = dat['time_of_update']
+            else:
+                print(dat['time_of_update'])
+                print(game_mass[len(game_mass) - 2]['time'])
+                game_mass[len(game_mass) - 1]['time'] = dat['time_of_update'] - summ_times()
+    streamstat = {"Games": game_mass, "middleviewcount": viewsummcount / len(TRASHMASSIVE), "StreamName": strim_name, "StreamDuration": strim_duration}
+    categorystr = ""
+    for r in streamstat['Games']:
+        print(r)
+        categorystr += f"{r['name']} - {r['time']}; "
+    return f"СТРИМ: {streamstat['StreamName']} || ДЛИТЕЛЬНОСТЬ: {streamstat['StreamDuration']} || СРЕДНЕЕ ЧИСЛО ЗРИТЕЛЕЙ: {streamstat['middleviewcount']} || {categorystr} "
 
 def parse_standartfile_message(nickname, formatable, message, command, name_of_file) -> str:
     if message == command:
@@ -40,17 +85,17 @@ def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "") -> 
     #-------------------------------------checking for clip--------------------------------------
     def do_request_for_getting_clip(id_game: str = "0", days_before: int = 0, ever: bool = False) -> {str: str}:
         if ever:
-            url = "https://api.twitch.tv/helix/clips?broadcaster_id={}".format(BROADCASTER_ID)
+            url = "https://api.twitch.tv/helix/clips?broadcaster_id={}".format(config.BROADCASTER_ID)
         else:
             datepast = rfc3339.format((datetime.utcnow() + timedelta(hours=3)) - timedelta(days=days_before), utc=True,
                                       use_system_timezone=False)
             datenow = rfc3339.format(datetime.utcnow() + timedelta(hours=3), utc=True, use_system_timezone=False)
             url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&started_at={}&ended_at={}".format(
-                BROADCASTER_ID, datepast,
+                config.BROADCASTER_ID, datepast,
                 datenow)
 
-        request = urllib.request.Request(url=url, headers={"Authorization": "Bearer {}".format(OAUTH),
-                                                           "Client-ID": "{}".format(CLIENT_ID)})
+        request = urllib.request.Request(url=url, headers={"Authorization": "Bearer {}".format(config.OAUTH),
+                                                           "Client-ID": "{}".format(config.CLIENT_ID)})
         response = urllib.request.urlopen(request).read()
         data = json.loads(response)
         ident: int = 1
@@ -63,14 +108,14 @@ def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "") -> 
                     if p['game_id'] == id_game:
                         return {"code": "1", "url": p['url']}
                 if ever:
-                    url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&after={}".format(BROADCASTER_ID,
+                    url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&after={}".format(config.BROADCASTER_ID,
                                                                                                 data['pagination'][
                                                                                                     'cursor'])
                 else:
                     url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&after={}&started_at={}&ended_at={}".format(
-                        BROADCASTER_ID, data['pagination']['cursor'], datepast, datenow)
-                request = urllib.request.Request(url=url, headers={"Authorization": "Bearer {}".format(OAUTH),
-                                                                   "Client-ID": "{}".format(CLIENT_ID)})
+                        config.BROADCASTER_ID, data['pagination']['cursor'], datepast, datenow)
+                request = urllib.request.Request(url=url, headers={"Authorization": "Bearer {}".format(config.OAUTH),
+                                                                   "Client-ID": "{}".format(config.CLIENT_ID)})
                 response = urllib.request.urlopen(request).read()
                 print(response)
                 data = json.loads(response)
@@ -113,8 +158,8 @@ def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "") -> 
             argument = abreviatur_helper(argument)
         qstr = quote(argument)
         url = "https://api.twitch.tv/helix/games?name={}".format(qstr)
-        request = urllib.request.Request(url=url, headers={"Authorization": "Bearer {}".format(OAUTH),
-                                                           "Client-ID": "{}".format(CLIENT_ID)})
+        request = urllib.request.Request(url=url, headers={"Authorization": "Bearer {}".format(config.OAUTH),
+                                                           "Client-ID": "{}".format(config.CLIENT_ID)})
         try:
             response = urllib.request.urlopen(request).read()
             data = json.loads(response)

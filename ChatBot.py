@@ -3,12 +3,14 @@ import json
 import AdditionalMethods
 import re
 import requests
+import config
 
 
 class ChatBot(commands.Bot):
 
     def __init__(self):
-        super().__init__(irc_token='oauth:2ed7e435kk3dm1tpgo73gnu7xcjczy', client_id='9qmki7jzmtz6qnjj4z35yucfn29xb9', nick='SLONB0T', prefix='@', initial_channels=['danantur'])
+        super().__init__(irc_token=f'oauth:{config.OAUTH}',
+                         client_id=config.CLIENT_ID, nick=config.BOT, prefix='@', initial_channels=config.CHANNELS)
 
     async def event_ready(self):
         print(f'Ready ChatBot | {self.nick}')

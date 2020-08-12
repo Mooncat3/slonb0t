@@ -9,17 +9,23 @@ import re
 import random
 import time
 import subprocess
+import config
 
 
 class Bot(commands.Bot, ABC):
 
     def __init__(self):
-        super().__init__(irc_token='oauth:2ed7e435kk3dm1tpgo73gnu7xcjczy',
-                         client_id='9qmki7jzmtz6qnjj4z35yucfn29xb9', nick='SLONB0T', prefix='+',
-                         initial_channels=['danantur'])
+        super().__init__(irc_token=f'oauth:{config.OAUTH}',
+                         client_id=config.CLIENT_ID, nick=config.BOT, prefix='+',
+                         initial_channels=config.CHANNELS)
 
     async def event_ready(self):
         print(f'Ready CommandsBot | {self.nick} on {self.initial_channels}')
+
+    @commands.command(name='стрим')
+    async def stream(self, ctx):
+        s = ctx.send
+        await s(AdditionalMethods.get_last_stream_stat())
 
     @commands.command(name='рецепт')
     async def recept(self, ctx):
@@ -415,7 +421,7 @@ class Bot(commands.Bot, ABC):
             await s(goroskop)
 
 
-
 subprocess.Popen([sys.executable, 'ChatBot.py'])
+subprocess.Popen([sys.executable, 'CheckingStreamThread.py'])
 bot = Bot()
 bot.run()
