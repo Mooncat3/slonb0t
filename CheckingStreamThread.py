@@ -4,7 +4,7 @@ import config
 import time
 
 
-TRASHMASSIVE = [{}]
+TRASHMASSIVE = []
 global active
 global times
 
@@ -27,18 +27,18 @@ def checkingthread():
             if len(TRASHMASSIVE) > 0:
                 if res['GAME_ID'] != TRASHMASSIVE[len(TRASHMASSIVE) - 1]["GAME_ID"] or res['ViewerCount'] != TRASHMASSIVE[len(TRASHMASSIVE) - 1]["ViewerCount"]:
                     TRASHMASSIVE.append(res)
-                    with open(file='TRASH.txt', mode='w', encoding='utf-8') as q:
+                    with open(file='data/TRASH.txt', mode='w', encoding='utf-8') as q:
                         q.write(json.dumps(TRASHMASSIVE))
                     print(TRASHMASSIVE[len(TRASHMASSIVE) - 1])
             else:
                 TRASHMASSIVE.append(res)
-                with open(file='TRASH.txt', mode='w', encoding='utf-8') as q:
+                with open(file='data/TRASH.txt', mode='w', encoding='utf-8') as q:
                     q.write(json.dumps(TRASHMASSIVE))
                 print(TRASHMASSIVE[len(TRASHMASSIVE) - 1])
         else:
             if active:
                 active = False
-                with open(file='TRASH.txt', mode='w', encoding='utf-8') as q:
+                with open(file='data/TRASH.txt', mode='w', encoding='utf-8') as q:
                     q.write(json.dumps(TRASHMASSIVE))
                 print(TRASHMASSIVE)
         time.sleep(60)
