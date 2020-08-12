@@ -372,24 +372,27 @@ class Bot(commands.Bot, ABC):
         listcnb = ['⛰', '✂️', '📜']
         usercnb = str.replace(message, '+кнб ', '')
         rndcnb1 = random.choice(listcnb)
-        if usercnb == 'камень' and rndcnb1 == '⛰':
-            await s(f"{nickname} поставил(а) ⛰ , а Бот поставил ⛰ . Ничья! ThumbUp")
-        if usercnb == 'ножницы' and rndcnb1 == '✂️':
-            await s(f"{nickname} поставил(а) ✂️ , а Бот поставил ✂️. Ничья! ThumbUp")
-        if usercnb == 'бумага' and rndcnb1 == '📜':
-            await s(f"{nickname} поставил(а) 📜 , а Бот поставил 📜 . Ничья! ThumbUp")
-        if usercnb == 'бумага' and rndcnb1 == '⛰':
-            await s(f"{nickname} поставил(а) 📜 , а Бот поставил ⛰ . Победа {nickname} Clap")
-        if usercnb == 'камень' and rndcnb1 == '📜':
-            await s(f"{nickname} поставил(а) ⛰ , а Бот поставил 📜 . Победа Бота Lohich")
-        if usercnb == 'камень' and rndcnb1 == '✂️':
-            await s(f"{nickname} поставил(а) ⛰ , а Бот поставил ✂️. Победа {nickname} Clap")
-        if usercnb == 'ножницы' and rndcnb1 == '⛰':
-            await s(f"{nickname} поставил(а) ✂️ , а Бот поставил ⛰ . Победа Бота Lohich")
-        if usercnb == 'ножницы' and rndcnb1 == '📜':
-            await s(f"{nickname} поставил(а) ✂️ , а Бот поставил 📜 . Победа {nickname} Clap")
-        if usercnb == 'бумага' and rndcnb1 == '✂️':
-            await s(f"{nickname} поставил(а) 📜 , а Бот поставил ✂️. Победа Бота Lohich")
+        if message == '+кнб':
+            await s(f"{nickname}, введите +кнб [камень, ножницы, бумага])
+        else:
+            if usercnb == 'камень' and rndcnb1 == '⛰':
+                await s(f"{nickname} поставил(а) ⛰ , а Бот поставил ⛰ . Ничья! ThumbUp")
+            if usercnb == 'ножницы' and rndcnb1 == '✂️':
+                await s(f"{nickname} поставил(а) ✂️ , а Бот поставил ✂️. Ничья! ThumbUp")
+            if usercnb == 'бумага' and rndcnb1 == '📜':
+                await s(f"{nickname} поставил(а) 📜 , а Бот поставил 📜 . Ничья! ThumbUp")
+            if usercnb == 'бумага' and rndcnb1 == '⛰':
+                await s(f"{nickname} поставил(а) 📜 , а Бот поставил ⛰ . Победа {nickname} EZ Clap")
+            if usercnb == 'камень' and rndcnb1 == '📜':
+                await s(f"{nickname} поставил(а) ⛰ , а Бот поставил 📜 . Победа Бота Lohich")
+            if usercnb == 'камень' and rndcnb1 == '✂️':
+                await s(f"{nickname} поставил(а) ⛰ , а Бот поставил ✂️. Победа {nickname} EZ Clap")
+            if usercnb == 'ножницы' and rndcnb1 == '⛰':
+                await s(f"{nickname} поставил(а) ✂️ , а Бот поставил ⛰ . Победа Бота Lohich")
+            if usercnb == 'ножницы' and rndcnb1 == '📜':
+                await s(f"{nickname} поставил(а) ✂️ , а Бот поставил 📜 . Победа {nickname} EZ Clap")
+            if usercnb == 'бумага' and rndcnb1 == '✂️':
+                await s(f"{nickname} поставил(а) 📜 , а Бот поставил ✂️. Победа Бота Lohich")
 
     @commands.command(name='BOOBS')
     async def boobs(self, ctx):
