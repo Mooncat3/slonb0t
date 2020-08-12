@@ -18,7 +18,7 @@ def get_last_stream_stat():
             if 'time' in t.keys():
                 timeq = timeq + float(t['time'])
         return timeq
-    with open(file='TRASH.txt', mode='r', encoding='utf-8') as q:
+    with open(file='data/TRASH.txt', mode='r', encoding='utf-8') as q:
         TRASHMASSIVE = json.loads(q.read())
     url = "https://api.twitch.tv/helix/videos?user_id=34711476&first=2"
     request = urllib.request.Request(url=url, headers={"Authorization": "Bearer {}".format(config.OAUTH),
@@ -61,12 +61,12 @@ def get_last_stream_stat():
 
 def parse_standartfile_message(nickname, formatable, message, command, name_of_file) -> str:
     if message == command:
-        return f"@{nickname}, введите {command} [message]"
+        return f"{nickname}, введите {command} [message]"
     else:
         if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find('заходите') != -1:
-            return f"@{nickname}, думал забанить меня? WeirdChamp "
+            return f"{nickname}, думал забанить меня? WeirdChamp "
         else:
-            with open(f'{name_of_file}.txt', 'r', encoding='utf-8') as c:
+            with open(f'data/{name_of_file}.txt', 'r', encoding='utf-8') as c:
                 List = list(c)
                 randomm = random.choice(List)
                 randomm = re.sub("\n", '', randomm)
@@ -75,7 +75,7 @@ def parse_standartfile_message(nickname, formatable, message, command, name_of_f
                 return formatable.format(nickname=nickname, filestr=randomm, messagestr=subject)
 
 def parse_simplefile_message(formatable, name_of_file) -> str:
-    with open(f'{name_of_file}.txt', 'r', encoding='utf-8') as n:
+    with open(f'data/{name_of_file}.txt', 'r', encoding='utf-8') as n:
         List = list(n)
         randomm = random.choice(List)
         randomm = re.sub("\n", '', randomm)
@@ -145,7 +145,7 @@ def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "") -> 
             return "{}, из 3000 клипов не было найдено ни одного с такой категорией DaUj ".format(nickname)
     #------------------------------------helping with abreviatures---------------------------
     def abreviatur_helper(argument: str) -> str:
-        with open('abreviatures.txt') as n:
+        with open('data/abreviatures.txt') as n:
             ad = json.loads(n.read())
             if argument in ad:
                 return ad[argument]
@@ -175,15 +175,15 @@ def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "") -> 
         return make_response_string(do_request_for_getting_clip(id_game=id_game, days_before=days_before), days_before)
 
 def parse_response_query(data: json) -> str:
-    with open(file='aiml.txt', encoding='utf-8') as q:
+    with open(file='data/aiml.txt', encoding='utf-8') as q:
         aiml = json.loads(q.read())
         if data['aiml'] in aiml:
             return data['aiml'] + " " + aiml[data['aiml']]
-    with open(file='emotions.txt', encoding='utf-8') as q:
+    with open(file='data/emotions.txt', encoding='utf-8') as q:
         emotions = json.loads(q.read().replace("'", '"'))
         if data['emotion'] in emotions:
             return data['aiml'] + " " + emotions[data['emotion']]
-    with open(file='rubname.txt', encoding='utf-8') as q:
+    with open(file='data/rubname.txt', encoding='utf-8') as q:
         newrubname = json.loads(q.read().replace("'", '"'))
         if data['newrubname'] in emotions:
             return data['aiml'] + " " + newrubname[data['newrubname']]
@@ -194,7 +194,7 @@ def get_goroskop(message, nickname) -> str:
     def parse_goroskop(name: str) -> str:
         # ----------------------ifs----------------------------------------
         def choose_string_for_response(gor) -> str:
-            with open(file='goroskopdictionary.txt', encoding='utf-8') as q:
+            with open(file='data/goroskopdictionary.txt', encoding='utf-8') as q:
                 return json.loads(q.read())['response_strings'][gor]
 
         URL = 'https://www.wday.ru/horoscope/common/{}/daily/'.format(name)
@@ -221,7 +221,7 @@ def get_goroskop(message, nickname) -> str:
     if message == "+гороскоп":
         return "{}, введите +гороскоп [знак зодиака]".format(nickname)
 
-    with open(file='goroskopdictionary.txt', encoding='utf-8') as q:
+    with open(file='data/goroskopdictionary.txt', encoding='utf-8') as q:
         gors = json.loads(q.read())
         if message in gors['query_strings']:
             return parse_goroskop(gors['query_strings'][message])
