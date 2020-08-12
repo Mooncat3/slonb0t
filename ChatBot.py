@@ -13,7 +13,7 @@ class ChatBot(commands.Bot):
                          client_id=config.CLIENT_ID, nick=config.BOT, prefix='@', initial_channels=config.CHANNELS)
 
     async def event_ready(self):
-        print(f'Ready ChatBot | {self.nick}')
+        print(f'Ready ChatBot | {self.nick} on {self.initial_channels}')
 
     @commands.command(name='SLONB0T')
     async def privet(self, ctx):
