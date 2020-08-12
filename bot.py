@@ -104,7 +104,7 @@ class Bot(commands.Bot, ABC):
             get_content(html.text, html1.text)
 
         parse()
-        now = datetime.now()
+        now = datetime.now() + timedelta(hours=3)
         today = now.strftime("%d.%m")
 
         if message == "+курс":
