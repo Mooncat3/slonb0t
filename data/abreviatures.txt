@@ -1,0 +1,22 @@
+{
+    "DBD": "dead by daylight",
+    "RDR2": "red dead redemption 2",
+    "MINE": "Minecraft",
+    "JC": "just chatting",
+    "FG": "fall guys",
+    "DBH": "Detroit: Become Human",
+    "TS&P": "Talk Shows & Podcasts",
+    "anime": "Anime Land",
+    "COF": "cry of fear",
+    "LISBS": "Life Is Strange: Before the Storm",
+    "RE2": "Resident Evil 2",
+    "TLOU": "The Last of Us",
+    "TLOU2": "The Last of Us Part II",
+    "SCVR": "Social Club VR : Casino Nights",
+    "DS": "Death Stranding",
+    "SCP": "SCP Containment Breach",
+    "TWDNF": "The Walking Dead: A New Frontier",
+    "DOKI": "Doki Doki Literature Club",
+    "G&D": "Games + Demos",
+    "TABS": "Totally Accurate Battle Simulator"
+}
