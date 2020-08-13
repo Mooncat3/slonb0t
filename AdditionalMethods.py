@@ -31,11 +31,12 @@ def get_last_stream_stat():
     id_game = "0"
     game_mass = []
     timet = 0.0
+    maxviewcount=0
     for dat in TRASHMASSIVE:
         viewsummcount += dat['ViewerCount']
+        if dat['ViewerCount'] > maxviewcount:
+            maxviewcount = dat['ViewerCount']
         if len(game_mass) > 0 and (id_game != dat['GAME_ID'] or (dat == TRASHMASSIVE[len(TRASHMASSIVE)-1] and dat['GAME_ID'] == TRASHMASSIVE[len(TRASHMASSIVE)-2]['GAME_ID'])):
-            if dat == TRASHMASSIVE[len(TRASHMASSIVE)-1] and dat['GAME_ID'] == TRASHMASSIVE[len(TRASHMASSIVE)-2]['GAME_ID']:
-                print("п")
             game_mass[len(game_mass) - 1]['time'] = dat['time_of_update'] - timet
         if id_game != dat['GAME_ID']:
             id_game = dat['GAME_ID']
@@ -49,15 +50,22 @@ def get_last_stream_stat():
             if len(game_mass) == 1:
                 game_mass[len(game_mass) - 1]['time'] = dat['time_of_update']
             else:
-                print(dat['time_of_update'])
-                print(game_mass[len(game_mass) - 2]['time'])
                 game_mass[len(game_mass) - 1]['time'] = dat['time_of_update'] - summ_times()
     streamstat = {"Games": game_mass, "middleviewcount": viewsummcount / len(TRASHMASSIVE), "StreamName": strim_name, "StreamDuration": strim_duration}
     categorystr = ""
     for r in streamstat['Games']:
-        print(r)
-        categorystr += f"{r['name']} - {r['time']}; "
-    return f"СТРИМ: {streamstat['StreamName']} || ДЛИТЕЛЬНОСТЬ: {streamstat['StreamDuration']} || СРЕДНЕЕ ЧИСЛО ЗРИТЕЛЕЙ: {streamstat['middleviewcount']} || {categorystr} "
+        rounded = ""
+        timestart = r['time']
+        if timestart/3600 > 1:
+            rounded += f"{int(timestart/3600)}h "
+            timestart = timestart % 3600
+        if timestart/60 > 1:
+            rounded += f"{int(timestart/60)}m "
+            timestart = timestart % 60
+        if timestart/60 > 1 and rounded.find("h") == -1:
+            rounded = f"{int(timestart)}s "
+        categorystr += f"{r['name']} - {rounded}; "
+    return f"СТРИМ: {streamstat['StreamName']} || ДЛИТЕЛЬНОСТЬ: {streamstat['StreamDuration']} || СРЕДНЕЕ ЧИСЛО ЗРИТЕЛЕЙ: {int(streamstat['middleviewcount'])} || МАКСИМАЛЬНОЕ ЧИСЛО ЗРИТЕЛЕЙ: {maxviewcount} || {categorystr} "
 
 def parse_standartfile_message(nickname, formatable, message, command, name_of_file) -> str:
     if message == command:
