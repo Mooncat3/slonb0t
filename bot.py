@@ -29,7 +29,7 @@ class Bot(commands.Bot, ABC):
         if time.time() - self.times > 3:
             s = ctx.send
             await s(AdditionalMethods.get_last_stream_stat())
-        self.times = time.time()
+            self.times = time.time()
     """
     @commands.command(name='рецепт')
     async def recept(self, ctx):
@@ -152,7 +152,7 @@ class Bot(commands.Bot, ABC):
             if top == "+topclipever":
                 top = ""
             await s(AdditionalMethods.gettopclip(0, top, nickname))
-        self.times = time.time()
+            self.times = time.time()
 
     @commands.command(name='topclipyear')
     async def topclipyear(self, ctx):
@@ -165,7 +165,7 @@ class Bot(commands.Bot, ABC):
             if top == "+topclipyear":
                 top = ""
             await s(AdditionalMethods.gettopclip(365, top, nickname))
-        self.times = time.time()
+            self.times = time.time()
 
     @commands.command(name='topclipmonth')
     async def topclipmonth(self, ctx):
@@ -178,7 +178,7 @@ class Bot(commands.Bot, ABC):
             if top == "+topclipmonth":
                 top = ""
             await s(AdditionalMethods.gettopclip(30, top, nickname))
-        self.times = time.time()
+            self.times = time.time()
 
     @commands.command(name='topclipday')
     async def topclipday(self, ctx):
@@ -191,7 +191,7 @@ class Bot(commands.Bot, ABC):
             if top == "+topclipday":
                 top = ""
             await s(AdditionalMethods.gettopclip(1, top, nickname))
-        self.times = time.time()
+            self.times = time.time()
     """
     @commands.command(name='iq')
     async def iq(self, ctx):
