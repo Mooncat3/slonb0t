@@ -22,7 +22,7 @@ class Bot(commands.Bot, ABC):
     async def event_ready(self):
         print(f'Ready CommandsBot | {self.nick} on {self.initial_channels}')
 
-    @commands.command(name='стрим')
+    @commands.command(name='history')
     async def stream(self, ctx):
         s = ctx.send
         await s(AdditionalMethods.get_last_stream_stat())
