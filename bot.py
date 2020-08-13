@@ -378,7 +378,7 @@ class Bot(commands.Bot, ABC):
             if usercnb == 'камень' and rndcnb1 == '⛰':
                 await s(f"{nickname} поставил(а) ⛰ , а Бот поставил ⛰ . Ничья! ThumbUp")
             if usercnb == 'ножницы' and rndcnb1 == '✂️':
-                await s(f"{nickname} поставил(а) ✂️ , а Бот поставил ✂️. Ничья! ThumbUp")
+                await s(f"{nickname} поставил(а) ✂️ , а Бот поставил ✂️ . Ничья! ThumbUp")
             if usercnb == 'бумага' and rndcnb1 == '📜':
                 await s(f"{nickname} поставил(а) 📜 , а Бот поставил 📜 . Ничья! ThumbUp")
             if usercnb == 'бумага' and rndcnb1 == '⛰':
@@ -386,13 +386,13 @@ class Bot(commands.Bot, ABC):
             if usercnb == 'камень' and rndcnb1 == '📜':
                 await s(f"{nickname} поставил(а) ⛰ , а Бот поставил 📜 . Победа Бота Lohich")
             if usercnb == 'камень' and rndcnb1 == '✂️':
-                await s(f"{nickname} поставил(а) ⛰ , а Бот поставил ✂️. Победа {nickname} EZ Clap")
+                await s(f"{nickname} поставил(а) ⛰ , а Бот поставил ✂️ . Победа {nickname} EZ Clap")
             if usercnb == 'ножницы' and rndcnb1 == '⛰':
                 await s(f"{nickname} поставил(а) ✂️ , а Бот поставил ⛰ . Победа Бота Lohich")
             if usercnb == 'ножницы' and rndcnb1 == '📜':
                 await s(f"{nickname} поставил(а) ✂️ , а Бот поставил 📜 . Победа {nickname} EZ Clap")
             if usercnb == 'бумага' and rndcnb1 == '✂️':
-                await s(f"{nickname} поставил(а) 📜 , а Бот поставил ✂️. Победа Бота Lohich")
+                await s(f"{nickname} поставил(а) 📜 , а Бот поставил ✂️ . Победа Бота Lohich")
 
     @commands.command(name='BOOBS')
     async def boobs(self, ctx):
