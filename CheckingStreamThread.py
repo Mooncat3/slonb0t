@@ -13,7 +13,7 @@ def checkingthread():
     active = False
     times = time.time()
     while True:
-        url = "https://api.twitch.tv/helix/streams"
+        url = f"https://api.twitch.tv/helix/streams?user_id={config.BROADCASTER_ID}"
         request = urllib.request.Request(url=url, headers={"Authorization": "Bearer {}".format(config.OAUTH),
                                                            "Client-ID": "{}".format(config.CLIENT_ID)})
         response = urllib.request.urlopen(request).read()
@@ -29,19 +29,21 @@ def checkingthread():
                     TRASHMASSIVE.append(res)
                     with open(file='data/TRASH.txt', mode='w', encoding='utf-8') as q:
                         q.write(json.dumps(TRASHMASSIVE))
-                    print(TRASHMASSIVE[len(TRASHMASSIVE) - 1])
             else:
                 TRASHMASSIVE.append(res)
                 with open(file='data/TRASH.txt', mode='w', encoding='utf-8') as q:
                     q.write(json.dumps(TRASHMASSIVE))
-                print(TRASHMASSIVE[len(TRASHMASSIVE) - 1])
         else:
             if active:
                 active = False
+                TRASHMASSIVE.append(TRASHMASSIVE[len(TRASHMASSIVE)-1])
+                TRASHMASSIVE[len(TRASHMASSIVE)-1]['time_of_update'] = time.time() - times
                 with open(file='data/TRASH.txt', mode='w', encoding='utf-8') as q:
                     q.write(json.dumps(TRASHMASSIVE))
-                print(TRASHMASSIVE)
-        time.sleep(60)
+        if active:
+            time.sleep(60)
+        if not active:
+            time.sleep(300)
 
 
 
