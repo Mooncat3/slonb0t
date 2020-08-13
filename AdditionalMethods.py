@@ -71,7 +71,7 @@ def get_last_stream_stat():
         categorystr += f"{r['name']} [{rounded}]"
         if r != streamstat['Games'][len(streamstat['Games'])-1]:
             categorystr += " » "
-    return f"стрим: {streamstat['StreamName']} [{streamstat['StreamDuration']}] || среднее зр: {int(streamstat['middleviewcount'])} || {categorystr}"
+    return f"прошлый стрим: {streamstat['StreamName']} [{streamstat['StreamDuration']}] || среднее зр: {int(streamstat['middleviewcount'])} || {categorystr}"
 
 def parse_standartfile_message(nickname, formatable, message, command, name_of_file) -> str:
     if message == command:
