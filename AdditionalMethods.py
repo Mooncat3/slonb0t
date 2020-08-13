@@ -65,7 +65,7 @@ def get_last_stream_stat():
         if timestart/60 > 1 and rounded.find("h") == -1:
             rounded = f"{int(timestart)}s "
         categorystr += f"{r['name']}[{rounded}] > "
-    return f"стрим: {streamstat['StreamName']}[{streamstat['StreamDuration']}] || среднее зр: {int(streamstat['middleviewcount'])} || {categorystr} "
+    return f"стрим: {streamstat['StreamName']}[{streamstat['StreamDuration']}] || среднее зр: {int(streamstat['middleviewcount'])} || {categorystr}"
 
 def parse_standartfile_message(nickname, formatable, message, command, name_of_file) -> str:
     if message == command:
