@@ -41,7 +41,7 @@ def checkingthread():
                 with open(file='data/TRASH.txt', mode='w', encoding='utf-8') as q:
                     q.write(json.dumps(TRASHMASSIVE))
         if active:
-            time.sleep(60)
+            time.sleep(10)
         if not active:
             time.sleep(300)
 
