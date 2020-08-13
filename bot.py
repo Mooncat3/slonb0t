@@ -14,6 +14,8 @@ import config
 
 class Bot(commands.Bot, ABC):
 
+    times = time.time()
+    
     def __init__(self):
         super().__init__(irc_token=f'oauth:{config.OAUTH}',
                          client_id=config.CLIENT_ID, nick=config.BOT, prefix='+',
@@ -24,9 +26,11 @@ class Bot(commands.Bot, ABC):
 
     @commands.command(name='history')
     async def stream(self, ctx):
-        s = ctx.send
-        await s(AdditionalMethods.get_last_stream_stat())
-
+        if time.time() - self.times > 3:
+            s = ctx.send
+            await s(AdditionalMethods.get_last_stream_stat())
+        self.times = time.time()
+    """
     @commands.command(name='рецепт')
     async def recept(self, ctx):
         s = ctx.send
@@ -136,51 +140,59 @@ class Bot(commands.Bot, ABC):
                     await s(f"{nickname}, {kurs} RUB = {result} EUR")
             except OverflowError:
                 await s("Число слишком большое WeirdChamp")
-
+    """
     @commands.command(name='topclipever')
     async def topclipever(self, ctx):
-        nickname = ctx.author.name
-        s = ctx.send
-        message = ctx.message.content
-        top = str.replace(message, '+topclipever ', '')
-        top = re.sub("\n", '', top)
-        if top == "+topclipever":
-            top = ""
-        await s(AdditionalMethods.gettopclip(0, top, nickname))
+        if time.time() - self.times > 3:
+            nickname = ctx.author.name
+            s = ctx.send
+            message = ctx.message.content
+            top = str.replace(message, '+topclipever ', '')
+            top = re.sub("\n", '', top)
+            if top == "+topclipever":
+                top = ""
+            await s(AdditionalMethods.gettopclip(0, top, nickname))
+        self.times = time.time()
 
     @commands.command(name='topclipyear')
     async def topclipyear(self, ctx):
-        nickname = ctx.author.name
-        s = ctx.send
-        message = ctx.message.content
-        top = str.replace(message, '+topclipyear ', '')
-        top = re.sub("\n", '', top)
-        if top == "+topclipyear":
-            top = ""
-        await s(AdditionalMethods.gettopclip(365, top, nickname))
+        if time.time() - self.times > 3:
+            nickname = ctx.author.name
+            s = ctx.send
+            message = ctx.message.content
+            top = str.replace(message, '+topclipyear ', '')
+            top = re.sub("\n", '', top)
+            if top == "+topclipyear":
+                top = ""
+            await s(AdditionalMethods.gettopclip(365, top, nickname))
+        self.times = time.time()
 
     @commands.command(name='topclipmonth')
     async def topclipmonth(self, ctx):
-        nickname = ctx.author.name
-        s = ctx.send
-        message = ctx.message.content
-        top = str.replace(message, '+topclipmonth ', '')
-        top = re.sub("\n", '', top)
-        if top == "+topclipmonth":
-            top = ""
-        await s(AdditionalMethods.gettopclip(30, top, nickname))
+        if time.time() - self.times > 3:
+            nickname = ctx.author.name
+            s = ctx.send
+            message = ctx.message.content
+            top = str.replace(message, '+topclipmonth ', '')
+            top = re.sub("\n", '', top)
+            if top == "+topclipmonth":
+                top = ""
+            await s(AdditionalMethods.gettopclip(30, top, nickname))
+        self.times = time.time()
 
     @commands.command(name='topclipday')
     async def topclipday(self, ctx):
-        nickname = ctx.author.name
-        s = ctx.send
-        message = ctx.message.content
-        top = str.replace(message, '+topclipday ', '')
-        top = re.sub("\n", '', top)
-        if top == "+topclipday":
-            top = ""
-        await s(AdditionalMethods.gettopclip(1, top, nickname))
-
+        if time.time() - self.times > 3:
+            nickname = ctx.author.name
+            s = ctx.send
+            message = ctx.message.content
+            top = str.replace(message, '+topclipday ', '')
+            top = re.sub("\n", '', top)
+            if top == "+topclipday":
+                top = ""
+            await s(AdditionalMethods.gettopclip(1, top, nickname))
+        self.times = time.time()
+    """
     @commands.command(name='iq')
     async def iq(self, ctx):
         nickname = ctx.author.name
@@ -431,9 +443,10 @@ class Bot(commands.Bot, ABC):
         s = ctx.send
         goroskop = AdditionalMethods.get_goroskop(message, nickname)
         await s(goroskop)
+    """
 
 
-subprocess.Popen([sys.executable, 'ChatBot.py'])
+#subprocess.Popen([sys.executable, 'ChatBot.py'])
 subprocess.Popen([sys.executable, 'CheckingStreamThread.py'])
 bot = Bot()
 bot.run()
