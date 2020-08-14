@@ -11,13 +11,91 @@ import random
 import re
 import config
 
-def get_last_stream_stat():
+def get_archive_stream_stat(id):
+    active: bool
+    date: str
     def summ_times() -> time:
         timeq: time = 0.0
         for t in game_mass:
             if 'time' in t.keys():
                 timeq = timeq + float(t['time'])
         return timeq
+    with open(file='data/TRASHMASSIVE.txt', mode='r', encoding='utf-8') as q:
+        dat = json.loads(q.read())
+        if id <= len(dat['TRASHMASS']) - 1:
+            TRASHMASSIVE = dat['TRASHMASS'][len(dat['TRASHMASS']) - 1 - id]['MASS']
+            date = dat['TRASHMASS'][len(dat['TRASHMASS']) - 1 - id]['date']
+        else:
+            return "{} стрима с id {} нет в архиве"
+    url = "https://api.twitch.tv/helix/videos?user_id=34711476&first=2"
+    request = urllib.request.Request(url=url, headers={"Authorization": "Bearer {}".format(config.OAUTH),
+                                                       "Client-ID": "{}".format(config.CLIENT_ID)})
+    response = urllib.request.urlopen(request).read()
+    data = json.loads(response)
+    strim_name = data['data'][0]['title']
+    strim_duration = data['data'][0]['duration']
+    viewsummcount = 0
+    id_game = "0"
+    game_mass = []
+    timet = 0.0
+    maxviewcount=0
+    for dat in TRASHMASSIVE:
+        viewsummcount += dat['ViewerCount']
+        if dat['ViewerCount'] > maxviewcount:
+            maxviewcount = dat['ViewerCount']
+        if len(game_mass) > 0 and (id_game != dat['GAME_ID'] or (dat == TRASHMASSIVE[len(TRASHMASSIVE)-1] and dat['GAME_ID'] == TRASHMASSIVE[len(TRASHMASSIVE)-2]['GAME_ID'])):
+            game_mass[len(game_mass) - 1]['time'] = dat['time_of_update'] - timet
+        if id_game != dat['GAME_ID']:
+            if id_game != "666":
+                id_game = dat['GAME_ID']
+                url = "https://api.twitch.tv/helix/games?id={}".format(id_game)
+                request = urllib.request.Request(url=url, headers={"Authorization": "Bearer {}".format(config.OAUTH),
+                                                                   "Client-ID": "{}".format(config.CLIENT_ID)})
+                response = urllib.request.urlopen(request).read()
+                data = json.loads(response)
+                game_mass.append({"name": data['data'][0]['name']})
+            else:
+                game_mass.append({"name": "Timeout"})
+            timet = dat['time_of_update']
+            if len(game_mass) == 1:
+                game_mass[len(game_mass) - 1]['time'] = dat['time_of_update']
+            else:
+                game_mass[len(game_mass) - 1]['time'] = dat['time_of_update'] - summ_times()
+    streamstat = {"Games": game_mass, "middleviewcount": viewsummcount / len(TRASHMASSIVE), "StreamName": strim_name, "StreamDuration": strim_duration}
+    categorystr = ""
+    for r in streamstat['Games']:
+        rounded = ""
+        timestart = r['time']
+        if timestart/3600 > 1:
+            rounded += f"{int(timestart/3600)}h"
+            timestart = timestart % 3600
+        if timestart/60 > 1:
+            if rounded.find("h") != -1:
+                rounded += " "
+            rounded += f"{int(timestart/60)}m"
+            timestart = timestart % 60
+        if timestart/60 > 1 and rounded.find("h") == -1:
+            if rounded.find("m") != -1:
+                rounded += " "
+            rounded += f"{int(timestart)}s"
+        if len(rounded) > 0:
+            categorystr += f"{r['name']} [{rounded}]"
+            if r != streamstat['Games'][len(streamstat['Games'])-1]:
+                categorystr += " » "
+
+    return f"[{date}] стрим: {streamstat['StreamName']} [{streamstat['StreamDuration']}] || среднее зр: {int(streamstat['middleviewcount'])} || {categorystr}"
+
+def get_last_stream_stat(tag, nickname):
+    active: bool
+    def summ_times() -> time:
+        timeq: time = 0.0
+        for t in game_mass:
+            if 'time' in t.keys():
+                timeq = timeq + float(t['time'])
+        return timeq
+    with open(file='data/TRASHMASSIVE.txt', mode='r', encoding='utf-8') as q:
+        dat = json.loads(q.read())
+        active = dat['active']
     with open(file='data/TRASH.txt', mode='r', encoding='utf-8') as q:
         TRASHMASSIVE = json.loads(q.read())
     url = "https://api.twitch.tv/helix/videos?user_id=34711476&first=2"
@@ -68,10 +146,20 @@ def get_last_stream_stat():
             if rounded.find("m") != -1:
                 rounded += " "
             rounded += f"{int(timestart)}s"
-        categorystr += f"{r['name']} [{rounded}]"
-        if r != streamstat['Games'][len(streamstat['Games'])-1]:
-            categorystr += " » "
-    return f"прошлый стрим: {streamstat['StreamName']} [{streamstat['StreamDuration']}] || среднее зр: {int(streamstat['middleviewcount'])} || {categorystr}"
+        if len(rounded) > 0:
+            categorystr += f"{r['name']} [{rounded}]"
+            if r != streamstat['Games'][len(streamstat['Games'])-1]:
+                categorystr += " » "
+    tag = tag[1:len(tag)]
+    if len(tag) > 1 and len(tag) < 25 and tag.find(" ") == -1:
+        seter = ' '+tag
+    else:
+        seter = ''
+    if not active:
+        srt = "прошлый"
+    else:
+        srt = "текущий"
+    return f"{nickname}{seter} {srt} стрим: {streamstat['StreamName']} [{streamstat['StreamDuration']}] || среднее зр: {int(streamstat['middleviewcount'])} || {categorystr}"
 
 def parse_standartfile_message(nickname, formatable, message, command, name_of_file) -> str:
     if message == command:
