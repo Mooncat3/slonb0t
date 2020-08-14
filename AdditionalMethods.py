@@ -153,6 +153,7 @@ def get_last_stream_stat(tag, nickname):
     tag = tag[1:len(tag)]
     if len(tag) > 1 and len(tag) < 25 and tag.find(" ") == -1:
         seter = ' '+tag
+        nickname = ""
     else:
         seter = ''
     if not active:
