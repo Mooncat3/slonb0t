@@ -27,8 +27,25 @@ class Bot(commands.Bot, ABC):
     @commands.command(name='history')
     async def stream(self, ctx):
         if time.time() - self.times > 3:
+            nickname = ctx.author.name
             s = ctx.send
-            await s(AdditionalMethods.get_last_stream_stat())
+            message = ctx.message.content
+            message = str.replace(message, '+history', '')
+            await s(AdditionalMethods.get_last_stream_stat(message,nickname))
+            self.times = time.time()
+
+    @commands.command(name='historyq')
+    async def streamh(self, ctx):
+        if time.time() - self.times > 3:
+            nickname = ctx.author.name
+            s = ctx.send
+            message = ctx.message.content
+            message = str.replace(message, '+historyq', '')
+            try:
+                id=int(message[1:2])
+                await s(AdditionalMethods.get_archive_stream_stat(id).format(nickname,id))
+            except:
+                await s(f'{nickname} +historyq [0-9]')
             self.times = time.time()
     """
     @commands.command(name='рецепт')
