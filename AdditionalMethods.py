@@ -124,7 +124,7 @@ def parse_stream_stat(nickname: str, tag: str, TRASHMASSIVE: dict, date = "", id
     else:
         seter = ''
     if len(date) > 0:
-        locale.setlocale(locale.LC_TIME, 'ru_RU')
+        locale.setlocale(locale.LC_TIME, 'С')
         actualdate = datetime.datetime.strptime(date, "%m.%d.%y")
         date = datetime.datetime.strftime(actualdate , "%a, %d %B, %Y")
         date = f"[{date}]"
