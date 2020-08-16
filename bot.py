@@ -106,30 +106,35 @@ class Bot(commands.Bot, ABC):
         message = ctx.message.content
         URL = 'https://fortrader.org/quotes/usdrur'
         URL1 = 'https://fortrader.org/quotes/eurrur'
-
+        URL2 = 'https://fortrader.org/currencyrates/jpy'
         def get_html(url, params=None):
             r = requests.get(url, params=params)
             return r
 
-        def get_content(html, html1):
+        def get_content(html, html1, html2):
             soup = BeautifulSoup(html, 'html.parser')
             soup1 = BeautifulSoup(html1, 'html.parser')
+            soup2 = BeautifulSoup(html2, 'html.parser')
             global dollar
             global euro
+            global jpy
             dollar = soup.find('p', class_='rates_box1_inner pid-USDRUR-bid').get_text()
             euro = soup1.find('p', class_='rates_box1_inner pid-EURRUR-bid').get_text()
+            jpy = soup2.find('input', class_='converter_form_inp converterInpTo').get(key="value")
+            jpy = str(round(float(jpy) * 100, ndigits=2))
 
         def parse():
             html = get_html(URL)
             html1 = get_html(URL1)
-            get_content(html.text, html1.text)
+            html2 = get_html(URL2)
+            get_content(html.text, html1.text, html2.text)
 
         parse()
         now = datetime.now() + timedelta(hours=3)
         today = now.strftime("%d.%m")
 
         if message == "!курс":
-            AdditionalMethods.add_to_buffer("c", f"Курс валют на {today}: USD = {dollar} RUB | EURO = {euro} RUB", ctx.author)
+            AdditionalMethods.add_to_buffer("c", f"Курс валют на {today}: USD = {dollar} RUB | EURO = {euro} RUB | JPY = {jpy} RUB", ctx.author)
         else:
             try:
                 if message.find('!курс доллар-рубль') != -1:
@@ -155,6 +160,18 @@ class Bot(commands.Bot, ABC):
                     result = float(kurs) / float(euro)
                     result = round(result, 2)
                     AdditionalMethods.add_to_buffer("c", f"{nickname}, {kurs} RUB = {result} EUR", ctx.author)
+
+                if message.find('!курс йена-рубль') != -1:
+                    kurs = str.replace(message, '!курс йена-рубль ', '')
+                    result = float(kurs) * float(jpy)
+                    result = round(result, 2)
+                    AdditionalMethods.add_to_buffer("c", f"{nickname}, {kurs} JPY = {result} RUB", ctx.author)
+
+                if message.find('!курс рубль-йена') != -1:
+                    kurs = str.replace(message, '!курс рубль-йена ', '')
+                    result = float(kurs) / float(jpy)
+                    result = round(result, 2)
+                    AdditionalMethods.add_to_buffer("c", f"{nickname}, {kurs} RUB = {result} JPY", ctx.author)
             except OverflowError:
                 AdditionalMethods.add_to_buffer("c", "Число слишком большое WeirdChamp", ctx.author)
 
