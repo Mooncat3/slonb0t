@@ -49,6 +49,7 @@ def add_to_buffer(type: str, message: str, author: User):
 
 
 def check_active() -> bool:
+    return True
     with open(file='data/TRASHMASSIVE.txt', mode='r', encoding='utf-8') as q:
         dat = json.loads(q.read())
         return dat['active']
