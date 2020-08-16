@@ -18,5 +18,8 @@
     "TWDNF": "The Walking Dead: A New Frontier",
     "DOKI": "Doki Doki Literature Club",
     "G&D": "Games + Demos",
-    "TABS": "Totally Accurate Battle Simulator"
+    "TABS": "Totally Accurate Battle Simulator",
+    "MFS": "Microsoft Flight Simulator",
+    "MFSX": "Microsoft Flight Simulator X",
+    "STLSC": "S.T.A.L.K.E.R.: Shadow of Chernobyl"
 }
