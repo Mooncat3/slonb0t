@@ -13,7 +13,7 @@ dopbol: bool
 
 def get_timeout(abr: str) -> time:
     if abr == "c":
-        return 3.0
+        return 1.0
     if abr == "e":
         return 3.0
     if abr == "s":
