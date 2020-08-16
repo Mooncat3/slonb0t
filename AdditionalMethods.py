@@ -11,39 +11,64 @@ import random
 import re
 import config
 
-def get_archive_stream_stat(id):
-    active: bool
-    date: str
+def check_on_bans(message) -> bool:
+    if message.find('.') != -1 or message.find('suicide') != -1 or message.find(
+            'kill') != -1 or message.find('заходите') != -1:
+        add_to_buffer("s", "{}, думал забанить меня? WeirdChamp ")
+        return False
+    else:
+        return True
+
+
+def add_to_buffer(type: str, message: str):
+    try:
+        with open(file='data/buffer.txt', mode='r', encoding='utf-8') as e:
+            dat = json.loads(e.read())
+            for ser in dat:
+                if ser['bufered']:
+                    dat.remove(ser)
+    except:
+        dat = []
+    with open(file='data/buffer.txt', mode='w', encoding='utf-8') as q:
+        dat.append({"type": type, "message": message, "bufered": False})
+        if len(dat) == 0:
+            q.write("[]")
+        else:
+            q.write(json.dumps(dat))
+
+
+def check_active() -> bool:
+    return False
+    with open(file='data/TRASHMASSIVE.txt', mode='r', encoding='utf-8') as q:
+        dat = json.loads(q.read())
+        return dat['active']
+
+def parse_stream_stat(nickname: str, tag: str, TRASHMASSIVE: dict, date = "", id = 0, active = False):
     def summ_times() -> time:
         timeq: time = 0.0
         for t in game_mass:
             if 'time' in t.keys():
                 timeq = timeq + float(t['time'])
         return timeq
-    with open(file='data/TRASHMASSIVE.txt', mode='r', encoding='utf-8') as q:
-        dat = json.loads(q.read())
-        if id <= len(dat['TRASHMASS']) - 1:
-            TRASHMASSIVE = dat['TRASHMASS'][len(dat['TRASHMASS']) - 1 - id]['MASS']
-            date = dat['TRASHMASS'][len(dat['TRASHMASS']) - 1 - id]['date']
-        else:
-            return "{} стрима с id {} нет в архиве"
-    url = "https://api.twitch.tv/helix/videos?user_id=34711476&first=2"
+    url = f"https://api.twitch.tv/helix/videos?user_id={config.BROADCASTER_ID}&first=10"
     request = urllib.request.Request(url=url, headers={"Authorization": "Bearer {}".format(config.OAUTH),
                                                        "Client-ID": "{}".format(config.CLIENT_ID)})
     response = urllib.request.urlopen(request).read()
     data = json.loads(response)
-    strim_name = data['data'][0]['title']
-    strim_duration = data['data'][0]['duration']
+    strim_name = data['data'][id]['title']
+    strim_duration = data['data'][id]['duration']
     viewsummcount = 0
     id_game = "0"
     game_mass = []
     timet = 0.0
-    maxviewcount=0
+    maxviewcount = 0
     for dat in TRASHMASSIVE:
         viewsummcount += dat['ViewerCount']
         if dat['ViewerCount'] > maxviewcount:
             maxviewcount = dat['ViewerCount']
-        if len(game_mass) > 0 and (id_game != dat['GAME_ID'] or (dat == TRASHMASSIVE[len(TRASHMASSIVE)-1] and dat['GAME_ID'] == TRASHMASSIVE[len(TRASHMASSIVE)-2]['GAME_ID'])):
+        if len(game_mass) > 0 and (id_game != dat['GAME_ID'] or (
+                dat == TRASHMASSIVE[len(TRASHMASSIVE) - 1] and dat['GAME_ID'] == TRASHMASSIVE[len(TRASHMASSIVE) - 2][
+            'GAME_ID'])):
             game_mass[len(game_mass) - 1]['time'] = dat['time_of_update'] - timet
         if id_game != dat['GAME_ID']:
             if id_game != "666":
@@ -61,106 +86,65 @@ def get_archive_stream_stat(id):
                 game_mass[len(game_mass) - 1]['time'] = dat['time_of_update']
             else:
                 game_mass[len(game_mass) - 1]['time'] = dat['time_of_update'] - summ_times()
-    streamstat = {"Games": game_mass, "middleviewcount": viewsummcount / len(TRASHMASSIVE), "StreamName": strim_name, "StreamDuration": strim_duration}
+    streamstat = {"Games": game_mass, "middleviewcount": viewsummcount / len(TRASHMASSIVE), "StreamName": strim_name,
+                  "StreamDuration": strim_duration}
     categorystr = ""
     for r in streamstat['Games']:
         rounded = ""
         timestart = r['time']
-        if timestart/3600 > 1:
-            rounded += f"{int(timestart/3600)}h"
+        if timestart / 3600 >= 1:
+            rounded += f"{int(timestart / 3600)}h"
             timestart = timestart % 3600
-        if timestart/60 > 1:
+        if timestart / 60 >= 1:
             if rounded.find("h") != -1:
                 rounded += " "
-            rounded += f"{int(timestart/60)}m"
+            rounded += f"{int(timestart / 60)}m"
             timestart = timestart % 60
-        if timestart/60 > 1 and rounded.find("h") == -1:
+        if timestart >= 1 and rounded.find("h") == -1:
             if rounded.find("m") != -1:
                 rounded += " "
             rounded += f"{int(timestart)}s"
         if len(rounded) > 0:
             categorystr += f"{r['name']} [{rounded}]"
-            if r != streamstat['Games'][len(streamstat['Games'])-1]:
+            if r != streamstat['Games'][len(streamstat['Games']) - 1]:
                 categorystr += " » "
+    if len(tag) > 1 and len(tag) <= 26 and tag.find(" ") == -1:
+        seter = ' ' + tag
+        nickname = ''
+    else:
+        seter = ''
+    if len(date) > 0:
+        date = f"[{date}]"
+    else:
+        if active:
+            date = "текущий"
+        else:
+            date = "прошлый"
+    return f"{nickname}{seter} {date} стрим: {streamstat['StreamName']} [{streamstat['StreamDuration']}] || среднее зр: {int(streamstat['middleviewcount'])} || {categorystr}"
 
-    return f"[{date}] стрим: {streamstat['StreamName']} [{streamstat['StreamDuration']}] || среднее зр: {int(streamstat['middleviewcount'])} || {categorystr}"
+
+
+def get_archive_stream_stat(id, nickname, tag):
+    with open(file='data/TRASHMASSIVE.txt', mode='r', encoding='utf-8') as q:
+        dat = json.loads(q.read())
+        if id <= len(dat['TRASHMASS']) - 1:
+            TRASHMASSIVE = dat['TRASHMASS'][len(dat['TRASHMASS']) - 1 - id]['MASS']
+            date = dat['TRASHMASS'][len(dat['TRASHMASS']) - 1 - id]['date']
+        else:
+            return "{} стрима с id {} нет в архиве"
+    return parse_stream_stat(nickname=nickname, tag=tag, TRASHMASSIVE=TRASHMASSIVE, date=date, id=id)
+
+
 
 def get_last_stream_stat(tag, nickname):
-    active: bool
-    def summ_times() -> time:
-        timeq: time = 0.0
-        for t in game_mass:
-            if 'time' in t.keys():
-                timeq = timeq + float(t['time'])
-        return timeq
     with open(file='data/TRASHMASSIVE.txt', mode='r', encoding='utf-8') as q:
         dat = json.loads(q.read())
         active = dat['active']
     with open(file='data/TRASH.txt', mode='r', encoding='utf-8') as q:
         TRASHMASSIVE = json.loads(q.read())
-    url = "https://api.twitch.tv/helix/videos?user_id=34711476&first=2"
-    request = urllib.request.Request(url=url, headers={"Authorization": "Bearer {}".format(config.OAUTH),
-                                                       "Client-ID": "{}".format(config.CLIENT_ID)})
-    response = urllib.request.urlopen(request).read()
-    data = json.loads(response)
-    strim_name = data['data'][0]['title']
-    strim_duration = data['data'][0]['duration']
-    viewsummcount = 0
-    id_game = "0"
-    game_mass = []
-    timet = 0.0
-    maxviewcount=0
-    for dat in TRASHMASSIVE:
-        viewsummcount += dat['ViewerCount']
-        if dat['ViewerCount'] > maxviewcount:
-            maxviewcount = dat['ViewerCount']
-        if len(game_mass) > 0 and (id_game != dat['GAME_ID'] or (dat == TRASHMASSIVE[len(TRASHMASSIVE)-1] and dat['GAME_ID'] == TRASHMASSIVE[len(TRASHMASSIVE)-2]['GAME_ID'])):
-            game_mass[len(game_mass) - 1]['time'] = dat['time_of_update'] - timet
-        if id_game != dat['GAME_ID']:
-            id_game = dat['GAME_ID']
-            url = "https://api.twitch.tv/helix/games?id={}".format(id_game)
-            request = urllib.request.Request(url=url, headers={"Authorization": "Bearer {}".format(config.OAUTH),
-                                                               "Client-ID": "{}".format(config.CLIENT_ID)})
-            response = urllib.request.urlopen(request).read()
-            data = json.loads(response)
-            game_mass.append({"name": data['data'][0]['name']})
-            timet = dat['time_of_update']
-            if len(game_mass) == 1:
-                game_mass[len(game_mass) - 1]['time'] = dat['time_of_update']
-            else:
-                game_mass[len(game_mass) - 1]['time'] = dat['time_of_update'] - summ_times()
-    streamstat = {"Games": game_mass, "middleviewcount": viewsummcount / len(TRASHMASSIVE), "StreamName": strim_name, "StreamDuration": strim_duration}
-    categorystr = ""
-    for r in streamstat['Games']:
-        rounded = ""
-        timestart = r['time']
-        if timestart/3600 > 1:
-            rounded += f"{int(timestart/3600)}h"
-            timestart = timestart % 3600
-        if timestart/60 > 1:
-            if rounded.find("h") != -1:
-                rounded += " "
-            rounded += f"{int(timestart/60)}m"
-            timestart = timestart % 60
-        if timestart/60 > 1 and rounded.find("h") == -1:
-            if rounded.find("m") != -1:
-                rounded += " "
-            rounded += f"{int(timestart)}s"
-        if len(rounded) > 0:
-            categorystr += f"{r['name']} [{rounded}]"
-            if r != streamstat['Games'][len(streamstat['Games'])-1]:
-                categorystr += " » "
-    tag = tag[1:len(tag)]
-    if len(tag) > 1 and len(tag) < 25 and tag.find(" ") == -1:
-        seter = ' '+tag
-        nickname = ""
-    else:
-        seter = ''
-    if not active:
-        srt = "прошлый"
-    else:
-        srt = "текущий"
-    return f"{nickname}{seter} {srt} стрим: {streamstat['StreamName']} [{streamstat['StreamDuration']}] || среднее зр: {int(streamstat['middleviewcount'])} || {categorystr}"
+    return parse_stream_stat(nickname=nickname, tag=tag, TRASHMASSIVE=TRASHMASSIVE, active=active)
+
+
 
 def parse_standartfile_message(nickname, formatable, message, command, name_of_file) -> str:
     if message == command:
@@ -177,12 +161,17 @@ def parse_standartfile_message(nickname, formatable, message, command, name_of_f
                 subject = re.sub("\n", '', subject)
                 return formatable.format(nickname=nickname, filestr=randomm, messagestr=subject)
 
+
+
 def parse_simplefile_message(formatable, name_of_file) -> str:
     with open(f'data/{name_of_file}.txt', 'r', encoding='utf-8') as n:
         List = list(n)
         randomm = random.choice(List)
         randomm = re.sub("\n", '', randomm)
         return formatable.format(str(randomm))
+
+
+
 
 def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "") -> str:
     #-------------------------------------checking for clip--------------------------------------
@@ -277,6 +266,9 @@ def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "") -> 
     else:
         return make_response_string(do_request_for_getting_clip(id_game=id_game, days_before=days_before), days_before)
 
+
+
+
 def parse_response_query(data: json) -> str:
     with open(file='data/aiml.txt', encoding='utf-8') as q:
         aiml = json.loads(q.read())
@@ -291,6 +283,9 @@ def parse_response_query(data: json) -> str:
         if data['newrubname'] in emotions:
             return data['aiml'] + " " + newrubname[data['newrubname']]
     return data['aiml'] + " P226Smug"
+
+
+
 
 def get_goroskop(message, nickname) -> str:
     #----------------------method for getting goroskop-----------------
@@ -318,7 +313,7 @@ def get_goroskop(message, nickname) -> str:
             get_content(html.text)
 
         parse()
-        return '{} {} {}'.format(goroskop_day, choose_string_for_response(name), goroskop)
+        return '{} {} {} {}'.format(nickname, goroskop_day, choose_string_for_response(name), goroskop)
 
     # ----------------------ifs----------------------------------------
     if message == "+гороскоп":
@@ -329,4 +324,4 @@ def get_goroskop(message, nickname) -> str:
         if message in gors['query_strings']:
             return parse_goroskop(gors['query_strings'][message])
         else:
-            return ""
+            return f"{nickname} введите правильный знак зодиака WeirdChamp"

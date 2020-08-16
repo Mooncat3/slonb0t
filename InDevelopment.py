@@ -19,3 +19,19 @@ for i in range(600, 0, -1):
         await s(nickname + ", поздравляю! Ты победил! Приз " + str(rubles) + " руб. PepoParty ")
 await s("Чат проиграл, время вышло Sadge ")
 """
+
+"""
+    @commands.command(name='love')
+    async def love(self, ctx):
+        if not AdditionalMethods.check_active():
+            message = ctx.message.content
+            nickname = ctx.author.name
+            if message == "!love":
+                AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !love [nickname]")
+            else:
+                procent = random.randrange(0, 100, 1)
+                if AdditionalMethods.check_on_bans(message):
+                    love = str.replace(message, '!love ', '')
+                    love = re.sub("\n", '', love)
+                    AdditionalMethods.add_to_buffer("e", f"{nickname} любит {str(love)} на {str(procent)} %!")
+    """

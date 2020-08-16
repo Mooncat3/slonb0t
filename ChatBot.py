@@ -19,31 +19,31 @@ class ChatBot(commands.Bot):
     async def privet(self, ctx):
         message = ctx.message.content
         nickname = ctx.author.name
-        s = ctx.send
         mess = str.replace(message, '@SLONB0T ', '')
         mess = re.sub("\n", '', mess)
-        url = "https://aiproject.ru/api/"
-        query = {"ask": mess, "userid": nickname, "key": ""}
-        jsonquery = json.encoder.JSONEncoder.encode(self=json.encoder.JSONEncoder(), o=query)
-        response = requests.post(url=url, data={"query": jsonquery})
-        content = response.content.decode('utf8').replace("'", '"')
-        data = json.loads(content)
-        await s(nickname + ", " + AdditionalMethods.parse_response_query(data))
+        if AdditionalMethods.check_on_bans(mess):
+            url = "https://aiproject.ru/api/"
+            query = {"ask": mess, "userid": nickname, "key": ""}
+            jsonquery = json.encoder.JSONEncoder.encode(self=json.encoder.JSONEncoder(), o=query)
+            response = requests.post(url=url, data={"query": jsonquery})
+            content = response.content.decode('utf8').replace("'", '"')
+            data = json.loads(content)
+            AdditionalMethods.add_to_buffer("e", nickname + ", " + AdditionalMethods.parse_response_query(data))
 
     @commands.command(name='slonb0t,')
     async def privet1(self, ctx):
         message = ctx.message.content
         nickname = ctx.author.name
-        s = ctx.send
-        mess = str.replace(message, '@slonb0t, ', '')
+        mess = str.replace(message, '@slonb0t ', '')
         mess = re.sub("\n", '', mess)
-        url = "https://aiproject.ru/api/"
-        query = {"ask": mess, "userid": nickname, "key": ""}
-        jsonquery = json.encoder.JSONEncoder.encode(self=json.encoder.JSONEncoder(), o=query)
-        response = requests.post(url=url, data={"query": jsonquery})
-        content = response.content.decode('utf8').replace("'", '"')
-        data = json.loads(content)
-        await s(nickname + ", " + AdditionalMethods.parse_response_query(data))
+        if AdditionalMethods.check_on_bans(mess):
+            url = "https://aiproject.ru/api/"
+            query = {"ask": mess, "userid": nickname, "key": ""}
+            jsonquery = json.encoder.JSONEncoder.encode(self=json.encoder.JSONEncoder(), o=query)
+            response = requests.post(url=url, data={"query": jsonquery})
+            content = response.content.decode('utf8').replace("'", '"')
+            data = json.loads(content)
+            AdditionalMethods.add_to_buffer("e", nickname + ", " + AdditionalMethods.parse_response_query(data))
 
 
 
