@@ -117,8 +117,11 @@ def start_buffer_thread():
                                         tttime = time.time()
                                         subprocess.Popen([sys.executable, 'singlemessthread.py', leng])
                     else:
-                        users[res['nickname']] = {"time": time.time(), "got": False}
-                        leng = parse_file(timer, str.replace(res['message'], "\n", " "))
+                        if res['vip']:
+                            leng = parse_file(0.0, str.replace(res['message'], "\n", " "))
+                        else:
+                            users[res['nickname']] = {"time": time.time(), "got": False}
+                            leng = parse_file(timer, str.replace(res['message'], "\n", " "))
                         if res['type'] != "r":
                             timer = timer + get_bufer_timeout()
                             tttime = time.time()
