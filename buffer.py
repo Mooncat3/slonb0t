@@ -55,8 +55,6 @@ def start_buffer_thread():
                     if res['type'] == "r":
                         if dopbol:
                             dopbol = False
-                            if timer > 0.0:
-                                timer = timer - (time.time() - tttime)
                         else:
                             dopbol = True
                             timer = timer + 2.0
@@ -72,8 +70,6 @@ def start_buffer_thread():
                         tttime = time.time()
                         subprocess.Popen([sys.executable, 'singlemessthread.py', str(len(tad)-1)])
                     if res['type'] == "c":
-                        if timec > 0.0:
-                            timec = timec - (time.time() - tttime)
                         try:
                             with open(file='data/sendmess.txt', mode='r', encoding='utf-8') as e:
                                 tad = json.loads(e.read())
@@ -86,8 +82,6 @@ def start_buffer_thread():
                         tttime = time.time()
                         subprocess.Popen([sys.executable, 'singlemessthread.py', str(len(tad)-1)])
                     if res['type'] == "e":
-                        if timee > 0.0:
-                            timee = timee - (time.time() - tttime)
                         try:
                             with open(file='data/sendmess.txt', mode='r', encoding='utf-8') as e:
                                 tad = json.loads(e.read())
@@ -100,8 +94,6 @@ def start_buffer_thread():
                         tttime = time.time()
                         subprocess.Popen([sys.executable, 'singlemessthread.py', str(len(tad)-1)])
                     if res['type'] == "s":
-                        if times > 0.0:
-                            times = times - (time.time() - tttime)
                         try:
                             with open(file='data/sendmess.txt', mode='r', encoding='utf-8') as e:
                                 tad = json.loads(e.read())
