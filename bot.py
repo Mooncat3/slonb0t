@@ -36,13 +36,16 @@ class Bot(commands.Bot, ABC):
         nickname = ctx.author.name
         message = ctx.message.content
         message = str.replace(message, '!archive', '')
-        id=int(message[1:2])
-        if len(message[2:len(message)]) > 1:
-            tag = str.replace(message, f' {id} ', '')
-        else:
-            tag = ''
-        if AdditionalMethods.check_on_bans(message, ctx.author):
-            AdditionalMethods.add_to_buffer("c", AdditionalMethods.get_archive_stream_stat(id, nickname, tag).format(nickname, id), ctx.author)
+        try:
+            id=int(message[1:2])
+            if len(message[2:len(message)]) > 1:
+                tag = str.replace(message, f' {id} ', '')
+            else:
+                tag = ''
+            if AdditionalMethods.check_on_bans(message, ctx.author):
+                AdditionalMethods.add_to_buffer("c", AdditionalMethods.get_archive_stream_stat(id, nickname, tag).format(nickname, id), ctx.author)
+        except:
+            AdditionalMethods.add_to_buffer("c", f'{nickname} !archive [0-9]', ctx.author)
             
     @commands.command(name='рецепт')
     async def recept(self, ctx):
