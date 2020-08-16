@@ -31,20 +31,12 @@ class Bot(commands.Bot, ABC):
         if AdditionalMethods.check_on_bans(message, ctx.author):
             AdditionalMethods.add_to_buffer("c", AdditionalMethods.get_last_stream_stat(message[1:len(message)], nickname), ctx.author)
 
-    @commands.command(name='history')
-    async def stream(self, ctx):
-        nickname = ctx.author.name
-        message = ctx.message.content
-        message = str.replace(message, '!history', '')
-        if AdditionalMethods.check_on_bans(message, ctx.author):
-            AdditionalMethods.add_to_buffer("c", AdditionalMethods.get_last_stream_stat(message[1:len(message)], nickname), ctx.author)
-
     @commands.command(name='archive')
     async def streamh(self, ctx):
         nickname = ctx.author.name
         message = ctx.message.content
         message = str.replace(message, '!archive', '')
-        try:
+
             id=int(message[1:2])
             if len(message[2:len(message)]) > 1:
                 tag = str.replace(message, f' {id} ', '')
@@ -52,8 +44,6 @@ class Bot(commands.Bot, ABC):
                 tag = ''
             if AdditionalMethods.check_on_bans(message, ctx.author):
                 AdditionalMethods.add_to_buffer("c", AdditionalMethods.get_archive_stream_stat(id, nickname, tag).format(nickname, id), ctx.author)
-        except:
-            AdditionalMethods.add_to_buffer("c", f'{nickname} !archive [0-9]', ctx.author)
             
     @commands.command(name='рецепт')
     async def recept(self, ctx):
