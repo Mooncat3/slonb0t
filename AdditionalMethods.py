@@ -124,8 +124,8 @@ def parse_stream_stat(nickname: str, tag: str, TRASHMASSIVE: dict, date = "", id
     else:
         seter = ''
     if len(date) > 0:
-        actualdate = datetime.datetime.strptime(date, "%m.%d.%y")
-        date = datetime.datetime.strftime(actualdate , "%a, %d %B, %Y")
+        actualdate = datetime.strptime(date, "%m.%d.%y")
+        date = datetime.strftime(actualdate , "%a, %d %B, %Y")
         date = f"[{date}]"
     else:
         if active:
