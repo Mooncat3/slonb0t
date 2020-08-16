@@ -228,7 +228,7 @@ class Bot(commands.Bot, ABC):
     async def help(self, ctx):
         nickname = ctx.author.name
         AdditionalMethods.add_to_buffer("c", f"{nickname}, Ку catJAM , меня зовут slonb0t catJAM , вот что я умею: страница 1: !history [nickname], !archive [id] [nickname]"
-            f", !курс ['изначальная валюта'-'переводимая валюта'(доллар-рубль, евро-рубль и наоборот)] [число], !topclipever [category], !topclipyear ["
+            f", !topclipever [category], !topclipyear ["
             f"category], !topclipmonth [category], !topclipday [category] Чтобы перейти на следующую страницу введите !help1 catJAM ")
 
     @commands.command(name='help1')
@@ -242,7 +242,7 @@ class Bot(commands.Bot, ABC):
     @commands.command(name='help2')
     async def help2(self, ctx):
         nickname = ctx.author.name
-        AdditionalMethods.add_to_buffer("c", f"{nickname}, страница 3: !паста, !me, !do [message], !iq, !temp, !love [message], !бубу [message], !steal [message]")
+        AdditionalMethods.add_to_buffer("c", f"{nickname}, страница 3: !паста, !курс ['изначальная валюта'-'переводимая валюта'(доллар-рубль, евро-рубль и наоборот)] [число], !iq, !temp, !love [message], !бубу [message], !steal [message]")
 
     @commands.command(name='temp')
     async def temp(self, ctx):
@@ -258,6 +258,8 @@ class Bot(commands.Bot, ABC):
                 else:
                     if temp > 40 or temp < 32:
                         AdditionalMethods.add_to_buffer("e", f"{nickname}, ваша температура {str(temp)} °C! Вызывайте дурку! Durka")
+    
+    """
 
     @commands.command(name='me')
     async def me(self, ctx):
@@ -285,6 +287,8 @@ class Bot(commands.Bot, ABC):
                         randomdo = random.choice(listme)
                         randomdo = re.sub("\n", '', randomdo)
                         AdditionalMethods.add_to_buffer("e", randomdo.format(nickname, do))
+    
+    """
 
     @commands.command(name='бубу')
     async def bubu(self, ctx):
