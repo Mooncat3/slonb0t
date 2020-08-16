@@ -191,9 +191,9 @@ def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "") -> 
         if ever:
             url = "https://api.twitch.tv/helix/clips?broadcaster_id={}".format(config.BROADCASTER_ID)
         else:
-            datepast = rfc3339.format((datetime.utcnow() + timedelta(hours=3)) - timedelta(days=days_before), utc=True,
+            datepast = rfc3339.format((datetime.now() + timedelta(hours=3)) - timedelta(days=days_before), utc=True,
                                       use_system_timezone=False)
-            datenow = rfc3339.format(datetime.utcnow() + timedelta(hours=3), utc=True, use_system_timezone=False)
+            datenow = rfc3339.format(datetime.now() + timedelta(hours=3), utc=True, use_system_timezone=False)
             url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&started_at={}&ended_at={}".format(
                 config.BROADCASTER_ID, datepast,
                 datenow)
