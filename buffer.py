@@ -17,7 +17,7 @@ def get_timeout(abr: str) -> time:
     if abr == "e":
         return 3.0
     if abr == "s":
-        return 3.0
+        return 1.0
     if abr == "r":
         return 5.0
 
