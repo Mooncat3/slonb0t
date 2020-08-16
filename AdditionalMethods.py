@@ -10,17 +10,28 @@ import requests
 import random
 import re
 import config
+from twitchio.dataclasses import User
+import datetime
+import locale
 
-def check_on_bans(message) -> bool:
+
+def vip(mod: bool, name: str) -> bool:
+    if mod or name == "danantur" or name == "mooncat3":
+        return True
+    else:
+        return False
+
+
+def check_on_bans(message, author: User) -> bool:
     if message.find('.') != -1 or message.find('suicide') != -1 or message.find(
             'kill') != -1 or message.find('заходите') != -1:
-        add_to_buffer("s", "{}, думал забанить меня? WeirdChamp ")
+        add_to_buffer("s", "{}, думал забанить меня? WeirdChamp ".format(author.name), author)
         return False
     else:
         return True
 
 
-def add_to_buffer(type: str, message: str):
+def add_to_buffer(type: str, message: str, author: User):
     try:
         with open(file='data/buffer.txt', mode='r', encoding='utf-8') as e:
             dat = json.loads(e.read())
@@ -30,7 +41,7 @@ def add_to_buffer(type: str, message: str):
     except:
         dat = []
     with open(file='data/buffer.txt', mode='w', encoding='utf-8') as q:
-        dat.append({"type": type, "message": message, "bufered": False})
+        dat.append({"vip": vip(author.is_mod, author.name), "nickname": author.name, "type": type, "message": message, "bufered": False})
         if len(dat) == 0:
             q.write("[]")
         else:
@@ -38,7 +49,6 @@ def add_to_buffer(type: str, message: str):
 
 
 def check_active() -> bool:
-    return False
     with open(file='data/TRASHMASSIVE.txt', mode='r', encoding='utf-8') as q:
         dat = json.loads(q.read())
         return dat['active']
@@ -114,6 +124,9 @@ def parse_stream_stat(nickname: str, tag: str, TRASHMASSIVE: dict, date = "", id
     else:
         seter = ''
     if len(date) > 0:
+        locale.setlocale(locale.LC_TIME, 'ru_RU')
+        actualdate = datetime.datetime.strptime(date, "%m.%d.%y")
+        date = datetime.datetime.strftime(actualdate , "%a, %d %B, %Y")
         date = f"[{date}]"
     else:
         if active:

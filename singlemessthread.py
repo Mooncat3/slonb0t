@@ -8,7 +8,6 @@ import time
 
 def go_for_message():
     id = int(sys.argv[1])
-
     s = socket.socket()
     s.connect(("irc.twitch.tv", 6667))
     outputPassMsg = "PASS oauth:" + config.OAUTH + "\r\n"
