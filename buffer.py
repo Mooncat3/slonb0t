@@ -88,6 +88,7 @@ def start_buffer_thread():
                 if not res['bufered']:
                     res['bufered'] = True
                     if res['nickname'] in users and not res['vip']:
+                        print(get_user_timeout())
                         if time.time() - users[res['nickname']]['time'] < get_user_timeout() and res['type'] != "r":
                             users[res['nickname']]['time'] = time.time()
                             if not users[res['nickname']]['got']:
