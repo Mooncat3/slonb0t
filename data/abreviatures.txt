@@ -21,5 +21,8 @@
     "TABS": "Totally Accurate Battle Simulator",
     "MFS": "Microsoft Flight Simulator",
     "MFSX": "Microsoft Flight Simulator X",
-    "STLSC": "S.T.A.L.K.E.R.: Shadow of Chernobyl"
+    "STALKER": "S.T.A.L.K.E.R.: Shadow of Chernobyl",
+    "FNAF": "Five Nights at Freddy's",
+    "FNAF2": "Five Nights at Freddy's 2",
+    "FNAFVR": "Five Nights at Freddy's VR: Help Wanted"
 }
