@@ -163,13 +163,13 @@ class Bot(commands.Bot, ABC):
 
                 if message.find('!курс йена-рубль') != -1:
                     kurs = str.replace(message, '!курс йена-рубль ', '')
-                    result = float(kurs) * float(jpy)
+                    result = float(kurs) / float(jpy)
                     result = round(result, 2)
                     AdditionalMethods.add_to_buffer("c", f"{nickname}, {kurs} JPY = {result} RUB", ctx.author)
 
                 if message.find('!курс рубль-йена') != -1:
                     kurs = str.replace(message, '!курс рубль-йена ', '')
-                    result = float(kurs) / float(jpy)
+                    result = float(kurs) * float(jpy)
                     result = round(result, 2)
                     AdditionalMethods.add_to_buffer("c", f"{nickname}, {kurs} RUB = {result} JPY", ctx.author)
             except OverflowError:
