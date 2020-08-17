@@ -121,7 +121,6 @@ class Bot(commands.Bot, ABC):
             dollar = soup.find('p', class_='rates_box1_inner pid-USDRUR-bid').get_text()
             euro = soup1.find('p', class_='rates_box1_inner pid-EURRUR-bid').get_text()
             jpy = soup2.find('input', class_='converter_form_inp converterInpTo').get(key="value")
-            jpy = str(round(float(jpy) * 100, ndigits=2))
 
         def parse():
             html = get_html(URL)
@@ -163,13 +162,13 @@ class Bot(commands.Bot, ABC):
 
                 if message.find('!курс йена-рубль') != -1:
                     kurs = str.replace(message, '!курс йена-рубль ', '')
-                    result = float(kurs) / float(jpy)
+                    result = float(kurs) * float(jpy)
                     result = round(result, 2)
                     AdditionalMethods.add_to_buffer("c", f"{nickname}, {kurs} JPY = {result} RUB", ctx.author)
 
                 if message.find('!курс рубль-йена') != -1:
                     kurs = str.replace(message, '!курс рубль-йена ', '')
-                    result = float(kurs) * float(jpy)
+                    result = float(kurs) / float(jpy)
                     result = round(result, 2)
                     AdditionalMethods.add_to_buffer("c", f"{nickname}, {kurs} RUB = {result} JPY", ctx.author)
             except OverflowError:
