@@ -22,9 +22,8 @@ def vip(mod: bool, name: str) -> bool:
 
 
 def check_on_bans(message, author: User) -> bool:
-    return True
-    if message.find('.') != -1 or message.find('suicide') != -1 or message.find(
-            'kill') != -1 or message.find('заходите') != -1:
+    if message.find('suicide') != -1 or message.find(
+            'kill') != -1 or message.find('заходите') != -1 or message.find('pasta') != -1:
         add_to_buffer("s", "{}, думал забанить меня? WeirdChamp ".format(author.name), author)
         return False
     else:
