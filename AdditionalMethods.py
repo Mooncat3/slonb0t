@@ -332,7 +332,7 @@ def get_goroskop(message, nickname) -> str:
 
     with open(file='data/goroskopdictionary.txt', encoding='utf-8') as q:
         gors = json.loads(q.read())
-        if message in gors['query_strings']:
+        if message.lower() in gors['query_strings']:
             return parse_goroskop(gors['query_strings'][message])
         else:
             return f"{nickname} введите правильный знак зодиака WeirdChamp"
