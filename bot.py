@@ -504,19 +504,15 @@ class Bot(commands.Bot, ABC):
                                                                      "{nickname} передаёт {filestr} привет {messagestr} "
                                                                      "peepoHey peepoLove",
                                                                      message, "!привет", "privet"), ctx.author)
-    
-    
-    
+                
     @commands.command(name='сон')
     async def son(self, ctx):
         if not AdditionalMethods.check_active():
             message = ctx.message.content
             nickname = ctx.author.name
             if AdditionalMethods.check_on_bans(message, ctx.author):
-                AdditionalMethods.add_to_buffer("e", AdditionalMethods.parse_standartfile_message(nickname,
-                                                                     "{nickname} говорит, что {messagestr} "
-                                                                     "пора спать! pepeZ",
-                                                                     message, "!сон", "son"), ctx.author)
+                son = str.replace(message, '!сон ', '')
+                AdditionalMethods.add_to_buffer("e", f"{nickname} говорит, что {son} пора спать! pepeZ" , ctx.author)
     
     @commands.command(name='заебало')
     async def zaebalo(self, ctx):
