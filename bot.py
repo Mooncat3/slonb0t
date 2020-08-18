@@ -23,6 +23,7 @@ class Bot(commands.Bot, ABC):
     async def event_ready(self):
         print(f'Ready CommandsBot | {self.nick} on {self.initial_channels}')
 
+    """
     @commands.command(name='history')
     async def stream(self, ctx):
         nickname = ctx.author.name
@@ -433,14 +434,12 @@ class Bot(commands.Bot, ABC):
                 AdditionalMethods.add_to_buffer("e", AdditionalMethods.parse_standartfile_message(nickname, "{nickname} {filestr} обнимает {messagestr} "
                                                                            "VoHiYo",
                                                                  message, "!обнять", "hug"), ctx.author)
-    """
     @commands.command(name='COCK')
     async def cock(self, ctx):
         if not AdditionalMethods.check_active():
             nickname = ctx.author.name
             cock = random.randrange(1, 36, 1)
             AdditionalMethods.add_to_buffer("e", f"{nickname}, твой COCK равен {str(cock)} см! YEP", ctx.author)
-    """
 
     @commands.command(name='кнб')
     async def cnb(self, ctx):
@@ -473,14 +472,12 @@ class Bot(commands.Bot, ABC):
                     if usercnb == 'бумага' and rndcnb1 == '✂️':
                         AdditionalMethods.add_to_buffer("e", f"{nickname} поставил(а) 📜 , а Бот поставил ✂️ . Победа Бота Lohich", ctx.author)
 
-    """
     @commands.command(name='BOOBS')
     async def boobs(self, ctx):
         if not AdditionalMethods.check_active():
             nickname = ctx.author.name
             boobs = random.randrange(0, 15, 1)
             AdditionalMethods.add_to_buffer("e", f"{nickname}, твои BOOBS {str(boobs)} размера YEP", ctx.author)
-    """
 
     @commands.command(name='вниз')
     async def vniz(self, ctx):
@@ -507,7 +504,6 @@ class Bot(commands.Bot, ABC):
                                                                      "{nickname} передаёт {filestr} привет {messagestr} "
                                                                      "peepoHey peepoLove",
                                                                      message, "!привет", "privet"), ctx.author)
-    """
     @commands.command(name='сон')
     async def son(self, ctx):
         if not AdditionalMethods.check_active():
@@ -535,7 +531,6 @@ class Bot(commands.Bot, ABC):
                     print(s)
                 p = str.replace(p.lower(), s, ban)
         AdditionalMethods.add_to_buffer("e", AdditionalMethods.check_on_toomuchsimbols(p), ctx.author)
-    """
 
     @commands.command(name='гороскоп')
     async def goroskop(self, ctx):
@@ -544,6 +539,7 @@ class Bot(commands.Bot, ABC):
             message = ctx.message.content
             goroskop = AdditionalMethods.get_goroskop(message, nickname)
             AdditionalMethods.add_to_buffer("e", goroskop, ctx.author)
+    """
 
 
 subprocess.Popen([sys.executable, 'ChatBot.py'])
