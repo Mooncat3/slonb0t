@@ -30,6 +30,20 @@ class Bot(commands.Bot, ABC):
         message = str.replace(message, '!history', '')
         if AdditionalMethods.check_on_bans(message, ctx.author):
             AdditionalMethods.add_to_buffer("c", AdditionalMethods.get_last_stream_stat(message[1:len(message)], nickname), ctx.author)
+            
+            
+    @commands.command(name='заебало')
+    async def zaebalo(self, ctx):
+    s = ctx.send
+    randpage = random.randrange(1, 1689, 1)
+    r = requests.get("https://zaebalo.ru/?page=" + str(randpage))
+    soup = BeautifulSoup(r.content, 'html.parser')
+    d = soup.find_all('div', align='left')
+    p = str(random.choice(d)).replace("</div>", "").replace("<br/>", "").replace("</p>", "").replace("<p>", "").replace('<div align="left">', '').replace("<br>", "").replace("</br>", "")
+    while 'пидор' in p or 'негр' in p or len(p) > 500:
+        d = soup.find_all('div', align='left')
+        p = str(random.choice(d)).replace("</div>", "").replace("<br/>", "").replace("</p>", "").replace("<p>", "").replace('<div align="left">', '').replace("<br>", "").replace("</br>", "")
+    await s(p)
 
     @commands.command(name='archive')
     async def streamh(self, ctx):
