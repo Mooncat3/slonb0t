@@ -23,16 +23,16 @@ class Bot(commands.Bot, ABC):
     async def event_ready(self):
         print(f'Ready CommandsBot | {self.nick} on {self.initial_channels}')
 
-    """
     @commands.command(name='history')
     async def stream(self, ctx):
-        nickname = ctx.author.name
-        message = ctx.message.content
-        message = str.replace(message, '!history', '')
-        if AdditionalMethods.check_on_bans(message, ctx.author):
-            AdditionalMethods.add_to_buffer("c", AdditionalMethods.get_last_stream_stat(message[1:len(message)], nickname), ctx.author)
+        if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
+            nickname = ctx.author.name
+            message = ctx.message.content
+            message = str.replace(message, '!history', '')
+            if AdditionalMethods.check_on_bans(message, ctx.author):
+                AdditionalMethods.add_to_buffer("c", AdditionalMethods.get_last_stream_stat(message[1:len(message)], nickname), ctx.author)
             
-            
+    """     
     @commands.command(name='заебало')
     async def zaebalo(self, ctx):
         randpage = random.randrange(1, 1689, 1)
