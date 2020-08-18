@@ -15,6 +15,7 @@ class ChatBot(commands.Bot):
     async def event_ready(self):
         print(f'Ready ChatBot | {self.nick} on {self.initial_channels}')
 
+    """
     @commands.command(name='SLONB0T')
     async def privet(self, ctx):
         message = ctx.message.content
@@ -44,6 +45,7 @@ class ChatBot(commands.Bot):
             content = response.content.decode('utf8').replace("'", '"')
             data = json.loads(content)
             AdditionalMethods.add_to_buffer("e", nickname + ", " + AdditionalMethods.parse_response_query(data), ctx.author)
+     """
 
 
 
