@@ -505,6 +505,19 @@ class Bot(commands.Bot, ABC):
                                                                      "peepoHey peepoLove",
                                                                      message, "!привет", "privet"), ctx.author)
     
+    
+    
+    @commands.command(name='сон')
+    async def son(self, ctx):
+        if not AdditionalMethods.check_active():
+            message = ctx.message.content
+            nickname = ctx.author.name
+            if AdditionalMethods.check_on_bans(message, ctx.author):
+                AdditionalMethods.add_to_buffer("e", AdditionalMethods.parse_standartfile_message(nickname,
+                                                                     "{nickname} говорит, что {messagestr} "
+                                                                     "пора спать! pepeZ",
+                                                                     message, "!сон", "son"), ctx.author)
+    
     @commands.command(name='заебало')
     async def zaebalo(self, ctx):
         randpage = random.randrange(1, 1689, 1)
