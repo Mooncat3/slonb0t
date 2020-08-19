@@ -6,7 +6,7 @@
     "FG": "fall guys",
     "DBH": "Detroit: Become Human",
     "TS&P": "Talk Shows & Podcasts",
-    "anime": "Anime Land",
+    "ANIME": "Anime Land",
     "COF": "cry of fear",
     "LISBS": "Life Is Strange: Before the Storm",
     "RE2": "Resident Evil 2",
@@ -21,9 +21,5 @@
     "TABS": "Totally Accurate Battle Simulator",
     "MFS": "Microsoft Flight Simulator",
     "MFSX": "Microsoft Flight Simulator X",
-    "STALKER": "S.T.A.L.K.E.R.: Shadow of Chernobyl",
-    "FNAF": "Five Nights at Freddy's",
-    "FNAF2": "Five Nights at Freddy's 2",
-    "FNAFVR": "Five Nights at Freddy's VR: Help Wanted",
-    "": ""
+    "STLSC": "S.T.A.L.K.E.R.: Shadow of Chernobyl"
 }

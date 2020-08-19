@@ -1,1 +1,1 @@
-{"usertimeout": 4.0, "buferdelay": 1.0}
+{"usertimeout": 2.5, "bufferdelay": 1.5, "buffermax": 4}
