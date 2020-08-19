@@ -6,7 +6,7 @@
     "FG": "fall guys",
     "DBH": "Detroit: Become Human",
     "TS&P": "Talk Shows & Podcasts",
-    "anime": "Anime Land",
+    "ANIME": "Anime Land",
     "COF": "cry of fear",
     "LISBS": "Life Is Strange: Before the Storm",
     "RE2": "Resident Evil 2",
@@ -18,5 +18,8 @@
     "TWDNF": "The Walking Dead: A New Frontier",
     "DOKI": "Doki Doki Literature Club",
     "G&D": "Games + Demos",
-    "TABS": "Totally Accurate Battle Simulator"
+    "TABS": "Totally Accurate Battle Simulator",
+    "MFS": "Microsoft Flight Simulator",
+    "MFSX": "Microsoft Flight Simulator X",
+    "STLSC": "S.T.A.L.K.E.R.: Shadow of Chernobyl"
 }

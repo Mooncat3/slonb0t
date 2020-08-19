@@ -1,56 +1,84 @@
 import sys
 from abc import ABC
-from twitchio.ext import commands
+from twitchioc.ext import commands
+import asyncio
 from datetime import timedelta, datetime
 from bs4 import BeautifulSoup
 import requests
+
 import AdditionalMethods
 import re
 import random
-import time
 import subprocess
 import config
+import json
+import time
 
 
-class Bot(commands.Bot, ABC):
+class CommandsBot(commands.Bot, ABC):
 
-    times = time.time()
-    
     def __init__(self):
         super().__init__(irc_token=f'oauth:{config.OAUTH}',
-                         client_id=config.CLIENT_ID, nick=config.BOT, prefix='+',
+                         client_id=config.CLIENT_ID, nick=config.BOT, prefix='!',
                          initial_channels=config.CHANNELS)
 
     async def event_ready(self):
-        print(f'Ready CommandsBot | {self.nick} on {self.initial_channels}')
+        print(f'Ready {str(self.__class__.__name__)} | {self.nick} on {self.initial_channels}')
+
+    @commands.command(name='case')
+    async def cse(self, ctx):
+        nickname = ctx.author.name
+        def check_price(prce: float) -> str:
+            if prce < 100:
+                return str(prce) + " ₽ Lohich"
+            elif prce < 500:
+                return str(prce) + " ₽ SeemsGood"
+            elif prce < 1000:
+                return str(prce) + " ₽ dedU"
+            elif prce < 5000:
+                return str(prce) + " ₽ PogU"
+            elif prce < 10000:
+                return str(prce) + " ₽ PogChamp"
+            elif prce < 100000:
+                return str(prce) + " ₽ Pog"
+            elif prce > 100000:
+                return str(prce) + " ₽ Pog Clap"
+        randstr = random.randint(1, 179)
+        r = requests.get('https://market.csgo.com/?s=name&r=&q=&p=' + str(randstr) + '&h=&fst=0')
+        soup = BeautifulSoup(r.content, 'html.parser')
+        d = soup.find_all('a', class_='item')
+        skin = str(random.choice(d)).partition(';"></div>')[2]
+        skinorig = re.sub('<div class="price">', '', skin)
+        skinorig = re.sub("\n", '', skinorig)
+        skin = skinorig.partition(';">')[2].replace('</div></a>', '')
+        price = skinorig.rpartition('<s')[0]
+        price = re.sub(" ", '', price)
+        AdditionalMethods.add_to_buffer("e", f"{nickname} Вам выпал " + skin + " со стоймостью " + check_price(float(price)), ctx.author)
 
     @commands.command(name='history')
     async def stream(self, ctx):
-        if time.time() - self.times > 3:
-            nickname = ctx.author.name
-            s = ctx.send
-            message = ctx.message.content
-            message = str.replace(message, '+history', '')
-            await s(AdditionalMethods.get_last_stream_stat(message,nickname))
-            self.times = time.time()
+        nickname = ctx.author.name
+        message = ctx.message.content
+        message = str.replace(message, '!history', '')
+        AdditionalMethods.add_to_buffer("e", AdditionalMethods.get_last_stream_stat(message[1:len(message)], nickname), ctx.author)
 
-    @commands.command(name='historyq')
+    @commands.command(name='archive')
     async def streamh(self, ctx):
-        if time.time() - self.times > 3:
-            nickname = ctx.author.name
-            s = ctx.send
-            message = ctx.message.content
-            message = str.replace(message, '+historyq', '')
-            try:
-                id=int(message[1:2])
-                await s(AdditionalMethods.get_archive_stream_stat(id).format(nickname,id))
-            except:
-                await s(f'{nickname} +historyq [0-9]')
-            self.times = time.time()
-    """
+        nickname = ctx.author.name
+        message = ctx.message.content
+        message = str.replace(message, '!archive', '')
+        #try:
+        id=int(message[1:2])
+        if len(message[2:len(message)]) > 1:
+            tag = str.replace(message, f' {id} ', '')
+        else:
+            tag = ''
+        AdditionalMethods.add_to_buffer("c", AdditionalMethods.get_archive_stream_stat(id, nickname, tag).format(nickname, id), ctx.author)
+        #except:
+           # AdditionalMethods.add_to_buffer("с", f'{nickname} !archive [0-9]', ctx.author)
+
     @commands.command(name='рецепт')
     async def recept(self, ctx):
-        s = ctx.send
         URL = 'http://culinar.ivest.kz/randomMenu'
 
         def get_html(url, params=None):
@@ -73,13 +101,11 @@ class Bot(commands.Bot, ABC):
         receptt = 'Способ приготовления:'.join(recept.split('Способ приготовления:')[:-1])
         recept1 = recept[recept.find("Способ приготовления:") + 1:]
         recept1 = (recept1[:495] + '...') if len(recept1) > 495 else recept1
-        await s(f"{name} - {receptt}")
-        time.sleep(2)
-        await s(f"С{recept1}")
+        AdditionalMethods.add_to_buffer("r", f"{name} - {receptt}", ctx.author)
+        AdditionalMethods.add_to_buffer("r", f"С{recept1}", ctx.author)
 
     @commands.command(name='анекдот')
     async def anekdot(self, ctx):
-        s = ctx.send
         URL = 'http://anecdotica.ru/'
 
         def get_html(url, params=None):
@@ -97,373 +123,442 @@ class Bot(commands.Bot, ABC):
 
         parse()
         anekdott = (anekdot[:493] + '...') if len(anekdot) > 493 else anekdot
-        await s(f"{anekdott} KeK")
+        AdditionalMethods.add_to_buffer("e", '{} KeK'.format(str.replace(anekdott, "\r\n", " ")), ctx.author)
 
     @commands.command(name='курс')
     async def kurs(self, ctx):
         nickname = ctx.author.name
-        s = ctx.send
         message = ctx.message.content
         URL = 'https://fortrader.org/quotes/usdrur'
         URL1 = 'https://fortrader.org/quotes/eurrur'
-
+        URL2 = 'https://fortrader.org/currencyrates/jpy'
         def get_html(url, params=None):
             r = requests.get(url, params=params)
             return r
 
-        def get_content(html, html1):
+        def get_content(html, html1, html2):
             soup = BeautifulSoup(html, 'html.parser')
             soup1 = BeautifulSoup(html1, 'html.parser')
+            soup2 = BeautifulSoup(html2, 'html.parser')
             global dollar
             global euro
+            global jpy
             dollar = soup.find('p', class_='rates_box1_inner pid-USDRUR-bid').get_text()
             euro = soup1.find('p', class_='rates_box1_inner pid-EURRUR-bid').get_text()
+            jpy = soup2.find('input', class_='converter_form_inp converterInpTo').get(key="value")
+            jpy = str(round(float(jpy) * 100, ndigits=2))
 
         def parse():
             html = get_html(URL)
             html1 = get_html(URL1)
-            get_content(html.text, html1.text)
+            html2 = get_html(URL2)
+            get_content(html.text, html1.text, html2.text)
 
         parse()
         now = datetime.now() + timedelta(hours=3)
         today = now.strftime("%d.%m")
 
-        if message == "+курс":
-            await s(f"Курс валют на {today}: USD = {dollar} RUB | EURO = {euro} RUB")
+        if message == "!курс":
+            AdditionalMethods.add_to_buffer("c", f"Курс валют на {today}: USD = {dollar} RUB | EURO = {euro} RUB | JPY = {jpy} RUB", ctx.author)
         else:
             try:
-                if message.find('+курс доллар-рубль') != -1:
-                    kurs = str.replace(message, '+курс доллар-рубль ', '')
-                    result = int(kurs) * float(dollar)
+                if message.find('!курс доллар-рубль') != -1:
+                    kurs = str.replace(message, '!курс доллар-рубль ', '')
+                    result = float(kurs) * float(dollar)
                     result = round(result, 2)
-                    await s(f"{nickname}, {kurs} USD = {result} RUB")
-
-                if message.find('+курс рубль-доллар') != -1:
-                    kurs = str.replace(message, '+курс рубль-доллар ', '')
+                    AdditionalMethods.add_to_buffer("c", f"{nickname}, {kurs} USD = {result} RUB", ctx.author)
+                elif message.find('!курс рубль-доллар') != -1:
+                    kurs = str.replace(message, '!курс рубль-доллар ', '')
                     result = float(kurs) / float(dollar)
                     result = round(result, 2)
-                    await s(f"{nickname}, {kurs} RUB = {result} USD")
-
-                if message.find('+курс евро-рубль') != -1:
-                    kurs = str.replace(message, '+курс евро-рубль ', '')
-                    result = int(kurs) * float(euro)
+                    AdditionalMethods.add_to_buffer("c", f"{nickname}, {kurs} RUB = {result} USD", ctx.author)
+                elif message.find('!курс евро-рубль') != -1:
+                    kurs = str.replace(message, '!курс евро-рубль ', '')
+                    result = float(kurs) * float(euro)
                     result = round(result, 2)
-                    await s(f"{nickname}, {kurs} EUR = {result} RUB")
-
-                if message.find('+курс рубль-евро') != -1:
-                    kurs = str.replace(message, '+курс рубль-евро ', '')
+                    AdditionalMethods.add_to_buffer("c", f"{nickname}, {kurs} EUR = {result} RUB", ctx.author)
+                elif message.find('!курс рубль-евро') != -1:
+                    kurs = str.replace(message, '!курс рубль-евро ', '')
                     result = float(kurs) / float(euro)
                     result = round(result, 2)
-                    await s(f"{nickname}, {kurs} RUB = {result} EUR")
+                    AdditionalMethods.add_to_buffer("c", f"{nickname}, {kurs} RUB = {result} EUR", ctx.author)
+                elif message.find('!курс йена-рубль') != -1:
+                    kurs = str.replace(message, '!курс йена-рубль ', '')
+                    result = float(kurs) * float(jpy)
+                    result = round(result, 2)
+                    AdditionalMethods.add_to_buffer("c", f"{nickname}, {kurs} JPY = {result} RUB", ctx.author)
+                elif message.find('!курс рубль-йена') != -1:
+                    kurs = str.replace(message, '!курс рубль-йена ', '')
+                    result = float(kurs) / float(jpy)
+                    result = round(result, 2)
+                    AdditionalMethods.add_to_buffer("c", f"{nickname}, {kurs} RUB = {result} JPY", ctx.author)
+                else:
+                    AdditionalMethods.add_to_buffer("c", f"{nickname}, неккоректно написаны валюты, пишите в именительном падеже (рубль-доллар и т.д.)", ctx.author)
             except OverflowError:
-                await s("Число слишком большое WeirdChamp")
-    """
+                AdditionalMethods.add_to_buffer("с", f"{nickname} Число слишком большое WeirdChamp", ctx.author)
+            except ValueError:
+                AdditionalMethods.add_to_buffer("с", f"{nickname} Это не число WeirdChamp", ctx.author)
+
     @commands.command(name='topclipever')
     async def topclipever(self, ctx):
-        if time.time() - self.times > 3:
-            nickname = ctx.author.name
-            s = ctx.send
-            message = ctx.message.content
-            top = str.replace(message, '+topclipever ', '')
-            top = re.sub("\n", '', top)
-            if top == "+topclipever":
-                top = ""
-            await s(AdditionalMethods.gettopclip(0, top, nickname))
-            self.times = time.time()
+        nickname = ctx.author.name
+        message = ctx.message.content
+        top = str.replace(message, '!topclipever ', '')
+        top = re.sub("\n", '', top)
+        if top == "!topclipever":
+            top = ""
+        AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(0, top, nickname), ctx.author)
 
     @commands.command(name='topclipyear')
     async def topclipyear(self, ctx):
-        if time.time() - self.times > 3:
-            nickname = ctx.author.name
-            s = ctx.send
-            message = ctx.message.content
-            top = str.replace(message, '+topclipyear ', '')
-            top = re.sub("\n", '', top)
-            if top == "+topclipyear":
-                top = ""
-            await s(AdditionalMethods.gettopclip(365, top, nickname))
-            self.times = time.time()
+        nickname = ctx.author.name
+        message = ctx.message.content
+        top = str.replace(message, '!topclipyear ', '')
+        top = re.sub("\n", '', top)
+        if top == "!topclipyear":
+            top = ""
+        AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(365, top, nickname), ctx.author)
 
     @commands.command(name='topclipmonth')
     async def topclipmonth(self, ctx):
-        if time.time() - self.times > 3:
-            nickname = ctx.author.name
-            s = ctx.send
-            message = ctx.message.content
-            top = str.replace(message, '+topclipmonth ', '')
-            top = re.sub("\n", '', top)
-            if top == "+topclipmonth":
-                top = ""
-            await s(AdditionalMethods.gettopclip(30, top, nickname))
-            self.times = time.time()
+        nickname = ctx.author.name
+        message = ctx.message.content
+        top = str.replace(message, '!topclipmonth ', '')
+        top = re.sub("\n", '', top)
+        if top == "!topclipmonth":
+            top = ""
+        AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(30, top, nickname), ctx.author)
 
     @commands.command(name='topclipday')
     async def topclipday(self, ctx):
-        if time.time() - self.times > 3:
-            nickname = ctx.author.name
-            s = ctx.send
-            message = ctx.message.content
-            top = str.replace(message, '+topclipday ', '')
-            top = re.sub("\n", '', top)
-            if top == "+topclipday":
-                top = ""
-            await s(AdditionalMethods.gettopclip(1, top, nickname))
-            self.times = time.time()
-    """
+        nickname = ctx.author.name
+        message = ctx.message.content
+        top = str.replace(message, '!topclipday ', '')
+        top = re.sub("\n", '', top)
+        if top == "!topclipday":
+            top = ""
+        AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(1, top, nickname), ctx.author)
+
     @commands.command(name='iq')
     async def iq(self, ctx):
         nickname = ctx.author.name
-        s = ctx.send
         iq = random.randrange(55, 180, 1)
         if iq == 110:
-            await s(f"{nickname}, ваш IQ = {str(iq)}! Вы Хесус?! PogU")
+            AdditionalMethods.add_to_buffer("e", f"{nickname}, ваш IQ = {str(iq)}! Вы Хесус?! PogU", ctx.author)
         if iq == 89:
-            await s(f"{nickname}, ваш IQ = {str(iq)}! Вы Братишкин?! PogU")
+            AdditionalMethods.add_to_buffer("e", f"{nickname}, ваш IQ = {str(iq)}! Вы Братишкин?! PogU", ctx.author)
         else:
             if 110 > iq > 70:
-                await s(f"{nickname}, ваш IQ = {str(iq)}! Надо же, у стримера больше IQ чем у вас KeK")
+                AdditionalMethods.add_to_buffer("e", f"{nickname}, ваш IQ = {str(iq)}! Надо же, у стримера больше IQ чем у вас KeK", ctx.author)
             if 110 < iq < 135:
-                await s(f"{nickname}, ваш IQ = {str(iq)}! Ого, а вы не глупый человек ThumbUp")
+                AdditionalMethods.add_to_buffer("e", f"{nickname}, ваш IQ = {str(iq)}! Ого, а вы не глупый человек ThumbUp", ctx.author)
             if iq < 70:
-                await s(f"{nickname}, ваш IQ = {str(iq)}! Чел... сходи книгу почитай WeirdChamp")
+                AdditionalMethods.add_to_buffer("e", f"{nickname}, ваш IQ = {str(iq)}! Чел... сходи книгу почитай WeirdChamp", ctx.author)
             if iq >= 135:
-                await s(f"{nickname}, ваш IQ = {str(iq)}! Внимание! В чате гений WAYTOOSMART Clap")
+                AdditionalMethods.add_to_buffer("e", f"{nickname}, ваш IQ = {str(iq)}! Внимание! В чате гений WAYTOOSMART Clap", ctx.author)
 
+    """
     @commands.command(name='паста')
     async def pasta(self, ctx):
-        s = ctx.send
-        await s(AdditionalMethods.parse_simplefile_message("{}", "nadya"))
+        AdditionalMethods.add_to_buffer("e", AdditionalMethods.parse_simplefile_message("{}", "nadya"), ctx.author)
+    """
 
     @commands.command(name='help')
     async def help(self, ctx):
         nickname = ctx.author.name
-        s = ctx.send
-        await s(
-            f"{nickname}, Привет, я бот по имени слон. Можешь использовать следующие команды (страница 1): +паста, "
-            f"+me, +do [message], +iq, +temp, +love [message], +бубу [message], +steal [message] Чтобы перейти на "
-            f"следующую страницу введите +help1 catJAM")
+        if ctx.message.content != "!help":
+            helper = str.replace(ctx.message.content, '!help ', '')
+            helper = re.sub("\n", '', helper)
+            with open('data/documentation.txt', 'r', encoding='utf-8') as w:
+                data = json.loads(w.read())
+                if helper in data:
+                    prefix = "!"
+                    if helper == config.BOT:
+                        prefix = "@"
+                    AdditionalMethods.add_to_buffer("c", f"{nickname} {prefix}{helper} - {data[helper]}", ctx.author)
+                else:
+                    AdditionalMethods.add_to_buffer("с", f"{nickname} такой команды нет PepoG ", ctx.author)
+        else:
+            AdditionalMethods.add_to_buffer("c", f"{nickname}, Ку catJAM , меня зовут {config.BOT} catJAM , вот что я умею: страница 1: !help [command], !history [nickname], !archive [id] [nickname]"
+            f", !topclipever [category], !topclipyear ["
+            f"category], !topclipmonth [category], !topclipday [category] Чтобы перейти на следующую страницу введите !help1 catJAM ", ctx.author)
 
     @commands.command(name='help1')
     async def help1(self, ctx):
         nickname = ctx.author.name
-        s = ctx.send
-        await s(
-            f"{nickname}, страница 2: +привет [message], +try [message], +кнб, +time, +когда [message], +обнять ["
-            f"message], +COCK, +BOOBS, +вниз Чтобы перейти на следующую страницу введите +help2")
+        AdditionalMethods.add_to_buffer("c", f"{nickname}, страница 2: !время, !гороскоп [знак зодиака], !анекдот, !рецепт, !привет [nickname], !try [action]"
+            f", !кнб [камень, ножницы или бумага], !когда [message], !обнять [nickname]"
+            f" Чтобы перейти на следующую страницу введите !help2"
+        , ctx.author)
 
     @commands.command(name='help2')
     async def help2(self, ctx):
         nickname = ctx.author.name
-        s = ctx.send
-        await s(
-            f"{nickname}, страница 3: +анекдот, +гороскоп [message], +курс ['изначальная валюта'-'переводимая валюта'"
-            f"(доллар-рубль, евро-рубль и наоборот)] [число], +рецепт, +topclipever [category], +topclipyear ["
-            f"category], +topclipmonth [category], +topclipday [category]")
+        AdditionalMethods.add_to_buffer("c", f"{nickname}, страница 3: !курс ['изначальная валюта'-'переводимая валюта'(доллар-рубль, евро-рубль и наоборот)] [число], !iq, !temp"
+                                             f", !бубу [message], !steal [nickname], !вниз, !case Чтобы увидеть команды для управления ботом (только для узкого круга лиц), напишите !helpm", ctx.author)
+
+    @commands.command(name='helpm')
+    async def help3(self, ctx):
+        nickname = ctx.author.name
+        if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
+            AdditionalMethods.add_to_buffer("s", f"{nickname}, страница 4 (управление ботом, доступно модераторам и узкому кругу лиц): !bufferdelay [time], !buffermax [time], !chkstreamactive [time]", ctx.author)
+
+    @commands.command(name='bufferdelay')
+    async def bufedelay(self, ctx):
+        if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
+            nickname = ctx.author.name
+            timeout = str.replace(ctx.message.content, '!bufferdelay ', '')
+            timeout = re.sub("\n", '', timeout)
+            timeout = str.replace(timeout, ",", ".")
+            try:
+                with open('data/settings.txt', 'r', encoding='utf-8') as b:
+                    data = json.loads(b.read())
+            except:
+                data = {}
+            with open('data/settings.txt', 'w', encoding='utf-8') as b:
+                try:
+                    data["bufferdelay"] = float(timeout)
+                    b.write(json.dumps(data))
+                    AdditionalMethods.add_to_buffer("s", f"{nickname} теперь задержка между сообщениями будет составлять {data['bufferdelay']}", ctx.author)
+                except:
+                    AdditionalMethods.add_to_buffer("s", f"{nickname}, не удалось прочесть число PepoG ", ctx.author)
+
+    @commands.command(name='buffermax')
+    async def bufermax(self, ctx):
+        if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
+            nickname = ctx.author.name
+            timeout = str.replace(ctx.message.content, '!buffermax ', '')
+            timeout = re.sub("\n", '', timeout)
+            timeout = str.replace(timeout, ",", ".")
+            try:
+                with open('data/settings.txt', 'r', encoding='utf-8') as b:
+                    data = json.loads(b.read())
+            except:
+                data = {}
+            with open('data/settings.txt', 'w', encoding='utf-8') as b:
+                try:
+                    data["buffermax"] = int(timeout)
+                    b.write(json.dumps(data))
+                    AdditionalMethods.add_to_buffer("s", f"{nickname} теперь, если в очереди на вывод будет {data['buffermax']} сообщений, бот будет писать в лс", ctx.author)
+                except:
+                    AdditionalMethods.add_to_buffer("s", f"{nickname}, не удалось прочесть число PepoG ", ctx.author)
+
+    @commands.command(name='chkstreamactive')
+    async def usetime(self, ctx):
+        if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
+            nickname = ctx.author.name
+            timeout = str.replace(ctx.message.content, '!chkstreamactive ', '')
+            timeout = re.sub("\n", '', timeout)
+            try:
+                with open('data/settings.txt', 'r', encoding='utf-8') as b:
+                    data = json.loads(b.read())
+            except:
+                data = {}
+            with open('data/settings.txt', 'w', encoding='utf-8') as b:
+                if timeout == "0":
+                    data["checkStreamActive"] = False
+                    b.write(json.dumps(data))
+                    AdditionalMethods.add_to_buffer("s",
+                                                    f"{nickname} бот теперь не будет игнорировать развлекательные команды от не вип-пользователей во время стрима",
+                                                    ctx.author)
+                elif timeout == "1":
+                    data["checkStreamActive"] = True
+                    b.write(json.dumps(data))
+                    AdditionalMethods.add_to_buffer("s",
+                                                    f"{nickname} бот теперь будет игнорировать развлекательные команды от не вип-пользователей во время стрима",
+                                                    ctx.author)
+                else:
+                    AdditionalMethods.add_to_buffer("s",
+                                                    f"{nickname} !chkstreamactive [0,1]",
+                                                    ctx.author)
 
     @commands.command(name='temp')
     async def temp(self, ctx):
         nickname = ctx.author.name
-        s = ctx.send
         tempp = random.uniform(25, 45)
         temp = round(tempp, 1)
         if 35.7 <= temp <= 37:
-            await s(f"{nickname}, ваша температура {str(temp)} °C! У вас температура в норме ThumbUp")
+            AdditionalMethods.add_to_buffer("e", f"{nickname}, ваша температура {str(temp)} °C! У вас температура в норме ThumbUp", ctx.author)
         else:
             if 37 < temp < 40 or 35.7 > temp >= 32:
-                await s(f"{nickname}, ваша температура {str(temp)} °C! У вас вирус? PepeS")
+                AdditionalMethods.add_to_buffer("e", f"{nickname}, ваша температура {str(temp)} °C! У вас вирус? PepeS", ctx.author)
             else:
                 if temp > 40 or temp < 32:
-                    await s(f"{nickname}, ваша температура {str(temp)} °C! Вызывайте дурку! Durka")
+                    AdditionalMethods.add_to_buffer("e", f"{nickname}, ваша температура {str(temp)} °C! Вызывайте дурку! Durka", ctx.author)
 
     @commands.command(name='me')
     async def me(self, ctx):
         nickname = ctx.author.name
-        s = ctx.send
         with open('data/me.txt', 'r', encoding='utf-8') as b:
             listme = list(b)
             randomm = random.choice(listme)
             randomm = re.sub("\n", '', randomm)
-            await s(randomm.format(nickname))
+            AdditionalMethods.add_to_buffer("e", randomm.format(nickname), ctx.author)
 
     @commands.command(name='do')
     async def do(self, ctx):
         message = ctx.message.content
         nickname = ctx.author.name
-        s = ctx.send
-        if message == "+do":
-            await s(f"{nickname}, введите +do [message]")
+        if message == "!do":
+            AdditionalMethods.add_to_buffer("c", f"{nickname}, введите !do [message]", ctx.author)
         else:
-            if message.find('.') != -1 or message.find('suicide') != -1 or message.find(
-                    'kill') != -1 or message.find('заходите') != -1:
-                await s(f"{nickname}, думал забанить меня? WeirdChamp ")
-            else:
-                with open('data/do.txt', 'r', encoding='utf-8') as c:
-                    listme = list(c)
-                    randomdo = random.choice(listme)
-                    randomdo = re.sub("\n", '', randomdo)
-                    do = str.replace(message, '+do ', '')
-                    do = re.sub("\n", '', do)
-                    await s(randomdo.format(nickname, do))
+            do = str.replace(message, '!do ', '')
+            do = re.sub("\n", '', do)
+            with open('data/do.txt', 'r', encoding='utf-8') as c:
+                listme = list(c)
+                randomdo = random.choice(listme)
+                randomdo = re.sub("\n", '', randomdo)
+                AdditionalMethods.add_to_buffer("e", randomdo.format(nickname, do), ctx.author)
 
     @commands.command(name='бубу')
     async def bubu(self, ctx):
         message = ctx.message.content
         nickname = ctx.author.name
-        s = ctx.send
-        if message == "+бубу":
-            await s(f"{nickname}, введите +бубу [something]")
+        if message == "!бубу":
+            AdditionalMethods.add_to_buffer("c", f"{nickname}, введите !бубу [something]", ctx.author)
         else:
-            if message.find('.') != -1 or message.find('suicide') != -1 or message.find(
-                    'kill') != -1 or message.find('заходите') != -1:
-                await s(f"{nickname}, думал забанить меня? WeirdChamp ")
+            bubu = str.replace(message, '!бубу ', '')
+            bubu = re.sub("\n", '', bubu)
+            if len(bubu) < 235:
+                AdditionalMethods.add_to_buffer("e", f"Ну {str(bubu)} и {str(bubu)} Чё бубнить-то? ThumbUp", ctx.author)
             else:
-
-                bubu = str.replace(message, '+бубу ', '')
-                bubu = re.sub("\n", '', bubu)
-                if len(bubu) < 235:
-                    await s(f"Ну {str(bubu)} и {str(bubu)} Чё бубнить-то? ThumbUp")
-                else:
-                    await s("Слишком длинное бубу WeirdChamp ")
-
-    @commands.command(name='love')
-    async def love(self, ctx):
-        message = ctx.message.content
-        nickname = ctx.author.name
-        s = ctx.send
-        if message == "+love":
-            await s(f"{nickname}, введите +love [nickname]")
-        else:
-            procent = random.randrange(0, 100, 1)
-            if message.find('.') != -1 or message.find('suicide') != -1 or message.find(
-                    'kill') != -1 or message.find('заходите') != -1:
-                await s(f"{nickname}, думал забанить меня? WeirdChamp ")
-            else:
-                love = str.replace(message, '+love ', '')
-                love = re.sub("\n", '', love)
-                await s(f"{nickname} любит {str(love)} на {str(procent)} %!")
+                AdditionalMethods.add_to_buffer("e", "Слишком длинное бубу WeirdChamp ", ctx.author)
 
     @commands.command(name='steal')
     async def steal(self, ctx):
         message = ctx.message.content
         nickname = ctx.author.name
-        s = ctx.send
-        if message == "+steal":
-            await s(f"{nickname}, введите +steal [nickname]")
+        if message == "!steal":
+            AdditionalMethods.add_to_buffer("c", f"{nickname}, введите !steal [nickname]", ctx.author)
         else:
             procent = random.randrange(0, 100, 1)
             ruble = random.randrange(0, 2000, 1)
-            if message.find('.') != -1 or message.find('suicide') != -1 or message.find(
-                    'kill') != -1 or message.find('заходите') != -1:
-                await s(f"{nickname}, думал забанить меня? WeirdChamp ")
+            steal = str.replace(message, '!steal ', '')
+            steal = re.sub("\n", '', steal)
+            if procent >= 33:
+                AdditionalMethods.add_to_buffer("e", f"{nickname} украл у {str(steal)} {str(ruble)} руб. BOP", ctx.author)
             else:
-                steal = str.replace(message, '+steal ', '')
-                steal = re.sub("\n", '', steal)
-                if procent >= 33:
-                    await s(f"{nickname} украл у {str(steal)} {str(ruble)} руб. BOP")
-                else:
-                    await s(f"{nickname} ничего не украл у {str(steal)} KeK Lohich")
+                AdditionalMethods.add_to_buffer("e", f"{nickname} ничего не украл у {str(steal)} KeK Lohich", ctx.author)
 
     @commands.command(name='try')
     async def ttry(self, ctx):
         message = ctx.message.content
         nickname = ctx.author.name
-        s = ctx.send
-        await s(
-            AdditionalMethods.parse_standartfile_message(nickname, "{nickname} попробовал {messagestr}... {filestr}",
-                                                         message, "+try", "try"))
+        AdditionalMethods.add_to_buffer("e", AdditionalMethods.parse_standartfile_message(nickname, "{nickname} попробовал {messagestr}... {filestr}",
+                                                         message, "!try", "try"), ctx.author)
 
-    @commands.command(name='time')
+    @commands.command(name='время')
     async def time(self, ctx):
-        s = ctx.send
-        await s(datetime.strftime(datetime.now() + timedelta(hours=3), "Чичас %H:%M по МСК Waiting"))
+        AdditionalMethods.add_to_buffer("c", datetime.strftime(datetime.now() + timedelta(hours=3), "Чичас %H:%M по МСК Waiting"), ctx.author)
 
     @commands.command(name='обнять')
     async def hug(self, ctx):
         message = ctx.message.content
         nickname = ctx.author.name
-        s = ctx.send
-        await s(AdditionalMethods.parse_standartfile_message(nickname, "{nickname} {filestr} обнимает {messagestr} "
+        AdditionalMethods.add_to_buffer("e", AdditionalMethods.parse_standartfile_message(nickname, "{nickname} {filestr} обнимает {messagestr} "
                                                                        "VoHiYo",
-                                                             message, "+обнять", "hug"))
+                                                             message, "!обнять", "hug"), ctx.author)
+
+    """
 
     @commands.command(name='COCK')
     async def cock(self, ctx):
         nickname = ctx.author.name
-        s = ctx.send
         cock = random.randrange(1, 36, 1)
-        await s(f"{nickname}, твой COCK равен {str(cock)} см! YEP")
+        AdditionalMethods.add_to_buffer("e", f"{nickname}, твой COCK равен {str(cock)} см! YEP", ctx.author)
+        """
 
     @commands.command(name='кнб')
     async def cnb(self, ctx):
         message = ctx.message.content
         nickname = ctx.author.name
-        s = ctx.send
         listcnb = ['⛰', '✂️', '📜']
-        usercnb = str.replace(message, '+кнб ', '')
+        usercnb = str.replace(message, '!кнб ', '')
         rndcnb1 = random.choice(listcnb)
-        if message == '+кнб':
-            await s(f"{nickname}, введите +кнб [камень, ножницы, бумага]")
+        if message == '!кнб':
+            AdditionalMethods.add_to_buffer("c", f"{nickname}, введите !кнб [камень, ножницы, бумага]", ctx.author)
         else:
             if usercnb == 'камень' and rndcnb1 == '⛰':
-                await s(f"{nickname} поставил(а) ⛰ , а Бот поставил ⛰ . Ничья! ThumbUp")
+                AdditionalMethods.add_to_buffer("e", f"{nickname} поставил(а) ⛰ , а Бот поставил ⛰ . Ничья! ThumbUp", ctx.author)
             if usercnb == 'ножницы' and rndcnb1 == '✂️':
-                await s(f"{nickname} поставил(а) ✂️ , а Бот поставил ✂️ . Ничья! ThumbUp")
+                AdditionalMethods.add_to_buffer("e", f"{nickname} поставил(а) ✂️ , а Бот поставил ✂️ . Ничья! ThumbUp", ctx.author)
             if usercnb == 'бумага' and rndcnb1 == '📜':
-                await s(f"{nickname} поставил(а) 📜 , а Бот поставил 📜 . Ничья! ThumbUp")
+                AdditionalMethods.add_to_buffer("e", f"{nickname} поставил(а) 📜 , а Бот поставил 📜 . Ничья! ThumbUp", ctx.author)
             if usercnb == 'бумага' and rndcnb1 == '⛰':
-                await s(f"{nickname} поставил(а) 📜 , а Бот поставил ⛰ . Победа {nickname} EZ Clap")
+                AdditionalMethods.add_to_buffer("e", f"{nickname} поставил(а) 📜 , а Бот поставил ⛰ . Победа {nickname} EZ Clap", ctx.author)
             if usercnb == 'камень' and rndcnb1 == '📜':
-                await s(f"{nickname} поставил(а) ⛰ , а Бот поставил 📜 . Победа Бота Lohich")
+                AdditionalMethods.add_to_buffer("e", f"{nickname} поставил(а) ⛰ , а Бот поставил 📜 . Победа Бота Lohich", ctx.author)
             if usercnb == 'камень' and rndcnb1 == '✂️':
-                await s(f"{nickname} поставил(а) ⛰ , а Бот поставил ✂️ . Победа {nickname} EZ Clap")
+                AdditionalMethods.add_to_buffer("e", f"{nickname} поставил(а) ⛰ , а Бот поставил ✂️ . Победа {nickname} EZ Clap", ctx.author)
             if usercnb == 'ножницы' and rndcnb1 == '⛰':
-                await s(f"{nickname} поставил(а) ✂️ , а Бот поставил ⛰ . Победа Бота Lohich")
+                AdditionalMethods.add_to_buffer("e", f"{nickname} поставил(а) ✂️ , а Бот поставил ⛰ . Победа Бота Lohich", ctx.author)
             if usercnb == 'ножницы' and rndcnb1 == '📜':
-                await s(f"{nickname} поставил(а) ✂️ , а Бот поставил 📜 . Победа {nickname} EZ Clap")
+                AdditionalMethods.add_to_buffer("e", f"{nickname} поставил(а) ✂️ , а Бот поставил 📜 . Победа {nickname} EZ Clap", ctx.author)
             if usercnb == 'бумага' and rndcnb1 == '✂️':
-                await s(f"{nickname} поставил(а) 📜 , а Бот поставил ✂️ . Победа Бота Lohich")
+                AdditionalMethods.add_to_buffer("e", f"{nickname} поставил(а) 📜 , а Бот поставил ✂️ . Победа Бота Lohich", ctx.author)
+
+    """
 
     @commands.command(name='BOOBS')
     async def boobs(self, ctx):
         nickname = ctx.author.name
-        s = ctx.send
         boobs = random.randrange(0, 15, 1)
-        await s(f"{nickname}, твои BOOBS {str(boobs)} размера YEP")
+        AdditionalMethods.add_to_buffer("e", f"{nickname}, твои BOOBS {str(boobs)} размера YEP", ctx.author)
+
+    """
 
     @commands.command(name='вниз')
     async def vniz(self, ctx):
-        s = ctx.send
-        await s(AdditionalMethods.parse_simplefile_message(":point_down: {}", "down"))
+        AdditionalMethods.add_to_buffer("e", AdditionalMethods.parse_simplefile_message(":point_down: {}", "down"), ctx.author)
 
     @commands.command(name='когда')
     async def kogda(self, ctx):
         message = ctx.message.content
         nickname = ctx.author.name
-        s = ctx.send
-        await s(AdditionalMethods.parse_standartfile_message(nickname, "{nickname}, {messagestr} {filestr}",
-                                                             message, "+когда", "kogda"))
+        AdditionalMethods.add_to_buffer("e", AdditionalMethods.parse_standartfile_message(nickname, "{nickname}, {messagestr} {filestr}",
+                                                             message, "!когда", "kogda"), ctx.author)
 
     @commands.command(name='привет')
     async def privet(self, ctx):
         message = ctx.message.content
         nickname = ctx.author.name
-        s = ctx.send
-        await s(AdditionalMethods.parse_standartfile_message(nickname,
-                                                             "{nickname} передаёт {filestr} привет {messagestr} "
-                                                             "peepoHey peepoLove",
-                                                             message, "+привет", "privet"))
+        AdditionalMethods.add_to_buffer("e", AdditionalMethods.parse_standartfile_message(nickname,
+                                                                 "{nickname} передаёт {filestr} привет {messagestr} "
+                                                                 "peepoHey peepoLove",
+                                                                 message, "!привет", "privet"), ctx.author)
+
+    """
+    @commands.command(name='заебало')
+    async def zaebalo(self, ctx):
+        randpage = random.randrange(1, 1689, 1)
+        r = requests.get("https://zaebalo.ru/?page=" + str(randpage))
+        soup = BeautifulSoup(r.content, 'html.parser')
+        d = soup.find_all('div', align='left')
+        p = str(random.choice(d)).replace("</div>", "").replace("<br/>", "").replace("</p>", "").replace("<p>", "").replace('<div align="left">', '').replace("<br>", "").replace("</br>", "").replace("\r     ","")
+        with open('data/osujdau.txt', 'r', encoding='utf-8') as c:
+            List = list(c)
+            for s in List:
+                ban = ""
+                s = s.replace("\n", "")
+                for i in range(0, len(s)):
+                    ban += "*"
+                if p.find(s) != -1:
+                    print(s)
+                p = str.replace(p.lower(), s, ban)
+        AdditionalMethods.add_to_buffer("e", AdditionalMethods.check_on_toomuchsimbols(p), ctx.author)
+    """
 
     @commands.command(name='гороскоп')
     async def goroskop(self, ctx):
         nickname = ctx.author.name
         message = ctx.message.content
-        s = ctx.send
         goroskop = AdditionalMethods.get_goroskop(message, nickname)
-        await s(goroskop)
-    """
+        AdditionalMethods.add_to_buffer("e", goroskop, ctx.author)
+
 
 
 #subprocess.Popen([sys.executable, 'ChatBot.py'])
+subprocess.Popen([sys.executable, 'BufferCleaner.py'])
 subprocess.Popen([sys.executable, 'CheckingStreamThread.py'])
-bot = Bot()
+bot = CommandsBot()
 bot.run()
