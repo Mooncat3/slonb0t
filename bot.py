@@ -25,6 +25,35 @@ class CommandsBot(commands.Bot, ABC):
     async def event_ready(self):
         print(f'Ready {str(self.__class__.__name__)} | {self.nick} on {self.initial_channels}')
 
+    @commands.command(name='case')
+    async def cse(self, ctx):
+        nickname = ctx.author.name
+        def check_price(prce: float) -> str:
+            if prce < 100:
+                return str(prce) + " ₽ Lohich"
+            elif prce < 500:
+                return str(prce) + " ₽ SeemsGood"
+            elif prce < 1000:
+                return str(prce) + " ₽ dedU"
+            elif prce < 5000:
+                return str(prce) + " ₽ PogU"
+            elif prce < 10000:
+                return str(prce) + " ₽ PogChamp"
+            elif prce < 100000:
+                return str(prce) + " ₽ Pog"
+            elif prce > 100000:
+                return str(prce) + " ₽ Pog Clap"
+        randstr = random.randint(1, 179)
+        r = requests.get('https://market.csgo.com/?s=name&r=&q=&p=' + str(randstr) + '&h=&fst=0')
+        soup = BeautifulSoup(r.content, 'html.parser')
+        d = soup.find_all('a', class_='item')
+        skin = str(random.choice(d)).partition(';"></div>')[2]
+        skinorig = re.sub('<div class="price">', '', skin)
+        skinorig = re.sub("\n", '', skinorig)
+        skin = skinorig.partition(';">')[2].replace('</div></a>', '')
+        price = skinorig.rpartition('<s')[0]
+        price = re.sub(" ", '', price)
+        AdditionalMethods.add_to_buffer("e", f"{nickname} Вам выпал " + skin + " со стоймостью " + check_price(float(price)), ctx.author)
 
     @commands.command(name='history')
     async def stream(self, ctx):
@@ -33,23 +62,21 @@ class CommandsBot(commands.Bot, ABC):
         message = str.replace(message, '!history', '')
         AdditionalMethods.add_to_buffer("e", AdditionalMethods.get_last_stream_stat(message[1:len(message)], nickname), ctx.author)
 
-    """
     @commands.command(name='archive')
     async def streamh(self, ctx):
         nickname = ctx.author.name
         message = ctx.message.content
         message = str.replace(message, '!archive', '')
-        try:
-            id=int(message[1:2])
-            if len(message[2:len(message)]) > 1:
-                tag = str.replace(message, f' {id} ', '')
-            else:
-                tag = ''
-            AdditionalMethods.add_to_buffer("c", AdditionalMethods.get_archive_stream_stat(id, nickname, tag).format(nickname, id), ctx.author)
-        except:
-            AdditionalMethods.add_to_buffer("с", f'{nickname} !archive [0-9]', ctx.author)
-    """
-            
+        #try:
+        id=int(message[1:2])
+        if len(message[2:len(message)]) > 1:
+            tag = str.replace(message, f' {id} ', '')
+        else:
+            tag = ''
+        AdditionalMethods.add_to_buffer("c", AdditionalMethods.get_archive_stream_stat(id, nickname, tag).format(nickname, id), ctx.author)
+        #except:
+           # AdditionalMethods.add_to_buffer("с", f'{nickname} !archive [0-9]', ctx.author)
+
     @commands.command(name='рецепт')
     async def recept(self, ctx):
         URL = 'http://culinar.ivest.kz/randomMenu'
@@ -266,33 +293,13 @@ class CommandsBot(commands.Bot, ABC):
     async def help2(self, ctx):
         nickname = ctx.author.name
         AdditionalMethods.add_to_buffer("c", f"{nickname}, страница 3: !паста, !курс ['изначальная валюта'-'переводимая валюта'(доллар-рубль, евро-рубль и наоборот)] [число], !iq, !temp"
-                                             f", !бубу [message], !steal [nickname], !COCK, !BOOBS, !вниз, Чтобы увидеть команды для управления ботом (только для узкого круга лиц), напишите !helpm", ctx.author)
+                                             f", !бубу [message], !steal [nickname], !вниз, !case Чтобы увидеть команды для управления ботом (только для узкого круга лиц), напишите !helpm", ctx.author)
 
     @commands.command(name='helpm')
     async def help3(self, ctx):
         nickname = ctx.author.name
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
-            AdditionalMethods.add_to_buffer("s", f"{nickname}, страница 4 (управление ботом, доступно модераторам и узкому кругу лиц): !usertimeout [time], !bufferdelay [time], !buffermax [time]", ctx.author)
-
-    @commands.command(name='usertimeout')
-    async def usetime(self, ctx):
-        if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
-            nickname = ctx.author.name
-            timeout = str.replace(ctx.message.content, '!usertimeout ', '')
-            timeout = re.sub("\n", '', timeout)
-            timeout = str.replace(timeout, ",", ".")
-            try:
-                with open('data/settings.txt', 'r', encoding='utf-8') as b:
-                    data = json.loads(b.read())
-            except:
-                data = {}
-            with open('data/settings.txt', 'w', encoding='utf-8') as b:
-                try:
-                    data["usertimeout"] = float(timeout)
-                    b.write(json.dumps(data))
-                    AdditionalMethods.add_to_buffer("s", f"{nickname} пользователи теперь могут писать в чат только раз в {data['usertimeout']} секунд", ctx.author)
-                except:
-                    AdditionalMethods.add_to_buffer("s", f"{nickname} не удалось прочесть число PepoG ", ctx.author)
+            AdditionalMethods.add_to_buffer("s", f"{nickname}, страница 4 (управление ботом, доступно модераторам и узкому кругу лиц): !bufferdelay [time], !buffermax [time], !chkstreamactive [time]", ctx.author)
 
     @commands.command(name='bufferdelay')
     async def bufedelay(self, ctx):
@@ -333,6 +340,35 @@ class CommandsBot(commands.Bot, ABC):
                     AdditionalMethods.add_to_buffer("s", f"{nickname} теперь, если в очереди на вывод будет {data['buffermax']} сообщений, бот будет писать в лс", ctx.author)
                 except:
                     AdditionalMethods.add_to_buffer("s", f"{nickname}, не удалось прочесть число PepoG ", ctx.author)
+
+    @commands.command(name='chkstreamactive')
+    async def usetime(self, ctx):
+        if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
+            nickname = ctx.author.name
+            timeout = str.replace(ctx.message.content, '!chkstreamactive ', '')
+            timeout = re.sub("\n", '', timeout)
+            try:
+                with open('data/settings.txt', 'r', encoding='utf-8') as b:
+                    data = json.loads(b.read())
+            except:
+                data = {}
+            with open('data/settings.txt', 'w', encoding='utf-8') as b:
+                if timeout == "0":
+                    data["checkStreamActive"] = False
+                    b.write(json.dumps(data))
+                    AdditionalMethods.add_to_buffer("s",
+                                                    f"{nickname} бот теперь не будет игнорировать развлекательные команды от не вип-пользователей во время стрима",
+                                                    ctx.author)
+                elif timeout == "1":
+                    data["checkStreamActive"] = True
+                    b.write(json.dumps(data))
+                    AdditionalMethods.add_to_buffer("s",
+                                                    f"{nickname} бот теперь будет игнорировать развлекательные команды от не вип-пользователей во время стрима",
+                                                    ctx.author)
+                else:
+                    AdditionalMethods.add_to_buffer("s",
+                                                    f"{nickname} !chkstreamactive [0,1]",
+                                                    ctx.author)
 
     @commands.command(name='temp')
     async def temp(self, ctx):
@@ -519,7 +555,7 @@ class CommandsBot(commands.Bot, ABC):
 
 
 
-subprocess.Popen([sys.executable, 'ChatBot.py'])
+#subprocess.Popen([sys.executable, 'ChatBot.py'])
 subprocess.Popen([sys.executable, 'BufferCleaner.py'])
 subprocess.Popen([sys.executable, 'CheckingStreamThread.py'])
 bot = CommandsBot()

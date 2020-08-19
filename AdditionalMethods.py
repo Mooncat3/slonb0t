@@ -46,7 +46,6 @@ def check_on_toomuchsimbols(string):
 
 
 def vip(mod: bool, name: str) -> bool:
-    return False
     if mod or name == "danantur" or name == "mooncat3":
         return True
     else:
@@ -69,6 +68,10 @@ def add_to_buffer(type: str, message: str, author: User):
 
 
 def check_active() -> bool:
+    with open(file='data/settings.txt', mode='r', encoding='utf-8') as q:
+        dat = json.loads(q.read())
+        if not dat['checkStreamActive']:
+            return True
     with open(file='data/TRASHMASSIVE.txt', mode='r', encoding='utf-8') as q:
         dat = json.loads(q.read())
         return dat['active']
