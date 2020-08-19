@@ -279,7 +279,7 @@ class CommandsBot(commands.Bot, ABC):
                 else:
                     AdditionalMethods.add_to_buffer("с", f"{nickname} такой команды нет PepoG ", ctx.author)
         else:
-            AdditionalMethods.add_to_buffer("c", f"{nickname}, Ку catJAM , меня зовут {config.BOT} catJAM , вот что я умею: страница 1: !help [command], !history [nickname]"
+            AdditionalMethods.add_to_buffer("c", f"{nickname}, Ку catJAM , меня зовут {config.BOT} catJAM , вот что я умею: страница 1: !help [command], !history [nickname], !archive [id] [nickname]"
             f", !topclipever [category], !topclipyear ["
             f"category], !topclipmonth [category], !topclipday [category] Чтобы перейти на следующую страницу введите !help1 catJAM ", ctx.author)
 
@@ -287,14 +287,14 @@ class CommandsBot(commands.Bot, ABC):
     async def help1(self, ctx):
         nickname = ctx.author.name
         AdditionalMethods.add_to_buffer("c", f"{nickname}, страница 2: !время, !гороскоп [знак зодиака], !анекдот, !рецепт, !привет [nickname], !try [action]"
-            f", !кнб [камень, ножницы или бумага], !когда [message], !обнять [nickname], @{config.BOT}, "
+            f", !кнб [камень, ножницы или бумага], !когда [message], !обнять [nickname]"
             f" Чтобы перейти на следующую страницу введите !help2"
         , ctx.author)
 
     @commands.command(name='help2')
     async def help2(self, ctx):
         nickname = ctx.author.name
-        AdditionalMethods.add_to_buffer("c", f"{nickname}, страница 3: !паста, !курс ['изначальная валюта'-'переводимая валюта'(доллар-рубль, евро-рубль и наоборот)] [число], !iq, !temp"
+        AdditionalMethods.add_to_buffer("c", f"{nickname}, страница 3: !курс ['изначальная валюта'-'переводимая валюта'(доллар-рубль, евро-рубль и наоборот)] [число], !iq, !temp"
                                              f", !бубу [message], !steal [nickname], !вниз, !case Чтобы увидеть команды для управления ботом (только для узкого круга лиц), напишите !helpm", ctx.author)
 
     @commands.command(name='helpm')
