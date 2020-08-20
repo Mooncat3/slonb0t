@@ -11,7 +11,7 @@ import random
 import re
 import config
 from twitchioc.dataclasses import User
-import locale
+#import locale
 
 
 def get_bufer_max() -> float:
@@ -337,24 +337,11 @@ def get_goroskop(message, nickname) -> str:
             with open(file='data/goroskopdictionary.txt', encoding='utf_8') as q:
                 return json.loads(q.read())['response_strings'][gor]
 
-        URL = 'https://www.wday.ru/horoscope/common/{}/daily/'.format(name)
+        r = requests.get('https://www.wday.ru/horoscope/common/{}/daily/'.format(name))
+        soup = BeautifulSoup(r.content, 'html.parser')
+        goroskop = soup.find('div', class_='tab-panel text active').get_text()
+        goroskop_day = soup.find('h2', class_='horo-title').get_text()
 
-        def get_html(url, params=None):
-            r = requests.get(url, params=params)
-            return r
-
-        def get_content(html):
-            soup = BeautifulSoup(html, 'html.parser')
-            global goroskop
-            global goroskop_day
-            goroskop = soup.find('div', class_='tab-panel text active').get_text()
-            goroskop_day = soup.find('h2', class_='horo-title').get_text()
-
-        def parse():
-            html = get_html(URL)
-            get_content(html.text)
-
-        parse()
         return '{} {} {} {}'.format(nickname, goroskop_day, choose_string_for_response(name), goroskop)
 
     # ----------------------ifs----------------------------------------
