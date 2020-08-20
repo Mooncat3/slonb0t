@@ -22,7 +22,6 @@ class BufferCleaner(Client, ABC):
                                        nick=config.BOT, initial_channels=config.CHANNELS)
         self.loop.create_task(self.listen_to_buffer())
 
-
     async def event_webhook(self, data):
         pass
 
@@ -103,16 +102,16 @@ class BufferCleaner(Client, ABC):
         recepttime = 0.0
         ondeleting = []
         while True:
-            async def send_mess(sock, resert , rest):
+            async def send_mess(sock, resert, rest):
                 mess = resert['mes']
                 while sock._websocket is None:
                     await asyncio.sleep(1)
                 if rest['type'] == "e":
                     if not AdditionalMethods.check_active() or rest['vip']:
-                        print("------------------------------------------")
-                        print(len(dat))
-                        print(AdditionalMethods.get_bufer_max())
-                        print(rest['vip'])
+                        # print("------------------------------------------")
+                        # print(len(dat))
+                        # print(AdditionalMethods.get_bufer_max())
+                        # print(rest['vip'])
                         if len(dat) > AdditionalMethods.get_bufer_max() and not rest['vip']:
                             await sock.send_privmsg(config.CHAN, f"/w {rest['nickname']} {mess}")
                         else:
