@@ -247,12 +247,12 @@ class CommandsBot(commands.Bot, ABC):
                 else:
                     AdditionalMethods.add_to_buffer("с", f"{nickname} такой команды нет PepoG ", ctx.author)
         else:
-            AdditionalMethods.add_to_buffer("c", f"Ку, {nickname}, меня зовут {config.BOT} catJAM , вот что я могу: страница 1: !гороскоп [знак зодиака], !обнять [nickname], !время, !me, !do [message], !try [action], !кнб [камень, ножницы, бумага], !iq, !temp, !бубу [message], !steal [nickname] Чтобы перейти на следующую страницу введите !help1 catJAM", ctx.author)
+            AdditionalMethods.add_to_buffer("c", f"Ку, {nickname}, меня зовут SLONB0T catJAM , вот что я могу: страница 1: !гороскоп [знак зодиака], !обнять [nickname], !время, !me, !do [message], !try [action], !кнб [камень, ножницы, бумага], !iq, !temp, !бубу [message], !steal [nickname] Чтобы перейти на следующую страницу введите !help1 catJAM", ctx.author)
 
     @commands.command(name='help1')
     async def help1(self, ctx):
         nickname = ctx.author.name
-        AdditionalMethods.add_to_buffer("c", f"{nickname}, страница 2: !анекдот, !рецепт, !привет [nickname], !вниз, !case, !когда [message], !history, !archive [id] Чтобы перейти на следующую страницу введите !help2", ctx.author)
+        AdditionalMethods.add_to_buffer("c", f"{nickname}, страница 2: !анекдот, !рецепт, !привет [nickname], !case, !когда [message], !history, !archive [id] Чтобы перейти на следующую страницу введите !help2", ctx.author)
 
     @commands.command(name='help2')
     async def help2(self, ctx):
@@ -484,12 +484,7 @@ class CommandsBot(commands.Bot, ABC):
                 AdditionalMethods.add_to_buffer("e",
                                                 f"{nickname} поставил(а) 📜 , а Бот поставил ✂️ . Победа Бота Lohich",
                                                 ctx.author)
-
-    @commands.command(name='вниз')
-    async def vniz(self, ctx):
-        AdditionalMethods.add_to_buffer("e", AdditionalMethods.parse_simplefile_message(":point_down: {}", "down"),
-                                        ctx.author)
-
+                
     @commands.command(name='когда')
     async def kogda(self, ctx):
         message = ctx.message.content
