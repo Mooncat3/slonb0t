@@ -112,7 +112,6 @@ class CommandsBot(commands.Bot, ABC):
         dollar = soup.find('p', class_='rates_box1_inner pid-USDRUR-bid').get_text()
         euro = soup1.find('p', class_='rates_box1_inner pid-EURRUR-bid').get_text()
         jpy = soup2.find('input', class_='converter_form_inp converterInpTo').get(key="value")
-        jpy = str(round(float(jpy) * 100, ndigits=2))
         now = datetime.now() + timedelta(hours=3)
         today = now.strftime("%d.%m")
 
