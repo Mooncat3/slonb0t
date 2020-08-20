@@ -233,35 +233,7 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='help')
     async def help(self, ctx):
         nickname = ctx.author.name
-        if ctx.message.content != "!help":
-            helper = str.replace(ctx.message.content, '!help ', '')
-            helper = re.sub("\n", '', helper)
-            with open('data/documentation.txt', 'r', encoding='utf-8') as w:
-                data = json.loads(w.read())
-                if helper in data:
-                    prefix = "!"
-                    if helper == config.BOT:
-                        prefix = "@"
-                    AdditionalMethods.add_to_buffer("c", f"{nickname} {prefix}{helper} - {data[helper]}", ctx.author)
-                else:
-                    AdditionalMethods.add_to_buffer("с", f"{nickname} такой команды нет PepoG ", ctx.author)
-        else:
-            AdditionalMethods.add_to_buffer("c", f"Ку, {nickname}, меня зовут SLONB0T catJAM , вот что я могу: страница 1: !гороскоп [знак зодиака], !обнять [nickname], !время, !me, !do [message], !try [action], !кнб [камень, ножницы, бумага], !iq, !temp, !бубу [message], !steal [nickname] Чтобы перейти на следующую страницу введите !help1 catJAM", ctx.author)
-
-    @commands.command(name='help1')
-    async def help1(self, ctx):
-        nickname = ctx.author.name
-        AdditionalMethods.add_to_buffer("c", f"{nickname}, страница 2: !анекдот, !рецепт, !привет [nickname], !case, !когда [message], !history, !archive [id] Чтобы перейти на следующую страницу введите !help2", ctx.author)
-
-    @commands.command(name='help2')
-    async def help2(self, ctx):
-        nickname = ctx.author.name
-        AdditionalMethods.add_to_buffer("c", f"{nickname}, страница 3: !курс ['изначальная валюта'-'переводимая валюта'(доллар-рубль, евро-рубль и наоборот)] [число],  Чтобы перейти на следующую страницу введите !help3", ctx.author)
-        
-    @commands.command(name='help3')
-    async def help3(self, ctx):
-        nickname = ctx.author.name
-        AdditionalMethods.add_to_buffer("c", f"{nickname}, страница 4: !topclipever [category], !topclipyear [category], !topclipmonth [category], !topclipday [category]", ctx.author)
+        AdditionalMethods.add_to_buffer("c", f"Ку, {nickname}, меня зовут SLONB0T catJAM , список всех моих команд: https://pastebin.com/raw/hZ4GGw4z catJAM", ctx.author)
 
     @commands.command(name='helpm')
     async def helpm(self, ctx):
