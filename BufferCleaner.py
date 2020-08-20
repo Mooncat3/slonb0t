@@ -108,10 +108,6 @@ class BufferCleaner(Client, ABC):
                     await asyncio.sleep(1)
                 if rest['type'] == "e":
                     if not AdditionalMethods.check_active() or rest['vip']:
-                        # print("------------------------------------------")
-                        # print(len(dat))
-                        # print(AdditionalMethods.get_bufer_max())
-                        # print(rest['vip'])
                         if len(dat) > AdditionalMethods.get_bufer_max() and not rest['vip']:
                             await sock.send_privmsg(config.CHAN, f"/w {rest['nickname']} {mess}")
                         else:
@@ -127,7 +123,7 @@ class BufferCleaner(Client, ABC):
                         await sock.send_privmsg(config.CHAN, mess)
 
             await asyncio.sleep(0.1)
-            if time.time() - (tttime + timer) > AdditionalMethods.get_user_timeout():
+            if time.time() - (tttime + timer) > AdditionalMethods.get_bufer_timeout():
                 tttime = time.time()
                 timer = 0.0
             with open(file='data/buffer.txt', mode='r', encoding='utf-8') as e:
@@ -136,34 +132,34 @@ class BufferCleaner(Client, ABC):
                 except:
                     dat = []
                 if len(dat) > 0:
-                    for res in dat:
-                        ondeleting.append(res)
-                        if not res['vip']:
-                            if res['type'] != "r":
-                                reser = {"timeout": timer, "mes": res['message']}
-                                timer = AdditionalMethods.get_bufer_timeout()
-                                tttime = time.time()
-                                await send_mess(self._ws, reser, res)
-                            else:
-                                if time.time() - recepttime > 10:
-                                    if dopbol:
-                                        dopbol = False
-                                        reser = {"timeout": timer, "mes": res['message']}
-                                        timer = AdditionalMethods.get_bufer_timeout()
-                                        tttime = time.time()
-                                        await send_mess(self._ws, reser, res)
-                                    else:
-                                        dopbol = True
-                                        timer = AdditionalMethods.get_bufer_timeout() + 2.0
-                                        reser = {"timeout": timer, "mes": res['message']}
-                                        tttime = time.time()
-                                        recepttime = time.time()
-                                        await send_mess(self._ws, reser, res)
-                        else:
+                    res = dat[0]
+                    ondeleting.append(res)
+                    if not res['vip']:
+                        if res['type'] != "r":
                             reser = {"timeout": timer, "mes": res['message']}
                             timer = AdditionalMethods.get_bufer_timeout()
                             tttime = time.time()
                             await send_mess(self._ws, reser, res)
+                        else:
+                            if time.time() - recepttime > 10:
+                                if dopbol:
+                                    dopbol = False
+                                    reser = {"timeout": timer, "mes": res['message']}
+                                    timer = AdditionalMethods.get_bufer_timeout()
+                                    tttime = time.time()
+                                    await send_mess(self._ws, reser, res)
+                                else:
+                                    dopbol = True
+                                    timer = AdditionalMethods.get_bufer_timeout() + 2.0
+                                    reser = {"timeout": timer, "mes": res['message']}
+                                    tttime = time.time()
+                                    recepttime = time.time()
+                                    await send_mess(self._ws, reser, res)
+                    else:
+                        reser = {"timeout": timer, "mes": res['message']}
+                        timer = AdditionalMethods.get_bufer_timeout()
+                        tttime = time.time()
+                        await send_mess(self._ws, reser, res)
             if len(ondeleting) > 0:
                 while config.buferchanged:
                     await asyncio.sleep(0.1)

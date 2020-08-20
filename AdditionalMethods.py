@@ -10,8 +10,8 @@ import requests
 import random
 import re
 import config
+import asyncio
 from twitchioc.dataclasses import User
-#import locale
 
 
 def get_bufer_max() -> float:
@@ -32,17 +32,12 @@ def get_bufer_timeout() -> float:
             return 1.0
 
 
-def get_user_timeout() -> float:
-    with open(file='data/settings.txt', mode='r', encoding='utf-8') as e:
-        try:
-            data = json.loads(e.read())
-            return data['usertimeout']
-        except:
-            return 3.0
-
-
 def check_on_toomuchsimbols(string):
     return (string[:493] + '...') if len(string) > 495 else string
+
+
+def check_on_toomuchbool(string) -> bool:
+    return len(string) >= 500
 
 
 def vip(mod: bool, name: str) -> bool:
@@ -70,79 +65,65 @@ def add_to_buffer(type: str, message: str, author: User):
 def check_active() -> bool:
     with open(file='data/settings.txt', mode='r', encoding='utf-8') as q:
         dat = json.loads(q.read())
-        if not dat['checkStreamActive']:
+        if not dat['entertain']:
             return True
     with open(file='data/TRASHMASSIVE.txt', mode='r', encoding='utf-8') as q:
         dat = json.loads(q.read())
         return dat['active']
 
 
-def parse_stream_stat(nickname: str, tag: str, TRASHMASSIVE: dict, date="", id=0, active=False):
+def parse_stream_stat(nickname: str, tag: str, TRASHMASSIVE: dict, author: User, date="", id=0, active=False):
     def summ_times() -> time:
         timeq: time = 0.0
         for t in game_mass:
             if 'time' in t.keys():
                 timeq = timeq + float(t['time'])
         return timeq
-
-    url = f"https://api.twitch.tv/helix/videos?user_id={config.BROADCASTER_ID}&first=10"
-    request = urllib.request.Request(url=url, headers={"Authorization": "Bearer {}".format(config.OAUTH),
-                                                       "Client-ID": "{}".format(config.CLIENT_ID)})
-    response = urllib.request.urlopen(request).read()
-    data = json.loads(response)
-    strim_name = data['data'][id]['title']
-    strim_duration = data['data'][id]['duration']
+    def parse_time(timetet: time, secs: bool) -> str:
+        rounded = ""
+        timestart = timetet
+        if timestart / 3600 >= 1:
+            rounded += f"{int(timestart / 3600)}h"
+            timestart = timestart % 3600
+        if timestart / 60 >= 1:
+            if rounded.find("h") != -1 and not secs:
+                rounded += " "
+            rounded += f"{int(timestart / 60)}m"
+            timestart = timestart % 60
+        if timestart >= 1 and (rounded.find("h") == -1 or secs):
+            if rounded.find("m") != -1 and not secs:
+                rounded += " "
+            rounded += f"{int(timestart)}s"
+        return rounded
+    id = len(TRASHMASSIVE['TRASHMASS']) - 1 - id
+    strim_name = TRASHMASSIVE['TRASHMASS'][id]['name']
+    strim_duration = parse_time(TRASHMASSIVE['TRASHMASS'][id]['duration'], True)
     viewsummcount = 0
     id_game = "0"
     game_mass = []
     timet = 0.0
     maxviewcount = 0
-    for dat in TRASHMASSIVE:
+    for dat in TRASHMASSIVE['TRASHMASS'][id]['MASS']:
         viewsummcount += dat['ViewerCount']
         if dat['ViewerCount'] > maxviewcount:
             maxviewcount = dat['ViewerCount']
-        if len(game_mass) > 0 and (id_game != dat['GAME_ID'] or (
-                dat == TRASHMASSIVE[len(TRASHMASSIVE) - 1] and dat['GAME_ID'] == TRASHMASSIVE[len(TRASHMASSIVE) - 2][
-            'GAME_ID'])):
+        if len(game_mass) > 0 and (id_game != dat['GAME_ID'] or (dat == TRASHMASSIVE['TRASHMASS'][id]['MASS'][len(TRASHMASSIVE['TRASHMASS'][id]['MASS']) - 1] and dat['GAME_ID'] == TRASHMASSIVE['TRASHMASS'][id]['MASS'][len(TRASHMASSIVE['TRASHMASS'][id]['MASS']) - 2]['GAME_ID'])):
             game_mass[len(game_mass) - 1]['time'] = dat['time_of_update'] - timet
         if id_game != dat['GAME_ID']:
-            if id_game != "666":
+            if dat['GAME_ID'] != "Timeout":
                 id_game = dat['GAME_ID']
-                url = "https://api.twitch.tv/helix/games?id={}".format(id_game)
-                request = urllib.request.Request(url=url, headers={"Authorization": "Bearer {}".format(config.OAUTH),
-                                                                   "Client-ID": "{}".format(config.CLIENT_ID)})
-                response = urllib.request.urlopen(request).read()
-                data = json.loads(response)
-                game_mass.append({"name": data['data'][0]['name']})
+                game_mass.append({"name": dat['GAME_ID']})
             else:
+                id_game = "Timeout"
                 game_mass.append({"name": "Timeout"})
             timet = dat['time_of_update']
             if len(game_mass) == 1:
                 game_mass[len(game_mass) - 1]['time'] = dat['time_of_update']
             else:
                 game_mass[len(game_mass) - 1]['time'] = dat['time_of_update'] - summ_times()
-    streamstat = {"Games": game_mass, "middleviewcount": viewsummcount / len(TRASHMASSIVE), "StreamName": strim_name,
+    streamstat = {"Games": game_mass, "middleviewcount": viewsummcount / len(TRASHMASSIVE['TRASHMASS'][id]['MASS']), "StreamName": strim_name,
                   "StreamDuration": strim_duration}
     categorystr = ""
-    for r in streamstat['Games']:
-        rounded = ""
-        timestart = r['time']
-        if timestart / 3600 >= 1:
-            rounded += f"{int(timestart / 3600)}h"
-            timestart = timestart % 3600
-        if timestart / 60 >= 1:
-            if rounded.find("h") != -1:
-                rounded += " "
-            rounded += f"{int(timestart / 60)}m"
-            timestart = timestart % 60
-        if timestart >= 1 and rounded.find("h") == -1:
-            if rounded.find("m") != -1:
-                rounded += " "
-            rounded += f"{int(timestart)}s"
-        if len(rounded) > 0:
-            categorystr += f"{r['name']} [{rounded}]"
-            if r != streamstat['Games'][len(streamstat['Games']) - 1]:
-                categorystr += " » "
     if len(tag) > 1 and len(tag) <= 26 and tag.find(" ") == -1:
         seter = ' ' + tag
         nickname = ''
@@ -157,27 +138,52 @@ def parse_stream_stat(nickname: str, tag: str, TRASHMASSIVE: dict, date="", id=0
             date = "текущий"
         else:
             date = "прошлый"
-    return f"{nickname}{seter} {date} стрим: {streamstat['StreamName']} [{streamstat['StreamDuration']}] || среднее зр: {int(streamstat['middleviewcount'])} || {categorystr}"
+    crash = False
+    already = False
+    for r in streamstat['Games']:
+        rounded = parse_time(r['time'], False)
+        if len(rounded) > 0:
+            categorystr += f"{r['name']} [{rounded}]"
+            if r != streamstat['Games'][len(streamstat['Games']) - 1]:
+                categorystr += " » "
+        if not crash:
+            crash = len(f"{nickname}{seter} {date} стрим: {streamstat['StreamName']} [{streamstat['StreamDuration']}] || среднее зр: {int(streamstat['middleviewcount'])} || {categorystr}") >= 500
+        if crash and not already:
+            already = True
+            print(
+                f"{nickname}{seter} {date} стрим: {streamstat['StreamName']} [{streamstat['StreamDuration']}] || среднее зр: {int(streamstat['middleviewcount'])} || {categorystr}")
+            while len(f"{nickname}{seter} {date} стрим: {streamstat['StreamName']} [{streamstat['StreamDuration']}] || среднее зр: {int(streamstat['middleviewcount'])} || {categorystr}") > 500 or categorystr[categorystr.rfind("»")+2: len(categorystr)] == f"{r['name']} [{rounded}]":
+                categorystr = categorystr[0:categorystr.rfind("»")-1]
+            print(
+                f"{nickname}{seter} {date} стрим: {streamstat['StreamName']} [{streamstat['StreamDuration']}] || среднее зр: {int(streamstat['middleviewcount'])} || {categorystr}")
+            add_to_buffer("c", f"{nickname}{seter} {date} стрим: {streamstat['StreamName']} [{streamstat['StreamDuration']}] || среднее зр: {int(streamstat['middleviewcount'])} || {categorystr}", author)
+            categorystr = ""
+            if len(rounded) > 0:
+                categorystr += f"{r['name']} [{rounded}]"
+                if r != streamstat['Games'][len(streamstat['Games']) - 1]:
+                    categorystr += " » "
+    if not crash:
+        return f"{nickname}{seter} {date} стрим: {streamstat['StreamName']} [{streamstat['StreamDuration']}] || среднее зр: {int(streamstat['middleviewcount'])} || {categorystr}"
+    else:
+        print(f"{nickname}{seter} {categorystr}")
+        return f"{nickname}{seter} {categorystr}"
 
 
-def get_archive_stream_stat(id, nickname, tag):
+def get_archive_stream_stat(id, nickname, tag, author):
     with open(file='data/TRASHMASSIVE.txt', mode='r', encoding='utf-8') as q:
-        dat = json.loads(q.read())
-        if id <= len(dat['TRASHMASS']) - 1:
-            TRASHMASSIVE = dat['TRASHMASS'][len(dat['TRASHMASS']) - 1 - id]['MASS']
-            date = dat['TRASHMASS'][len(dat['TRASHMASS']) - 1 - id]['date']
+        TRASHMASSIVE = json.loads(q.read())
+        if id <= len(TRASHMASSIVE['TRASHMASS']) - 1:
+            date = TRASHMASSIVE['TRASHMASS'][len(TRASHMASSIVE['TRASHMASS']) - 1 - id]['date']
         else:
             return "{} стрима с id {} нет в архиве"
-    return parse_stream_stat(nickname=nickname, tag=tag, TRASHMASSIVE=TRASHMASSIVE, date=date, id=id)
+    return parse_stream_stat(nickname=nickname, tag=tag, TRASHMASSIVE=TRASHMASSIVE, date=date, id=id, author=author)
 
 
-def get_last_stream_stat(tag, nickname):
+def get_last_stream_stat(tag, nickname, author):
     with open(file='data/TRASHMASSIVE.txt', mode='r', encoding='utf-8') as q:
-        dat = json.loads(q.read())
-        active = dat['active']
-    with open(file='data/TRASH.txt', mode='r', encoding='utf-8') as q:
         TRASHMASSIVE = json.loads(q.read())
-    return parse_stream_stat(nickname=nickname, tag=tag, TRASHMASSIVE=TRASHMASSIVE, active=active)
+        active = TRASHMASSIVE['active']
+    return parse_stream_stat(nickname=nickname, tag=tag, TRASHMASSIVE=TRASHMASSIVE, active=active, author=author)
 
 
 def parse_standartfile_message(nickname, formatable, message, command, name_of_file) -> str:
@@ -207,7 +213,7 @@ def parse_simplefile_message(formatable, name_of_file) -> str:
 
 async def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "") -> str:
     # -------------------------------------checking for clip--------------------------------------
-    def do_request_for_getting_clip(id_game: str = "0", days_before: int = 0, ever: bool = False) -> {str: str}:
+    async def do_request_for_getting_clip(id_game: str = "0", days_before: int = 0, ever: bool = False) -> {str: str}:
         if ever:
             url = "https://api.twitch.tv/helix/clips?broadcaster_id={}".format(config.BROADCASTER_ID)
         else:
@@ -231,7 +237,7 @@ async def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "
             while True:
                 for p in data["data"]:
                     if p['game_id'] == id_game:
-                        config.istopcliprunning = True
+                        config.istopcliprunning = False
                         return {"code": "1", "url": p['url']}
                 if ever:
                     url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&after={}".format(config.BROADCASTER_ID,
@@ -250,12 +256,15 @@ async def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "
                     return {"code": "3", "url": ""}
                 else:
                     ident += 1
+                await asyncio.sleep(0.5)
 
     # -------------------------------------making response string--------------------------------------
     def make_response_string(response: {}, dat: int) -> str:
         def get_needed_datestring(dt) -> str:
             if dt == 1:
                 return "за 24 часа"
+            if dt == 7:
+                return "за неделю"
             if dt == 30:
                 return "за месяц"
             if dt == 365:
@@ -263,7 +272,7 @@ async def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "
             if dt == 0:
                 return "за всё время"
 
-        if response["code"] != "2" and response['code'] != "3":
+        if response["code"] != "2" and response['code'] != "3" and response['code'] != "4":
             if response["code"] == "0":
                 return "{}, самый топовый клип {} PogU {} ".format(nickname, get_needed_datestring(dat),
                                                                    response["url"])
@@ -308,9 +317,9 @@ async def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "
         except:
             return make_response_string({"code": "2", "url": ""}, days_before)
     if days_before == 0:
-        return make_response_string(do_request_for_getting_clip(id_game=id_game, ever=True), days_before)
+        return make_response_string(await do_request_for_getting_clip(id_game=id_game, ever=True), days_before)
     else:
-        return make_response_string(do_request_for_getting_clip(id_game=id_game, days_before=days_before), days_before)
+        return make_response_string(await do_request_for_getting_clip(id_game=id_game, days_before=days_before), days_before)
 
 
 def parse_response_query(data: json) -> str:

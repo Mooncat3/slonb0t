@@ -17,7 +17,6 @@ class ChatBot(commands.Bot, ABC):
     async def event_ready(self):
         print(f'Ready {str(self.__class__.__name__)} | {self.nick} on {self.initial_channels}')
 
-    """
     @commands.command(name='SLONB0T')
     async def privet(self, ctx):
         message = ctx.message.content
@@ -31,9 +30,8 @@ class ChatBot(commands.Bot, ABC):
         content = response.content.decode('utf8').replace("'", '"')
         data = json.loads(content)
         await AdditionalMethods.add_to_buffer("e", nickname + ", " + AdditionalMethods.parse_response_query(data), ctx.author)
-    """
 
-    @commands.command(name=config.BOT)
+    @commands.command(name="slonb0t")
     async def privet1(self, ctx):
         message = ctx.message.content
         nickname = ctx.author.name

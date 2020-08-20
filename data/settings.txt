@@ -1,1 +1,1 @@
-{"checkStreamActive": true, "bufferdelay": 0.0}
+{"entertain": false, "bufferdelay": 1.0, "buffermax": 3}
