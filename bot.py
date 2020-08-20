@@ -5,14 +5,12 @@ import asyncio
 from datetime import timedelta, datetime
 from bs4 import BeautifulSoup
 import requests
-
 import AdditionalMethods
 import re
 import random
 import subprocess
 import config
 import json
-import time
 
 
 class CommandsBot(commands.Bot, ABC):
@@ -26,23 +24,8 @@ class CommandsBot(commands.Bot, ABC):
         print(f'Ready {str(self.__class__.__name__)} | {self.nick} on {self.initial_channels}')
 
     @commands.command(name='case')
-    async def cse(self, ctx):
+    async def case(self, ctx):
         nickname = ctx.author.name
-        def check_price(prce: float) -> str:
-            if prce < 100:
-                return str(prce) + " ₽ Lohich"
-            elif prce < 500:
-                return str(prce) + " ₽ SeemsGood"
-            elif prce < 1000:
-                return str(prce) + " ₽ dedU"
-            elif prce < 5000:
-                return str(prce) + " ₽ PogU"
-            elif prce < 10000:
-                return str(prce) + " ₽ PogChamp"
-            elif prce < 100000:
-                return str(prce) + " ₽ Pog"
-            elif prce > 100000:
-                return str(prce) + " ₽ Pog Clap"
         randstr = random.randint(1, 179)
         r = requests.get('https://market.csgo.com/?s=name&r=&q=&p=' + str(randstr) + '&h=&fst=0')
         soup = BeautifulSoup(r.content, 'html.parser')
@@ -53,8 +36,25 @@ class CommandsBot(commands.Bot, ABC):
         skin = skinorig.partition(';">')[2].replace('</div></a>', '')
         price = skinorig.rpartition('<s')[0]
         price = re.sub(" ", '', price)
-        AdditionalMethods.add_to_buffer("e", f"{nickname} Вам выпал " + skin + " со стоймостью " + check_price(float(price)), ctx.author)
+        if float(price) < 100:
+            price = str(price) + " ₽ Lohich"
+        elif float(price) < 500:
+            price = str(price) + " ₽ SeemsGood"
+        elif float(price) < 1000:
+            price = str(price) + " ₽ dedU"
+        elif float(price) < 5000:
+            price = str(price) + " ₽ PogU"
+        elif float(price) < 10000:
+            price = str(price) + " ₽ PogChamp"
+        elif float(price) < 100000:
+            price = str(price) + " ₽ Pog"
+        elif float(price) > 100000:
+            price = str(price) + " ₽ Pog Clap"
+        AdditionalMethods.add_to_buffer("e",
+                                        f"{nickname}, вам выпал " + skin + " Стоимость: " + price,
+                                        ctx.author)
 
+        """""
     @commands.command(name='history')
     async def stream(self, ctx):
         nickname = ctx.author.name
@@ -76,28 +76,15 @@ class CommandsBot(commands.Bot, ABC):
         AdditionalMethods.add_to_buffer("c", AdditionalMethods.get_archive_stream_stat(id, nickname, tag).format(nickname, id), ctx.author)
         #except:
            # AdditionalMethods.add_to_buffer("с", f'{nickname} !archive [0-9]', ctx.author)
+           
+        """""
 
     @commands.command(name='рецепт')
     async def recept(self, ctx):
-        URL = 'http://culinar.ivest.kz/randomMenu'
-
-        def get_html(url, params=None):
-            r = requests.get(url, params=params)
-            return r
-
-        def get_content(html):
-            soup = BeautifulSoup(html, 'html.parser')
-            global name
-            global recept
-            global recept1
-            name = soup.find('a', class_='rec_name').get_text()
-            recept = soup.find('div', class_='randome_recept_right').get_text()
-
-        def parse():
-            html = get_html(URL)
-            get_content(html.text)
-
-        parse()
+        r = requests.get('http://culinar.ivest.kz/randomMenu')
+        soup = BeautifulSoup(r.content, 'html.parser')
+        name = soup.find('a', class_='rec_name').get_text()
+        recept = soup.find('div', class_='randome_recept_right').get_text()
         receptt = 'Способ приготовления:'.join(recept.split('Способ приготовления:')[:-1])
         recept1 = recept[recept.find("Способ приготовления:") + 1:]
         recept1 = (recept1[:495] + '...') if len(recept1) > 495 else recept1
@@ -106,22 +93,9 @@ class CommandsBot(commands.Bot, ABC):
 
     @commands.command(name='анекдот')
     async def anekdot(self, ctx):
-        URL = 'http://anecdotica.ru/'
-
-        def get_html(url, params=None):
-            r = requests.get(url, params=params)
-            return r
-
-        def get_content(html):
-            soup = BeautifulSoup(html, 'html.parser')
-            global anekdot
-            anekdot = soup.find('div', class_='item_text').get_text()
-
-        def parse():
-            html = get_html(URL)
-            get_content(html.text)
-
-        parse()
+        r = requests.get('http://anecdotica.ru/')
+        soup = BeautifulSoup(r.content, 'html.parser')
+        anekdot = soup.find('div', class_='item_text').get_text()
         anekdott = (anekdot[:493] + '...') if len(anekdot) > 493 else anekdot
         AdditionalMethods.add_to_buffer("e", '{} KeK'.format(str.replace(anekdott, "\r\n", " ")), ctx.author)
 
@@ -129,37 +103,23 @@ class CommandsBot(commands.Bot, ABC):
     async def kurs(self, ctx):
         nickname = ctx.author.name
         message = ctx.message.content
-        URL = 'https://fortrader.org/quotes/usdrur'
-        URL1 = 'https://fortrader.org/quotes/eurrur'
-        URL2 = 'https://fortrader.org/currencyrates/jpy'
-        def get_html(url, params=None):
-            r = requests.get(url, params=params)
-            return r
-
-        def get_content(html, html1, html2):
-            soup = BeautifulSoup(html, 'html.parser')
-            soup1 = BeautifulSoup(html1, 'html.parser')
-            soup2 = BeautifulSoup(html2, 'html.parser')
-            global dollar
-            global euro
-            global jpy
-            dollar = soup.find('p', class_='rates_box1_inner pid-USDRUR-bid').get_text()
-            euro = soup1.find('p', class_='rates_box1_inner pid-EURRUR-bid').get_text()
-            jpy = soup2.find('input', class_='converter_form_inp converterInpTo').get(key="value")
-            jpy = str(round(float(jpy) * 100, ndigits=2))
-
-        def parse():
-            html = get_html(URL)
-            html1 = get_html(URL1)
-            html2 = get_html(URL2)
-            get_content(html.text, html1.text, html2.text)
-
-        parse()
+        r = requests.get('https://fortrader.org/quotes/usdrur')
+        r1 = requests.get('https://fortrader.org/quotes/eurrur')
+        r2 = requests.get('https://fortrader.org/currencyrates/jpy')
+        soup = BeautifulSoup(r.content, 'html.parser')
+        soup1 = BeautifulSoup(r1.content, 'html.parser')
+        soup2 = BeautifulSoup(r2.content, 'html.parser')
+        dollar = soup.find('p', class_='rates_box1_inner pid-USDRUR-bid').get_text()
+        euro = soup1.find('p', class_='rates_box1_inner pid-EURRUR-bid').get_text()
+        jpy = soup2.find('input', class_='converter_form_inp converterInpTo').get(key="value")
+        jpy = str(round(float(jpy) * 100, ndigits=2))
         now = datetime.now() + timedelta(hours=3)
         today = now.strftime("%d.%m")
 
         if message == "!курс":
-            AdditionalMethods.add_to_buffer("c", f"Курс валют на {today}: USD = {dollar} RUB | EURO = {euro} RUB | JPY = {jpy} RUB", ctx.author)
+            AdditionalMethods.add_to_buffer("c",
+                                            f"Курс валют на {today}: USD = {dollar} RUB | EURO = {euro} RUB | JPY = {jpy} RUB",
+                                            ctx.author)
         else:
             try:
                 if message.find('!курс доллар-рубль') != -1:
@@ -193,7 +153,9 @@ class CommandsBot(commands.Bot, ABC):
                     result = round(result, 2)
                     AdditionalMethods.add_to_buffer("c", f"{nickname}, {kurs} RUB = {result} JPY", ctx.author)
                 else:
-                    AdditionalMethods.add_to_buffer("c", f"{nickname}, неккоректно написаны валюты, пишите в именительном падеже (рубль-доллар и т.д.)", ctx.author)
+                    AdditionalMethods.add_to_buffer("c",
+                                                    f"{nickname}, неккоректно написаны валюты, пишите в именительном падеже (рубль-доллар и т.д.)",
+                                                    ctx.author)
             except OverflowError:
                 AdditionalMethods.add_to_buffer("с", f"{nickname} Число слишком большое WeirdChamp", ctx.author)
             except ValueError:
@@ -249,19 +211,25 @@ class CommandsBot(commands.Bot, ABC):
             AdditionalMethods.add_to_buffer("e", f"{nickname}, ваш IQ = {str(iq)}! Вы Братишкин?! PogU", ctx.author)
         else:
             if 110 > iq > 70:
-                AdditionalMethods.add_to_buffer("e", f"{nickname}, ваш IQ = {str(iq)}! Надо же, у стримера больше IQ чем у вас KeK", ctx.author)
+                AdditionalMethods.add_to_buffer("e",
+                                                f"{nickname}, ваш IQ = {str(iq)}! Надо же, у стримера больше IQ чем у вас KeK",
+                                                ctx.author)
             if 110 < iq < 135:
-                AdditionalMethods.add_to_buffer("e", f"{nickname}, ваш IQ = {str(iq)}! Ого, а вы не глупый человек ThumbUp", ctx.author)
+                AdditionalMethods.add_to_buffer("e",
+                                                f"{nickname}, ваш IQ = {str(iq)}! Ого, а вы не глупый человек ThumbUp",
+                                                ctx.author)
             if iq < 70:
-                AdditionalMethods.add_to_buffer("e", f"{nickname}, ваш IQ = {str(iq)}! Чел... сходи книгу почитай WeirdChamp", ctx.author)
+                AdditionalMethods.add_to_buffer("e",
+                                                f"{nickname}, ваш IQ = {str(iq)}! Чел... сходи книгу почитай WeirdChamp",
+                                                ctx.author)
             if iq >= 135:
-                AdditionalMethods.add_to_buffer("e", f"{nickname}, ваш IQ = {str(iq)}! Внимание! В чате гений WAYTOOSMART Clap", ctx.author)
+                AdditionalMethods.add_to_buffer("e",
+                                                f"{nickname}, ваш IQ = {str(iq)}! Внимание! В чате гений WAYTOOSMART Clap",
+                                                ctx.author)
 
-    """
     @commands.command(name='паста')
     async def pasta(self, ctx):
         AdditionalMethods.add_to_buffer("e", AdditionalMethods.parse_simplefile_message("{}", "nadya"), ctx.author)
-    """
 
     @commands.command(name='help')
     async def help(self, ctx):
@@ -279,23 +247,17 @@ class CommandsBot(commands.Bot, ABC):
                 else:
                     AdditionalMethods.add_to_buffer("с", f"{nickname} такой команды нет PepoG ", ctx.author)
         else:
-            AdditionalMethods.add_to_buffer("c", f"{nickname}, Ку catJAM , меня зовут {config.BOT} catJAM , вот что я умею: страница 1: !help [command], !history [nickname], !archive [id] [nickname]"
-            f", !topclipever [category], !topclipyear ["
-            f"category], !topclipmonth [category], !topclipday [category] Чтобы перейти на следующую страницу введите !help1 catJAM ", ctx.author)
+            AdditionalMethods.add_to_buffer("c", f"Привет, {nickname}, меня зовут {config.BOT} catJAM , вот что я умею: страница 1: !время, !me, !do [message], !анекдот, !рецепт, !привет [nickname], !try [action], !кнб [камень, ножницы, бумага], !когда [message], !обнять [nickname] Чтобы перейти на следующую страницу введите !help1 catJAM", ctx.author)
 
     @commands.command(name='help1')
     async def help1(self, ctx):
         nickname = ctx.author.name
-        AdditionalMethods.add_to_buffer("c", f"{nickname}, страница 2: !время, !гороскоп [знак зодиака], !анекдот, !рецепт, !привет [nickname], !try [action]"
-            f", !кнб [камень, ножницы или бумага], !когда [message], !обнять [nickname]"
-            f" Чтобы перейти на следующую страницу введите !help2"
-        , ctx.author)
+        AdditionalMethods.add_to_buffer("c", f"{nickname}, страница 3: !курс ['изначальная валюта'-'переводимая валюта'(доллар-рубль, евро-рубль и наоборот)] [число], !iq, !temp, !бубу [message],!гороскоп [знак зодиака], !steal [nickname], !вниз, !case Чтобы перейти на следующую страницу введите !help2", ctx.author)
 
     @commands.command(name='help2')
     async def help2(self, ctx):
         nickname = ctx.author.name
-        AdditionalMethods.add_to_buffer("c", f"{nickname}, страница 3: !курс ['изначальная валюта'-'переводимая валюта'(доллар-рубль, евро-рубль и наоборот)] [число], !iq, !temp"
-                                             f", !бубу [message], !steal [nickname], !вниз, !case Чтобы увидеть команды для управления ботом (только для узкого круга лиц), напишите !helpm", ctx.author)
+        AdditionalMethods.add_to_buffer("c", f"{nickname}, страница 2: !history, !archive [id], !topclipever [category], !topclipyear [category], !topclipmonth [category], !topclipday [category]", ctx.author)
 
     @commands.command(name='helpm')
     async def help3(self, ctx):
@@ -319,7 +281,9 @@ class CommandsBot(commands.Bot, ABC):
                 try:
                     data["bufferdelay"] = float(timeout)
                     b.write(json.dumps(data))
-                    AdditionalMethods.add_to_buffer("s", f"{nickname} теперь задержка между сообщениями будет составлять {data['bufferdelay']}", ctx.author)
+                    AdditionalMethods.add_to_buffer("s",
+                                                    f"{nickname} теперь задержка между сообщениями будет составлять {data['bufferdelay']}",
+                                                    ctx.author)
                 except:
                     AdditionalMethods.add_to_buffer("s", f"{nickname}, не удалось прочесть число PepoG ", ctx.author)
 
@@ -339,7 +303,9 @@ class CommandsBot(commands.Bot, ABC):
                 try:
                     data["buffermax"] = int(timeout)
                     b.write(json.dumps(data))
-                    AdditionalMethods.add_to_buffer("s", f"{nickname} теперь, если в очереди на вывод будет {data['buffermax']} сообщений, бот будет писать в лс", ctx.author)
+                    AdditionalMethods.add_to_buffer("s",
+                                                    f"{nickname} теперь, если в очереди на вывод будет {data['buffermax']} сообщений, бот будет писать в лс",
+                                                    ctx.author)
                 except:
                     AdditionalMethods.add_to_buffer("s", f"{nickname}, не удалось прочесть число PepoG ", ctx.author)
 
@@ -378,13 +344,18 @@ class CommandsBot(commands.Bot, ABC):
         tempp = random.uniform(25, 45)
         temp = round(tempp, 1)
         if 35.7 <= temp <= 37:
-            AdditionalMethods.add_to_buffer("e", f"{nickname}, ваша температура {str(temp)} °C! У вас температура в норме ThumbUp", ctx.author)
+            AdditionalMethods.add_to_buffer("e",
+                                            f"{nickname}, ваша температура {str(temp)} °C! У вас температура в норме ThumbUp",
+                                            ctx.author)
         else:
             if 37 < temp < 40 or 35.7 > temp >= 32:
-                AdditionalMethods.add_to_buffer("e", f"{nickname}, ваша температура {str(temp)} °C! У вас вирус? PepeS", ctx.author)
+                AdditionalMethods.add_to_buffer("e", f"{nickname}, ваша температура {str(temp)} °C! У вас вирус? PepeS",
+                                                ctx.author)
             else:
                 if temp > 40 or temp < 32:
-                    AdditionalMethods.add_to_buffer("e", f"{nickname}, ваша температура {str(temp)} °C! Вызывайте дурку! Durka", ctx.author)
+                    AdditionalMethods.add_to_buffer("e",
+                                                    f"{nickname}, ваша температура {str(temp)} °C! Вызывайте дурку! Durka",
+                                                    ctx.author)
 
     @commands.command(name='me')
     async def me(self, ctx):
@@ -436,37 +407,34 @@ class CommandsBot(commands.Bot, ABC):
             steal = str.replace(message, '!steal ', '')
             steal = re.sub("\n", '', steal)
             if procent >= 33:
-                AdditionalMethods.add_to_buffer("e", f"{nickname} украл у {str(steal)} {str(ruble)} руб. BOP", ctx.author)
+                AdditionalMethods.add_to_buffer("e", f"{nickname} украл у {str(steal)} {str(ruble)} руб. BOP",
+                                                ctx.author)
             else:
-                AdditionalMethods.add_to_buffer("e", f"{nickname} ничего не украл у {str(steal)} KeK Lohich", ctx.author)
+                AdditionalMethods.add_to_buffer("e", f"{nickname} ничего не украл у {str(steal)} KeK Lohich",
+                                                ctx.author)
 
     @commands.command(name='try')
     async def ttry(self, ctx):
         message = ctx.message.content
         nickname = ctx.author.name
-        AdditionalMethods.add_to_buffer("e", AdditionalMethods.parse_standartfile_message(nickname, "{nickname} попробовал {messagestr}... {filestr}",
-                                                         message, "!try", "try"), ctx.author)
+        AdditionalMethods.add_to_buffer("e", AdditionalMethods.parse_standartfile_message(nickname,
+                                                                                          "{nickname} попробовал {messagestr}... {filestr}",
+                                                                                          message, "!try", "try"),
+                                        ctx.author)
 
     @commands.command(name='время')
     async def time(self, ctx):
-        AdditionalMethods.add_to_buffer("c", datetime.strftime(datetime.now() + timedelta(hours=3), "Чичас %H:%M по МСК Waiting"), ctx.author)
+        AdditionalMethods.add_to_buffer("c", datetime.strftime(datetime.now() + timedelta(hours=3),
+                                                               "Чичас %H:%M по МСК Waiting"), ctx.author)
 
     @commands.command(name='обнять')
     async def hug(self, ctx):
         message = ctx.message.content
         nickname = ctx.author.name
-        AdditionalMethods.add_to_buffer("e", AdditionalMethods.parse_standartfile_message(nickname, "{nickname} {filestr} обнимает {messagestr} "
-                                                                       "VoHiYo",
-                                                             message, "!обнять", "hug"), ctx.author)
-
-    """
-
-    @commands.command(name='COCK')
-    async def cock(self, ctx):
-        nickname = ctx.author.name
-        cock = random.randrange(1, 36, 1)
-        AdditionalMethods.add_to_buffer("e", f"{nickname}, твой COCK равен {str(cock)} см! YEP", ctx.author)
-        """
+        AdditionalMethods.add_to_buffer("e", AdditionalMethods.parse_standartfile_message(nickname,
+                                                                                          "{nickname} {filestr} обнимает {messagestr} "
+                                                                                          "VoHiYo",
+                                                                                          message, "!обнять", "hug"), ctx.author)
 
     @commands.command(name='кнб')
     async def cnb(self, ctx):
@@ -479,62 +447,71 @@ class CommandsBot(commands.Bot, ABC):
             AdditionalMethods.add_to_buffer("c", f"{nickname}, введите !кнб [камень, ножницы, бумага]", ctx.author)
         else:
             if usercnb == 'камень' and rndcnb1 == '⛰':
-                AdditionalMethods.add_to_buffer("e", f"{nickname} поставил(а) ⛰ , а Бот поставил ⛰ . Ничья! ThumbUp", ctx.author)
+                AdditionalMethods.add_to_buffer("e", f"{nickname} поставил(а) ⛰ , а Бот поставил ⛰ . Ничья! ThumbUp",
+                                                ctx.author)
             if usercnb == 'ножницы' and rndcnb1 == '✂️':
-                AdditionalMethods.add_to_buffer("e", f"{nickname} поставил(а) ✂️ , а Бот поставил ✂️ . Ничья! ThumbUp", ctx.author)
+                AdditionalMethods.add_to_buffer("e", f"{nickname} поставил(а) ✂️ , а Бот поставил ✂️ . Ничья! ThumbUp",
+                                                ctx.author)
             if usercnb == 'бумага' and rndcnb1 == '📜':
-                AdditionalMethods.add_to_buffer("e", f"{nickname} поставил(а) 📜 , а Бот поставил 📜 . Ничья! ThumbUp", ctx.author)
+                AdditionalMethods.add_to_buffer("e", f"{nickname} поставил(а) 📜 , а Бот поставил 📜 . Ничья! ThumbUp",
+                                                ctx.author)
             if usercnb == 'бумага' and rndcnb1 == '⛰':
-                AdditionalMethods.add_to_buffer("e", f"{nickname} поставил(а) 📜 , а Бот поставил ⛰ . Победа {nickname} EZ Clap", ctx.author)
+                AdditionalMethods.add_to_buffer("e",
+                                                f"{nickname} поставил(а) 📜 , а Бот поставил ⛰ . Победа {nickname} EZ Clap",
+                                                ctx.author)
             if usercnb == 'камень' and rndcnb1 == '📜':
-                AdditionalMethods.add_to_buffer("e", f"{nickname} поставил(а) ⛰ , а Бот поставил 📜 . Победа Бота Lohich", ctx.author)
+                AdditionalMethods.add_to_buffer("e",
+                                                f"{nickname} поставил(а) ⛰ , а Бот поставил 📜 . Победа Бота Lohich",
+                                                ctx.author)
             if usercnb == 'камень' and rndcnb1 == '✂️':
-                AdditionalMethods.add_to_buffer("e", f"{nickname} поставил(а) ⛰ , а Бот поставил ✂️ . Победа {nickname} EZ Clap", ctx.author)
+                AdditionalMethods.add_to_buffer("e",
+                                                f"{nickname} поставил(а) ⛰ , а Бот поставил ✂️ . Победа {nickname} EZ Clap",
+                                                ctx.author)
             if usercnb == 'ножницы' and rndcnb1 == '⛰':
-                AdditionalMethods.add_to_buffer("e", f"{nickname} поставил(а) ✂️ , а Бот поставил ⛰ . Победа Бота Lohich", ctx.author)
+                AdditionalMethods.add_to_buffer("e",
+                                                f"{nickname} поставил(а) ✂️ , а Бот поставил ⛰ . Победа Бота Lohich",
+                                                ctx.author)
             if usercnb == 'ножницы' and rndcnb1 == '📜':
-                AdditionalMethods.add_to_buffer("e", f"{nickname} поставил(а) ✂️ , а Бот поставил 📜 . Победа {nickname} EZ Clap", ctx.author)
+                AdditionalMethods.add_to_buffer("e",
+                                                f"{nickname} поставил(а) ✂️ , а Бот поставил 📜 . Победа {nickname} EZ Clap",
+                                                ctx.author)
             if usercnb == 'бумага' and rndcnb1 == '✂️':
-                AdditionalMethods.add_to_buffer("e", f"{nickname} поставил(а) 📜 , а Бот поставил ✂️ . Победа Бота Lohich", ctx.author)
-
-    """
-
-    @commands.command(name='BOOBS')
-    async def boobs(self, ctx):
-        nickname = ctx.author.name
-        boobs = random.randrange(0, 15, 1)
-        AdditionalMethods.add_to_buffer("e", f"{nickname}, твои BOOBS {str(boobs)} размера YEP", ctx.author)
-
-    """
+                AdditionalMethods.add_to_buffer("e",
+                                                f"{nickname} поставил(а) 📜 , а Бот поставил ✂️ . Победа Бота Lohich",
+                                                ctx.author)
 
     @commands.command(name='вниз')
     async def vniz(self, ctx):
-        AdditionalMethods.add_to_buffer("e", AdditionalMethods.parse_simplefile_message(":point_down: {}", "down"), ctx.author)
+        AdditionalMethods.add_to_buffer("e", AdditionalMethods.parse_simplefile_message(":point_down: {}", "down"),
+                                        ctx.author)
 
     @commands.command(name='когда')
     async def kogda(self, ctx):
         message = ctx.message.content
         nickname = ctx.author.name
-        AdditionalMethods.add_to_buffer("e", AdditionalMethods.parse_standartfile_message(nickname, "{nickname}, {messagestr} {filestr}",
-                                                             message, "!когда", "kogda"), ctx.author)
+        AdditionalMethods.add_to_buffer("e", AdditionalMethods.parse_standartfile_message(nickname,
+                                                                                          "{nickname}, {messagestr} {filestr}",
+                                                                                          message, "!когда", "kogda"),
+                                        ctx.author)
 
     @commands.command(name='привет')
     async def privet(self, ctx):
         message = ctx.message.content
         nickname = ctx.author.name
         AdditionalMethods.add_to_buffer("e", AdditionalMethods.parse_standartfile_message(nickname,
-                                                                 "{nickname} передаёт {filestr} привет {messagestr} "
-                                                                 "peepoHey peepoLove",
-                                                                 message, "!привет", "privet"), ctx.author)
+                                                                                          "{nickname} передаёт {filestr} привет {messagestr} "
+                                                                                          "peepoHey peepoLove",
+                                                                                          message, "!привет", "privet"), ctx.author)
 
-    """
     @commands.command(name='заебало')
     async def zaebalo(self, ctx):
         randpage = random.randrange(1, 1689, 1)
         r = requests.get("https://zaebalo.ru/?page=" + str(randpage))
         soup = BeautifulSoup(r.content, 'html.parser')
         d = soup.find_all('div', align='left')
-        p = str(random.choice(d)).replace("</div>", "").replace("<br/>", "").replace("</p>", "").replace("<p>", "").replace('<div align="left">', '').replace("<br>", "").replace("</br>", "").replace("\r     ","")
+        p = str(random.choice(d)).replace("</div>", "").replace("<br/>", "").replace("</p>", "").replace("<p>",
+                                                                                                         "").replace(
+            '<div align="left">', '').replace("<br>", "").replace("</br>", "").replace("\r     ", "")
         with open('data/osujdau.txt', 'r', encoding='utf-8') as c:
             List = list(c)
             for s in List:
@@ -546,7 +523,6 @@ class CommandsBot(commands.Bot, ABC):
                     print(s)
                 p = str.replace(p.lower(), s, ban)
         AdditionalMethods.add_to_buffer("e", AdditionalMethods.check_on_toomuchsimbols(p), ctx.author)
-    """
 
     @commands.command(name='гороскоп')
     async def goroskop(self, ctx):
@@ -556,8 +532,7 @@ class CommandsBot(commands.Bot, ABC):
         AdditionalMethods.add_to_buffer("e", goroskop, ctx.author)
 
 
-
-#subprocess.Popen([sys.executable, 'ChatBot.py'])
+# subprocess.Popen([sys.executable, 'ChatBot.py'])
 subprocess.Popen([sys.executable, 'BufferCleaner.py'])
 subprocess.Popen([sys.executable, 'CheckingStreamThread.py'])
 bot = CommandsBot()
