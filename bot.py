@@ -234,7 +234,7 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='help')
     async def help(self, ctx):
         nickname = ctx.author.name
-        if ctx.message.content != "!help ":
+        if ctx.message.content != "!help":
             helper = str.replace(ctx.message.content, '!help ', '')
             helper = re.sub("\n", '', helper)
             with open('data/documentation.txt', 'r', encoding='utf-8') as w:
@@ -247,25 +247,25 @@ class CommandsBot(commands.Bot, ABC):
                 else:
                     AdditionalMethods.add_to_buffer("с", f"{nickname} такой команды нет PepoG ", ctx.author)
         else:
-            AdditionalMethods.add_to_buffer("c", f"Ку, {nickname}, меня зовут {config.BOT} catJAM , вот что я умею: страница 1: !время, !me, !do [message],  !try [action], !кнб [камень, ножницы, бумага] Чтобы перейти на следующую страницу введите !help1 catJAM", ctx.author)
+            AdditionalMethods.add_to_buffer("c", f"Ку, {nickname}, меня зовут {config.BOT} catJAM , вот что я могу: страница 1: !гороскоп [знак зодиака], !обнять [nickname], !время, !me, !do [message], !try [action], !кнб [камень, ножницы, бумага], !iq, !temp, !бубу [message], !steal [nickname] Чтобы перейти на следующую страницу введите !help1", ctx.author)
 
     @commands.command(name='help1')
     async def help1(self, ctx):
         nickname = ctx.author.name
-        AdditionalMethods.add_to_buffer("c", f"{nickname}, страница 2: !анекдот, !рецепт, !привет [nickname], !iq, !temp, !бубу [message], !steal [nickname], !вниз, !case Чтобы перейти на следующую страницу введите !help2", ctx.author)
+        AdditionalMethods.add_to_buffer("c", f"{nickname}, страница 2: !анекдот, !рецепт, !привет [nickname], !вниз, !case, !когда [message], !history, !archive [id] Чтобы перейти на следующую страницу введите !help2", ctx.author)
 
     @commands.command(name='help2')
     async def help2(self, ctx):
         nickname = ctx.author.name
-        AdditionalMethods.add_to_buffer("c", f"{nickname}, страница 3: !курс ['изначальная валюта'-'переводимая валюта'(доллар-рубль, евро-рубль и наоборот)] [число], !когда [message] Чтобы перейти на следующую страницу введите !help3", ctx.author)
+        AdditionalMethods.add_to_buffer("c", f"{nickname}, страница 3: !курс ['изначальная валюта'-'переводимая валюта'(доллар-рубль, евро-рубль и наоборот)] [число],  Чтобы перейти на следующую страницу введите !help3", ctx.author)
         
     @commands.command(name='help3')
     async def help3(self, ctx):
         nickname = ctx.author.name
-        AdditionalMethods.add_to_buffer("c", f"{nickname}, страница 4: !topclipever [category], !topclipyear [category], !topclipmonth [category], !topclipday [category], !history, !archive [id], !гороскоп [знак зодиака], !обнять [nickname]", ctx.author)
+        AdditionalMethods.add_to_buffer("c", f"{nickname}, страница 4: !topclipever [category], !topclipyear [category], !topclipmonth [category], !topclipday [category]", ctx.author)
 
     @commands.command(name='helpm')
-    async def help3(self, ctx):
+    async def helpm(self, ctx):
         nickname = ctx.author.name
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
             AdditionalMethods.add_to_buffer("s", f"{nickname}, страница 4 (управление ботом, доступно модераторам и узкому кругу лиц): !bufferdelay [time], !buffermax [time], !chkstreamactive [time]", ctx.author)
