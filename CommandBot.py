@@ -256,7 +256,7 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='helpm')
     async def helpm(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
-            AdditionalMethods.add_to_buffer("s", f"!bufferdelay [time], !buffermax [time], !entertain [time], !settings [time]", ctx.author)
+            AdditionalMethods.add_to_buffer("s", f"!bufferdelay [time], !buffermax [time], !entertain [0-1], !settings", ctx.author)
 
     @commands.command(name='bufferdelay')
     async def bufedelay(self, ctx):
