@@ -101,6 +101,7 @@ class BufferCleaner(Client, ABC):
         timer = 0.0
         recepttime = 0.0
         ondeleting = []
+        dopbol = True
         while True:
             async def send_mess(sock, resert, rest):
                 mess = resert['mes']
