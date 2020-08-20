@@ -247,7 +247,7 @@ class CommandsBot(commands.Bot, ABC):
                 else:
                     AdditionalMethods.add_to_buffer("с", f"{nickname} такой команды нет PepoG ", ctx.author)
         else:
-            AdditionalMethods.add_to_buffer("c", f"Ку, {nickname}, меня зовут {config.BOT} catJAM , вот что я могу: страница 1: !гороскоп [знак зодиака], !обнять [nickname], !время, !me, !do [message], !try [action], !кнб [камень, ножницы, бумага], !iq, !temp, !бубу [message], !steal [nickname] Чтобы перейти на следующую страницу введите !help1", ctx.author)
+            AdditionalMethods.add_to_buffer("c", f"Ку, {nickname}, меня зовут {config.BOT} catJAM , вот что я могу: страница 1: !гороскоп [знак зодиака], !обнять [nickname], !время, !me, !do [message], !try [action], !кнб [камень, ножницы, бумага], !iq, !temp, !бубу [message], !steal [nickname] Чтобы перейти на следующую страницу введите !help1 catJAM", ctx.author)
 
     @commands.command(name='help1')
     async def help1(self, ctx):
