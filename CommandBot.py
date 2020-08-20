@@ -22,6 +22,15 @@ class CommandsBot(commands.Bot, ABC):
 
     async def event_ready(self):
         print(f'Ready {str(self.__class__.__name__)} | {self.nick} on {self.initial_channels}')
+        
+    @commands.command(name='logs')
+    async def logs(self, ctx):
+        if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
+            with open(file='data/TRASHMASSIVE.txt', mode='r', encoding='utf-8') as q:
+                strer = q.read()
+            paste = AdditionalMethods.createPaste(strer, "loges", "php", "1", "10M")
+            urlPaste = AdditionalMethods.sendPaste(paste)
+            AdditionalMethods.add_to_buffer("s", urlPaste, ctx.author)
 
     @commands.command(name='slon')
     async def slon(self, ctx):
