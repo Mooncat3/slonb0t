@@ -247,17 +247,17 @@ class CommandsBot(commands.Bot, ABC):
                 else:
                     AdditionalMethods.add_to_buffer("с", f"{nickname} такой команды нет PepoG ", ctx.author)
         else:
-            AdditionalMethods.add_to_buffer("c", f"Привет, {nickname}, меня зовут {config.BOT} catJAM , вот что я умею: страница 1: !время, !me, !do [message], !анекдот, !рецепт, !привет [nickname], !try [action], !кнб [камень, ножницы, бумага], !когда [message], !обнять [nickname] Чтобы перейти на следующую страницу введите !help1 catJAM", ctx.author)
+            AdditionalMethods.add_to_buffer("c", f"Ку, {nickname}, меня зовут {config.BOT} catJAM , вот что я умею: страница 1: !время, !me, !do [message], !анекдот, !рецепт, !привет [nickname], !try [action], !кнб [камень, ножницы, бумага] Чтобы перейти на следующую страницу введите !help1 catJAM", ctx.author)
 
     @commands.command(name='help1')
     async def help1(self, ctx):
         nickname = ctx.author.name
-        AdditionalMethods.add_to_buffer("c", f"{nickname}, страница 3: !курс ['изначальная валюта'-'переводимая валюта'(доллар-рубль, евро-рубль и наоборот)] [число], !iq, !temp, !бубу [message],!гороскоп [знак зодиака], !steal [nickname], !вниз, !case Чтобы перейти на следующую страницу введите !help2", ctx.author)
+        AdditionalMethods.add_to_buffer("c", f"{nickname}, страница 2: !курс ['изначальная валюта'-'переводимая валюта'(доллар-рубль, евро-рубль и наоборот)] [число], !iq, !temp, !бубу [message], !steal [nickname], !вниз, !case Чтобы перейти на следующую страницу введите !help2", ctx.author)
 
     @commands.command(name='help2')
     async def help2(self, ctx):
         nickname = ctx.author.name
-        AdditionalMethods.add_to_buffer("c", f"{nickname}, страница 2: !history, !archive [id], !topclipever [category], !topclipyear [category], !topclipmonth [category], !topclipday [category]", ctx.author)
+        AdditionalMethods.add_to_buffer("c", f"{nickname}, страница 3: !когда [message], !гороскоп [знак зодиака], !обнять [nickname], !history, !archive [id], !topclipever [category], !topclipyear [category], !topclipmonth [category], !topclipday [category]", ctx.author)
 
     @commands.command(name='helpm')
     async def help3(self, ctx):
