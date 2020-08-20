@@ -14,6 +14,24 @@ import asyncio
 from twitchioc.dataclasses import User
 
 
+def sendPaste(paste):
+    url = "https://pastebin.com/api/api_post.php"
+    req = requests.post(url, data=paste)
+    return req.text
+
+def createPaste(code, name, format_, private, date):
+    dev_key = "6Dg9D7qLYfBZdZrq--nH5wfZ0507TjnN"
+    p = {}
+    p['api_dev_key'] = dev_key
+    p['api_option'] = 'paste'
+    p['api_paste_code'] = code
+    p['api_paste_name'] = name
+    p['api_paste_format'] = format_
+    p['api_paste_private'] = private
+    p['api_paste_expire_date'] = date
+    return p
+
+
 def get_bufer_max() -> float:
     with open(file='data/settings.txt', mode='r', encoding='utf-8') as e:
         try:
