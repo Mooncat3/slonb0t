@@ -150,12 +150,8 @@ def parse_stream_stat(nickname: str, tag: str, TRASHMASSIVE: dict, author: User,
             crash = len(f"{nickname}{seter} {date} стрим: {streamstat['StreamName']} [{streamstat['StreamDuration']}] || среднее зр: {int(streamstat['middleviewcount'])} || {categorystr}") >= 500
         if crash and not already:
             already = True
-            print(
-                f"{nickname}{seter} {date} стрим: {streamstat['StreamName']} [{streamstat['StreamDuration']}] || среднее зр: {int(streamstat['middleviewcount'])} || {categorystr}")
             while len(f"{nickname}{seter} {date} стрим: {streamstat['StreamName']} [{streamstat['StreamDuration']}] || среднее зр: {int(streamstat['middleviewcount'])} || {categorystr}") > 500 or categorystr[categorystr.rfind("»")+2: len(categorystr)] == f"{r['name']} [{rounded}]":
                 categorystr = categorystr[0:categorystr.rfind("»")-1]
-            print(
-                f"{nickname}{seter} {date} стрим: {streamstat['StreamName']} [{streamstat['StreamDuration']}] || среднее зр: {int(streamstat['middleviewcount'])} || {categorystr}")
             add_to_buffer("c", f"{nickname}{seter} {date} стрим: {streamstat['StreamName']} [{streamstat['StreamDuration']}] || среднее зр: {int(streamstat['middleviewcount'])} || {categorystr}", author)
             categorystr = ""
             if len(rounded) > 0:
@@ -165,7 +161,7 @@ def parse_stream_stat(nickname: str, tag: str, TRASHMASSIVE: dict, author: User,
     if not crash:
         return f"{nickname}{seter} {date} стрим: {streamstat['StreamName']} [{streamstat['StreamDuration']}] || среднее зр: {int(streamstat['middleviewcount'])} || {categorystr}"
     else:
-        print(f"{nickname}{seter} {categorystr}")
+        time.sleep(1)
         return f"{nickname}{seter} {categorystr}"
 
 
