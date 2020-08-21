@@ -295,7 +295,7 @@ async def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "
                                                                                    get_needed_datestring(dat),
                                                                                    response["url"])
         if response['code'] == "2":
-            return "{}, такой категории нет PeepoWeird ".format(nickname)
+            return "{}, такой категории нет FeelsBadMan ".format(nickname)
         if response['code'] == "3":
             return "{}, из 3000 клипов не было найдено ни одного с такой категорией DaUj ".format(nickname)
         if response['code'] == "4":
@@ -315,7 +315,7 @@ async def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "
     id_game = "0"
     if len(argument) > 0:
         print(argument + "  " + str(len(argument)))
-        if len(argument) <= 5 and abreviatur_helper(argument) != "":
+        if len(argument) <= 6 and abreviatur_helper(argument) != "":
             argument = abreviatur_helper(argument)
         qstr = quote(argument)
         url = "https://api.twitch.tv/helix/games?name={}".format(qstr)
