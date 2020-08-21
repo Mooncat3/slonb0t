@@ -96,8 +96,9 @@ class CommandsBot(commands.Bot, ABC):
         r = requests.get('http://anecdotica.ru/')
         soup = BeautifulSoup(r.content, 'html.parser')
         anekdot = soup.find('div', class_='item_text').get_text()
+        anekdott = str.replace("\n", "", anekdott)
         anekdott = (anekdot[:493] + '...') if len(anekdot) > 493 else anekdot
-        AdditionalMethods.add_to_buffer("e", '{} KeK'.format(str.replace(anekdott, "\r\n", " ")), ctx.author)
+        AdditionalMethods.add_to_buffer("e", f"{anekdott} KeK", ctx.author)
 
     @commands.command(name='курс')
     async def kurs(self, ctx):
