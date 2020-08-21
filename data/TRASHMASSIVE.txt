@@ -4,7 +4,7 @@
         {
             "name": "🔴НЕДЕЛЯ ХОРРОРОВ: ДЕНЬ 3",
             "duration": 20584,
-            "date": "08.20.20",
+            "date": "08.19.20",
             "MASS": [
                 {"GAME_ID": "Just Chatting", "ViewerCount": 5699, "time_of_update": 0.0},
                 {"GAME_ID": "Games + Demos", "ViewerCount": 7894, "time_of_update": 3192.0},
@@ -28,6 +28,20 @@
                 {"GAME_ID": "Politics", "ViewerCount": 3500, "time_of_update": 16449.0},
                 {"GAME_ID": "Just Chatting", "ViewerCount": 3637, "time_of_update": 16504.0},
                 {"GAME_ID": "Just Chatting", "ViewerCount": 3637, "time_of_update": 20344.0}
+            ]
+
+        },
+        {
+            "name": "🔴НЕДЕЛЯ ХОРРОРОВ: ДЕНЬ 4",
+            "duration": 25818,
+            "date": "08.20.20",
+            "MASS": [
+                {"GAME_ID": "Just Chatting", "ViewerCount": 5699, "time_of_update": 0.0},
+                {"GAME_ID": "Games + Demos", "ViewerCount": 7894, "time_of_update": 5640},
+                {"GAME_ID": "Just Chatting", "ViewerCount": 6890, "time_of_update": 10980.0},
+                {"GAME_ID": "Games + Demos", "ViewerCount": 5791, "time_of_update": 11416.0},
+                {"GAME_ID": "Just Chatting", "ViewerCount": 5683, "time_of_update": 13528.0},
+                {"GAME_ID": "Just Chatting", "ViewerCount": 5500, "time_of_update": 25768.0}
             ]
 
         }
