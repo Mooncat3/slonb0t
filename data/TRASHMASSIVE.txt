@@ -44,6 +44,28 @@
                 {"GAME_ID": "Just Chatting", "ViewerCount": 5500, "time_of_update": 25768.0}
             ]
 
+        },
+        {
+            "name": "🔴НЕДЕЛЯ ХОРРОРОВ: ДЕНЬ 5",
+            "duration": 22513,
+            "date": "08.21.20",
+            "MASS": [
+                {"GAME_ID": "Just Chatting", "ViewerCount": 5699, "time_of_update": 0.0},
+                {"GAME_ID": "Games + Demos", "ViewerCount": 7894, "time_of_update": 7080.0},
+                {"GAME_ID": "Just Chatting", "ViewerCount": 6890, "time_of_update": 7778.0},
+                {"GAME_ID": "Games + Demos", "ViewerCount": 5791, "time_of_update": 7823.0},
+                {"GAME_ID": "Just Chatting", "ViewerCount": 5683, "time_of_update": 7868.0},
+                {"GAME_ID": "NIGHT OF THE CONSUMERS", "ViewerCount": 5500, "time_of_update": 8056.0},
+                {"GAME_ID": "Just Chatting", "ViewerCount": 5683, "time_of_update": 9371.0},
+                {"GAME_ID": "Games + Demos", "ViewerCount": 5791, "time_of_update": 9805.0},
+                {"GAME_ID": "Just Chatting", "ViewerCount": 5683, "time_of_update": 10239.0},
+                {"GAME_ID": "Games + Demos", "ViewerCount": 5791, "time_of_update": 11130.0},
+                {"GAME_ID": "Just Chatting", "ViewerCount": 5683, "time_of_update": 14682.0},
+                {"GAME_ID": "Suite 776", "ViewerCount": 5683, "time_of_update": 14945.0},
+                {"GAME_ID": "Just Chatting", "ViewerCount": 5683, "time_of_update": 18313.0},
+                {"GAME_ID": "Just Chatting", "ViewerCount": 5683, "time_of_update": 22513.0}
+            ]
+
         }
     ]
 }
