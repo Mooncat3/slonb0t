@@ -135,7 +135,7 @@ class CommandsBot(commands.Bot, ABC):
 
         if message == "!курс":
             AdditionalMethods.add_to_buffer("c",
-                                            f"Курс валют на {today}: USD = {dollar} RUB | EUR = {euro} RUB | JPY = {jpy} RUB | UAH = {uah}",
+                                            f"Курс валют на {today}: USD = {dollar} RUB | EUR = {euro} RUB | JPY = {jpy} RUB | UAH = {uah} RUB",
                                             ctx.author)
         else:
             try:
