@@ -35,7 +35,7 @@ class ChatBot(commands.Bot, ABC):
     async def privet1(self, ctx):
         message = ctx.message.content
         nickname = ctx.author.name
-        mess = str.replace(message, '@slonb0t ', '')
+        mess = str.replace(message, '@slonb0t, ', '')
         mess = re.sub("\n", '', mess)
         url = "https://aiproject.ru/api/"
         query = {"ask": mess, "userid": nickname, "key": ""}
