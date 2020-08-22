@@ -118,51 +118,76 @@ class CommandsBot(commands.Bot, ABC):
         r = requests.get('https://fortrader.org/quotes/usdrur')
         r1 = requests.get('https://fortrader.org/quotes/eurrur')
         r2 = requests.get('https://fortrader.org/currencyrates/jpy')
+        r3 = requests.get('https://fortrader.org/currencyrates/uah')
+        
         soup = BeautifulSoup(r.content, 'html.parser')
         soup1 = BeautifulSoup(r1.content, 'html.parser')
         soup2 = BeautifulSoup(r2.content, 'html.parser')
+        soup3 = BeautifulSoup(r3.content, 'html.parser')
+        
         dollar = soup.find('p', class_='rates_box1_inner pid-USDRUR-bid').get_text()
         euro = soup1.find('p', class_='rates_box1_inner pid-EURRUR-bid').get_text()
         jpy = soup2.find('input', class_='converter_form_inp converterInpTo').get(key="value")
+        uah = soup3.find('input', class_='converter_form_inp converterInpTo').get(key="value")
+        
         now = datetime.now() + timedelta(hours=3)
         today = now.strftime("%d.%m")
 
         if message == "!курс":
             AdditionalMethods.add_to_buffer("c",
-                                            f"Курс валют на {today}: USD = {dollar} RUB | EURO = {euro} RUB | JPY = {jpy} RUB",
+                                            f"Курс валют на {today}: USD = {dollar} RUB | EUR = {euro} RUB | JPY = {jpy} RUB | UAH = {uah}",
                                             ctx.author)
         else:
             try:
+            
                 if message.find('!курс доллар-рубль') != -1:
                     kurs = str.replace(message, '!курс доллар-рубль ', '')
                     result = float(kurs) * float(dollar)
                     result = round(result, 2)
                     AdditionalMethods.add_to_buffer("c", f"{nickname}, {kurs} USD = {result} RUB", ctx.author)
+                    
                 elif message.find('!курс рубль-доллар') != -1:
                     kurs = str.replace(message, '!курс рубль-доллар ', '')
                     result = float(kurs) / float(dollar)
                     result = round(result, 2)
                     AdditionalMethods.add_to_buffer("c", f"{nickname}, {kurs} RUB = {result} USD", ctx.author)
+                    
                 elif message.find('!курс евро-рубль') != -1:
                     kurs = str.replace(message, '!курс евро-рубль ', '')
                     result = float(kurs) * float(euro)
                     result = round(result, 2)
                     AdditionalMethods.add_to_buffer("c", f"{nickname}, {kurs} EUR = {result} RUB", ctx.author)
+                    
                 elif message.find('!курс рубль-евро') != -1:
                     kurs = str.replace(message, '!курс рубль-евро ', '')
                     result = float(kurs) / float(euro)
                     result = round(result, 2)
                     AdditionalMethods.add_to_buffer("c", f"{nickname}, {kurs} RUB = {result} EUR", ctx.author)
+                    
                 elif message.find('!курс йена-рубль') != -1:
                     kurs = str.replace(message, '!курс йена-рубль ', '')
                     result = float(kurs) * float(jpy)
                     result = round(result, 2)
                     AdditionalMethods.add_to_buffer("c", f"{nickname}, {kurs} JPY = {result} RUB", ctx.author)
+                    
                 elif message.find('!курс рубль-йена') != -1:
                     kurs = str.replace(message, '!курс рубль-йена ', '')
                     result = float(kurs) / float(jpy)
                     result = round(result, 2)
                     AdditionalMethods.add_to_buffer("c", f"{nickname}, {kurs} RUB = {result} JPY", ctx.author)
+                    
+                elif message.find('!курс рубль-гривна') != -1:
+                    kurs = str.replace(message, '!курс рубль-гривна ', '')
+                    result = float(kurs) / float(uah)
+                    result = round(result, 2)
+                    AdditionalMethods.add_to_buffer("c", f"{nickname}, {kurs} RUB = {result} UAH", ctx.author)
+
+                elif message.find('!курс гривна-рубль') != -1:
+                    kurs = str.replace(message, '!курс гривна-рубль ', '')
+                    result = float(kurs) * float(uah)
+                    result = round(result, 2)
+                    AdditionalMethods.add_to_buffer("c", f"{nickname}, {kurs} UAH = {result} RUB", ctx.author)
+                    
                 else:
                     AdditionalMethods.add_to_buffer("c",
                                                     f"{nickname}, неккоректно написаны валюты, пишите в именительном падеже (рубль-доллар и т.д.)",
@@ -541,28 +566,6 @@ class CommandsBot(commands.Bot, ABC):
             AdditionalMethods.add_to_buffer("e", result, ctx.author)
         else:
             AdditionalMethods.add_to_buffer("c", f"{nickname} пишите меньше знаков WeirdChamp", ctx.author)
-
-    """
-    @commands.command(name='заебало')
-    async def zaebalo(self, ctx):
-        randpage = random.randrange(1, 1689, 1)
-        r = requests.get("https://zaebalo.ru/?page=" + str(randpage))
-        soup = BeautifulSoup(r.content, 'html.parser')
-        d = soup.find_all('div', align='left')
-        p = str(random.choice(d)).replace("</div>", "").replace("<br/>", "").replace("</p>", "").replace("<p>", "").replace(
-            '<div align="left">', '').replace("<br>", "").replace("</br>", "").replace("\r     ", "")
-        with open('data/osujdau.txt', 'r', encoding='utf-8') as c:
-            List = list(c)
-            for s in List:
-                ban = ""
-                s = s.replace("\n", "")
-                for i in range(0, len(s)):
-                    ban += "*"
-                if p.find(s) != -1:
-                    print(s)
-                p = str.replace(p.lower(), s, ban)
-        AdditionalMethods.add_to_buffer("e", AdditionalMethods.check_on_toomuchsimbols(p), ctx.author)
-    """
 
     @commands.command(name='гороскоп')
     async def goroskop(self, ctx):
