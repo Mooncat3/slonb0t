@@ -31,7 +31,7 @@ class ChatBot(commands.Bot, ABC):
         data = json.loads(content)
         await AdditionalMethods.add_to_buffer("e", nickname + ", " + AdditionalMethods.parse_response_query(data), ctx.author)
 
-    @commands.command(name="slonb0t")
+    @commands.command(name="slonb0t,")
     async def privet1(self, ctx):
         message = ctx.message.content
         nickname = ctx.author.name
