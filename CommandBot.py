@@ -35,7 +35,7 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='slon')
     async def slon(self, ctx):
         nickname = ctx.author.name
-        story = nickname + ", что же, дело было летом 2019 года, хесус играл в майнкрафт без модов и смог приручить себе кота, которого мы прозвали Слон, в один прекрасный солнечный день, он залез под блок, где была вода, и, медленно задыхаясь, умер peepoSad , этот бот будет вечным напоминанием о трагедии, которую никто не забудет roflanPominy "
+        story = nickname + ", дело было летом 2019 года, хесус играл в майнкрафт без модов и смог приручить себе кота, которого мы прозвали Слон, в один прекрасный солнечный день, он залез под блок, где была вода, и, медленно задыхаясь, умер peepoSad , этот бот будет вечным напоминанием о трагедии, которую никто не забудет roflanPominy "
         AdditionalMethods.add_to_buffer("e", story, ctx.author)
 
     @commands.command(name='case')
@@ -456,14 +456,14 @@ class CommandsBot(commands.Bot, ABC):
                     AdditionalMethods.add_to_buffer("e", f"{nickname} украл у {str(steal)} {str(ruble)} руб. BOP",
                                                     ctx.author)
                 else:
-                    AdditionalMethods.add_to_buffer("c", f"{nickname} пишите меньше знаков WeirdChamp",
+                    AdditionalMethods.add_to_buffer("c", f"{nickname} пишите меньше символов WeirdChamp",
                                                     ctx.author)
             else:
                 if not AdditionalMethods.check_on_toomuchbool(f"{nickname} ничего не украл у {str(steal)} KeK Lohich"):
                     AdditionalMethods.add_to_buffer("e", f"{nickname} ничего не украл у {str(steal)} KeK Lohich",
                                                 ctx.author)
                 else:
-                    AdditionalMethods.add_to_buffer("c", f"{nickname} пишите меньше знаков WeirdChamp",
+                    AdditionalMethods.add_to_buffer("c", f"{nickname} пишите меньше символов WeirdChamp",
                                                 ctx.author)
 
     @commands.command(name='try')
@@ -475,7 +475,7 @@ class CommandsBot(commands.Bot, ABC):
         if not AdditionalMethods.check_on_toomuchbool(result):
             AdditionalMethods.add_to_buffer("e", result, ctx.author)
         else:
-            AdditionalMethods.add_to_buffer("c", f"{nickname} пишите меньше знаков WeirdChamp",
+            AdditionalMethods.add_to_buffer("c", f"{nickname} пишите меньше символов WeirdChamp",
                                             ctx.author)
 
     @commands.command(name='время')
@@ -493,7 +493,7 @@ class CommandsBot(commands.Bot, ABC):
         if not AdditionalMethods.check_on_toomuchbool(result):
             AdditionalMethods.add_to_buffer("e", result, ctx.author)
         else:
-            AdditionalMethods.add_to_buffer("c", f"{nickname} пишите меньше знаков WeirdChamp", ctx.author)
+            AdditionalMethods.add_to_buffer("c", f"{nickname} пишите меньше символов WeirdChamp", ctx.author)
 
     @commands.command(name='кнб')
     async def cnb(self, ctx):
@@ -538,12 +538,7 @@ class CommandsBot(commands.Bot, ABC):
                 AdditionalMethods.add_to_buffer("e",
                                                 f"{nickname} поставил(а) 📜 , а Бот поставил ✂️ . Победа Бота Lohich",
                                                 ctx.author)
-    """
-    @commands.command(name='вниз')
-    async def vniz(self, ctx):
-        AdditionalMethods.add_to_buffer("e", AdditionalMethods.parse_simplefile_message(":point_down: {}", "down"),
-                                        ctx.author)
-    """
+
     @commands.command(name='когда')
     async def kogda(self, ctx):
         message = ctx.message.content
@@ -552,20 +547,20 @@ class CommandsBot(commands.Bot, ABC):
         if not AdditionalMethods.check_on_toomuchbool(result):
             AdditionalMethods.add_to_buffer("e", result, ctx.author)
         else:
-            AdditionalMethods.add_to_buffer("c", f"{nickname} пишите меньше знаков WeirdChamp", ctx.author)
+            AdditionalMethods.add_to_buffer("c", f"{nickname} пишите меньше символов WeirdChamp", ctx.author)
 
     @commands.command(name='привет')
     async def privet(self, ctx):
         message = ctx.message.content
         nickname = ctx.author.name
         result = AdditionalMethods.parse_standartfile_message(nickname,
-                                                                                          "{nickname} передаёт {filestr} привет {messagestr} "
+                                                                                          "{nickname} {filestr} приветствует {messagestr} "
                                                                                           "peepoHey peepoLove",
                                                                                           message, "!привет", "privet")
         if not AdditionalMethods.check_on_toomuchbool(result):
             AdditionalMethods.add_to_buffer("e", result, ctx.author)
         else:
-            AdditionalMethods.add_to_buffer("c", f"{nickname} пишите меньше знаков WeirdChamp", ctx.author)
+            AdditionalMethods.add_to_buffer("c", f"{nickname} пишите меньше символов WeirdChamp", ctx.author)
 
     @commands.command(name='гороскоп')
     async def goroskop(self, ctx):
