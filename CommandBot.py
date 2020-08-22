@@ -543,7 +543,7 @@ class CommandsBot(commands.Bot, ABC):
     async def kogda(self, ctx):
         message = ctx.message.content
         nickname = ctx.author.name
-        result = AdditionalMethods.parse_standartfile_message(nickname, "{nickname}, {messagestr}? Hmmm {filestr}", message, "!когда", "kogda")
+        result = AdditionalMethods.parse_standartfile_message(nickname, "{nickname}, когда {messagestr}? Hmmm {filestr}", message, "!когда", "kogda")
         if not AdditionalMethods.check_on_toomuchbool(result):
             AdditionalMethods.add_to_buffer("e", result, ctx.author)
         else:
