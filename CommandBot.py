@@ -463,7 +463,7 @@ class CommandsBot(commands.Bot, ABC):
                     AdditionalMethods.add_to_buffer("e", f"{nickname} ничего не украл у {str(steal)} KeK Lohich",
                                                 ctx.author)
                 else:
-                    AdditionalMethods.add_to_buffer("c", f"{nickname} пишите меньше символов WeirdChamp",
+                    AdditionalMethods.add_to_buffer("c", f"{nickname}, пишите меньше символов WeirdChamp",
                                                 ctx.author)
 
     @commands.command(name='try')
@@ -475,7 +475,7 @@ class CommandsBot(commands.Bot, ABC):
         if not AdditionalMethods.check_on_toomuchbool(result):
             AdditionalMethods.add_to_buffer("e", result, ctx.author)
         else:
-            AdditionalMethods.add_to_buffer("c", f"{nickname} пишите меньше символов WeirdChamp",
+            AdditionalMethods.add_to_buffer("c", f"{nickname}, пишите меньше символов WeirdChamp",
                                             ctx.author)
 
     @commands.command(name='время')
@@ -493,7 +493,7 @@ class CommandsBot(commands.Bot, ABC):
         if not AdditionalMethods.check_on_toomuchbool(result):
             AdditionalMethods.add_to_buffer("e", result, ctx.author)
         else:
-            AdditionalMethods.add_to_buffer("c", f"{nickname} пишите меньше символов WeirdChamp", ctx.author)
+            AdditionalMethods.add_to_buffer("c", f"{nickname}, пишите меньше символов WeirdChamp", ctx.author)
 
     @commands.command(name='кнб')
     async def cnb(self, ctx):
@@ -543,11 +543,11 @@ class CommandsBot(commands.Bot, ABC):
     async def kogda(self, ctx):
         message = ctx.message.content
         nickname = ctx.author.name
-        result = AdditionalMethods.parse_standartfile_message(nickname, "{nickname}, {messagestr} {filestr}", message, "!когда", "kogda")
+        result = AdditionalMethods.parse_standartfile_message(nickname, "{nickname}, {messagestr}? Hmmm {filestr}", message, "!когда", "kogda")
         if not AdditionalMethods.check_on_toomuchbool(result):
             AdditionalMethods.add_to_buffer("e", result, ctx.author)
         else:
-            AdditionalMethods.add_to_buffer("c", f"{nickname} пишите меньше символов WeirdChamp", ctx.author)
+            AdditionalMethods.add_to_buffer("c", f"{nickname}, пишите меньше символов WeirdChamp", ctx.author)
 
     @commands.command(name='привет')
     async def privet(self, ctx):
@@ -560,7 +560,7 @@ class CommandsBot(commands.Bot, ABC):
         if not AdditionalMethods.check_on_toomuchbool(result):
             AdditionalMethods.add_to_buffer("e", result, ctx.author)
         else:
-            AdditionalMethods.add_to_buffer("c", f"{nickname} пишите меньше символов WeirdChamp", ctx.author)
+            AdditionalMethods.add_to_buffer("c", f"{nickname}, пишите меньше символов WeirdChamp", ctx.author)
 
     @commands.command(name='гороскоп')
     async def goroskop(self, ctx):
