@@ -17,4 +17,4 @@ time.sleep(5)
 
 repo.create_file("data/TRASHMASSIVE.txt", "Automated Upload from Bot", strer)
 
-time.sleep(300)
+time.sleep(3600)
