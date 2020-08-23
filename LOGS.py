@@ -8,9 +8,7 @@ with open(file='data/TRASHMASSIVE.txt', mode='r', encoding='utf-8') as q:
 paste = AdditionalMethods.createPaste(strer, "loges", "php", "1", "10M")
 urlPaste = AdditionalMethods.sendPaste(paste)
 
-teg = urlPaste[21:]
-
-r = requests.get('https://pastebin.com/raw/' + str(teg))
+r = requests.get('https://pastebin.com/raw/' + str(urlPaste[21:]))
 soup = BeautifulSoup(r.content, 'lxml')
 d = soup.get_text()
 
