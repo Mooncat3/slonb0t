@@ -1,18 +1,14 @@
 import AdditionalMethods
-from bs4 import BeautifulSoup
 import requests
 import time
+from github import Github
 
 with open(file='data/TRASHMASSIVE.txt', mode='r', encoding='utf-8') as q:
     strer = q.read()
-paste = AdditionalMethods.createPaste(strer, "loges", "php", "1", "10M")
-urlPaste = AdditionalMethods.sendPaste(paste)
 
-r = requests.get('https://pastebin.com/raw/' + str(urlPaste[21:]))
-soup = BeautifulSoup(r.content, 'lxml')
-d = soup.get_text()
+g = Github("f0011283768114fac26230cd23b3208ed10d0a54")
 
-with open(file='data/TRASHMASSIVE.txt', mode='w', encoding='utf-8') as e:
-    e.write(str(d))
+repo = g.search_repositories("slonb0t")[0]
+repo.create_file("data/TRASHMASSIVE.txt", "Automated Upload from Bot", strer)
 
-time.sleep(7200)
+time.sleep(300)
