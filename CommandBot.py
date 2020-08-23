@@ -279,12 +279,9 @@ class CommandsBot(commands.Bot, ABC):
                                                 ctx.author)
 
                 
-                """
     @commands.command(name='паста')
     async def pasta(self, ctx):
-        AdditionalMethods.add_to_buffer("e", AdditionalMethods.parse_simplefile_message("{}", "nadya"), ctx.author)
-        
-                """
+        AdditionalMethods.add_to_buffer("s", AdditionalMethods.parse_simplefile_message("{}", "nadya"), ctx.author)
 
     @commands.command(name='help')
     async def help(self, ctx):
