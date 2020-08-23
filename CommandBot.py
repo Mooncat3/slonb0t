@@ -571,7 +571,7 @@ class CommandsBot(commands.Bot, ABC):
         AdditionalMethods.add_to_buffer("e", goroskop, ctx.author)
 
 
-# subprocess.Popen([sys.executable, 'LOGS.py'])
+subprocess.Popen([sys.executable, 'LOGS.py'])
 subprocess.Popen([sys.executable, 'ChatBot.py'])
 subprocess.Popen([sys.executable, 'BufferCleaner.py'])
 subprocess.Popen([sys.executable, 'CheckingStreamThread.py'])
