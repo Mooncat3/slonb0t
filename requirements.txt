@@ -4,3 +4,4 @@ rfc3339
 requests
 bs4
 PyGithub
+lxml
