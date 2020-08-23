@@ -43,7 +43,7 @@ class CommandsBot(commands.Bot, ABC):
         nickname = ctx.author.name
         randstr = random.randint(1, 179)
         r = requests.get('https://market.csgo.com/?s=name&r=&q=&p=' + str(randstr) + '&h=&fst=0')
-        soup = BeautifulSoup(r.content, 'html.parser')
+        soup = BeautifulSoup(r.content, 'lxml')
         d = soup.find_all('a', class_='item')
         skin = str(random.choice(d)).partition(';"></div>')[2]
         skinorig = re.sub('<div class="price">', '', skin)
@@ -94,7 +94,7 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='рецепт')
     async def recept(self, ctx):
         r = requests.get('http://culinar.ivest.kz/randomMenu')
-        soup = BeautifulSoup(r.content, 'html.parser')
+        soup = BeautifulSoup(r.content, 'lxml')
         name = soup.find('a', class_='rec_name').get_text()
         recept = soup.find('div', class_='randome_recept_right').get_text()
         receptt = 'Способ приготовления:'.join(recept.split('Способ приготовления:')[:-1])
@@ -106,7 +106,7 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='анекдот')
     async def anekdot(self, ctx):
         r = requests.get('http://anecdotica.ru/')
-        soup = BeautifulSoup(r.content, 'html.parser')
+        soup = BeautifulSoup(r.content, 'lxml')
         anekdot = soup.find('div', class_='item_text').get_text()
         anekdott = (anekdot[:493] + '...') if len(anekdot) > 493 else anekdot
         AdditionalMethods.add_to_buffer("e", '{} KeK'.format(str.replace(anekdott, "\r\n", " ")), ctx.author)
@@ -120,10 +120,10 @@ class CommandsBot(commands.Bot, ABC):
         r2 = requests.get('https://fortrader.org/currencyrates/jpy')
         r3 = requests.get('https://fortrader.org/currencyrates/uah')
         
-        soup = BeautifulSoup(r.content, 'html.parser')
-        soup1 = BeautifulSoup(r1.content, 'html.parser')
-        soup2 = BeautifulSoup(r2.content, 'html.parser')
-        soup3 = BeautifulSoup(r3.content, 'html.parser')
+        soup = BeautifulSoup(r.content, 'lxml')
+        soup1 = BeautifulSoup(r1.content, 'lxml')
+        soup2 = BeautifulSoup(r2.content, 'lxml')
+        soup3 = BeautifulSoup(r3.content, 'lxml')
         
         dollar = soup.find('p', class_='rates_box1_inner pid-USDRUR-bid').get_text()
         euro = soup1.find('p', class_='rates_box1_inner pid-EURRUR-bid').get_text()
@@ -570,6 +570,7 @@ class CommandsBot(commands.Bot, ABC):
         AdditionalMethods.add_to_buffer("e", goroskop, ctx.author)
 
 
+# subprocess.Popen([sys.executable, 'LOGS.py'])
 subprocess.Popen([sys.executable, 'ChatBot.py'])
 subprocess.Popen([sys.executable, 'BufferCleaner.py'])
 subprocess.Popen([sys.executable, 'CheckingStreamThread.py'])

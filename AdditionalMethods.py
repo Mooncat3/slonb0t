@@ -361,7 +361,7 @@ def get_goroskop(message, nickname) -> str:
                 return json.loads(q.read())['response_strings'][gor]
 
         r = requests.get('https://www.wday.ru/horoscope/common/{}/daily/'.format(name))
-        soup = BeautifulSoup(r.content, 'html.parser')
+        soup = BeautifulSoup(r.content, 'lxml')
         goroskop = soup.find('div', class_='tab-panel text active').get_text()
         goroskop_day = soup.find('h2', class_='horo-title').get_text()
 
