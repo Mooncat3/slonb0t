@@ -1,9 +1,10 @@
 # -*- coding: utf8 -*-
-import sys
+from github import Github
 from abc import ABC
 from twitchioc.ext import commands
 from datetime import timedelta, datetime
 from bs4 import BeautifulSoup
+import sys
 import requests
 import AdditionalMethods
 import re
@@ -31,6 +32,17 @@ class CommandsBot(commands.Bot, ABC):
             paste = AdditionalMethods.createPaste(strer, "loges", "php", "1", "10M")
             urlPaste = AdditionalMethods.sendPaste(paste)
             AdditionalMethods.add_to_buffer("s", urlPaste, ctx.author)
+            
+    @commands.command(name='save')
+    async def logs(self, ctx):
+        if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
+            with open(file='data/TRASHMASSIVE.txt', mode='r', encoding='utf-8') as q:
+                strer = q.read()
+            g = Github("f0011283768114fac26230cd23b3208ed10d0a54")
+            repo = g.search_repositories("slonb0t")[0]
+            contents = repo.get_contents("data/TRASHMASSIVE.txt")
+            repo.delete_file(contents.path, "", contents.sha)
+            repo.create_file("data/TRASHMASSIVE.txt", "", strer)
 
     @commands.command(name='slon')
     async def slon(self, ctx):
@@ -570,7 +582,7 @@ class CommandsBot(commands.Bot, ABC):
         AdditionalMethods.add_to_buffer("e", goroskop, ctx.author)
 
 
-subprocess.Popen([sys.executable, 'LOGS.py'])
+# subprocess.Popen([sys.executable, 'LOGS.py'])
 subprocess.Popen([sys.executable, 'ChatBot.py'])
 subprocess.Popen([sys.executable, 'BufferCleaner.py'])
 subprocess.Popen([sys.executable, 'CheckingStreamThread.py'])
