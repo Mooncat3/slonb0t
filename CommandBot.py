@@ -200,19 +200,47 @@ class CommandsBot(commands.Bot, ABC):
                     result = round(result, 2)
                     AdditionalMethods.add_to_buffer("c", f"{nickname}, {kurs} UAH = {result} RUB", ctx.author)
                 
-            elif message.find('!курс йена-доллар') != -1:
-                kurs = str.replace(message, '!курс йена-доллар ', '')
-                rubles = float(kurs) * float(jpy)
-                dollars = rubles / float(dollar)
-                result = round(dollars, 2)
-                AdditionalMethods.add_to_buffer("c", f"{nickname}, {kurs} JPY = {result} USD", ctx.author)
+                elif message.find('!курс йена-доллар') != -1:
+                    kurs = str.replace(message, '!курс йена-доллар ', '')
+                    rubles = float(kurs) * float(jpy)
+                    dollars = rubles / float(dollar)
+                    result = round(dollars, 2)
+                    AdditionalMethods.add_to_buffer("c", f"{nickname}, {kurs} JPY = {result} USD", ctx.author)
 
-            elif message.find('!курс доллар-йена') != -1:
-                kurs = str.replace(message, '!курс доллар-йена ', '')
-                rubles = float(kurs) * float(dollar)
-                iens = rubles / float(jpy)
-                result = round(iens, 2)
-                AdditionalMethods.add_to_buffer("c", f"{nickname}, {kurs} USD = {result} JPY", ctx.author)
+                elif message.find('!курс доллар-йена') != -1:
+                    kurs = str.replace(message, '!курс доллар-йена ', '')
+                    rubles = float(kurs) * float(dollar)
+                    iens = rubles / float(jpy)
+                    result = round(iens, 2)
+                    AdditionalMethods.add_to_buffer("c", f"{nickname}, {kurs} USD = {result} JPY", ctx.author)
+                
+                elif message.find('!курс гривна-доллар') != -1:
+                    kurs = str.replace(message, '!курс гривна-доллар ', '')
+                    rubles = float(kurs) * float(uah)
+                    dollars = rubles / float(dollar)
+                    result = round(dollars, 2)
+                    AdditionalMethods.add_to_buffer("c", f"{nickname}, {kurs} UAH = {result} RUB", ctx.author)
+
+                elif message.find('!курс доллар-гривна') != -1:
+                    kurs = str.replace(message, '!курс доллар-гривна ', '')
+                    rubles = float(kurs) * float(dollar)
+                    uahs = rubles / float(uah)
+                    result = round(uahs, 2)
+                    AdditionalMethods.add_to_buffer("c", f"{nickname}, {kurs} RUB = {result} UAH", ctx.author)
+                
+                elif message.find('!курс евро-доллар') != -1:
+                    kurs = str.replace(message, '!курс евро-доллар ', '')
+                    rubles = float(kurs) * float(euro)
+                    dollars = rubles / float(dollar)
+                    result = round(dollars, 2)
+                    AdditionalMethods.add_to_buffer("c", f"{nickname}, {kurs} EUR = {result} USD", ctx.author)
+
+                elif message.find('!курс доллар-евро') != -1:
+                    kurs = str.replace(message, '!курс доллар-евро ', '')
+                    rubles = float(kurs) * float(dollar)
+                    euros = rubles / float(euro)
+                    result = round(euros, 2)
+                    AdditionalMethods.add_to_buffer("c", f"{nickname}, {kurs} USD = {result} EUR", ctx.author)
                     
                 else:
                     AdditionalMethods.add_to_buffer("c",
