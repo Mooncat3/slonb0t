@@ -81,6 +81,12 @@ def checkingthread():
                             dat['TRASHMASS'][len(dat['TRASHMASS']) - 1]['MASS'][len(dat['TRASHMASS'][len(dat['TRASHMASS']) - 1]['MASS']) - 1]['time_of_update'] = time.time() - times
                             q.write(json.dumps(dat))
                     safer += 1
+                else:
+                    with open(file='data/TRASHMASSIVE.txt', mode='r', encoding='utf-8') as q:
+                        dat = json.loads(q.read())
+                    dat['active'] = False
+                    with open(file='data/TRASHMASSIVE.txt', mode='w', encoding='utf-8') as q:
+                        q.write(json.dumps(dat))
 
         if active:
             time.sleep(10)
