@@ -199,6 +199,20 @@ class CommandsBot(commands.Bot, ABC):
                     result = float(kurs) * float(uah)
                     result = round(result, 2)
                     AdditionalMethods.add_to_buffer("c", f"{nickname}, {kurs} UAH = {result} RUB", ctx.author)
+                
+                elif message.find('!курс йена-доллар') != -1:
+                    kurs = str.replace(message, '!курс йена-рубль ', '')
+                    rubles = float(kurs) * float(jpy)
+                    dollars = rubles / float(dollar)
+                    result = round(dollars, 2)
+                    AdditionalMethods.add_to_buffer("c", f"{nickname}, {kurs} JPY = {result} RUB", ctx.author)
+                    
+                elif message.find('!курс доллар-йена') != -1:
+                    kurs = str.replace(message, '!курс рубль-йена ', '')
+                    rubles = float(kurs) * float(dollar)
+                    iens = rubles / float(jpy)
+                    result = round(iens, 2)
+                    AdditionalMethods.add_to_buffer("c", f"{nickname}, {kurs} RUB = {result} JPY", ctx.author)
                     
                 else:
                     AdditionalMethods.add_to_buffer("c",
