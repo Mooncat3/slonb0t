@@ -23,25 +23,20 @@ class CommandsBot(commands.Bot, ABC):
 
     async def event_ready(self):
         print(f'Ready {str(self.__class__.__name__)} | {self.nick} on {self.initial_channels}')
-        
-    """
-
+       
     @commands.command(name='porf')
     async def dev(self, ctx):
-        url = "https://models.dobro.ai/gpt2/medium/"
         nickname = ctx.author.name
         word = str.replace(ctx.message.content, '!porf ', "")
+        url = "https://models.dobro.ai/gpt2/medium/"
         if word == "!porf":
             AdditionalMethods.add_to_buffer("e", f"{nickname}, Впишите какое-либо предложение", ctx.author, "porf")
         elif len(word) > 300:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, Бот может принимать максимум 300 символов", ctx.author, "porf")
         else:
-            response = requests.post(url, json={'prompt': word, 'length': '60', 'num_samples': '1'})
-            result = str(response.text)
-            result = result.replace('{"replies":["', '').replace('"]}', '')
+            response = requests.post(url, json={'prompt': word, 'length': '30', 'num_samples': '5'})
+            result = str(response.text).replace('{"replies":["', '').replace('"]}', '').rpartition('","')[2]
             AdditionalMethods.add_to_buffer("e", AdditionalMethods.check_on_toomuchsimbols(f"{nickname}, " + word + result), ctx.author, "porf")
-
-    """
 
     @commands.command(name='save')
     async def logs(self, ctx):
