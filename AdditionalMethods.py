@@ -14,6 +14,63 @@ import asyncio
 from twitchioc.dataclasses import User
 
 
+def summvalue(start: str, end: str, value: float, dollar: float, euro: float, iens: float, grivn: float):
+    result = "неккоректно написаны валюты, пишите в именительном падеже (рубль-доллар и т.д.)"
+    splited = start + end
+    if splited.find("рубль") != -1:
+        if start == "рубль":
+            if end == "доллар":
+                result = f"{value} RUB = {round(value / dollar, 2)} USD"
+            elif end == "евро":
+                result = f"{value} RUB = {round(value / euro, 2)} EUR"
+            elif end == "йена":
+                result = f"{value} RUB = {round(value / iens, 2)} JPY"
+            elif end == "гривны":
+                result = f"{value} RUB = {round(value / grivn, 2)} UAH"
+        else:
+            if start == "доллар":
+                result = f"{value} USD = {round(value * dollar, 2)} RUB"
+            elif start == "евро":
+                result = f"{value} EUR = {round(value * euro, 2)} RUB"
+            elif start == "йена":
+                result = f"{value} JPY = {round(value * iens, 2)} RUB"
+            elif start == "гривны":
+                result = f"{value} UAH = {round(value * grivn, 2)} RUB"
+    elif splited.find("доллар") != -1:
+        if start == "доллар":
+            if end == "евро":
+                result = f"{value} USD = {round(value * dollar / euro, 2)} EUR"
+            elif end == "йена":
+                result = f"{value} USD = {round(value * dollar / iens, 2)} JPY"
+            elif end == "гривны":
+                result = f"{value} USD = {round(value * dollar / grivn, 2)} UAH"
+        else:
+            if start == "евро":
+                result = f"{value} EUR = {round(value * euro / dollar, 2)} USD"
+            elif start == "йена":
+                result = f"{value} JPY = {round(value * iens / dollar, 2)} USD"
+            elif start == "гривны":
+                result = f"{value} UAH = {round(value * grivn / dollar, 2)} USD"
+    elif splited.find("йена") != -1:
+        if start == "йена":
+            if end == "евро":
+                result = f"{value} JPY = {round(value * iens / euro, 2)} EUR"
+            elif end == "гривны":
+                result = f"{value} JPY = {round(value * iens / grivn, 2)} UAH"
+        else:
+            if start == "евро":
+                result = f"{value} EUR = {round(value * euro / iens, 2)} JPY"
+            elif start == "гривны":
+                result = f"{value} UAH = {round(value * grivn / iens, 2)} JPY"
+    else:
+        if start == "евро":
+            result = f"{value} EUR = {round(value * euro / grivn, 2)} UAH"
+        elif end == "гривны":
+            result = f"{value} UAH = {round(value * grivn / euro, 2)} EUR"
+    return result
+
+
+
 def sendPaste(paste):
     url = "https://pastebin.com/api/api_post.php"
     req = requests.post(url, data=paste)
@@ -65,7 +122,7 @@ def vip(mod: bool, name: str) -> bool:
         return False
 
 
-def add_to_buffer(type: str, message: str, author: User):
+def add_to_buffer(type: str, message: str, author: User, command: str):
     try:
         with open(file='data/buffer.txt', mode='r', encoding='utf-8') as e:
             dat = json.loads(e.read())
@@ -75,7 +132,7 @@ def add_to_buffer(type: str, message: str, author: User):
         time.sleep(0.1)
     config.buferchanged = True
     with open(file='data/buffer.txt', mode='w', encoding='utf-8') as q:
-        dat.append({"vip": vip(author.is_mod, author.name), "nickname": author.name, "type": type, "message": message})
+        dat.append({"vip": vip(author.is_mod, author.name), "nickname": author.name, "type": type, "message": message, "command": command})
         q.write(json.dumps(dat))
     config.buferchanged = False
 
@@ -352,7 +409,7 @@ def parse_response_query(data: json) -> str:
     return data['aiml'] + " P226Smug"
 
 
-def get_goroskop(message, nickname) -> str:
+def get_goroskop(message: str, nickname) -> str:
     # ----------------------method for getting goroskop-----------------
     def parse_goroskop(name: str) -> str:
         # ----------------------ifs----------------------------------------
@@ -373,7 +430,7 @@ def get_goroskop(message, nickname) -> str:
 
     with open(file='data/goroskopdictionary.txt', encoding='utf_8') as q:
         gors = json.loads(q.read())
-        if message in gors['query_strings']:
-            return parse_goroskop(gors['query_strings'][message])
+        if message.lower() in gors['query_strings']:
+            return parse_goroskop(gors['query_strings'][message.lower()])
         else:
             return f"{nickname} введите правильный знак зодиака WeirdChamp"
