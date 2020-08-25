@@ -109,7 +109,7 @@ class BufferCleaner(Client, ABC):
                 print(mess)
                 if rest['vip'] and rest['type'] != "s":
                     await sock.send_privmsg(config.CHAN, mess)
-                elif rest['type'] == "s":
+                elif rest['type'] == "s" or x >= AdditionalMethods.get_bufer_max():
                     await sock.send_privmsg(config.CHAN, f"/w {rest['nickname']} !{resert['cmd']} ▶ {mess}")
             await asyncio.sleep(0.5)
             with open(file='data/buffer.txt', mode='r', encoding='utf-8') as e:
@@ -118,8 +118,9 @@ class BufferCleaner(Client, ABC):
                 except:
                     dat = []
                 if len(dat) > 0:
-                    for res in dat:
-                        if res['vip'] or res['type'] == "s":
+                    for x in range(0, len(dat)):
+                        res = dat[len(dat) - x - 1]
+                        if res['vip'] or res['type'] == "s" or x >= AdditionalMethods.get_bufer_max():
                             ondeleting.append(res)
                             if res['type'] != "r":
                                 reser = {"mes": res['message'], "cmd": res['command']}
@@ -160,7 +161,6 @@ class BufferCleaner(Client, ABC):
         while True:
             async def send_mess(sock, resert, rest):
                 mess = resert['mes']
-                print(mess)
                 while sock._websocket is None:
                     await asyncio.sleep(1)
                 if rest['type'] == "e":
