@@ -42,7 +42,7 @@ class ChatBot(commands.Bot, ABC):
         response = requests.post(url=url, data={"query": jsonquery})
         content = response.content.decode('utf8').replace("'", '"')
         data = json.loads(content)
-        await AdditionalMethods.add_to_buffer("e", nickname + ", " + AdditionalMethods.parse_response_query(data), ctx.author, "slonb0t,")
+        await AdditionalMethods.add_to_buffer("e", nickname + ", " + AdditionalMethods.parse_response_query(data), ctx.author, "slonb0t")
         
     @commands.command(name="slonb0t")
     async def privet1(self, ctx):
