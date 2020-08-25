@@ -1,5 +1,8 @@
 import urllib.request
 import json
+
+from github import Github
+
 import config
 import time
 import datetime
@@ -32,17 +35,23 @@ def checkingthread():
         response = urllib.request.urlopen(request).read()
         data = json.loads(response)
         if len(data['data']) > 0:
+            print(data)
             if not active:
                 with open(file='data/TRASHMASSIVE.txt', mode='r', encoding='utf-8') as q:
                     dat = json.loads(q.read())
-                dat['active'] = True
-                dat['TRASHMASS'].append({"date": datetime.datetime.strftime(datetime.datetime.now(), "%m.%e.%y"), "MASS": []})
-                if len(dat['TRASHMASS']) > 10:
-                    dat['TRASHMASS'].remove(dat['TRASHMASS'][0])
-                with open(file='data/TRASHMASSIVE.txt', mode='w', encoding='utf-8') as q:
-                    q.write(json.dumps(dat))
-                times = time.time()
-                active = True
+                print(dat)
+                if not dat['active']:
+                    dat['active'] = True
+                    dat['TRASHMASS'].append({"date": datetime.datetime.strftime(datetime.datetime.now(), "%m.%e.%y"), "MASS": []})
+                    while len(dat['TRASHMASS']) > 10:
+                        dat['TRASHMASS'].remove(dat['TRASHMASS'][0])
+                    with open(file='data/TRASHMASSIVE.txt', mode='w', encoding='utf-8') as q:
+                        q.write(json.dumps(dat))
+                    times = time.time()
+                    active = True
+                else:
+                    times = time.time() - dat['TRASHMASS'][len(dat['TRASHMASS']) - 1]['duration']
+                    active = True
             if safer > 0:
                 safer = 0
                 res = {"GAME_ID": "Timeout", "ViewerCount": data['data'][0]['viewer_count'], "time_of_update": time.time() - times}
@@ -71,6 +80,14 @@ def checkingthread():
                 dat['TRASHMASS'][len(dat['TRASHMASS']) - 1]['MASS'][len(dat['TRASHMASS'][len(dat['TRASHMASS']) - 1]['MASS']) - 1]['GAME_ID'] = dat['TRASHMASS'][len(dat['TRASHMASS']) - 2]['MASS']['GAME_ID']
                 with open(file='data/TRASHMASSIVE.txt', mode='w', encoding='utf-8') as q:
                     q.write(json.dumps(dat))
+                g = Github("f0011283768114fac26230cd23b3208ed10d0a54")
+
+                repo = g.search_repositories("slonb0t")[0]
+
+                contents = repo.get_contents("data/TRASHMASSIVE.txt")
+                repo.delete_file(contents.path, "Automated Remove from Bot", contents.sha)
+
+                repo.create_file("data/TRASHMASSIVE.txt", "Automated Upload from Bot", json.dumps(dat))
             else:
                 if active:
                     if safer == 0:
