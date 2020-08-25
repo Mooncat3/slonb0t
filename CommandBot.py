@@ -1,9 +1,7 @@
 # -*- coding: utf8 -*-
 import sys
 from abc import ABC
-
 from github import Github
-
 from twitchioc.ext import commands
 from datetime import timedelta, datetime
 from bs4 import BeautifulSoup
@@ -255,10 +253,11 @@ class CommandsBot(commands.Bot, ABC):
                 AdditionalMethods.add_to_buffer("e",
                                                 f"{nickname}, ваш IQ = {str(iq)}! Внимание! В чате гений WAYTOOSMART Clap",
                                                 ctx.author, "iq")
-
+    '''
     @commands.command(name='паста')
     async def pasta(self, ctx):
         AdditionalMethods.add_to_buffer("e", AdditionalMethods.parse_simplefile_message("{}", "nadya"), ctx.author, "паста")
+    '''
 
     @commands.command(name='help')
     async def help(self, ctx):
