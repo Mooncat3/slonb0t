@@ -29,7 +29,7 @@ class ChatBot(commands.Bot, ABC):
         response = requests.post(url=url, data={"query": jsonquery})
         content = response.content.decode('utf8').replace("'", '"')
         data = json.loads(content)
-        await AdditionalMethods.add_to_buffer("e", nickname + ", " + AdditionalMethods.parse_response_query(data), ctx.author)
+        await AdditionalMethods.add_to_buffer("e", nickname + ", " + AdditionalMethods.parse_response_query(data), ctx.author, "SLONB0T")
 
     @commands.command(name="slonb0t,")
     async def privet1(self, ctx):
@@ -43,22 +43,7 @@ class ChatBot(commands.Bot, ABC):
         response = requests.post(url=url, data={"query": jsonquery})
         content = response.content.decode('utf8').replace("'", '"')
         data = json.loads(content)
-        await AdditionalMethods.add_to_buffer("e", nickname + ", " + AdditionalMethods.parse_response_query(data), ctx.author)
-        
-        
-    @commands.command(name="slonb0t")
-    async def privet1(self, ctx):
-        message = ctx.message.content
-        nickname = ctx.author.name
-        mess = str.replace(message, '@slonb0t ', '')
-        mess = re.sub("\n", '', mess)
-        url = "https://aiproject.ru/api/"
-        query = {"ask": mess, "userid": nickname, "key": ""}
-        jsonquery = json.encoder.JSONEncoder.encode(self=json.encoder.JSONEncoder(), o=query)
-        response = requests.post(url=url, data={"query": jsonquery})
-        content = response.content.decode('utf8').replace("'", '"')
-        data = json.loads(content)
-        await AdditionalMethods.add_to_buffer("e", nickname + ", " + AdditionalMethods.parse_response_query(data), ctx.author)
+        await AdditionalMethods.add_to_buffer("e", nickname + ", " + AdditionalMethods.parse_response_query(data), ctx.author, "slonb0t")
 
 
 
