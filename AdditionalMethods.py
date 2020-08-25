@@ -298,7 +298,7 @@ async def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "
         request = urllib.request.Request(url=url, headers={"Authorization": "Bearer {}".format(config.OAUTH),
                                                            "Client-ID": "{}".format(config.CLIENT_ID)})
         response = urllib.request.urlopen(request).read()
-        data = json.loads(response)
+        data: dict = json.loads(response)
         ident: int = 1
         if id_game == "0":
             for p in data["data"]:
@@ -315,12 +315,15 @@ async def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "
                                                                                                 data['pagination'][
                                                                                                     'cursor'])
                 else:
-                    url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&after={}&started_at={}&ended_at={}".format(
-                        config.BROADCASTER_ID, data['pagination']['cursor'], datepast, datenow)
+                    if 'cursor' in data['pagination'].keys():
+                        url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&after={}&started_at={}&ended_at={}".format(
+                            config.BROADCASTER_ID, data['pagination']['cursor'], datepast, datenow)
+                    else:
+                        return {"code": "3", "url": ""}
+                        config.istopcliprunning = False
                 request = urllib.request.Request(url=url, headers={"Authorization": "Bearer {}".format(config.OAUTH),
                                                                    "Client-ID": "{}".format(config.CLIENT_ID)})
                 response = urllib.request.urlopen(request).read()
-                print(response)
                 data = json.loads(response)
                 if ident == 30:
                     config.istopcliprunning = False
@@ -363,10 +366,12 @@ async def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "
         with open('data/abreviatures.txt') as n:
             ad = json.loads(n.read())
             if argument in ad:
+                print(ad[argument])
                 return ad[argument]
             return ""
 
     # -------------------------------------method itself--------------------------------------
+    argument = argument.lower()
     if config.istopcliprunning:
         return make_response_string({"code": "4", "url": ""}, days_before)
     id_game = "0"
