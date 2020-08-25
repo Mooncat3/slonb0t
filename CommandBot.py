@@ -25,6 +25,8 @@ class CommandsBot(commands.Bot, ABC):
 
     async def event_ready(self):
         print(f'Ready {str(self.__class__.__name__)} | {self.nick} on {self.initial_channels}')
+        
+    """
 
     @commands.command(name='porf')
     async def dev(self, ctx):
@@ -40,6 +42,8 @@ class CommandsBot(commands.Bot, ABC):
             result = str(response.text)
             result = result.replace('{"replies":["', '').replace('"]}', '')
             AdditionalMethods.add_to_buffer("e", AdditionalMethods.check_on_toomuchsimbols(f"{nickname}, " + word + result), ctx.author, "porf")
+
+    """
 
     @commands.command(name='save')
     async def logs(self, ctx):
