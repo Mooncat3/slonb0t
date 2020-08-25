@@ -86,7 +86,7 @@ class CommandsBot(commands.Bot, ABC):
         nickname = ctx.author.name
         message = ctx.message.content
         message = str.replace(message, '!history', '')
-        AdditionalMethods.add_to_buffer("s", AdditionalMethods.get_last_stream_stat(message[1:len(message)], nickname, ctx.author), ctx.author)
+        AdditionalMethods.add_to_buffer("c", AdditionalMethods.get_last_stream_stat(message[1:len(message)], nickname, ctx.author), ctx.author)
 
     @commands.command(name='archive')
     async def streamh(self, ctx):
