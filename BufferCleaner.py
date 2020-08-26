@@ -114,7 +114,7 @@ class BufferCleaner(Client, ABC):
                     await asyncio.sleep(0.1)
                 if rest['vip'] and rest['type'] != "s":
                     await sock.send_privmsg(config.CHAN, mess)
-                elif rest['type'] == "s" or len(dat) - x - excluding > AdditionalMethods.get_bufer_max():
+                elif rest['type'] == "s" or x - excluding > AdditionalMethods.get_bufer_max():
                     await asyncio.sleep(resert['timeout'])
                     await sock.send_privmsg(config.CHAN, f"/w {rest['nickname']} !{resert['cmd']} ▶ {mess}")
             await asyncio.sleep(0.2)
@@ -126,19 +126,21 @@ class BufferCleaner(Client, ABC):
                 if len(dat) > 0:
                     excluding = 0
                     for x in range(0, len(dat)):
-                        res = dat[len(dat) - x - 1]
+                        res = dat[x]
                         if res['vip'] or res['type'] == "s":
                             excluding += 1
                         if res['vip'] or res['type'] == "s" or x - excluding >= AdditionalMethods.get_bufer_max():
                             ondeleting.append(res)
                             if res['type'] != "r":
                                 reser = {"mes": res['message'], "cmd": res['command'], "timeout": 0.0}
+                                print("MESS = " + res['message'])
                                 await send_mess(self._ws, reser, res)
                             else:
                                 if time.time() - recepttime > 20:
                                     if dopbol:
                                         dopbol = False
                                         reser = {"mes": res['message'], "cmd": res['command'], "timeout": 0.0}
+                                        print("MESS = " + res['message'])
                                         await send_mess(self._ws, reser, res)
                                     else:
                                         dopbol = True
@@ -172,6 +174,7 @@ class BufferCleaner(Client, ABC):
                 mess = resert['mes']
                 while sock._websocket is None:
                     await asyncio.sleep(0.1)
+                print(resert['timeout'])
                 if rest['type'] == "e":
                     if not AdditionalMethods.check_active():
                         await asyncio.sleep(resert['timeout'])
@@ -183,7 +186,7 @@ class BufferCleaner(Client, ABC):
                     await sock.send_privmsg(config.CHAN, mess)
 
             await asyncio.sleep(0.2)
-            if time.time() - (tttime + timer) > 0:
+            if time.time() - (tttime + timer) > AdditionalMethods.get_bufer_timeout():
                 tttime = time.time()
                 timer = 0.0
             with open(file='data/buffer.txt', mode='r', encoding='utf-8') as e:
