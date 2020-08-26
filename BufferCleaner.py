@@ -22,6 +22,7 @@ class BufferCleaner(Client, ABC):
                                        nick=config.BOT, initial_channels=config.CHANNELS)
         self.loop.create_task(self.listen_to_buffer_delaied())
         self.loop.create_task(self.listen_to_buffer_undelaied())
+        self.messes = []
 
     async def event_webhook(self, data):
         pass
@@ -63,6 +64,11 @@ class BufferCleaner(Client, ABC):
         pass
 
     async def event_message(self, message):
+        """
+        self.messes.append(message.author.name+": "+message.content)
+        with open("data/messes", "w") as q:
+            q.write(json.dumps(self.messes))
+        """
         pass
 
     async def event_error(self, error: Exception, data=None):
@@ -105,46 +111,49 @@ class BufferCleaner(Client, ABC):
             async def send_mess(sock, resert, rest):
                 mess = resert['mes']
                 while sock._websocket is None:
-                    await asyncio.sleep(1)
-                print(mess)
+                    await asyncio.sleep(0.1)
                 if rest['vip'] and rest['type'] != "s":
                     await sock.send_privmsg(config.CHAN, mess)
-                elif rest['type'] == "s" or x >= AdditionalMethods.get_bufer_max():
+                elif rest['type'] == "s" or len(dat) - x - excluding > AdditionalMethods.get_bufer_max():
+                    await asyncio.sleep(resert['timeout'])
                     await sock.send_privmsg(config.CHAN, f"/w {rest['nickname']} !{resert['cmd']} ▶ {mess}")
-            await asyncio.sleep(0.5)
+            await asyncio.sleep(0.2)
             with open(file='data/buffer.txt', mode='r', encoding='utf-8') as e:
                 try:
                     dat = json.loads(e.read())
                 except:
                     dat = []
                 if len(dat) > 0:
+                    excluding = 0
                     for x in range(0, len(dat)):
                         res = dat[len(dat) - x - 1]
-                        if res['vip'] or res['type'] == "s" or x >= AdditionalMethods.get_bufer_max():
+                        if res['vip'] or res['type'] == "s":
+                            excluding += 1
+                        if res['vip'] or res['type'] == "s" or x - excluding >= AdditionalMethods.get_bufer_max():
                             ondeleting.append(res)
                             if res['type'] != "r":
-                                reser = {"mes": res['message'], "cmd": res['command']}
+                                reser = {"mes": res['message'], "cmd": res['command'], "timeout": 0.0}
                                 await send_mess(self._ws, reser, res)
                             else:
-                                if time.time() - recepttime > 10:
+                                if time.time() - recepttime > 20:
                                     if dopbol:
                                         dopbol = False
-                                        reser = {"mes": res['message'], "cmd": res['command']}
+                                        reser = {"mes": res['message'], "cmd": res['command'], "timeout": 0.0}
                                         await send_mess(self._ws, reser, res)
                                     else:
                                         dopbol = True
-                                        reser = {"mes": res['message'], "cmd": res['command']}
+                                        reser = {"mes": res['message'], "cmd": res['command'], "timeout": 2.0}
                                         recepttime = time.time()
                                         await send_mess(self._ws, reser, res)
             if len(ondeleting) > 0:
                 while config.buferchanged:
                     await asyncio.sleep(0.1)
+                config.buferchanged = True
                 with open(file='data/buffer.txt', mode='r', encoding='utf-8') as e:
                     dat = json.loads(e.read())
                     for delet in ondeleting:
                         dat.remove(delet)
                     ondeleting = []
-                config.buferchanged = True
                 with open(file='data/buffer.txt', mode='w', encoding='utf-8') as q:
                     if len(dat) == 0:
                         q.write("[]")
@@ -153,7 +162,7 @@ class BufferCleaner(Client, ABC):
                 config.buferchanged = False
 
     async def listen_to_buffer_delaied(self):
-        tttime = 0.0
+        tttime = time.time()
         timer = 0.0
         recepttime = 0.0
         ondeleting = []
@@ -162,7 +171,7 @@ class BufferCleaner(Client, ABC):
             async def send_mess(sock, resert, rest):
                 mess = resert['mes']
                 while sock._websocket is None:
-                    await asyncio.sleep(1)
+                    await asyncio.sleep(0.1)
                 if rest['type'] == "e":
                     if not AdditionalMethods.check_active():
                         await asyncio.sleep(resert['timeout'])
@@ -173,8 +182,8 @@ class BufferCleaner(Client, ABC):
                     dat.remove(rest)
                     await sock.send_privmsg(config.CHAN, mess)
 
-            await asyncio.sleep(0.5)
-            if time.time() - (tttime + timer) > AdditionalMethods.get_bufer_timeout():
+            await asyncio.sleep(0.2)
+            if time.time() - (tttime + timer) > 0:
                 tttime = time.time()
                 timer = 0.0
             with open(file='data/buffer.txt', mode='r', encoding='utf-8') as e:
@@ -183,7 +192,15 @@ class BufferCleaner(Client, ABC):
                 except:
                     dat = []
                 if len(dat) > 0:
-                    for res in dat:
+                    while len(dat) > AdditionalMethods.get_bufer_max():
+                        await asyncio.sleep(0.2)
+                        with open(file='data/buffer.txt', mode='r', encoding='utf-8') as e:
+                            try:
+                                dat = json.loads(e.read())
+                            except:
+                                dat = []
+                    if len(dat) > 0:
+                        res = dat[0]
                         if not res['vip'] and res['type'] != "s":
                             ondeleting.append(res)
                             if res['type'] != "r":
@@ -192,7 +209,7 @@ class BufferCleaner(Client, ABC):
                                 tttime = time.time()
                                 await send_mess(self._ws, reser, res)
                             else:
-                                if time.time() - recepttime > 10:
+                                if time.time() - recepttime > 20:
                                     if dopbol:
                                         dopbol = False
                                         reser = {"timeout": timer, "mes": res['message'], "cmd": res['command']}
@@ -201,7 +218,7 @@ class BufferCleaner(Client, ABC):
                                         await send_mess(self._ws, reser, res)
                                     else:
                                         dopbol = True
-                                        timer = AdditionalMethods.get_bufer_timeout() + 2.0
+                                        timer = 2.0
                                         reser = {"timeout": timer, "mes": res['message'], "cmd": res['command']}
                                         tttime = time.time()
                                         recepttime = time.time()
@@ -209,12 +226,12 @@ class BufferCleaner(Client, ABC):
             if len(ondeleting) > 0:
                 while config.buferchanged:
                     await asyncio.sleep(0.1)
+                config.buferchanged = True
                 with open(file='data/buffer.txt', mode='r', encoding='utf-8') as e:
                     dat = json.loads(e.read())
                     for delet in ondeleting:
                         dat.remove(delet)
                     ondeleting = []
-                config.buferchanged = True
                 with open(file='data/buffer.txt', mode='w', encoding='utf-8') as q:
                     if len(dat) == 0:
                         q.write("[]")
