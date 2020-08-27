@@ -249,9 +249,9 @@ class CommandsBot(commands.Bot, ABC):
                                                 f"{nickname}, ваш IQ = {str(iq)}! Внимание! В чате гений WAYTOOSMART Clap",
                                                 ctx.author, "iq")
                                                     
-    @commands.command(name='паста')
+    @commands.command(name='pastа')
     async def pasta(self, ctx):
-        AdditionalMethods.add_to_buffer("e", AdditionalMethods.parse_simplefile_message("{}", "nadya"), ctx.author, "паста")
+        AdditionalMethods.add_to_buffer("e", AdditionalMethods.parse_simplefile_message("{}", "nadya"), ctx.author, "pastа")
 
     @commands.command(name='help')
     async def help(self, ctx):
