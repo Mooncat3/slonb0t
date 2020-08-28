@@ -12,8 +12,7 @@ import random
 import subprocess
 import config
 import json
-from pytz import timezone, exceptions
-
+from urllib.parse import quote
 
 class CommandsBot(commands.Bot, ABC):
 
@@ -460,9 +459,8 @@ class CommandsBot(commands.Bot, ABC):
                                                                    f"{nickname}, Чичас %H:%M по МСК Waiting"), ctx.author, "время")
         else:
             loc = str.replace(message, '!время ', '')
-            loc = loc.replace(" ", "%20")
             url = "http://search.maps.sputnik.ru/search?q="
-            response = requests.get(url + loc)
+            response = requests.get(url + quote(loc))
             if response.text.find('"found":0') != -1:
                 AdditionalMethods.add_to_buffer("c", f"{nickname}, неправильно указан населённый пункт. Попробуйте ещё раз.", ctx.author, "время")
             else:
