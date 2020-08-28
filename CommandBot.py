@@ -477,7 +477,7 @@ class CommandsBot(commands.Bot, ABC):
                     time = time.replace('</formatted></result>', '')
                     time = time.split(' ')[1]
                     location = position["title"]
-                    AdditionalMethods.add_to_buffer("c", f"{nickname}, чичас {time} в {location}", ctx.author, "время")
+                    AdditionalMethods.add_to_buffer("c", f"{nickname}, чичас {time} в «{location}»", ctx.author, "время")
                 except IndexError:
                     AdditionalMethods.add_to_buffer("c", f"{nickname}, неудалось найти время для этого населённого пункта", ctx.author, "время")
 
