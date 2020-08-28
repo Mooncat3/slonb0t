@@ -119,8 +119,8 @@ class CommandsBot(commands.Bot, ABC):
         receptt = 'Способ приготовления:'.join(recept.split('Способ приготовления:')[:-1])
         recept1 = recept[recept.find("Способ приготовления:") + 1:]
         recept1 = (recept1[:495] + '...') if len(recept1) > 495 else recept1
-        AdditionalMethods.add_to_buffer("r", f"{name} - {receptt}", ctx.author, "рецепт")
-        AdditionalMethods.add_to_buffer("r", f"С{recept1}", ctx.author, "рецепт")
+        AdditionalMethods.add_to_buffer("s", f"{name} - {receptt}", ctx.author, "рецепт")
+        AdditionalMethods.add_to_buffer("s", f"С{recept1}", ctx.author, "рецепт")
 
     @commands.command(name='анекдот')
     async def anekdot(self, ctx):
