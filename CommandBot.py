@@ -12,6 +12,7 @@ import random
 import subprocess
 import config
 import json
+from pytz import timezone, exceptions
 
 
 class CommandsBot(commands.Bot, ABC):
@@ -452,8 +453,28 @@ class CommandsBot(commands.Bot, ABC):
 
     @commands.command(name='время')
     async def time(self, ctx):
-        AdditionalMethods.add_to_buffer("c", datetime.strftime(datetime.now() + timedelta(hours=3),
-                                                               "Чичас %H:%M по МСК Waiting"), ctx.author, "время")
+        nickname = ctx.author.name
+        message = ctx.message.content
+        if message == "!время":
+            AdditionalMethods.add_to_buffer("c", datetime.strftime(datetime.now() + timedelta(hours=3),
+                                                                   f"{nickname}, Чичас %H:%M по МСК Waiting"), ctx.author, "время")
+        else:
+            try:
+                zone = str.replace(message, "!время ", "")
+                selectedzone = timezone(zone)
+                fmt = '%H:%M'
+                loc_dt = timezone('UTC').localize(datetime.utcnow())
+                sel_dt = loc_dt.astimezone(selectedzone)
+                AdditionalMethods.add_to_buffer("c", f"{nickname}, Чичас {sel_dt.strftime(fmt)} по {zone} Waiting", ctx.author,
+                                                "время")
+            except exceptions.UnknownTimeZoneError:
+                AdditionalMethods.add_to_buffer("c", f"{nickname}, неправильно указана временная зона", ctx.author, "время")
+
+
+    @commands.command(name='helpвремя')
+    async def helptime(self, ctx):
+        nickname = ctx.author.name
+        AdditionalMethods.add_to_buffer("c", f"{nickname}, Здесь вы можете посмотреть все доступные временные зоны в команде !время {config.timeUrl}", ctx.author, "helpвремя")
 
     @commands.command(name='обнять')
     async def hug(self, ctx):
