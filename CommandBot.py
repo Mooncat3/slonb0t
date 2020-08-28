@@ -462,7 +462,7 @@ class CommandsBot(commands.Bot, ABC):
             url = "http://search.maps.sputnik.ru/search?q="
             response = requests.get(url + quote(loc))
             if response.text.find('"found":0') != -1:
-                AdditionalMethods.add_to_buffer("c", f"{nickname}, неправильно указан населённый пункт. Попробуйте ещё раз.", ctx.author, "время")
+                AdditionalMethods.add_to_buffer("c", f"{nickname}, неправильно указан населённый пункт. Попробуйте другое название.", ctx.author, "время")
             else:
                 try:
                     json_response = response.json()
@@ -477,9 +477,9 @@ class CommandsBot(commands.Bot, ABC):
                     time = time.replace('</formatted></result>', '')
                     time = time.split(' ')[1]
                     location = position["title"]
-                    AdditionalMethods.add_to_buffer("c", f"{nickname}, чичас {time} в «{location}»", ctx.author, "время")
+                    AdditionalMethods.add_to_buffer("c", f"{nickname}, чичас {time} в «{location}» Waiting", ctx.author, "время")
                 except IndexError:
-                    AdditionalMethods.add_to_buffer("c", f"{nickname}, неудалось найти время для этого населённого пункта", ctx.author, "время")
+                    AdditionalMethods.add_to_buffer("c", f"{nickname}, не удалось найти время для этого населённого пункта", ctx.author, "время")
 
     @commands.command(name='обнять')
     async def hug(self, ctx):
