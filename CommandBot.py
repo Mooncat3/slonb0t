@@ -459,22 +459,29 @@ class CommandsBot(commands.Bot, ABC):
             AdditionalMethods.add_to_buffer("c", datetime.strftime(datetime.now() + timedelta(hours=3),
                                                                    f"{nickname}, Чичас %H:%M по МСК Waiting"), ctx.author, "время")
         else:
-            try:
-                zone = str.replace(message, "!время ", "")
-                selectedzone = timezone(zone)
-                fmt = '%H:%M'
-                loc_dt = timezone('UTC').localize(datetime.utcnow())
-                sel_dt = loc_dt.astimezone(selectedzone)
-                AdditionalMethods.add_to_buffer("c", f"{nickname}, Чичас {sel_dt.strftime(fmt)} по {zone} Waiting", ctx.author,
-                                                "время")
-            except exceptions.UnknownTimeZoneError:
-                AdditionalMethods.add_to_buffer("c", f"{nickname}, неправильно указана временная зона", ctx.author, "время")
-
-
-    @commands.command(name='helpвремя')
-    async def helptime(self, ctx):
-        nickname = ctx.author.name
-        AdditionalMethods.add_to_buffer("c", f"{nickname}, Здесь вы можете посмотреть все доступные временные зоны в команде !время {config.timeUrl}", ctx.author, "helpвремя")
+            loc = str.replace(message, '!время ', '')
+            loc = loc.replace(" ", "%20")
+            url = "http://search.maps.sputnik.ru/search?q="
+            response = requests.get(url + loc)
+            if response.text.find('"found":0') != -1:
+                AdditionalMethods.add_to_buffer("c", f"{nickname}, неправильно указан населённый пункт. Попробуйте ещё раз.", ctx.author, "время")
+            else:
+                try:
+                    json_response = response.json()
+                    position = json_response['result'][0]
+                    result = str(position["position"]).replace("{'lat': ","")
+                    parts = result.rsplit(',', 1)
+                    lat = parts[0]
+                    lng = result.split(': ')[1].replace("}","")
+                    url = "http://api.timezonedb.com/v2.1/get-time-zone?key=APM2N08MFF2O&format=xml&by=position&lat="
+                    response1 = requests.get(url + lat + "&lng=" + lng)
+                    time = str(response1.text).split('<formatted>')[1]
+                    time = time.replace('</formatted></result>', '')
+                    time = time.split(' ')[1]
+                    location = position["title"]
+                    AdditionalMethods.add_to_buffer("c", f"{nickname}, чичас {time} в «{location}»‎", ctx.author, "время")
+                except IndexError:
+                    AdditionalMethods.add_to_buffer("c", f"{nickname}, неудалось найти время для этого населённого пункта", ctx.author, "время")
 
     @commands.command(name='обнять')
     async def hug(self, ctx):
