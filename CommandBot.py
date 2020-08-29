@@ -104,17 +104,26 @@ class CommandsBot(commands.Bot, ABC):
         nickname = ctx.author.name
         message = ctx.message.content
         message = str.replace(message, '!history', '')
-        AdditionalMethods.add_to_buffer("e", AdditionalMethods.get_last_stream_stat(message[1:len(message)], nickname, ctx.author), ctx.author, "history")
+        message = message[1:len(message)]
+        print(message)
+        while message[0:1] == "!" or message[0:1] == "/":
+            message = message[1:len(message)]
+            print(message)
+        AdditionalMethods.add_to_buffer("e", AdditionalMethods.get_last_stream_stat(message, nickname, ctx.author), ctx.author, "history")
 
     @commands.command(name='archive')
     async def streamh(self, ctx):
         nickname = ctx.author.name
         message = ctx.message.content
         message = str.replace(message, '!archive', '')
+        while message[0:1] == "!" or message[0:1] == "/":
+            message = message[1:len(message)]
         try:
             id=int(message[1:2])
             if len(message[2:len(message)]) > 1:
                 tag = str.replace(message, f' {id} ', '')
+                while tag[0:1] == "!" or tag[0:1] == "/":
+                    tag = tag[1:len(tag)]
             else:
                 tag = ''
             AdditionalMethods.add_to_buffer("c", AdditionalMethods.get_archive_stream_stat(id, nickname, tag, ctx.author).format(nickname, id), ctx.author, "history")
