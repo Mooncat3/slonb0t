@@ -30,7 +30,6 @@ class CommandsBot(commands.Bot, ABC):
     
     @commands.command(name='фреско')
     async def fresko(self, ctx):
-        nickname = ctx.author.name
         r = requests.get('https://socratify.net/quotes/random')
         soup = BeautifulSoup(r.content, 'lxml')
         d = soup.find('h1', class_='b-quote__text').get_text()
@@ -117,7 +116,7 @@ class CommandsBot(commands.Bot, ABC):
                 tag = str.replace(message, f' {id} ', '')
             else:
                 tag = ''
-            AdditionalMethods.add_to_buffer("c", AdditionalMethods.get_archive_stream_stat(id, nickname, tag, ctx.author).format(nickname, id), ctx.author, "archive")
+            AdditionalMethods.add_to_buffer("c", AdditionalMethods.get_archive_stream_stat(id, nickname, tag, ctx.author).format(nickname, id), ctx.author, "history")
         except:
             AdditionalMethods.add_to_buffer("с", f'{nickname} !archive [0-9]', ctx.author, "archive")
 
