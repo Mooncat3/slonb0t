@@ -227,7 +227,7 @@ def parse_stream_stat(nickname: str, tag: str, TRASHMASSIVE: dict, author: User,
             already = True
             while len(f"{nickname}{seter} {date} стрим: {streamstat['StreamName']} [{streamstat['StreamDuration']}] || среднее зр: {int(streamstat['middleviewcount'])} || {categorystr}") > 500 or categorystr[categorystr.rfind("»")+2: len(categorystr)] == f"{r['name']} [{rounded}]":
                 categorystr = categorystr[0:categorystr.rfind("»")-1]
-            add_to_buffer("c", f"{nickname}{seter} {date} стрим: {streamstat['StreamName']} [{streamstat['StreamDuration']}] || среднее зр: {int(streamstat['middleviewcount'])} || {categorystr}", author)
+            add_to_buffer("c", f"{nickname}{seter} {date} стрим: {streamstat['StreamName']} [{streamstat['StreamDuration']}] || среднее зр: {int(streamstat['middleviewcount'])} || {categorystr}", author, "history")
             categorystr = ""
             if len(rounded) > 0:
                 categorystr += f"{r['name']} [{rounded}]"
