@@ -28,7 +28,7 @@ class CommandsBot(commands.Bot, ABC):
     
     
     
-    @commands.command(name='фреско')
+    @commands.command(name='ауф')
     async def fresko(self, ctx):
         r = requests.get('https://socratify.net/quotes/random')
         soup = BeautifulSoup(r.content, 'lxml')
