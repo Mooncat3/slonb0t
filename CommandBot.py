@@ -30,6 +30,7 @@ class CommandsBot(commands.Bot, ABC):
     
     @commands.command(name='фреско')
     async def fresko(self, ctx):
+        nickname = ctx.author.name
         r = requests.get('https://socratify.net/quotes/random')
         soup = BeautifulSoup(r.content, 'lxml')
         d = soup.find('h1', class_='b-quote__text').get_text()
