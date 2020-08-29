@@ -582,6 +582,6 @@ class CommandsBot(commands.Bot, ABC):
 
 subprocess.Popen([sys.executable, 'ChatBot.py'])
 subprocess.Popen([sys.executable, 'BufferCleaner.py'])
-subprocess.Popen([sys.executable, 'CheckingStreamThread.py'])
+#subprocess.Popen([sys.executable, 'CheckingStreamThread.py'])
 bot = CommandsBot()
 bot.run()
