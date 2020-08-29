@@ -428,7 +428,7 @@ class CommandsBot(commands.Bot, ABC):
         else:
             bubu = str.replace(message, '!бубу ', '')
             bubu = re.sub("\n", '', bubu)
-            if len(bubu) < 235:
+            if len(bubu) < 117:
                 AdditionalMethods.add_to_buffer("e", f"Ну {str(bubu)} и {str(bubu)} Чё бубнить-то? ThumbUp", ctx.author, "бубу")
             else:
                 AdditionalMethods.add_to_buffer("e", "Слишком длинное бубу WeirdChamp ", ctx.author, "бубу")
