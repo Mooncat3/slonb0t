@@ -24,8 +24,19 @@ class CommandsBot(commands.Bot, ABC):
     async def event_ready(self):
         print(f'Ready {str(self.__class__.__name__)} | {self.nick} on {self.initial_channels}')
        
+    
+    
+    
+    
+    @commands.command(name='фреско')
+    async def fresko(self, ctx):
+        r = requests.get('https://socratify.net/quotes/random')
+        soup = BeautifulSoup(r.content, 'lxml')
+        d = soup.find('h1', class_='b-quote__text').get_text()
+        AdditionalMethods.add_to_buffer("e", f"{nickname}, {d} AUFFF", ctx.author, "porf")
+        
     @commands.command(name='porf')
-    async def dev(self, ctx):
+    async def porf(self, ctx):
         nickname = ctx.author.name
         word = str.replace(ctx.message.content, '!porf ', "")
         url = "https://models.dobro.ai/gpt2/medium/"
