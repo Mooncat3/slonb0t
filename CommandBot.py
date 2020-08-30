@@ -189,7 +189,7 @@ class CommandsBot(commands.Bot, ABC):
             except ValueError:
                 AdditionalMethods.add_to_buffer("с", f"{nickname} Это не число WeirdChamp", ctx.author, "курс")
 
-    @commands.command(name='topclipever')
+    @commands.command(name='clipever')
     async def topclipever(self, ctx):
         nickname = ctx.author.name
         message = ctx.message.content
@@ -199,7 +199,7 @@ class CommandsBot(commands.Bot, ABC):
             top = ""
         AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(0, top, nickname), ctx.author, "topclip")
 
-    @commands.command(name='topclipyear')
+    @commands.command(name='clipyear')
     async def topclipyear(self, ctx):
         nickname = ctx.author.name
         message = ctx.message.content
@@ -209,7 +209,7 @@ class CommandsBot(commands.Bot, ABC):
             top = ""
         AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(365, top, nickname), ctx.author, "topclip")
 
-    @commands.command(name='topclipweek')
+    @commands.command(name='clipweek')
     async def topclipweek(self, ctx):
         nickname = ctx.author.name
         message = ctx.message.content
@@ -219,7 +219,7 @@ class CommandsBot(commands.Bot, ABC):
             top = ""
         AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(7, top, nickname), ctx.author, "topclip")
 
-    @commands.command(name='topclipmonth')
+    @commands.command(name='clipmonth')
     async def topclipmonth(self, ctx):
         nickname = ctx.author.name
         message = ctx.message.content
@@ -229,7 +229,7 @@ class CommandsBot(commands.Bot, ABC):
             top = ""
         AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(30, top, nickname), ctx.author, "topclip")
 
-    @commands.command(name='topclipday')
+    @commands.command(name='cliptoday')
     async def topclipday(self, ctx):
         nickname = ctx.author.name
         message = ctx.message.content
