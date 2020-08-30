@@ -77,7 +77,6 @@ def checkingthread():
             if active and safer > 60:
                 safer = 0
                 active = False
-                dat['TRASHMASS'][len(dat['TRASHMASS']) - 1]['MASS'][len(dat['TRASHMASS'][len(dat['TRASHMASS']) - 1]['MASS']) - 1]['GAME_ID'] = dat['TRASHMASS'][len(dat['TRASHMASS']) - 2]['MASS']['GAME_ID']
                 with open(file='data/TRASHMASSIVE.txt', mode='w', encoding='utf-8') as q:
                     q.write(json.dumps(dat))
                 g = Github("f0011283768114fac26230cd23b3208ed10d0a54")
