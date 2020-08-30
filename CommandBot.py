@@ -193,9 +193,9 @@ class CommandsBot(commands.Bot, ABC):
     async def topclipever(self, ctx):
         nickname = ctx.author.name
         message = ctx.message.content
-        top = str.replace(message, '!topclipever ', '')
+        top = str.replace(message, '!clipever ', '')
         top = re.sub("\n", '', top)
-        if top == "!topclipever":
+        if top == "!clipever":
             top = ""
         AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(0, top, nickname), ctx.author, "topclip")
 
@@ -203,9 +203,9 @@ class CommandsBot(commands.Bot, ABC):
     async def topclipyear(self, ctx):
         nickname = ctx.author.name
         message = ctx.message.content
-        top = str.replace(message, '!topclipyear ', '')
+        top = str.replace(message, '!clipyear ', '')
         top = re.sub("\n", '', top)
-        if top == "!topclipyear":
+        if top == "!clipyear":
             top = ""
         AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(365, top, nickname), ctx.author, "topclip")
 
@@ -213,9 +213,9 @@ class CommandsBot(commands.Bot, ABC):
     async def topclipweek(self, ctx):
         nickname = ctx.author.name
         message = ctx.message.content
-        top = str.replace(message, '!topclipweek ', '')
+        top = str.replace(message, '!clipweek ', '')
         top = re.sub("\n", '', top)
-        if top == "!topclipweek":
+        if top == "!clipweek":
             top = ""
         AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(7, top, nickname), ctx.author, "topclip")
 
@@ -223,9 +223,9 @@ class CommandsBot(commands.Bot, ABC):
     async def topclipmonth(self, ctx):
         nickname = ctx.author.name
         message = ctx.message.content
-        top = str.replace(message, '!topclipmonth ', '')
+        top = str.replace(message, '!clipmonth ', '')
         top = re.sub("\n", '', top)
-        if top == "!topclipmonth":
+        if top == "!clipmonth":
             top = ""
         AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(30, top, nickname), ctx.author, "topclip")
 
@@ -233,9 +233,9 @@ class CommandsBot(commands.Bot, ABC):
     async def topclipday(self, ctx):
         nickname = ctx.author.name
         message = ctx.message.content
-        top = str.replace(message, '!topclipday ', '')
+        top = str.replace(message, '!cliptoday ', '')
         top = re.sub("\n", '', top)
-        if top == "!topclipday":
+        if top == "!cliptoday":
             top = ""
         AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(1, top, nickname), ctx.author, "topclip")
 
