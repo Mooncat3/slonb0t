@@ -314,7 +314,7 @@ async def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "
                                                                                                         'cursor'])
                     else:
                         config.istopcliprunning = False
-                        return {"code": "3", "url": ""}
+                        return {"code": "5", "url": random.choice(clips)}
                 else:
                     if 'cursor' in data['pagination'].keys():
                         url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&after={}&started_at={}&ended_at={}&first=100".format(
