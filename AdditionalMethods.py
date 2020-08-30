@@ -307,72 +307,53 @@ async def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "
             config.istopcliprunning = True
             clips = []
             while True:
-                try:
-                    if ever:
-                        if 'cursor' in data['pagination'].keys():
-                            url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&after={}&first=100".format(config.BROADCASTER_ID,
-                                                                                                        data['pagination'][
-                                                                                                            'cursor'])
-                        else:
-                            config.istopcliprunning = False
-                            return {"code": "5", "url": random.choice(clips)}
+                if ever:
+                    if 'cursor' in data['pagination'].keys():
+                        url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&after={}&first=100".format(config.BROADCASTER_ID,
+                                                                                                    data['pagination'][
+                                                                                                        'cursor'])
                     else:
-                        if 'cursor' in data['pagination'].keys():
-                            url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&after={}&started_at={}&ended_at={}&first=100".format(
-                                config.BROADCASTER_ID, data['pagination']['cursor'], datepast, datenow)
-                        else:
-                            config.istopcliprunning = False
-                            return {"code": "5", "url": random.choice(clips)}
-                    request = urllib.request.Request(url=url, headers={"Authorization": "Bearer {}".format(config.OAUTH),
-                                                                       "Client-ID": "{}".format(config.CLIENT_ID)})
-                    response = urllib.request.urlopen(request).read()
-                    data = json.loads(response)
-                    for p in data["data"]:
-                        clips.append(p['url'])
-                    if ident == 11:
                         config.istopcliprunning = False
                         return {"code": "5", "url": random.choice(clips)}
+                else:
+                    if 'cursor' in data['pagination'].keys():
+                        url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&after={}&started_at={}&ended_at={}&first=100".format(
+                            config.BROADCASTER_ID, data['pagination']['cursor'], datepast, datenow)
                     else:
-                        ident += 1
-                except:
+                        config.istopcliprunning = False
+                        return {"code": "5", "url": random.choice(clips)}
+                request = urllib.request.Request(url=url, headers={"Authorization": "Bearer {}".format(config.OAUTH),
+                                                                   "Client-ID": "{}".format(config.CLIENT_ID)})
+                response = urllib.request.urlopen(request).read()
+                data = json.loads(response)
+                print(data)
+                for p in data["data"]:
+                    clips.append(p['url'])
+                if ident == count:
                     config.istopcliprunning = False
-                    return {"code": "3", "url": ""}
+                    return {"code": "5", "url": random.choice(clips)}
+                else:
+                    ident += 1
                 await asyncio.sleep(0.1)
         else:
             config.istopcliprunning = True
             while True:
-                try:
-                    for p in data["data"]:
-                        if p['game_id'] == id_game:
-                            config.istopcliprunning = False
-                            return {"code": "1", "url": p['url']}
-                    if ever:
-                        if 'cursor' in data['pagination'].keys():
-                            url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&after={}&first=100".format(config.BROADCASTER_ID,
-                                                                                                        data['pagination'][
-                                                                                                            'cursor'])
-                        else:
-                            config.istopcliprunning = False
-                            return {"code": "3", "url": ""}
-                    else:
-                        if 'cursor' in data['pagination'].keys():
-                            url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&after={}&started_at={}&ended_at={}&first=100".format(
-                                config.BROADCASTER_ID, data['pagination']['cursor'], datepast, datenow)
-                        else:
-                            config.istopcliprunning = False
-                            return {"code": "3", "url": ""}
-                    request = urllib.request.Request(url=url, headers={"Authorization": "Bearer {}".format(config.OAUTH),
-                                                                       "Client-ID": "{}".format(config.CLIENT_ID)})
-                    response = urllib.request.urlopen(request).read()
-                    data = json.loads(response)
-                    if ident == 11:
+                for p in data["data"]:
+                    if p['game_id'] == id_game:
+                        config.istopcliprunning = False
+                        return {"code": "1", "url": p['url']}
+                if ever:
                         config.istopcliprunning = False
                         return {"code": "3", "url": ""}
-                    else:
-                        ident += 1
-                except:
+                request = urllib.request.Request(url=url, headers={"Authorization": "Bearer {}".format(config.OAUTH),
+                                                                   "Client-ID": "{}".format(config.CLIENT_ID)})
+                response = urllib.request.urlopen(request).read()
+                data = json.loads(response)
+                if ident == count:
                     config.istopcliprunning = False
                     return {"code": "3", "url": ""}
+                else:
+                    ident += 1
                 await asyncio.sleep(0.5)
 
     # -------------------------------------making response string--------------------------------------
@@ -399,7 +380,7 @@ async def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "
         elif response['code'] == "2":
             return "{}, такой категории нет FeelsBadMan ".format(nickname)
         elif response['code'] == "3":
-            return "{}, из 1000 клипов не было найдено ни одного с такой категорией DaUj ".format(nickname)
+            return "{}, из 3000 клипов не было найдено ни одного с такой категорией DaUj ".format(nickname)
         elif response['code'] == "4":
             return "{}, сейчас идёт поиск другого клипа ".format(nickname)
         elif response['code'] == "5":
@@ -420,7 +401,10 @@ async def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "
     if config.istopcliprunning:
         return make_response_string({"code": "4", "url": ""}, days_before)
     id_game = "0"
-
+    if days_before == 0:
+        count = 11
+    else:
+        count = 6
     if len(argument) > 0:
         if argument == "rand":
             id_game = "-1"
