@@ -286,12 +286,12 @@ async def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "
     # -------------------------------------checking for clip--------------------------------------
     async def do_request_for_getting_clip(id_game: str = "0", days_before: int = 0, ever: bool = False) -> {str: str}:
         if ever:
-            url = "https://api.twitch.tv/helix/clips?broadcaster_id={}".format(config.BROADCASTER_ID)
+            url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&first=100".format(config.BROADCASTER_ID)
         else:
             datepast = rfc3339.format((datetime.utcnow() + timedelta(hours=3)) - timedelta(days=days_before), utc=True,
                                       use_system_timezone=False)
             datenow = rfc3339.format(datetime.utcnow() + timedelta(hours=3), utc=True, use_system_timezone=False)
-            url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&started_at={}&ended_at={}".format(
+            url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&started_at={}&ended_at={}&first=100".format(
                 config.BROADCASTER_ID, datepast,
                 datenow)
 
@@ -303,6 +303,33 @@ async def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "
         if id_game == "0":
             for p in data["data"]:
                 return {"code": "0", "url": p['url']}
+        elif id_game == "-1":
+            config.istopcliprunning = True
+            clips = []
+            while True:
+                if ever:
+                    url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&after={}&first=100".format(config.BROADCASTER_ID,
+                                                                                                data['pagination'][
+                                                                                                    'cursor'])
+                else:
+                    if 'cursor' in data['pagination'].keys():
+                        url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&after={}&started_at={}&ended_at={}&first=100".format(
+                            config.BROADCASTER_ID, data['pagination']['cursor'], datepast, datenow)
+                    else:
+                        config.istopcliprunning = False
+                        return {"code": "5", "url": random.choice(clips)}
+                request = urllib.request.Request(url=url, headers={"Authorization": "Bearer {}".format(config.OAUTH),
+                                                                   "Client-ID": "{}".format(config.CLIENT_ID)})
+                response = urllib.request.urlopen(request).read()
+                data = json.loads(response)
+                for p in data["data"]:
+                    clips.append(p['url'])
+                if ident == 11:
+                    config.istopcliprunning = False
+                    return {"code": "5", "url": random.choice(clips)}
+                else:
+                    ident += 1
+                await asyncio.sleep(0.1)
         else:
             config.istopcliprunning = True
             while True:
@@ -311,21 +338,21 @@ async def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "
                         config.istopcliprunning = False
                         return {"code": "1", "url": p['url']}
                 if ever:
-                    url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&after={}".format(config.BROADCASTER_ID,
+                    url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&after={}&first=100".format(config.BROADCASTER_ID,
                                                                                                 data['pagination'][
                                                                                                     'cursor'])
                 else:
                     if 'cursor' in data['pagination'].keys():
-                        url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&after={}&started_at={}&ended_at={}".format(
+                        url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&after={}&started_at={}&ended_at={}&first=100".format(
                             config.BROADCASTER_ID, data['pagination']['cursor'], datepast, datenow)
                     else:
-                        return {"code": "3", "url": ""}
                         config.istopcliprunning = False
+                        return {"code": "3", "url": ""}
                 request = urllib.request.Request(url=url, headers={"Authorization": "Bearer {}".format(config.OAUTH),
                                                                    "Client-ID": "{}".format(config.CLIENT_ID)})
                 response = urllib.request.urlopen(request).read()
                 data = json.loads(response)
-                if ident == 30:
+                if ident == 11:
                     config.istopcliprunning = False
                     return {"code": "3", "url": ""}
                 else:
@@ -346,20 +373,22 @@ async def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "
             if dt == 0:
                 return "за всё время"
 
-        if response["code"] != "2" and response['code'] != "3" and response['code'] != "4":
-            if response["code"] == "0":
-                return "{}, самый топовый клип {} PogU {} ".format(nickname, get_needed_datestring(dat),
+        if response["code"] == "0":
+            return "{}, самый топовый клип {} PogU {} ".format(nickname, get_needed_datestring(dat),
                                                                    response["url"])
-            else:
-                return "{}, самый топовый клип по категории {} {} PogU {} ".format(nickname, argument,
+        elif response["code"] == "1":
+            return "{}, самый топовый клип по категории {} {} PogU {} ".format(nickname, argument,
                                                                                    get_needed_datestring(dat),
                                                                                    response["url"])
-        if response['code'] == "2":
+        elif response['code'] == "2":
             return "{}, такой категории нет FeelsBadMan ".format(nickname)
-        if response['code'] == "3":
+        elif response['code'] == "3":
             return "{}, из 3000 клипов не было найдено ни одного с такой категорией DaUj ".format(nickname)
-        if response['code'] == "4":
+        elif response['code'] == "4":
             return "{}, сейчас идёт поиск другого клипа ".format(nickname)
+        elif response['code'] == "5":
+            return "{}, случайный клип {} PogU {} ".format(nickname, get_needed_datestring(dat),
+                                                                   response["url"])
 
     # ------------------------------------helping with abreviatures---------------------------
     def abreviatur_helper(argument: str) -> str:
@@ -375,23 +404,26 @@ async def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "
     if config.istopcliprunning:
         return make_response_string({"code": "4", "url": ""}, days_before)
     id_game = "0"
+
     if len(argument) > 0:
-        print(argument + "  " + str(len(argument)))
-        if len(argument) <= 6 and abreviatur_helper(argument) != "":
-            argument = abreviatur_helper(argument)
-        qstr = quote(argument)
-        url = "https://api.twitch.tv/helix/games?name={}".format(qstr)
-        request = urllib.request.Request(url=url, headers={"Authorization": "Bearer {}".format(config.OAUTH),
-                                                           "Client-ID": "{}".format(config.CLIENT_ID)})
-        try:
-            response = urllib.request.urlopen(request).read()
-            data = json.loads(response)
-            for p in data["data"]:
-                id_game = p['id']
-            if id_game == "0":
+        if argument == "rand":
+            id_game = "-1"
+        else:
+            if len(argument) <= 6 and abreviatur_helper(argument) != "":
+                argument = abreviatur_helper(argument)
+            qstr = quote(argument)
+            url = "https://api.twitch.tv/helix/games?name={}".format(qstr)
+            request = urllib.request.Request(url=url, headers={"Authorization": "Bearer {}".format(config.OAUTH),
+                                                               "Client-ID": "{}".format(config.CLIENT_ID)})
+            try:
+                response = urllib.request.urlopen(request).read()
+                data = json.loads(response)
+                for p in data["data"]:
+                    id_game = p['id']
+                if id_game == "0":
+                    return make_response_string({"code": "2", "url": ""}, days_before)
+            except:
                 return make_response_string({"code": "2", "url": ""}, days_before)
-        except:
-            return make_response_string({"code": "2", "url": ""}, days_before)
     if days_before == 0:
         return make_response_string(await do_request_for_getting_clip(id_game=id_game, ever=True), days_before)
     else:
