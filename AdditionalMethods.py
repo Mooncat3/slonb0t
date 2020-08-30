@@ -116,7 +116,7 @@ def check_on_toomuchbool(string) -> bool:
 
 
 def vip(mod: bool, name: str) -> bool:
-    if mod or name == "danantur" or name == "mooncat3":
+    if mod or name == "danantur" or name == "mooncat3" or name == "justririll":
         return True
     else:
         return False
