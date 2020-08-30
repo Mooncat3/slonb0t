@@ -308,9 +308,13 @@ async def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "
             clips = []
             while True:
                 if ever:
-                    url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&after={}&first=100".format(config.BROADCASTER_ID,
-                                                                                                data['pagination'][
-                                                                                                    'cursor'])
+                    if 'cursor' in data['pagination'].keys():
+                        url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&after={}&first=100".format(config.BROADCASTER_ID,
+                                                                                                    data['pagination'][
+                                                                                                        'cursor'])
+                    else:
+                        config.istopcliprunning = False
+                        return {"code": "3", "url": ""}
                 else:
                     if 'cursor' in data['pagination'].keys():
                         url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&after={}&started_at={}&ended_at={}&first=100".format(
@@ -338,9 +342,13 @@ async def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "
                         config.istopcliprunning = False
                         return {"code": "1", "url": p['url']}
                 if ever:
-                    url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&after={}&first=100".format(config.BROADCASTER_ID,
-                                                                                                data['pagination'][
-                                                                                                    'cursor'])
+                    if 'cursor' in data['pagination'].keys():
+                        url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&after={}&first=100".format(config.BROADCASTER_ID,
+                                                                                                    data['pagination'][
+                                                                                                        'cursor'])
+                    else:
+                        config.istopcliprunning = False
+                        return {"code": "3", "url": ""}
                 else:
                     if 'cursor' in data['pagination'].keys():
                         url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&after={}&started_at={}&ended_at={}&first=100".format(
