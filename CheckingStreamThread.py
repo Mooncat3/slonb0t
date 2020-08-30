@@ -22,12 +22,13 @@ def checkingthread():
             response = urllib.request.urlopen(request).read()
             data = json.loads(response)
             games[id] = data['data'][0]['name']
-        print(games[id])
         return games[id]
     active = False
     times = time.time()
     safer = 0
     games = {}
+    with open(file='data/TRASHMASSIVE.txt', mode='r', encoding='utf-8') as q:
+        dat = json.loads(q.read())
     while True:
         url = f"https://api.twitch.tv/helix/streams?user_id={config.BROADCASTER_ID}"
         request = urllib.request.Request(url=url, headers={"Authorization": "Bearer {}".format(config.OAUTH),
@@ -35,11 +36,9 @@ def checkingthread():
         response = urllib.request.urlopen(request).read()
         data = json.loads(response)
         if len(data['data']) > 0:
-            print(data)
             if not active:
                 with open(file='data/TRASHMASSIVE.txt', mode='r', encoding='utf-8') as q:
                     dat = json.loads(q.read())
-                print(dat)
                 if not dat['active']:
                     dat['active'] = True
                     dat['TRASHMASS'].append({"date": datetime.datetime.strftime(datetime.datetime.now(), "%m.%e.%y"), "MASS": []})
