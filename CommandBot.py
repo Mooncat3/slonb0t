@@ -98,8 +98,6 @@ class CommandsBot(commands.Bot, ABC):
         AdditionalMethods.add_to_buffer("e",
                                         f"{nickname}, вам выпал " + skin + " Стоимость: " + price,
                                         ctx.author, "case")
-    
-    """
 
     @commands.command(name='history')
     async def stream(self, ctx):
@@ -131,8 +129,6 @@ class CommandsBot(commands.Bot, ABC):
             AdditionalMethods.add_to_buffer("c", AdditionalMethods.get_archive_stream_stat(id, nickname, tag, ctx.author).format(nickname, id), ctx.author, "history")
         except:
             AdditionalMethods.add_to_buffer("с", f'{nickname} !archive [0-9]', ctx.author, "archive")
-    
-    """
 
     @commands.command(name='рецепт')
     async def recept(self, ctx):
@@ -595,6 +591,6 @@ class CommandsBot(commands.Bot, ABC):
 
 subprocess.Popen([sys.executable, 'ChatBot.py'])
 subprocess.Popen([sys.executable, 'BufferCleaner.py'])
-#subprocess.Popen([sys.executable, 'CheckingStreamThread.py'])
+subprocess.Popen([sys.executable, 'CheckingStreamThread.py'])
 bot = CommandsBot()
 bot.run()
