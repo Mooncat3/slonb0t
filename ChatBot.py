@@ -15,6 +15,9 @@ class ChatBot(commands.Bot, ABC):
 
     async def event_ready(self):
         print(f'Ready {str(self.__class__.__name__)} | {self.nick} on {self.initial_channels}')
+        
+    async def event_command_error(ctx, error):
+        return
 
     @commands.command(name='SLONB0T')
     async def privet(self, ctx):
