@@ -23,12 +23,12 @@ bot = commands.Bot(
 
 
 @bot.event
-    async def event_ready():
-        print(f'Ready CommandsBot | {config.BOT} on {config.CHANNELS}')
+async def event_ready():
+    print(f'Ready CommandsBot | {config.BOT} on {config.CHANNELS}')
 
 @bot.event
-    async def event_command_error(ctx, error):
-        pass
+async def event_command_error(ctx, error):
+    pass
     
 @bot.command(name='ауф')
 async def auf(ctx):
