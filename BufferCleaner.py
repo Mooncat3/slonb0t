@@ -174,7 +174,7 @@ class BufferCleaner(Client, ABC):
                 mess = resert['mes']
                 while sock._websocket is None:
                     await asyncio.sleep(0.1)
-                print(resert['timeout'])
+                #print(resert['timeout'])
                 if rest['type'] == "e" or rest['type'] == "r":
                     if not AdditionalMethods.check_active():
                         await asyncio.sleep(resert['timeout'])
