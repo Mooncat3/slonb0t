@@ -133,14 +133,14 @@ class BufferCleaner(Client, ABC):
                             ondeleting.append(res)
                             if res['type'] != "r":
                                 reser = {"mes": res['message'], "cmd": res['command'], "timeout": 0.0}
-                                print("MESS = " + res['message'])
+                                #print("MESS = " + res['message'])
                                 await send_mess(self._ws, reser, res)
                             else:
                                 if time.time() - recepttime > 20:
                                     if dopbol:
                                         dopbol = False
                                         reser = {"mes": res['message'], "cmd": res['command'], "timeout": 0.0}
-                                        print("MESS = " + res['message'])
+                                        #print("MESS = " + res['message'])
                                         await send_mess(self._ws, reser, res)
                                     else:
                                         dopbol = True
