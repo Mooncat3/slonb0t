@@ -28,7 +28,7 @@ bot = commands.Bot(
 
 @bot.event
     async def event_command_error(ctx, error):
-        print('')
+        pass
     
 @bot.command(name='ауф')
 async def auf(ctx):
