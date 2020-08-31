@@ -15,7 +15,7 @@ from urllib.parse import quote
 
 
 bot = commands.Bot(
-    irc_token=f'oauth:{config.OAUTH},
+    irc_token=f'oauth:{config.OAUTH}',
     client_id=config.CLIENT_ID,
     nick=config.BOT,
     prefix='!',
