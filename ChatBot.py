@@ -8,19 +8,19 @@ import config
 
 
 bot = commands.Bot(
-    irc_token=f'oauth:{config.OAUTH},
+    irc_token=f'oauth:{config.OAUTH}',
     client_id=config.CLIENT_ID,
     nick=config.BOT,
     prefix='@',
     initial_channels=config.CHANNELS)
 
 @bot.event
-    async def event_ready():
-        print(f'Ready ChatBot | {config.BOT} on {config.CHANNELS}')
+async def event_ready():
+    print(f'Ready ChatBot | {config.BOT} on {config.CHANNELS}')
 
 @bot.event
-    async def event_command_error(ctx, error):
-        pass
+async def event_command_error(ctx, error):
+    pass
 
 @bot.command(name='SLONB0T')
 async def chat(ctx):
