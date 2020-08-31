@@ -141,6 +141,7 @@ async def recept(ctx):
     receptt = 'Способ приготовления:'.join(recept.split('Способ приготовления:')[:-1])
     recept1 = recept[recept.find("Способ приготовления:") + 1:]
     AdditionalMethods.add_to_buffer("s", f"{name} - {receptt}", ctx.author, "рецепт")
+    time.sleep(2)
     AdditionalMethods.add_to_buffer("s", f"С{recept1}", ctx.author, "рецепт")
 
 @bot.command(name='анекдот')
