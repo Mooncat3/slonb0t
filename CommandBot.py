@@ -50,7 +50,7 @@ async def porf(ctx):
     else:
         response = requests.post(url, json={'prompt': word, 'length': '30', 'num_samples': '5'})
         result = str(response.text).replace('{"replies":["', '').replace('"]}', '').rpartition('","')[2]
-        AdditionalMethods.add_to_buffer("e", AdditionalMethods.check_on_toomuchsimbols(f"{nickname}, " + word + result), ctx.author, "porf")
+        AdditionalMethods.add_to_buffer("e", f"{nickname}, " + word + result, ctx.author, "porf")
 
 @bot.command(name='save')
 async def logs(ctx):
@@ -140,7 +140,6 @@ async def recept(ctx):
     recept = soup.find('div', class_='randome_recept_right').get_text()
     receptt = 'Способ приготовления:'.join(recept.split('Способ приготовления:')[:-1])
     recept1 = recept[recept.find("Способ приготовления:") + 1:]
-    recept1 = (recept1[:495] + '...') if len(recept1) > 495 else recept1
     AdditionalMethods.add_to_buffer("s", f"{name} - {receptt}", ctx.author, "рецепт")
     AdditionalMethods.add_to_buffer("s", f"С{recept1}", ctx.author, "рецепт")
 
