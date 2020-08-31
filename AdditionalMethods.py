@@ -115,7 +115,7 @@ def get_bufer_timeout() -> float:
 
 
 def check_on_toomuchsimbols(string):
-    return (string[:493] + '...') if len(string) > 495 else string
+    return (string[:496] + '...') if len(string) >= 500 else string
 
 
 def check_on_toomuchbool(string) -> bool:
