@@ -75,7 +75,7 @@ class BufferCleaner(Client, ABC):
         traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
 
     async def event_ready(self):
-        print(f'Ready {str(self.__class__.__name__)} | {self._ws.nick} on {self._ws._initial_channels}')
+        print(f'Ready {str(self.__class__.__name__)} | {config.BOT} on {config.CHANNELS}')
         pass
 
     async def event_raw_data(self, data):
