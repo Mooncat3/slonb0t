@@ -14,6 +14,13 @@ import asyncio
 from twitchioc.dataclasses import User
 
 
+def check_on_max_or_not(arg: str) -> bool:
+    if arg == "анекдот":
+        return False
+    elif arg == "ауф":
+        return False
+    return True
+
 def summvalue(start: str, end: str, value: float, dollar: float, euro: float, iens: float, grivn: float):
     result = "неккоректно написаны валюты, пишите в именительном падеже (рубль-доллар и т.д.)"
     splited = start + end
@@ -116,7 +123,7 @@ def check_on_toomuchbool(string) -> bool:
 
 
 def vip(mod: bool, name: str) -> bool:
-    if mod or name == "danantur" or name == "mooncat3" or name == "justririll":
+    if mod or name == "danantur" or name == "mooncat3":
         return True
     else:
         return False
@@ -131,17 +138,20 @@ def add_to_buffer(type: str, message: str, author: User, command: str):
     while config.buferchanged:
         time.sleep(0.1)
     config.buferchanged = True
+    if check_on_max_or_not(command):
+        message = check_on_toomuchsimbols(message)
     with open(file='data/buffer.txt', mode='w', encoding='utf-8') as q:
         dat.append({"vip": vip(author.is_mod, author.name), "nickname": author.name, "type": type, "message": message, "command": command})
         q.write(json.dumps(dat))
     config.buferchanged = False
 
 
-def check_active() -> bool:
-    with open(file='data/settings.txt', mode='r', encoding='utf-8') as q:
-        dat = json.loads(q.read())
-        if not dat['entertain']:
-            return True
+def check_active(shouldchecksettings = True) -> bool:
+    if shouldchecksettings:
+        with open(file='data/settings.txt', mode='r', encoding='utf-8') as q:
+            dat = json.loads(q.read())
+            if not dat['entertain']:
+                return True
     with open(file='data/TRASHMASSIVE.txt', mode='r', encoding='utf-8') as q:
         dat = json.loads(q.read())
         return dat['active']
