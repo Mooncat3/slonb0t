@@ -52,3 +52,4 @@ polarExtreme {} ебёт {} polarExtreme
 {} злится на {} :japanese_goblin:
 {} ослепил {} своим успехом BasedGod
 {} приглашает {} на свидание peepoShy
+{} похуй на {} peepoCool
