@@ -50,3 +50,5 @@ polarExtreme {} ебёт {} polarExtreme
 {} угнетает {} pepePoint
 {} учит {} жизни HerbPerve
 {} злится на {} :japanese_goblin:
+{} ослепил {} своим успехом BasedGod
+{} приглашает {} на свидание peepoShy
