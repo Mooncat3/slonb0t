@@ -54,4 +54,4 @@ polarExtreme {} ебёт {} polarExtreme
 {} приглашает {} на свидание peepoShy
 {} похуй на {} peepoCool
 {} гониться за {} , но никак не может его догнать peepoSprint
-{} pepeLaugh :point_right: {}
+{} pepePoint {}
