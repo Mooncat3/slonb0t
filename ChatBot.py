@@ -20,7 +20,7 @@ bot = commands.Bot(
 
 @bot.event
     async def event_command_error(ctx, error):
-        return True
+        pass
 
 @bot.command(name='SLONB0T')
 async def chat(ctx):
