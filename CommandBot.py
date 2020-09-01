@@ -59,8 +59,8 @@ async def omgroulette(ctx):
     if not roulette_is_running:
         roulette_is_running = True
         roulette_nicknames.append(ctx.author.name)
-        await self._ws.send_privmsg(config.CHAN, "Рулетка началась! У вас есть 20 секунд! Чтобы учавствовать напишите !accept")
-        self.loop.create_task(self.rand(self._ws))
+        await ctx.channel._ws.send_privmsg(config.CHAN, "Рулетка началась! У вас есть 20 секунд! Чтобы учавствовать напишите !accept")
+        asyncio.get_event_loop().create_task(rand(ctx.channel._ws))
     
 @bot.command(name='ауф')
 async def auf(ctx):
