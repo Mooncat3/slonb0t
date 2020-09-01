@@ -49,13 +49,13 @@ async def event_command_error(ctx, error):
     pass
 
 @bot.command(name='accept')
-async def accept(self, ctx):
+async def accept(ctx):
     if roulette_is_running:
         if not ctx.author.name in roulette_nicknames:
             roulette_nicknames.append(ctx.author.name)
 
 @bot.command(name='omgroulette')
-async def omgroulette(self, ctx):
+async def omgroulette(ctx):
     if not roulette_is_running:
         roulette_is_running = True
         roulette_nicknames.append(ctx.author.name)
