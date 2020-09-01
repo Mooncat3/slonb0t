@@ -14,6 +14,10 @@ import json
 from urllib.parse import quote
 
 
+roulette_is_running = False
+roulette_nicknames = []
+
+
 bot = commands.Bot(
     irc_token=f'oauth:{config.OAUTH}',
     client_id=config.CLIENT_ID,
@@ -21,6 +25,20 @@ bot = commands.Bot(
     prefix='!',
     initial_channels=config.CHANNELS)
 
+async def rand(socket):
+    if roulette_is_running:
+        await asyncio.sleep(20)
+        if len(roulette_nicknames) == 1:
+            roulette_nicknames.clear()
+            await socket.send_privmsg(config.CHAN, "Никто не участвует, ну и ладно PogO")
+        else:
+            await socket.send_privmsg(config.CHAN, "Кто же умрёт? Hmmm ...")
+            randname = random.choice(self.roulette_nicknames)
+            await asyncio.sleep(5)
+            await socket.send_privmsg(config.CHAN, "А умирает сегодня " + randname + ", ББ!")
+            await socket.send_privmsg(config.CHAN, f"/timeout {randname} 60")
+            roulette_nicknames.clear()
+        roulette_is_running = False
 
 @bot.event
 async def event_ready():
@@ -29,6 +47,20 @@ async def event_ready():
 @bot.event
 async def event_command_error(ctx, error):
     pass
+
+@bot.command(name='accept')
+async def accept(self, ctx):
+    if self.roulette_is_running:
+        if not ctx.author.name in self.roulette_nicknames:
+            self.roulette_nicknames.append(ctx.author.name)
+
+@bot.command(name='omgroulette')
+async def omgroulette(self, ctx):
+    if not self.roulette_is_running:
+        self.roulette_is_running = True
+        self.roulette_nicknames.append(ctx.author.name)
+        await self._ws.send_privmsg(config.CHAN, "Рулетка началась! У вас есть 20 секунд! Чтобы учавствовать напишите !accept")
+        self.loop.create_task(self.rand(self._ws))
     
 @bot.command(name='ауф')
 async def auf(ctx):
