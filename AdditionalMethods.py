@@ -336,7 +336,7 @@ async def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "
                                                                    "Client-ID": "{}".format(config.CLIENT_ID)})
                 response = urllib.request.urlopen(request).read()
                 data = json.loads(response)
-                print(data)
+                #print(data)
                 for p in data["data"]:
                     clips.append(p['url'])
                 if ident == count:
@@ -402,7 +402,7 @@ async def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "
         with open('data/abreviatures.txt') as n:
             ad = json.loads(n.read())
             if argument in ad:
-                print(ad[argument])
+                #print(ad[argument])
                 return ad[argument]
             return ""
 
