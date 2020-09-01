@@ -107,10 +107,10 @@ async def stream(ctx):
     message = ctx.message.content
     message = str.replace(message, '!history', '')
     message = message[1:len(message)]
-    print(message)
+    #print(message)
     while message[0:1] == "!" or message[0:1] == "/":
         message = message[1:len(message)]
-        print(message)
+        #print(message)
     AdditionalMethods.add_to_buffer("e", AdditionalMethods.get_last_stream_stat(message, nickname, ctx.author), ctx.author, "history")
 
 @bot.command(name='archive')
@@ -399,7 +399,7 @@ async def me(ctx):
         listme = list(b)
         randomm = random.choice(listme)
         randomm = re.sub("\n", '', randomm)
-        print("каво")
+        #print("каво")
         AdditionalMethods.add_to_buffer("e", randomm.format(nickname), ctx.author, "me")
 
 @bot.command(name='do')
