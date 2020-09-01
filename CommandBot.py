@@ -50,15 +50,15 @@ async def event_command_error(ctx, error):
 
 @bot.command(name='accept')
 async def accept(self, ctx):
-    if self.roulette_is_running:
-        if not ctx.author.name in self.roulette_nicknames:
-            self.roulette_nicknames.append(ctx.author.name)
+    if roulette_is_running:
+        if not ctx.author.name in roulette_nicknames:
+            roulette_nicknames.append(ctx.author.name)
 
 @bot.command(name='omgroulette')
 async def omgroulette(self, ctx):
-    if not self.roulette_is_running:
-        self.roulette_is_running = True
-        self.roulette_nicknames.append(ctx.author.name)
+    if not roulette_is_running:
+        roulette_is_running = True
+        roulette_nicknames.append(ctx.author.name)
         await self._ws.send_privmsg(config.CHAN, "Рулетка началась! У вас есть 20 секунд! Чтобы учавствовать напишите !accept")
         self.loop.create_task(self.rand(self._ws))
     
