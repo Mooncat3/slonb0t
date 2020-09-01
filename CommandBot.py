@@ -15,6 +15,7 @@ import subprocess
 import config
 import json
 from urllib.parse import quote
+import asyncio
 
 
 class CommandsBot(commands.Bot, ABC):
@@ -66,34 +67,41 @@ class CommandsBot(commands.Bot, ABC):
     async def cu(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
             word = str.replace(ctx.message.content, '!пирамида ', "")
-            AdditionalMethods.add_to_buffer("e", "/color Red", ctx.author, "пирамида")
-            AdditionalMethods.add_to_buffer("e", f"/me {word}", ctx.author, "пирамида")
-            AdditionalMethods.add_to_buffer("e", "/color OrangeRed", ctx.author, "пирамида")
-            AdditionalMethods.add_to_buffer("e", f"/me {word} {word}", ctx.author, "пирамида")
-            AdditionalMethods.add_to_buffer("e", "/color YellowGreen", ctx.author, "пирамида")
-            AdditionalMethods.add_to_buffer("e", f"/me {word} {word} {word}", ctx.author, "пирамида")
-            AdditionalMethods.add_to_buffer("e", "/color Green", ctx.author, "пирамида")
-            AdditionalMethods.add_to_buffer("e", f"/me {word} {word} {word} {word}", ctx.author, "пирамида")
-            AdditionalMethods.add_to_buffer("e", "/color CadetBlue", ctx.author, "пирамида")
-            AdditionalMethods.add_to_buffer("e", f"/me {word} {word} {word}", ctx.author, "пирамида")
-            AdditionalMethods.add_to_buffer("e", "/color Blue", ctx.author, "пирамида")
-            AdditionalMethods.add_to_buffer("e", f"/me {word} {word}", ctx.author, "пирамида")
-            AdditionalMethods.add_to_buffer("e", "/color BlueViolet", ctx.author, "пирамида")
-            AdditionalMethods.add_to_buffer("e", f"/me {word}", ctx.author, "пирамида")
+            await self._ws.send_privmsg(config.CHAN, "/color Red")
+            await self._ws.send_privmsg(config.CHAN, f"/me {word}")
+            await self._ws.send_privmsg(config.CHAN, "/color OrangeRed")
+            await self._ws.send_privmsg(config.CHAN, f"/me {word} {word}")
+            await self._ws.send_privmsg(config.CHAN, "/color YellowGreen")
+            await self._ws.send_privmsg(config.CHAN, f"/me {word} {word} {word}")
+            await self._ws.send_privmsg(config.CHAN, "/color Green")
+            await self._ws.send_privmsg(config.CHAN, f"/me {word} {word} {word} {word}")
+            await self._ws.send_privmsg(config.CHAN, "/color CadetBlue")
+            await self._ws.send_privmsg(config.CHAN, f"/me {word} {word} {word}")
+            await self._ws.send_privmsg(config.CHAN, "/color Blue")
+            await self._ws.send_privmsg(config.CHAN, f"/me {word} {word}")
+            await self._ws.send_privmsg(config.CHAN, "/color BlueViolet")
+            await self._ws.send_privmsg(config.CHAN, f"/me {word}")
+            
+    @commands.command(name='ауф')
+    async def auf(self, ctx):
+        nickname = ctx.author.name
+        r = requests.get('https://socratify.net/quotes/random')
+        soup = BeautifulSoup(r.content, 'lxml')
+        d = soup.find('h1', class_='b-quote__text').get_text()
+        AdditionalMethods.add_to_buffer("e", f"{nickname}, {d} AUFFF", ctx.author, "ауф")
 
     @commands.command(name='porf')
-    async def dev(self, ctx):
-        url = "https://models.dobro.ai/gpt2/medium/"
+    async def porf(self, ctx):
         nickname = ctx.author.name
         word = str.replace(ctx.message.content, '!porf ', "")
+        url = "https://models.dobro.ai/gpt2/medium/"
         if word == "!porf":
             AdditionalMethods.add_to_buffer("e", f"{nickname}, Впишите какое-либо предложение", ctx.author, "porf")
         elif len(word) > 300:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, Бот может принимать максимум 300 символов", ctx.author, "porf")
         else:
-            response = requests.post(url, json={'prompt': word, 'length': '60', 'num_samples': '1'})
-            result = str(response.text)
-            result = result.replace('{"replies":["', '').replace('"]}', '')
+            response = requests.post(url, json={'prompt': word, 'length': '30', 'num_samples': '5'})
+            result = str(response.text).replace('{"replies":["', '').replace('"]}', '').rpartition('","')[2]
             AdditionalMethods.add_to_buffer("e", f"{nickname}, " + word + result, ctx.author, "porf")
 
     @commands.command(name='save')
@@ -151,10 +159,8 @@ class CommandsBot(commands.Bot, ABC):
         message = ctx.message.content
         message = str.replace(message, '!history', '')
         message = message[1:len(message)]
-        print(message)
         while message[0:1] == "!" or message[0:1] == "/":
             message = message[1:len(message)]
-            print(message)
         AdditionalMethods.add_to_buffer("e", AdditionalMethods.get_last_stream_stat(message, nickname, ctx.author),
                                         ctx.author, "history")
 
@@ -187,16 +193,17 @@ class CommandsBot(commands.Bot, ABC):
         receptt = 'Способ приготовления:'.join(recept.split('Способ приготовления:')[:-1])
         recept1 = recept[recept.find("Способ приготовления:") + 1:]
         recept1 = (recept1[:495] + '...') if len(recept1) > 495 else recept1
-        AdditionalMethods.add_to_buffer("r", f"{name} - {receptt}", ctx.author, "рецепт")
-        AdditionalMethods.add_to_buffer("r", f"С{recept1}", ctx.author, "рецепт")
+        AdditionalMethods.add_to_buffer("s", f"{name} - {receptt}", ctx.author, "рецепт")
+        await asyncio.sleep(2)
+        AdditionalMethods.add_to_buffer("s", f"С{recept1}", ctx.author, "рецепт")
 
     @commands.command(name='анекдот')
     async def anekdot(self, ctx):
         r = requests.get('http://anecdotica.ru/')
         soup = BeautifulSoup(r.content, 'lxml')
         anekdot = soup.find('div', class_='item_text').get_text()
-        anekdot = AdditionalMethods.check_on_toomuchsimbols("ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss")
-        AdditionalMethods.add_to_buffer("e", '{} KeK'.format(str.replace(anekdot, "\r\n", " ")), ctx.author, "анекдот")
+        anekdott = (anekdot[:493] + '...') if len(anekdot) > 493 else anekdot
+        AdditionalMethods.add_to_buffer("e", '{} KeK'.format(str.replace(anekdott, "\r\n", " ")), ctx.author, "анекдот")
 
     @commands.command(name='курс')
     async def kurs(self, ctx):
@@ -206,12 +213,12 @@ class CommandsBot(commands.Bot, ABC):
         r1 = requests.get('https://fortrader.org/quotes/eurrur')
         r2 = requests.get('https://fortrader.org/currencyrates/jpy')
         r3 = requests.get('https://fortrader.org/currencyrates/uah')
-        
+
         soup = BeautifulSoup(r.content, 'lxml')
         soup1 = BeautifulSoup(r1.content, 'lxml')
         soup2 = BeautifulSoup(r2.content, 'lxml')
         soup3 = BeautifulSoup(r3.content, 'lxml')
-        
+
         dollar = soup.find('p', class_='rates_box1_inner pid-USDRUR-bid').get_text()
         euro = soup1.find('p', class_='rates_box1_inner pid-EURRUR-bid').get_text()
         jpy = soup2.find('input', class_='converter_form_inp converterInpTo').get(key="value")
@@ -237,60 +244,60 @@ class CommandsBot(commands.Bot, ABC):
             except ValueError:
                 AdditionalMethods.add_to_buffer("с", f"{nickname} Это не число WeirdChamp", ctx.author, "курс")
 
-    @commands.command(name='topclipever')
+    @commands.command(name='clipever')
     async def topclipever(self, ctx):
         nickname = ctx.author.name
         message = ctx.message.content
-        top = str.replace(message, '!topclipever ', '')
+        top = str.replace(message, '!clipever ', '')
         top = re.sub("\n", '', top)
-        if top == "!topclipever":
+        if top == "!clipever":
             top = ""
-        AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(0, top, nickname), ctx.author, "topclip")
+        AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(0, top, nickname), ctx.author, "clip")
 
-    @commands.command(name='topclipyear')
+    @commands.command(name='clipyear')
     async def topclipyear(self, ctx):
         nickname = ctx.author.name
         message = ctx.message.content
-        top = str.replace(message, '!topclipyear ', '')
+        top = str.replace(message, '!clipyear ', '')
         top = re.sub("\n", '', top)
-        if top == "!topclipyear":
+        if top == "!clipyear":
             top = ""
-        AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(365, top, nickname), ctx.author, "topclip")
+        AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(365, top, nickname), ctx.author, "clip")
 
-    @commands.command(name='topclipweek')
+    @commands.command(name='clipweek')
     async def topclipweek(self, ctx):
         nickname = ctx.author.name
         message = ctx.message.content
-        top = str.replace(message, '!topclipweek ', '')
+        top = str.replace(message, '!clipweek ', '')
         top = re.sub("\n", '', top)
-        if top == "!topclipweek":
+        if top == "!clipweek":
             top = ""
-        AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(7, top, nickname), ctx.author, "topclip")
+        AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(7, top, nickname), ctx.author, "clip")
 
-    @commands.command(name='topclipmonth')
+    @commands.command(name='clipmonth')
     async def topclipmonth(self, ctx):
         nickname = ctx.author.name
         message = ctx.message.content
-        top = str.replace(message, '!topclipmonth ', '')
+        top = str.replace(message, '!clipmonth ', '')
         top = re.sub("\n", '', top)
-        if top == "!topclipmonth":
+        if top == "!clipmonth":
             top = ""
-        AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(30, top, nickname), ctx.author, "topclip")
+        AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(30, top, nickname), ctx.author, "clip")
 
-    @commands.command(name='topclipday')
+    @commands.command(name='cliptoday')
     async def topclipday(self, ctx):
         nickname = ctx.author.name
         message = ctx.message.content
-        top = str.replace(message, '!topclipday ', '')
+        top = str.replace(message, '!cliptoday ', '')
         top = re.sub("\n", '', top)
-        if top == "!topclipday":
+        if top == "!cliptoday":
             top = ""
-        AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(1, top, nickname), ctx.author, "topclip")
+        AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(1, top, nickname), ctx.author, "clip")
 
     @commands.command(name='abbreviations')
     async def abbreviations(self, ctx):
         nickname = ctx.author.name
-        AdditionalMethods.add_to_buffer("c", f"{nickname} Здесь вы можете посмотреть все доступные аббревиатуры в topclip {config.abreviationsUrl}", ctx.author, "abbreviations")
+        AdditionalMethods.add_to_buffer("c", f"{nickname} Здесь вы можете посмотреть все доступные аббревиатуры в clip {config.abreviationsUrl}", ctx.author, "abbreviations")
 
     @commands.command(name='iq')
     async def iq(self, ctx):
@@ -318,9 +325,9 @@ class CommandsBot(commands.Bot, ABC):
                                                 f"{nickname}, ваш IQ = {str(iq)}! Внимание! В чате гений WAYTOOSMART Clap",
                                                 ctx.author, "iq")
 
-    @commands.command(name='паста')
+    @commands.command(name='pastа')
     async def pasta(self, ctx):
-        AdditionalMethods.add_to_buffer("s", AdditionalMethods.parse_simplefile_message("{}", "nadya"), ctx.author, "паста")
+        AdditionalMethods.add_to_buffer("s", AdditionalMethods.parse_simplefile_message("{}", "nadya"), ctx.author, "pastа")
 
     @commands.command(name='help')
     async def help(self, ctx):
@@ -475,7 +482,7 @@ class CommandsBot(commands.Bot, ABC):
         else:
             bubu = str.replace(message, '!бубу ', '')
             bubu = re.sub("\n", '', bubu)
-            if len(bubu) < 235:
+            if len(bubu) < 117:
                 AdditionalMethods.add_to_buffer("e", f"Ну {str(bubu)} и {str(bubu)} Чё бубнить-то? ThumbUp", ctx.author, "бубу")
             else:
                 AdditionalMethods.add_to_buffer("e", "Слишком длинное бубу WeirdChamp ", ctx.author, "бубу")
@@ -526,37 +533,28 @@ class CommandsBot(commands.Bot, ABC):
             AdditionalMethods.add_to_buffer("c", datetime.strftime(datetime.now() + timedelta(hours=3),
                                                                    f"{nickname}, Чичас %H:%M по МСК Waiting"), ctx.author, "время")
         else:
-            try:
-                loc = str.replace(message, "!время ", "")
-                url = "http://search.maps.sputnik.ru/search?q="
-                response = requests.get(url + quote(loc))
-                if response.text.find('"found":0') != -1:
-                    AdditionalMethods.add_to_buffer("c", f"{nickname}, Неправильно указан населённый пункт. Попробуйте ещё раз.",
-                                                    ctx.author,
-                                                    "время")
-                else:
+            loc = str.replace(message, '!время ', '')
+            url = "http://search.maps.sputnik.ru/search?q="
+            response = requests.get(url + quote(loc))
+            if response.text.find('"found":0') != -1:
+                AdditionalMethods.add_to_buffer("c", f"{nickname}, не найден населённый пункт. Попробуйте другое название.", ctx.author, "время")
+            else:
+                try:
                     json_response = response.json()
                     position = json_response['result'][0]
-                    result = str(position["position"]).replace("{'lat': ", "")
+                    result = str(position["position"]).replace("{'lat': ","")
                     parts = result.rsplit(',', 1)
                     lat = parts[0]
-                    lng = result.split(': ')[1].replace("}", "")
+                    lng = result.split(': ')[1].replace("}","")
                     url = "http://api.timezonedb.com/v2.1/get-time-zone?key=APM2N08MFF2O&format=xml&by=position&lat="
                     response1 = requests.get(url + lat + "&lng=" + lng)
-                    print(str(response1.text))
                     time = str(response1.text).split('<formatted>')[1]
                     time = time.replace('</formatted></result>', '')
                     time = time.split(' ')[1]
-                    AdditionalMethods.add_to_buffer("c", f"{nickname}, Чичас {time} в {position['title']} Waiting", ctx.author,
-                                                "время")
-            except:
-                AdditionalMethods.add_to_buffer("c", f"{nickname}, не удалось найти время в этом пункте", ctx.author, "время")
-
-
-    @commands.command(name='helpвремя')
-    async def helptime(self, ctx):
-        nickname = ctx.author.name
-        AdditionalMethods.add_to_buffer("c", f"{nickname}, Здесь вы можете посмотреть все доступные временные зоны в команде !время {config.timeUrl}", ctx.author, "helpвремя")
+                    location = position["title"]
+                    AdditionalMethods.add_to_buffer("c", f"{nickname}, чичас {time} в «{location}» Waiting", ctx.author, "время")
+                except IndexError:
+                    AdditionalMethods.add_to_buffer("c", f"{nickname}, не удалось найти время для этого населённого пункта", ctx.author, "время")
 
     @commands.command(name='обнять')
     async def hug(self, ctx):
