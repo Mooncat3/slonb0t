@@ -26,6 +26,37 @@ class CommandsBot(commands.Bot, ABC):
                          initial_channels=config.CHANNELS)
         self.roulette_is_running = False
         self.roulette_nicknames = []
+        self.duel_is_running = False
+        self.duel_nicknames = []
+        self.duel_user = ""
+        self.duel_serious = True
+        
+    async def duelent(self, socket):
+        i: int = 0
+        while len(self.duel_nicknames) == 1 and i < 200:
+            print(i)
+            i += 1
+            await asyncio.sleep(0.1)
+        if len(self.duel_nicknames) == 1:
+            await socket.send_privmsg(config.CHAN, "Оппонент не принял дуэль MonkaHmm")
+        else:
+            if self.duel_serious:
+                await socket.send_privmsg(config.CHAN, "Дуэлянты смотрят друг на друга monkaW . В любой момент они готовы достать револьвер из кобуры... PepeS")
+                randname = random.choice(self.duel_nicknames)
+                self.duel_nicknames.remove(randname)
+                await asyncio.sleep(8)
+                await socket.send_privmsg(config.CHAN, f"Хлопок! Точный выстрел убивает {randname}. Самая быстрая рука дикого запада – {self.duel_nicknames[0]} EZ")
+                await socket.send_privmsg(config.CHAN, f"/timeout {randname} 60")
+            else:
+                await socket.send_privmsg(config.CHAN,
+                                          "Один из дуэлянтов бессмертен, поэтому они стреляют холостыми пулями monkaW . В любой момент они готовы достать револьвер из кобуры... PepeS")
+                randname = random.choice(self.duel_nicknames)
+                self.duel_nicknames.remove(randname)
+                await asyncio.sleep(8)
+                await socket.send_privmsg(config.CHAN,
+                                          f"Хлопок! Точный выстрел заставляет {randname} сдаться. Самая быстрая рука дикого запада – {self.duel_nicknames[0]} EZ")
+        self.duel_nicknames.clear()
+        self.duel_is_running = False
         
     async def rand(self, socket):
         if self.roulette_is_running:
@@ -48,6 +79,40 @@ class CommandsBot(commands.Bot, ABC):
 
     async def event_message(self, message):
         await self.handle_commands(message)
+        
+    @commands.command(name='acduel')
+    async def acduel(self, ctx):
+        if self.duel_is_running:
+            print(self.duel_user)
+            if ctx.author.name == self.duel_user:
+                if self.duel_serious:
+                    if ctx.author.is_mod:
+                        self.duel_serious = False
+                    else:
+                        self.duel_serious = True
+                self.duel_nicknames.append(ctx.author.name)
+
+    @commands.command(name='duel')
+    async def duel(self, ctx):
+        if not self.duel_is_running:
+            if ctx.author.is_mod:
+                self.duel_serious = False
+            else:
+                self.duel_serious = True
+            nickname = ctx.author.name
+            message = ctx.message.content
+            message = str.replace(message, '!duel', '')
+            message = message[1:len(message)]
+            if len(message) > 1 and len(message) <= 26 and message.find(" ") == -1:
+                self.duel_is_running = True
+                self.duel_nicknames.append(ctx.author.name)
+                self.duel_user = message.replace("@", "").lower()
+                await ctx.channel._ws.send_privmsg(config.CHAN,
+                                                   f"{nickname} кидает перчатку в {message}, вызывая его на дуэль peepoCool . Чтобы принять вызов – напишите !acduel.")
+                asyncio.get_event_loop().create_task(self.duelent(self._ws))
+            else:
+                await ctx.channel._ws.send_privmsg(config.CHAN,
+                                                   f"{nickname}, напишите никнейм правильно PepoG")
 
     @commands.command(name='accept')
     async def accept(self, ctx):
