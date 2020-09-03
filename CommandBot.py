@@ -34,7 +34,6 @@ class CommandsBot(commands.Bot, ABC):
     async def duelent(self, socket):
         i: int = 0
         while len(self.duel_nicknames) == 1 and i < 200:
-            print(i)
             i += 1
             await asyncio.sleep(0.1)
         if len(self.duel_nicknames) == 1:
@@ -64,7 +63,6 @@ class CommandsBot(commands.Bot, ABC):
             await socket.send_privmsg(config.CHAN, "Никто не участвует, ну и ладно PogO")
         else:
             await socket.send_privmsg(config.CHAN, "Кто же умрёт? Hmmm ...")
-            print(self.roulette_nicknames)
             randname = random.choice(self.roulette_nicknames)
             await asyncio.sleep(5)
             await socket.send_privmsg(config.CHAN, "А умирает сегодня " + randname + ", ББ!")
@@ -81,7 +79,6 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='acduel')
     async def acduel(self, ctx):
         if self.duel_is_running:
-            print(self.duel_user)
             if ctx.author.name == self.duel_user:
                 if self.duel_serious:
                     if ctx.author.is_mod:
