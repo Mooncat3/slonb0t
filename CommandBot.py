@@ -89,7 +89,7 @@ class CommandsBot(commands.Bot, ABC):
 
     @commands.command(name='duel')
     async def duel(self, ctx):
-        if not self.duel_is_running and AdditionalMethods.check_active(shouldchecksettings=True):
+        if not self.duel_is_running and (AdditionalMethods.check_active(shouldchecksettings=True) or AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name)):
             if ctx.author.is_mod:
                 self.duel_serious = False
             else:
@@ -117,7 +117,7 @@ class CommandsBot(commands.Bot, ABC):
 
     @commands.command(name='omgroulette')
     async def omgroulette(self, ctx):
-        if not self.roulette_is_running and AdditionalMethods.check_active(shouldchecksettings=True):
+        if not self.roulette_is_running and (AdditionalMethods.check_active(shouldchecksettings=True) or AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name)):
             self.roulette_is_running = True
             self.roulette_nicknames.append(ctx.author.name)
             await ctx.channel._ws.send_privmsg(config.CHAN, "Рулетка началась! У вас есть 20 секунд! Чтобы учавствовать напишите !accept")
