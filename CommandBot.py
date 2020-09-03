@@ -34,6 +34,7 @@ class CommandsBot(commands.Bot, ABC):
     async def duelent(self, socket):
         i: int = 0
         while len(self.duel_nicknames) == 1 and i < 200:
+            print(i)
             i += 1
             await asyncio.sleep(0.1)
         if len(self.duel_nicknames) == 1:
@@ -56,21 +57,20 @@ class CommandsBot(commands.Bot, ABC):
                                           f"Хлопок! Точный выстрел заставляет {randname} сдаться. Самая быстрая рука дикого запада – {self.duel_nicknames[0]} EZ")
         self.duel_nicknames.clear()
         self.duel_is_running = False
-        
+    
     async def rand(self, socket):
-        if self.roulette_is_running:
-            await asyncio.sleep(20)
-            if len(self.roulette_nicknames) == 1:
-                self.roulette_nicknames.clear()
-                await socket.send_privmsg(config.CHAN, "Никто не участвует, ну и ладно PogO")
-            else:
-                await socket.send_privmsg(config.CHAN, "Кто же умрёт? Hmmm ...")
-                randname = random.choice(self.roulette_nicknames)
-                await asyncio.sleep(5)
-                await socket.send_privmsg(config.CHAN, "А умирает сегодня " + randname + ", ББ!")
-                await socket.send_privmsg(config.CHAN, f"/timeout {randname} 60")
-                self.roulette_nicknames.clear()
-            self.roulette_is_running = False
+        await asyncio.sleep(20)
+        if len(self.roulette_nicknames) == 1:
+            await socket.send_privmsg(config.CHAN, "Никто не участвует, ну и ладно PogO")
+        else:
+            await socket.send_privmsg(config.CHAN, "Кто же умрёт? Hmmm ...")
+            print(self.roulette_nicknames)
+            randname = random.choice(self.roulette_nicknames)
+            await asyncio.sleep(5)
+            await socket.send_privmsg(config.CHAN, "А умирает сегодня " + randname + ", ББ!")
+            await socket.send_privmsg(config.CHAN, f"/timeout {randname} 60")
+        self.roulette_nicknames.clear()
+        self.roulette_is_running = False
 
     async def event_ready(self):
         print(f'Ready {str(self.__class__.__name__)} | {self.nick} on {self.initial_channels}')
@@ -81,6 +81,7 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='acduel')
     async def acduel(self, ctx):
         if self.duel_is_running:
+            print(self.duel_user)
             if ctx.author.name == self.duel_user:
                 if self.duel_serious:
                     if ctx.author.is_mod:
