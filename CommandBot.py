@@ -31,6 +31,10 @@ class CommandsBot(commands.Bot, ABC):
         self.duel_user = ""
         self.duel_serious = True
         
+        
+    async def event_command_error(self, ctx, error):
+        pass
+        
     async def duelent(self, socket):
         i: int = 0
         while len(self.duel_nicknames) == 1 and i < 200:
