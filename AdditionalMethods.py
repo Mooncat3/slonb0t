@@ -95,6 +95,21 @@ def createPaste(code, name, format_, private, date):
     p['api_paste_expire_date'] = date
     return p
 
+def get_norm() -> float:
+    with open(file='data/settings.txt', mode='r', encoding='utf-8') as e:
+        try:
+            data = json.loads(e.read())
+            return data['norm']
+        except:
+            return 2.0
+
+def get_max_messes() -> float:
+    with open(file='data/settings.txt', mode='r', encoding='utf-8') as e:
+        try:
+            data = json.loads(e.read())
+            return data['maxmesses']
+        except:
+            return 3
 
 def get_bufer_max() -> float:
     with open(file='data/settings.txt', mode='r', encoding='utf-8') as e:
