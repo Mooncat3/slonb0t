@@ -30,6 +30,8 @@ class CommandsBot(commands.Bot, ABC):
         self.duel_nicknames = []
         self.duel_user = ""
         self.duel_serious = True
+        self.spammers = {}
+        self.seekers = []
         
         
     async def event_command_error(self, ctx, error):
