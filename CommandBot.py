@@ -114,7 +114,7 @@ class CommandsBot(commands.Bot, ABC):
                 await ctx.channel._ws.send_privmsg(config.CHAN,
                                                    f"{nickname}, напишите никнейм правильно PepoG")
         elif self.duel_is_running:
-            AdditionalMethods.add_to_buffer("s", f"{nickname}, сейчас идёт общая рулетка", ctx.author, "!duel")
+            AdditionalMethods.add_to_buffer("s", f"{nickname}, сейчас идёт общая рулетка", ctx.author, "duel")
 
     @commands.command(name='accept')
     async def accept(self, ctx):
@@ -130,7 +130,7 @@ class CommandsBot(commands.Bot, ABC):
             await ctx.channel._ws.send_privmsg(config.CHAN, "Рулетка началась! У вас есть 20 секунд! Чтобы учавствовать напишите !accept")
             asyncio.get_event_loop().create_task(self.rand(self._ws))
         elif self.duel_is_running:
-            AdditionalMethods.add_to_buffer("s", f"{ctx.author.name}, сейчас идёт дуэль", ctx.author, "!duel")
+            AdditionalMethods.add_to_buffer("s", f"{ctx.author.name}, сейчас идёт дуэль", ctx.author, "omgroulette")
 
     @commands.command(name='пирамида')
     async def cu(self, ctx):
