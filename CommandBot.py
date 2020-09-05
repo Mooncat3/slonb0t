@@ -78,8 +78,127 @@ class CommandsBot(commands.Bot, ABC):
         print(f'Ready {str(self.__class__.__name__)} | {self.nick} on {self.initial_channels}')
 
     async def event_message(self, message):
+        nickname = message.author.name
+        if not AdditionalMethods.vip(message.author.is_mod, nickname):
+            if nickname in self.spammers.keys():
+                self.spammers[nickname]["messes"] += 1
+            else:
+                self.spammers[nickname] = {}
+                self.spammers[nickname]["messes"] = 0
+            if not "time" in self.spammers[nickname].keys():
+                self.spammers[nickname]["time"] = time.time()
+                self.spammers[nickname]["worned"] = False
+            if time.time() - self.spammers[nickname]["time"] > AdditionalMethods.get_norm() * AdditionalMethods.get_max_messes():
+                self.spammers[nickname]["time"] = time.time()
+                self.spammers[nickname]["messes"] = 0
+                self.spammers[nickname]["worned"] = False
+            if self.spammers[nickname]["messes"] > 0:
+                if (time.time() - self.spammers[nickname]["time"]) / self.spammers[nickname]["messes"] < AdditionalMethods.get_norm() and self.spammers[nickname]["messes"] >= AdditionalMethods.get_max_messes() and not self.spammers[nickname]["worned"]:
+                    for f in self.seekers:
+                        await self._ws.send_privmsg(config.CHAN, f"/w {f} {nickname}, нарушил условия спама")
+                    self.spammers[nickname]["worned"] = True
         await self.handle_commands(message)
-        
+
+    @commands.command(name='seek')
+    async def seek(self, ctx):
+        if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
+            nickname = ctx.author.name
+            if not nickname in self.seekers:
+                self.seekers.append(nickname)
+                AdditionalMethods.add_to_buffer("s",
+                                                f"Вы подписаны на уведомления о спаме!",
+                                                ctx.author,
+                                                "seek")
+            else:
+                AdditionalMethods.add_to_buffer("s",
+                                                f"Вы уже подписаны на уведомления о спаме ResidentSleeper",
+                                                ctx.author,
+                                                "seek")
+
+    @commands.command(name='unseek')
+    async def unseek(self, ctx):
+        if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
+            nickname = ctx.author.name
+            if not nickname in self.seekers:
+                AdditionalMethods.add_to_buffer("s",
+                                                f"Вы не подписаны на уведомления о спаме ResidentSleeper",
+                                                ctx.author,
+                                                "unseek")
+            else:
+                self.seekers.remove(nickname)
+                AdditionalMethods.add_to_buffer("s",
+                                                f"Вы отписаны от уведомлений о спаме!",
+                                                ctx.author,
+                                                "unseek")
+
+    @commands.command(name='maxmesses')
+    async def maxmesses(self, ctx):
+        if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
+            nickname = ctx.author.name
+            timeout = str.replace(ctx.message.content, '!maxmesses ', '')
+            timeout = re.sub("\n", '', timeout)
+            timeout = str.replace(timeout, ",", ".")
+            try:
+                with open('data/settings.txt', 'r', encoding='utf-8') as b:
+                    data = json.loads(b.read())
+            except:
+                data = {}
+            with open('data/settings.txt', 'w', encoding='utf-8') as b:
+                try:
+                    data["maxmesses"] = int(timeout)
+                    b.write(json.dumps(data))
+                    AdditionalMethods.add_to_buffer("s",
+                                                    f"{nickname} norm: {data['norm']},"
+                                                    f" maxmesses: {data['maxmesses']}",
+                                                    ctx.author, "maxmesses")
+                except:
+                    AdditionalMethods.add_to_buffer("s", f"{nickname}, не удалось прочесть число (оно должно быть не дробным) PepoG ", ctx.author,
+                                                    "maxmesses")
+
+    @commands.command(name='norm')
+    async def norm(self, ctx):
+        if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
+            nickname = ctx.author.name
+            timeout = str.replace(ctx.message.content, '!norm ', '')
+            timeout = re.sub("\n", '', timeout)
+            timeout = str.replace(timeout, ",", ".")
+            try:
+                with open('data/settings.txt', 'r', encoding='utf-8') as b:
+                    data = json.loads(b.read())
+            except:
+                data = {}
+            with open('data/settings.txt', 'w', encoding='utf-8') as b:
+                try:
+                    data["norm"] = float(timeout)
+                    b.write(json.dumps(data))
+                    AdditionalMethods.add_to_buffer("s",
+                                                    f"{nickname} norm: {data['norm']},"
+                                                    f" maxmesses: {data['maxmesses']}",
+                                                    ctx.author, "norm")
+                except:
+                    AdditionalMethods.add_to_buffer("s", f"{nickname}, не удалось прочесть число PepoG ", ctx.author,
+                                                    "norm")
+
+    @commands.command(name='settings')
+    async def settings(self, ctx):
+        if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
+            try:
+                with open('data/settings.txt', 'r', encoding='utf-8') as b:
+                    data = json.loads(b.read())
+            except:
+                data = {}
+            if len(data) == 0:
+                AdditionalMethods.add_to_buffer("s", f"Настройки пустые", ctx.author, "settings")
+            else:
+                AdditionalMethods.add_to_buffer("s",
+                                                f"max: {data['buffermax']}, delay: {data['bufferdelay']}, entertain: {data['entertain']}, norm: {data['norm']}, maxmesses: {data['maxmesses']}",
+                                                ctx.author, "settings")
+
+    @commands.command(name='helpm')
+    async def helpm(self, ctx):
+        if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
+            AdditionalMethods.add_to_buffer("s", f"!bufferdelay [time], !buffermax [time], !entertain [0-1], !settings, !norm [time], !maxmesses [int]",
+                                            ctx.author, "helpm")
     @commands.command(name='acduel')
     async def acduel(self, ctx):
         if self.duel_is_running:
@@ -404,11 +523,6 @@ class CommandsBot(commands.Bot, ABC):
         nickname = ctx.author.name
         AdditionalMethods.add_to_buffer("c", f"catJAM Ку, {nickname}, меня зовут SLONB0T catJAM , моя история довольно короткая и грустная BibleThump (если хочешь её увидеть введи !slon), но я воскрес, чтобы жить вечно AngelThump со списком команд можешь ознакомиться здесь {config.helpUrl}", ctx.author, "help")
 
-    @commands.command(name='helpm')
-    async def helpm(self, ctx):
-        if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
-            AdditionalMethods.add_to_buffer("s", f"!bufferdelay [time], !buffermax [time], !entertain [0-1], !settings", ctx.author, "helpm")
-
     @commands.command(name='bufferdelay')
     async def bufedelay(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
@@ -482,19 +596,6 @@ class CommandsBot(commands.Bot, ABC):
                     AdditionalMethods.add_to_buffer("s",
                                                     f"{nickname} !entertain [0,1]",
                                                     ctx.author, "entertain")
-
-    @commands.command(name='settings')
-    async def settings(self, ctx):
-        if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
-            try:
-                with open('data/settings.txt', 'r', encoding='utf-8') as b:
-                    data = json.loads(b.read())
-            except:
-                data = {}
-            if len(data) == 0:
-                AdditionalMethods.add_to_buffer("s", f"Настройки пустые", ctx.author, "settings")
-            else:
-                AdditionalMethods.add_to_buffer("s", f"max: {data['buffermax']}, delay: {data['bufferdelay']}, entertain: {data['entertain']}", ctx.author, "settings")
 
     @commands.command(name='temp')
     async def temp(self, ctx):
