@@ -42,8 +42,7 @@ class BufferCleaner(Client, ABC):
         return nonce
 
     async def event_command_error(self, ctx, error):
-        print('Ignoring exception in command: {0}:'.format(error), file=sys.stderr)
-        traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
+        pass
 
     async def event_mode(self, channel, user, status):
         pass
@@ -72,7 +71,7 @@ class BufferCleaner(Client, ABC):
         pass
 
     async def event_error(self, error: Exception, data=None):
-        traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
+        pass
 
     async def event_ready(self):
         print(f'Ready {str(self.__class__.__name__)} | {config.BOT} on {config.CHANNELS}')
