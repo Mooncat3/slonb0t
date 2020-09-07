@@ -205,7 +205,7 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='acduel')
     async def acduel(self, ctx):
         if self.duel_is_running:
-            print(self.duel_user)
+            #print(self.duel_user)
             if ctx.author.name == self.duel_user:
                 if self.duel_serious:
                     if ctx.author.is_mod:
