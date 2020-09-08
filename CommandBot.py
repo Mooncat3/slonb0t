@@ -290,12 +290,14 @@ class CommandsBot(commands.Bot, ABC):
             AdditionalMethods.add_to_buffer("e", f"{nickname}, Бот может принимать максимум 300 символов", ctx.author, "porf")
         else:
             response = requests.post(url, json={'prompt': word, 'length': '30', 'num_samples': '5'})
-            result = str(response.text).replace('{"replies":["', '').replace('"]}', '').rpartition('","')[2]
+            json_response = response.json()
+            result = json_response['replies'][4]
             with open('data/osujdau.txt', 'r', encoding='utf_8') as f:
                 l = [line.strip() for line in f]
             if any(x in result for x in l):
                 response = requests.post(url, json={'prompt': word, 'length': '30', 'num_samples': '5'})
-                result = str(response.text).replace('{"replies":["', '').replace('"]}', '').rpartition('","')[2]
+                json_response = response.json()
+                result = json_response['replies'][4]
                 AdditionalMethods.add_to_buffer("e", f"{nickname}, " + word + result, ctx.author, "porf")
             else:
                 AdditionalMethods.add_to_buffer("e", f"{nickname}, " + word + result, ctx.author, "porf")
