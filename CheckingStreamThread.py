@@ -102,10 +102,43 @@ def checkingthread():
                     dat['active'] = False
                     with open(file='data/TRASHMASSIVE.txt', mode='w', encoding='utf-8') as q:
                         q.write(json.dumps(dat))
-
         if active:
+            if additint == 6:
+                additint = 0
+                array = []
+                url = f"https://decapi.me/twitch/subscriber_emotes/jesusavgn"
+                request = urllib.request.Request(url=url)
+                response = urllib.request.urlopen(request).read()
+                array += str.split(str(response).replace("'", "").replace("b", ""), " ")
+                url = f"https://decapi.me/bttv/emotes?channel=jesusavgn"
+                request = urllib.request.Request(url=url)
+                response = urllib.request.urlopen(request).read()
+                array += str.split(str(response).replace("'", "").replace("b", ""), " ")
+                url = f"https://decapi.me/ffz/emotes/jesusavgn"
+                request = urllib.request.Request(url=url)
+                response = urllib.request.urlopen(request).read()
+                array += str.split(str(response).replace("'", "").replace("b", ""), " ")
+                with open(file='data/SMILES.txt', mode='w', encoding='utf-8') as q:
+                    q.write(json.dumps(array))
+            else:
+                additint += 1
             time.sleep(10)
         if not active:
+            array = []
+            url = f"https://decapi.me/twitch/subscriber_emotes/jesusavgn"
+            request = urllib.request.Request(url=url)
+            response = urllib.request.urlopen(request).read()
+            array += str.split(str(response).replace("'", "").replace("b", ""), " ")
+            url = f"https://decapi.me/bttv/emotes?channel=jesusavgn"
+            request = urllib.request.Request(url=url)
+            response = urllib.request.urlopen(request).read()
+            array += str.split(str(response).replace("'", "").replace("b", ""), " ")
+            url = f"https://decapi.me/ffz/emotes/jesusavgn"
+            request = urllib.request.Request(url=url)
+            response = urllib.request.urlopen(request).read()
+            array += str.split(str(response).replace("'", "").replace("b", ""), " ")
+            with open(file='data/SMILES.txt', mode='w', encoding='utf-8') as q:
+                q.write(json.dumps(array))
             time.sleep(60)
 
 
