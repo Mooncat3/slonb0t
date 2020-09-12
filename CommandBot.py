@@ -252,7 +252,7 @@ class CommandsBot(commands.Bot, ABC):
             AdditionalMethods.add_to_buffer("s", f"{ctx.author.name}, сейчас идёт дуэль", ctx.author, "omgroulette")
 
     @commands.command(name='пирамида')
-    async def cu(self, ctx):
+    async def piramide(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
             word = str.replace(ctx.message.content, '!пирамида ', "")
             await self._ws.send_privmsg(config.CHAN, "/color Red")
@@ -508,7 +508,7 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='abbreviations')
     async def abbreviations(self, ctx):
         nickname = ctx.author.name
-        AdditionalMethods.add_to_buffer("c", f"{nickname} Здесь вы можете посмотреть все доступные аббревиатуры в clip {config.abreviationsUrl}", ctx.author, "abbreviations")
+        AdditionalMethods.add_to_buffer("c", f"{nickname} Здесь вы можете посмотреть все доступные аббревиатуры для clip {config.abreviationsUrl}", ctx.author, "abbreviations")
 
     @commands.command(name='iq')
     async def iq(self, ctx):
@@ -543,7 +543,7 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='help')
     async def help(self, ctx):
         nickname = ctx.author.name
-        AdditionalMethods.add_to_buffer("c", f"catJAM Ку, {nickname}, меня зовут SLONB0T catJAM , моя история довольно короткая и грустная BibleThump (если хочешь её увидеть введи !slon), но я воскрес, чтобы жить вечно AngelThump со списком команд можешь ознакомиться здесь {config.helpUrl}", ctx.author, "help")
+        AdditionalMethods.add_to_buffer("c", f"catJAM Ку, {nickname}, со списком команд можешь ознакомиться здесь {config.helpUrl} catJAM", ctx.author, "help")
 
     @commands.command(name='bufferdelay')
     async def bufedelay(self, ctx):
