@@ -31,6 +31,7 @@ class CommandsBot(commands.Bot, ABC):
         self.duel_serious = True
         self.spammers = {}
         self.seekers = []
+        self.logs = []
         
     async def event_command_error(self, ctx, error):
         pass
@@ -79,125 +80,73 @@ class CommandsBot(commands.Bot, ABC):
 
     async def event_message(self, message):
         nickname = message.author.name
-        if not AdditionalMethods.vip(message.author.is_mod, nickname):
-            if nickname in self.spammers.keys():
-                self.spammers[nickname]["messes"] += 1
-            else:
-                self.spammers[nickname] = {}
-                self.spammers[nickname]["messes"] = 0
-            if not "time" in self.spammers[nickname].keys():
-                self.spammers[nickname]["time"] = time.time()
-                self.spammers[nickname]["worned"] = False
-            if time.time() - self.spammers[nickname]["time"] > AdditionalMethods.get_norm() * AdditionalMethods.get_max_messes():
-                self.spammers[nickname]["time"] = time.time()
-                self.spammers[nickname]["messes"] = 0
-                self.spammers[nickname]["worned"] = False
-            if self.spammers[nickname]["messes"] > 0:
-                if (time.time() - self.spammers[nickname]["time"]) / self.spammers[nickname]["messes"] < AdditionalMethods.get_norm() and self.spammers[nickname]["messes"] >= AdditionalMethods.get_max_messes() and not self.spammers[nickname]["worned"]:
-                    for f in self.seekers:
-                        await self._ws.send_privmsg(config.CHAN, f"/w {f} {nickname}, нарушил условия спама")
-                    self.spammers[nickname]["worned"] = True
+        if AdditionalMethods.vip(message.author.is_mod, nickname) and not nickname == "slonb0t":
+            docheck = True
+            mod = Settings.get_mod()
+            if mod != "all" and (mod == "skip" or mod == "skip_with"):
+                with open(file='data/SMILES.txt', mode='r', encoding='utf-8') as e:
+                    try:
+                        smiles = json.loads(e.read())
+                    except:
+                        smiles = []
+                if mod == "skip":
+                    docheck = False
+                    arraymess = str.split(message.content, " ")
+                    for r in arraymess:
+                        if not r in smiles:
+                            docheck = True
+                elif mod == "skip_with":
+                    docheck = True
+                    arraymess = str.split(message.content, " ")
+                    for r in arraymess:
+                        if r in smiles:
+                            docheck = False
+            if docheck:
+                if nickname in self.spammers.keys():
+                    self.spammers[nickname]["messes"] += 1
+                    if self.spammers[nickname]["messes"] == 1:
+                        self.spammers[nickname]["time"] = time.time()
+                    self.spammers[nickname]["log"].append(
+                        {"timenow": datetime.now().strftime("%H:%M:%S"), "messtime": round(time.time() - self.spammers[nickname]["time"], 2), "messes": self.spammers[nickname]['messes'], "content": message.content})
+                else:
+                    self.spammers[nickname] = {}
+                    self.spammers[nickname]["time"] = time.time()
+                    self.spammers[nickname]["messes"] = 1
+                    self.spammers[nickname]["worned"] = 0
+                    self.spammers[nickname]["log"] = [{"timenow": datetime.now().strftime("%H:%M:%S"), "messtime": round(time.time() - self.spammers[nickname]["time"], 2), "messes": self.spammers[nickname]['messes'], "content": message.content}]
+
+                if self.spammers[nickname]["messes"] > 1:
+                    if time.time() - self.spammers[nickname]["time"] < Settings.get_norm() and self.spammers[nickname]["messes"] == Settings.get_max_messes():
+                        self.spammers[nickname]["time"] = time.time()
+                        self.spammers[nickname]["messes"] = 0
+                        stringer = "|--------------------------------------------------|<br>"
+                        stringer += nickname + ":<br>"
+                        for r in self.spammers[nickname]["log"]:
+                            stringer += f"{r['timenow']}: {r['content']} || time: {r['messtime']} || messes: {r['messes']}<br>"
+                        if self.spammers[nickname]["worned"] == Settings.get_attentions():
+                            self.spammers[nickname]["worned"] = 0
+                            stringer += f"timeouted for {Settings.get_timeout()}, settings: |norm: {Settings.get_norm()}, maxmesses: {Settings.get_max_messes()}, emojymode: {Settings.get_mod()}|"
+                        else:
+                            self.spammers[nickname]["worned"] += 1
+                            stringer += f"attentions: {self.spammers[nickname]['worned']}|{Settings.get_attentions()}, settings: |norm: {Settings.get_norm()}, maxmesses: {Settings.get_max_messes()}, emojymode: {Settings.get_mod()}|"
+                        answer = requests.post(config.api_url + "/logs/jesusavgn",
+                                               data=stringer.encode(
+                                                   "utf-8"), headers={"Authorization": "y5IArL6S&%%G(69G"})
+                        self.spammers[nickname]["log"].clear()
+                    elif time.time() - self.spammers[nickname]["time"] >= Settings.get_norm():
+                        self.spammers[nickname]["time"] = time.time()
+                        self.spammers[nickname]["messes"] = 0
+                    else:
+                        self.spammers[nickname]["time"] = time.time()
+                else:
+                    self.spammers[nickname]["time"] = time.time()
+
         await self.handle_commands(message)
-
-    @commands.command(name='seek')
-    async def seek(self, ctx):
-        if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
-            nickname = ctx.author.name
-            if not nickname in self.seekers:
-                self.seekers.append(nickname)
-                AdditionalMethods.add_to_buffer("s",
-                                                f"Вы подписаны на уведомления о спаме!",
-                                                ctx.author,
-                                                "seek")
-            else:
-                AdditionalMethods.add_to_buffer("s",
-                                                f"Вы уже подписаны на уведомления о спаме ResidentSleeper",
-                                                ctx.author,
-                                                "seek")
-
-    @commands.command(name='unseek')
-    async def unseek(self, ctx):
-        if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
-            nickname = ctx.author.name
-            if not nickname in self.seekers:
-                AdditionalMethods.add_to_buffer("s",
-                                                f"Вы не подписаны на уведомления о спаме ResidentSleeper",
-                                                ctx.author,
-                                                "unseek")
-            else:
-                self.seekers.remove(nickname)
-                AdditionalMethods.add_to_buffer("s",
-                                                f"Вы отписаны от уведомлений о спаме!",
-                                                ctx.author,
-                                                "unseek")
-
-    @commands.command(name='maxmesses')
-    async def maxmesses(self, ctx):
-        if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
-            nickname = ctx.author.name
-            timeout = str.replace(ctx.message.content, '!maxmesses ', '')
-            timeout = re.sub("\n", '', timeout)
-            timeout = str.replace(timeout, ",", ".")
-            try:
-                with open('data/settings.txt', 'r', encoding='utf-8') as b:
-                    data = json.loads(b.read())
-            except:
-                data = {}
-            with open('data/settings.txt', 'w', encoding='utf-8') as b:
-                try:
-                    data["maxmesses"] = int(timeout)
-                    b.write(json.dumps(data))
-                    AdditionalMethods.add_to_buffer("s",
-                                                    f"{nickname} norm: {data['norm']},"
-                                                    f" maxmesses: {data['maxmesses']}",
-                                                    ctx.author, "maxmesses")
-                except:
-                    AdditionalMethods.add_to_buffer("s", f"{nickname}, не удалось прочесть число (оно должно быть не дробным) PepoG ", ctx.author,
-                                                    "maxmesses")
-
-    @commands.command(name='norm')
-    async def norm(self, ctx):
-        if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
-            nickname = ctx.author.name
-            timeout = str.replace(ctx.message.content, '!norm ', '')
-            timeout = re.sub("\n", '', timeout)
-            timeout = str.replace(timeout, ",", ".")
-            try:
-                with open('data/settings.txt', 'r', encoding='utf-8') as b:
-                    data = json.loads(b.read())
-            except:
-                data = {}
-            with open('data/settings.txt', 'w', encoding='utf-8') as b:
-                try:
-                    data["norm"] = float(timeout)
-                    b.write(json.dumps(data))
-                    AdditionalMethods.add_to_buffer("s",
-                                                    f"{nickname} norm: {data['norm']},"
-                                                    f" maxmesses: {data['maxmesses']}",
-                                                    ctx.author, "norm")
-                except:
-                    AdditionalMethods.add_to_buffer("s", f"{nickname}, не удалось прочесть число PepoG ", ctx.author,
-                                                    "norm")
-
-    @commands.command(name='settings')
-    async def settings(self, ctx):
-        if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
-            try:
-                with open('data/settings.txt', 'r', encoding='utf-8') as b:
-                    data = json.loads(b.read())
-            except:
-                data = {}
-            if len(data) == 0:
-                AdditionalMethods.add_to_buffer("s", f"Настройки пустые", ctx.author, "settings")
-            else:
-                AdditionalMethods.add_to_buffer("s",
-                                                f"max: {data['buffermax']}, delay: {data['bufferdelay']}, entertain: {data['entertain']}, norm: {data['norm']}, maxmesses: {data['maxmesses']}",
-                                                ctx.author, "settings")
 
     @commands.command(name='helpm')
     async def helpm(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
-            AdditionalMethods.add_to_buffer("s", f"!bufferdelay [time], !buffermax [time], !entertain [0-1], !settings, !norm [time], !maxmesses [int]",
+            AdditionalMethods.add_to_buffer("s", f"!bufferdelay [time], !buffermax [time], !entertain [0-1], !settings, !norm [time], !maxmesses [int], !attentions [int], !emojymod [mod], !timeout []",
                                             ctx.author, "helpm")
     @commands.command(name='acduel')
     async def acduel(self, ctx):
@@ -545,6 +494,21 @@ class CommandsBot(commands.Bot, ABC):
         nickname = ctx.author.name
         AdditionalMethods.add_to_buffer("c", f"catJAM Ку, {nickname}, со списком команд можешь ознакомиться здесь {config.helpUrl} catJAM", ctx.author, "help")
 
+    @commands.command(name='settings')
+    async def settings(self, ctx):
+        if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
+            try:
+                with open('data/settings.txt', 'r', encoding='utf-8') as b:
+                    data = json.loads(b.read())
+            except:
+                data = {}
+            if len(data) == 0:
+                AdditionalMethods.add_to_buffer("s", f"Настройки пустые", ctx.author, "settings")
+            else:
+                AdditionalMethods.add_to_buffer("s",
+                                                f"max: {data['buffermax']}, delay: {data['bufferdelay']}, entertain: {data['entertain']}, norm: {data['norm']}, maxmesses: {data['maxmesses']}, attentions: {data['attentions']}, emojymod: {data['emojymod']}, timeout: {data['timeout']}",
+                                                ctx.author, "settings")
+
     @commands.command(name='bufferdelay')
     async def bufedelay(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
@@ -566,7 +530,79 @@ class CommandsBot(commands.Bot, ABC):
                                                     f" max: {data['buffermax']}",
                                                     ctx.author, "bufferdelay")
                 except:
-                    AdditionalMethods.add_to_buffer("s", f"{nickname}, не удалось прочесть число PepoG ", ctx.author, "bufferdelay")
+                    AdditionalMethods.add_to_buffer("s", f"{nickname}, не удалось прочесть число PepoG ", ctx.author,
+                                                    "bufferdelay")
+
+    @commands.command(name='attentions')
+    async def attentions(self, ctx):
+        if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
+            nickname = ctx.author.name
+            timeout = str.replace(ctx.message.content, '!attentions ', '')
+            timeout = re.sub("\n", '', timeout)
+            timeout = str.replace(timeout, ",", ".")
+            try:
+                with open('data/settings.txt', 'r', encoding='utf-8') as b:
+                    data = json.loads(b.read())
+            except:
+                data = {}
+            with open('data/settings.txt', 'w', encoding='utf-8') as b:
+                try:
+                    data["attentions"] = int(timeout)
+                    b.write(json.dumps(data))
+                    AdditionalMethods.add_to_buffer("s",
+                                                    f"{nickname} attentions: {data['attentions']}, emojymod: {data['emojymod']}, timeout: {data['timeout']}",
+                                                    ctx.author, "attentions")
+                except:
+                    AdditionalMethods.add_to_buffer("s", f"{nickname}, не удалось прочесть число PepoG ", ctx.author,
+                                                    "attentions")
+
+    @commands.command(name='emojymod')
+    async def emojymod(self, ctx):
+        if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
+            nickname = ctx.author.name
+            timeout = str.replace(ctx.message.content, '!emojymod ', '')
+            timeout = re.sub("\n", '', timeout)
+            timeout = str.replace(timeout, ",", ".")
+            try:
+                with open('data/settings.txt', 'r', encoding='utf-8') as b:
+                    data = json.loads(b.read())
+            except:
+                data = {}
+            with open('data/settings.txt', 'w', encoding='utf-8') as b:
+                if timeout == "all" or timeout == "skip" or timeout == "skip_with":
+                    data["emojymod"] = timeout
+                    b.write(json.dumps(data))
+                    AdditionalMethods.add_to_buffer("s",
+                                                    f"{nickname} attentions: {data['attentions']}, emojymod: {data['emojymod']}, timeout: {data['timeout']}",
+                                                    ctx.author, "emojymod")
+                else:
+                    AdditionalMethods.add_to_buffer("s",
+                                                    f"{nickname}, есть только три фильтра для emogy: all, skip, skip_with",
+                                                    ctx.author, "emojymod")
+
+    @commands.command(name='timeout')
+    async def timeout(self, ctx):
+        if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
+            nickname = ctx.author.name
+            timeout = str.replace(ctx.message.content, '!timeout ', '')
+            timeout = re.sub("\n", '', timeout)
+            timeout = str.replace(timeout, ",", ".")
+            try:
+                with open('data/settings.txt', 'r', encoding='utf-8') as b:
+                    data = json.loads(b.read())
+            except:
+                data = {}
+            with open('data/settings.txt', 'w', encoding='utf-8') as b:
+                try:
+                    data["timeout"] = int(timeout)
+                    b.write(json.dumps(data))
+                    AdditionalMethods.add_to_buffer("s",
+                                                    f"{nickname} attentions: {data['attentions']}, emojymod: {data['emojymod']}, timeout: {data['timeout']}",
+                                                    ctx.author, "timeout")
+                except:
+                    AdditionalMethods.add_to_buffer("s",
+                                                    f"{nickname}, не удалось прочесть число",
+                                                    ctx.author, "timeout")
 
     @commands.command(name='buffermax')
     async def bufermax(self, ctx):
@@ -588,7 +624,8 @@ class CommandsBot(commands.Bot, ABC):
                                                     f"{nickname} max: {data['buffermax']}, delay: {data['bufferdelay']}",
                                                     ctx.author, "buffermax")
                 except:
-                    AdditionalMethods.add_to_buffer("s", f"{nickname}, не удалось прочесть число PepoG ", ctx.author, "buffermax")
+                    AdditionalMethods.add_to_buffer("s", f"{nickname}, не удалось прочесть число PepoG ", ctx.author,
+                                                    "buffermax")
 
     @commands.command(name='entertain')
     async def usetime(self, ctx):
@@ -618,6 +655,56 @@ class CommandsBot(commands.Bot, ABC):
                     AdditionalMethods.add_to_buffer("s",
                                                     f"{nickname} !entertain [0,1]",
                                                     ctx.author, "entertain")
+
+    @commands.command(name='maxmesses')
+    async def maxmesses(self, ctx):
+        if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
+            nickname = ctx.author.name
+            timeout = str.replace(ctx.message.content, '!maxmesses ', '')
+            timeout = re.sub("\n", '', timeout)
+            timeout = str.replace(timeout, ",", ".")
+            try:
+                with open('data/settings.txt', 'r', encoding='utf-8') as b:
+                    data = json.loads(b.read())
+            except:
+                data = {}
+            with open('data/settings.txt', 'w', encoding='utf-8') as b:
+                try:
+                    data["maxmesses"] = int(timeout)
+                    b.write(json.dumps(data))
+                    AdditionalMethods.add_to_buffer("s",
+                                                    f"{nickname} norm: {data['norm']},"
+                                                    f" maxmesses: {data['maxmesses']}",
+                                                    ctx.author, "maxmesses")
+                except:
+                    AdditionalMethods.add_to_buffer("s",
+                                                    f"{nickname}, не удалось прочесть число (оно должно быть не дробным) PepoG ",
+                                                    ctx.author,
+                                                    "maxmesses")
+
+    @commands.command(name='norm')
+    async def norm(self, ctx):
+        if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
+            nickname = ctx.author.name
+            timeout = str.replace(ctx.message.content, '!norm ', '')
+            timeout = re.sub("\n", '', timeout)
+            timeout = str.replace(timeout, ",", ".")
+            try:
+                with open('data/settings.txt', 'r', encoding='utf-8') as b:
+                    data = json.loads(b.read())
+            except:
+                data = {}
+            with open('data/settings.txt', 'w', encoding='utf-8') as b:
+                try:
+                    data["norm"] = float(timeout)
+                    b.write(json.dumps(data))
+                    AdditionalMethods.add_to_buffer("s",
+                                                    f"{nickname} norm: {data['norm']},"
+                                                    f" maxmesses: {data['maxmesses']}",
+                                                    ctx.author, "norm")
+                except:
+                    AdditionalMethods.add_to_buffer("s", f"{nickname}, не удалось прочесть число PepoG ", ctx.author,
+                                                    "norm")
 
     @commands.command(name='temp')
     async def temp(self, ctx):
