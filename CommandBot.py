@@ -7,6 +7,7 @@ from datetime import timedelta, datetime
 from bs4 import BeautifulSoup
 import requests
 import AdditionalMethods
+import Settings
 import re
 import random
 import subprocess
