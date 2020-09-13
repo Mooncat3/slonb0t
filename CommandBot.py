@@ -137,6 +137,7 @@ class CommandsBot(commands.Bot, ABC):
                         self.spammers[nickname]["log"].clear()
                     elif time.time() - self.spammers[nickname]["time"] >= Settings.get_norm():
                         self.spammers[nickname]["time"] = time.time()
+                        self.spammers[nickname]["log"].clear()
                         self.spammers[nickname]["messes"] = 0
                     else:
                         self.spammers[nickname]["time"] = time.time()
