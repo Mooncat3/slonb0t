@@ -27,6 +27,7 @@ def checkingthread():
     times = time.time()
     safer = 0
     games = {}
+    additint = 0
     with open(file='data/TRASHMASSIVE.txt', mode='r', encoding='utf-8') as q:
         dat = json.loads(q.read())
     while True:
