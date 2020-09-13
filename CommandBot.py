@@ -81,7 +81,7 @@ class CommandsBot(commands.Bot, ABC):
 
     async def event_message(self, message):
         nickname = message.author.name
-        if AdditionalMethods.vip(message.author.is_mod, nickname) and not nickname == "slonb0t":
+        if not AdditionalMethods.vip(message.author.is_mod, nickname) and not nickname == "slonb0t":
             docheck = True
             mod = Settings.get_mod()
             if mod != "all" and (mod == "skip" or mod == "skip_with"):
@@ -141,7 +141,6 @@ class CommandsBot(commands.Bot, ABC):
                         self.spammers[nickname]["time"] = time.time()
                 else:
                     self.spammers[nickname]["time"] = time.time()
-
         await self.handle_commands(message)
 
     @commands.command(name='helpm')
