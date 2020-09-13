@@ -1,1 +1,0 @@
-{"entertain": true, "bufferdelay": 5.0, "buffermax": 2, "norm": 3.0, "maxmesses": 3, "attentions": 3, "emojymod": "all", "timeout": 300}
