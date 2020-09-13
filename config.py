@@ -8,7 +8,7 @@ buferchanged = False
 istopcliprunning = False
 helpUrl = "https://pastebin.com/raw/hZ4GGw4z"
 abreviationsUrl = "https://pastebin.com/raw/h546CMvM"
-timeUrl = "https://pastebin.com/raw/DaNRcGFs"
+api_url = "https://slon-api.herokuapp.com"
 
 """
 OAUTH = "vj6bru9m36zvqalnst2myuynutukr6"
