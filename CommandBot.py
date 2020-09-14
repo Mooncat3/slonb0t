@@ -126,10 +126,11 @@ class CommandsBot(commands.Bot, ABC):
                             stringer += f"{r['timenow']}: {r['content']} || time: {r['messtime']} || messes: {r['messes']}<br>"
                         if self.spammers[nickname]["worned"] == Settings.get_attentions():
                             self.spammers[nickname]["worned"] = 0
-                            stringer += f"timeouted for {Settings.get_timeout()}, settings: |norm: {Settings.get_norm()}, maxmesses: {Settings.get_max_messes()}, emojymode: {Settings.get_mod()}|"
+                            stringer += f"отлетел на {Settings.get_timeout()} с настройками: |norm: {Settings.get_norm()}, maxmesses: {Settings.get_max_messes()}, emojymode: {Settings.get_mod()}|"
                         else:
                             self.spammers[nickname]["worned"] += 1
-                            stringer += f"attentions: {self.spammers[nickname]['worned']}|{Settings.get_attentions()}, settings: |norm: {Settings.get_norm()}, maxmesses: {Settings.get_max_messes()}, emojymode: {Settings.get_mod()}|"
+                            stringer += f"был предупреждён {self.spammers[nickname]['worned']} из {Settings.get_attentions()} раз с настройками: |norm: {Settings.get_norm()}, maxmesses: {Settings.get_max_messes()}, emojymode: {Settings.get_mod()}|"
+                        print(stringer.encode("utf-8"))
                         answer = requests.post(config.api_url + "/logs/jesusavgn",
                                                data=stringer.encode(
                                                    "utf-8"), headers={"Authorization": "y5IArL6S&%%G(69G"})
