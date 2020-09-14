@@ -366,6 +366,32 @@ class CommandsBot(commands.Bot, ABC):
         anekdot = soup.find('div', class_='item_text').get_text()
         anekdott = (anekdot[:493] + '...') if len(anekdot) > 493 else anekdot
         AdditionalMethods.add_to_buffer("e", '{} KeK'.format(str.replace(anekdott, "\r\n", " ")), ctx.author, "анекдот")
+        
+    @commands.command(name='перевод')
+    async def perevod(self, ctx):
+        nickname = ctx.author.name
+        message = ctx.message.content
+        if message == "!перевод":
+            AdditionalMethods.add_to_buffer("с", f"{nickname}, cсылка со всеми языками: https://pastebin.com/raw/nk1n1KxD", ctx.author, "перевод")
+        else:
+            try:
+                userlang = message.split(" ")[1]
+                word = message.replace("!перевод " + userlang,"")
+                dataa = {"text":word}
+                url = "https://translate.yandex.net/api/v1/tr.json/translate?id=9bade3aa.5f5e1930.ae218027.74722d74657874-5-0&srv=tr-text&lang="+userlang+"&reason=auto&format=text"
+                r = requests.get(url, data=dataa)
+                if str(r.status_code) == "400":
+                    AdditionalMethods.add_to_buffer("с", "Неправильно указаны языки. Ссылка со всеми языками: https://pastebin.com/raw/nk1n1KxD", ctx.author, "перевод")
+                else:
+                    resultat = str(r.text).partition('t":["')[-1].replace('"]}',"")
+                    with open('data/osujdau.txt', 'r', encoding='utf_8') as f:
+                        l = [line.strip() for line in f]
+                    if any(x in resultat for x in l):
+                        AdditionalMethods.add_to_buffer("с", f"{nickname}, в переводе мы обнаружили бан-ворд PepoG", ctx.author, "перевод")
+                    else:
+                        AdditionalMethods.add_to_buffer("с", f"{nickname}, {resultat}", ctx.author, "курс")
+            except:
+                AdditionalMethods.add_to_buffer("с", f"{nickname}, неправильно указаны параметры. Ссылка со всеми языками: https://pastebin.com/raw/nk1n1KxD", ctx.author, "перевод")
 
     @commands.command(name='курс')
     async def kurs(self, ctx):
@@ -399,8 +425,8 @@ class CommandsBot(commands.Bot, ABC):
                     res = userkurs.replace("-","_").upper()
                     one = userkurs.split("-")[0]
                     two = userkurs.split("-")[1]
-                    result = f"{nickname}, {count} {one.upper()} = {str(round(json_r[res],2) * float(count))} {two.upper()}"
-                    AdditionalMethods.add_to_buffer("с",f"{nickname}, {result}", ctx.author, "курс")
+                    result = f"{nickname}, {count} {one.upper()} = {str(round(json_r[res] * float(count),2))} {two.upper()}"
+                    AdditionalMethods.add_to_buffer("с", result, ctx.author, "курс")
                 except KeyError:
                     AdditionalMethods.add_to_buffer("с",f"{nickname}, произошла ошибка конвертации. Скорее всего вы неправильно написали валюты. PepoG", ctx.author, "курс")
 
