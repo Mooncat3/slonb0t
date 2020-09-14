@@ -25,7 +25,7 @@ def checkstream():
                 f.write("1")
                 
                 
-            with open('data/top/title.txt', 'r', encoding='utf_8') as g:
+            with open('data/top/title.txt', 'r', encoding='utf-8') as g:
                 checktitile = g.read()
                 
                 
