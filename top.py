@@ -21,11 +21,11 @@ def checkstream():
         response = urllib.request.urlopen(request).read()
         data = json.loads(response)
         if len(data['data']) > 0:
-            with open('data/active.txt', 'w') as f:
+            with open('data/top/active.txt', 'w') as f:
                 f.write("1")
                 
                 
-            with open('data/title.txt', 'r') as g:
+            with open('data/top/title.txt', 'r') as g:
                 checktitile = g.read()
                 
                 
@@ -33,15 +33,15 @@ def checkstream():
             
             
             if checktitile != title:
-                with open('data/title.txt', 'w') as u:
+                with open('data/top/title.txt', 'w') as u:
                     u.write(title) 
-                with open('data/nicknames.txt', 'w') as ll:
+                with open('data/top/nicknames.txt', 'w') as ll:
                     ll.write("")
                 print("Произведена чистка списка никнеймов!")
                 
                 
         else:
-            with open('data/active.txt', 'w') as f:
+            with open('data/top/active.txt', 'w') as f:
                 f.write("0")
                 
                 
@@ -65,20 +65,20 @@ def bott():
 
     @bot.event
     async def event_message(ctx):
-        with open('data/active.txt', 'r') as d:
+        with open('data/top/active.txt', 'r') as d:
             check = d.read()
         if check == "1":
             if ctx.author.name == 'slonb0t' or ctx.author.name == 'moobot' or ctx.author.name == channel:
                 pass
             else:
-                with open('data/nicknames.txt', 'a', encoding='utf-8') as log:
+                with open('data/top/nicknames.txt', 'a', encoding='utf-8') as log:
                     log.write(ctx.author.name + "\n")
         await bot.handle_commands(ctx)
 
     @bot.command(name='top')
     async def top(ctx):
         try:
-            with open('data/nicknames.txt', 'r', encoding='utf-8') as f:
+            with open('data/top/nicknames.txt', 'r', encoding='utf-8') as f:
                 listtop = [line.strip() for line in f]
             if len(listtop) == 0 or listtop == " " or len(listtop) == 1:
                 await ctx.channel.send(ctx.author.name +", на данный момент список пользователей пуст!")
