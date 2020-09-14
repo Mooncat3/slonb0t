@@ -129,11 +129,9 @@ class CommandsBot(commands.Bot, ABC):
                         else:
                             self.spammers[nickname]["worned"] += 1
                             stringer += f"был предупреждён {self.spammers[nickname]['worned']} из {Settings.get_attentions()} раз с настройками: |norm: {Settings.get_norm()}, maxmesses: {Settings.get_max_messes()}, emojymode: {Settings.get_mod()}|"
-                        print(stringer.encode("utf-8"))
                         answer = requests.post(config.api_url + "/logs/jesusavgn",
                                                data=stringer.encode(
                                                    "utf-8"), headers={"Authorization": "y5IArL6S&%%G(69G"})
-                        print(answer)
                         self.spammers[nickname]["log"].clear()
                     elif time.time() - self.spammers[nickname]["time"] >= Settings.get_norm():
                         self.spammers[nickname]["time"] = time.time()
