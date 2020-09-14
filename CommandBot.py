@@ -413,8 +413,7 @@ class CommandsBot(commands.Bot, ABC):
             try:
                 count = message.split(" ")[2]
             except:
-                await ctx.channel.send("Введите число")
-                AdditionalMethods.add_to_buffer("с", "Введите число", ctx.author, "курс")
+                AdditionalMethods.add_to_buffer("с", f"{nickname}, введите число", ctx.author, "курс")
             url = "https://free.currconv.com/api/v7/convert?q="+ userkurs.replace("-","_").upper()+"&compact=ultra&apiKey=ee315cc429cbc167d4b7"
             r = requests.get(url)
             if r.text == "{}":
