@@ -371,40 +371,38 @@ class CommandsBot(commands.Bot, ABC):
     async def kurs(self, ctx):
         nickname = ctx.author.name
         message = ctx.message.content
-        r = requests.get('https://fortrader.org/quotes/usdrur')
-        r1 = requests.get('https://fortrader.org/quotes/eurrur')
-        r2 = requests.get('https://fortrader.org/currencyrates/jpy')
-        r3 = requests.get('https://fortrader.org/currencyrates/uah')
-
-        soup = BeautifulSoup(r.content, 'lxml')
-        soup1 = BeautifulSoup(r1.content, 'lxml')
-        soup2 = BeautifulSoup(r2.content, 'lxml')
-        soup3 = BeautifulSoup(r3.content, 'lxml')
-
-        dollar = soup.find('p', class_='rates_box1_inner pid-USDRUR-bid').get_text()
-        euro = soup1.find('p', class_='rates_box1_inner pid-EURRUR-bid').get_text()
-        jpy = soup2.find('input', class_='converter_form_inp converterInpTo').get(key="value")
-        uah = soup3.find('input', class_='converter_form_inp converterInpTo').get(key="value")
-
-        now = datetime.now() + timedelta(hours=3)
-        today = now.strftime("%d.%m")
-
         if message == "!курс":
-            AdditionalMethods.add_to_buffer("c",
-                                            f"Курс валют на {today}: USD = {dollar} RUB | EUR = {euro} RUB | JPY = {jpy} RUB | UAH = {uah} RUB",
-                                            ctx.author, "")
+            url = "https://free.currconv.com/api/v7/convert?q=USD_RUB,EUR_RUB&compact=ultra&apiKey=ee315cc429cbc167d4b7"
+            url2 = "https://free.currconv.com/api/v7/convert?q=JPY_RUB,UAH_RUB&compact=ultra&apiKey=ee315cc429cbc167d4b7"
+            r = requests.get(url)
+            r2 = requests.get(url2)
+            json_r = r.json()
+            json_r2 = r2.json()
+            now = datetime.now() + timedelta(hours=3)
+            today = now.strftime("%d.%m")
+            resik = f"Курс валют на {today}: USD = {round(json_r['USD_RUB'],2)} RUB | EUR = {round(json_r['EUR_RUB'],2)} RUB | JPY = {round(json_r2['JPY_RUB'],4)} RUB | UAH = {round(json_r2['UAH_RUB'],2)} RUB"
+            AdditionalMethods.add_to_buffer("с", resik, ctx.author, "курс")
         else:
+            userkurs = message.split(" ")[1]
             try:
-                if message.find(' ', message.find('-')) != -1:
-                    AdditionalMethods.add_to_buffer("c", f"{nickname}, {AdditionalMethods.summvalue(message[message.find(' ') + 1:message.find('-')], message[message.find('-') + 1:message.find(' ', message.find('-'))], float(message[message.find(' ', message.find('-')) + 1:len(message)]), float(dollar), float(euro), float(jpy), float(uah))}", ctx.author, "курс")
-                else:
-                    AdditionalMethods.add_to_buffer("c",
-                                                    f"{nickname}, впишите количество переводимой валюты",
-                                                    ctx.author, "курс")
-            except OverflowError:
-                AdditionalMethods.add_to_buffer("с", f"{nickname} Число слишком большое WeirdChamp", ctx.author, "курс")
-            except ValueError:
-                AdditionalMethods.add_to_buffer("с", f"{nickname} Это не число WeirdChamp", ctx.author, "курс")
+                count = message.split(" ")[2]
+            except:
+                await ctx.channel.send("Введите число")
+                AdditionalMethods.add_to_buffer("с", "Введите число", ctx.author, "курс")
+            url = "https://free.currconv.com/api/v7/convert?q="+ userkurs.replace("-","_").upper()+"&compact=ultra&apiKey=ee315cc429cbc167d4b7"
+            r = requests.get(url)
+            if r.text == "{}":
+                AdditionalMethods.add_to_buffer("с", f"{nickname}, неправильно введены валюты. Вводите в международном формате (USD-RUB, RUB-JPY)", ctx.author, "курс")
+            else:
+                try:
+                    json_r = r.json()
+                    res = userkurs.replace("-","_").upper()
+                    one = userkurs.split("-")[0]
+                    two = userkurs.split("-")[1]
+                    result = f"{nickname}, {count} {one.upper()} = {str(round(json_r[res],2) * float(count))} {two.upper()}"
+                    AdditionalMethods.add_to_buffer("с",f"{nickname}, {result}", ctx.author, "курс")
+                except KeyError:
+                    AdditionalMethods.add_to_buffer("с",f"{nickname}, произошла ошибка конвертации. Скорее всего вы неправильно написали валюты. PepoG", ctx.author, "курс")
 
     @commands.command(name='clipever')
     async def topclipever(self, ctx):
