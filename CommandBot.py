@@ -243,7 +243,7 @@ class CommandsBot(commands.Bot, ABC):
             result = json_response['replies'][4]
             with open('data/osujdau.txt', 'r', encoding='utf_8') as f:
                 l = [line.strip() for line in f]
-            if any(x in result for x in l):
+            if any(x in result.lower() for x in l):
                 response = requests.post(url, json={'prompt': word, 'length': '30', 'num_samples': '5'})
                 json_response = response.json()
                 result = json_response['replies'][4]
@@ -388,7 +388,7 @@ class CommandsBot(commands.Bot, ABC):
                     resultat = str(r.text).partition('t":["')[-1].replace('"]}',"")
                     with open('data/osujdau.txt', 'r', encoding='utf_8') as f:
                         l = [line.strip() for line in f]
-                    if any(x in resultat for x in l):
+                    if any(x in resultat.lower() for x in l):
                         AdditionalMethods.add_to_buffer("с", f"{nickname}, в переводе мы обнаружили бан-ворд PepoG", ctx.author, "перевод")
                     else:
                         AdditionalMethods.add_to_buffer("с", f"{nickname}, {resultat}", ctx.author, "курс")
