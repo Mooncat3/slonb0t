@@ -281,6 +281,10 @@ class CommandsBot(commands.Bot, ABC):
         nickname = ctx.author.name
         story = nickname + ", дело было летом 2019 года, хесус играл в майнкрафт без модов и смог приручить себе кота, которого мы прозвали Слон, в один прекрасный солнечный день, он залез под блок, где была вода, и, медленно задыхаясь, умер peepoSad , этот бот будет вечным напоминанием о трагедии, которую никто не забудет roflanPominy "
         AdditionalMethods.add_to_buffer("s", story, ctx.author, "slon")
+        
+    @commands.command(name='kogda')
+    async def strim(self, ctx):
+        AdditionalMethods.add_to_buffer("c", "Стрим через час Jebaited", ctx.author, "kogda")
 
     @commands.command(name='case')
     async def case(self, ctx):
