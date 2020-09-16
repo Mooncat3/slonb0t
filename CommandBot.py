@@ -239,7 +239,7 @@ class CommandsBot(commands.Bot, ABC):
             AdditionalMethods.add_to_buffer("e", f"{nickname}, Бот может принимать максимум 300 символов", ctx.author, "porf")
         else:
             response = requests.post(url, json={'prompt': word, 'length': '30', 'num_samples': '5'})
-            if response.text = "Service Unavailable":
+            if response.text == "Service Unavailable":
                 AdditionalMethods.add_to_buffer("e", f"{nickname}, на данный момент Порфирьевич не работает. Попробуйте позже roflanPominy", ctx.author, "porf")
             else:
                 json_response = response.json()
