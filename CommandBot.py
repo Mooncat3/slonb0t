@@ -850,20 +850,15 @@ class CommandsBot(commands.Bot, ABC):
                 AdditionalMethods.add_to_buffer("c", f"{nickname}, не найден населённый пункт. Попробуйте другое название.", ctx.author, "время")
             else:
                 try:
-                    json_response = response.json()
-                    position = json_response['result'][0]
-                    result = str(position["position"]).replace("{'lat': ","")
-                    parts = result.rsplit(',', 1)
-                    lat = parts[0]
-                    lng = result.split(': ')[1].replace("}","")
-                    url = "http://api.timezonedb.com/v2.1/get-time-zone?key=APM2N08MFF2O&format=xml&by=position&lat="
-                    response1 = requests.get(url + lat + "&lng=" + lng)
-                    time = str(response1.text).split('<formatted>')[1]
-                    time = time.replace('</formatted></result>', '')
-                    time = time.split(' ')[1]
-                    location = position["title"]
-                    AdditionalMethods.add_to_buffer("c", f"{nickname}, чичас {time} в «{location}» Waiting", ctx.author, "время")
-                except IndexError:
+                    position = response.json()['result'][0]['position']
+                    url = "http://api.timezonedb.com/v2.1/get-time-zone?key=APM2N08MFF2O&format=json&by=position&lat="
+                    response1 = requests.get(url + str(position['lat']) + "&lng=" + str(position['lon']))
+                    timestamp = response1.json()['timestamp']
+                    dt_object = datetime.fromtimestamp(timestamp)
+                    date = dt_object.strftime("%H:%M")
+                    location = response.json()['result'][0]['title']
+                    AdditionalMethods.add_to_buffer("c", f"{nickname}, чичас {date} в «{location}» Waiting", ctx.author, "время")
+                except:
                     AdditionalMethods.add_to_buffer("c", f"{nickname}, не удалось найти время для этого населённого пункта", ctx.author, "время")
 
     @commands.command(name='обнять')
