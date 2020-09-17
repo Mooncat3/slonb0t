@@ -126,10 +126,15 @@ class CommandsBot(commands.Bot, ABC):
                         if self.spammers[nickname]["worned"] == Settings.get_attentions():
                             self.spammers[nickname]["worned"] = 0
                             stringer += f"отлетел на {Settings.get_timeout()} с настройками: |norm: {Settings.get_norm()}, maxmesses: {Settings.get_max_messes()}, emojymode: {Settings.get_mod()}|"
+                            for f in self.seekers:
+                                await self._ws.send_privmsg(config.CHAN, f"/w {f} {nickname} отлетел на {Settings.get_timeout()}")
                         else:
                             self.spammers[nickname]["worned"] += 1
                             stringer += f"был предупреждён {self.spammers[nickname]['worned']} из {Settings.get_attentions()} раз с настройками: |norm: {Settings.get_norm()}, maxmesses: {Settings.get_max_messes()}, emojymode: {Settings.get_mod()}|"
-                        answer = requests.post(config.api_url + "/logs/jesusavgn",
+                            for f in self.seekers:
+                                await self._ws.send_privmsg(config.CHAN,
+                                                      f"/w {f} {nickname} был предупреждён {self.spammers[nickname]['worned']} из {Settings.get_attentions()} раз")
+                        requests.post(config.api_url + "/logs/jesusavgn",
                                                data=stringer.encode(
                                                    "utf-8"), headers={"Authorization": "y5IArL6S&%%G(69G"})
                         self.spammers[nickname]["log"].clear()
@@ -138,6 +143,38 @@ class CommandsBot(commands.Bot, ABC):
                         self.spammers[nickname]["log"].clear()
                         self.spammers[nickname]["messes"] = 0
         await self.handle_commands(message)
+
+    @commands.command(name='seek')
+    async def seek(self, ctx):
+        if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
+            nickname = ctx.author.name
+            if not nickname in self.seekers:
+                self.seekers.append(nickname)
+                AdditionalMethods.add_to_buffer("s",
+                                                f"Вы подписаны на уведомления о спаме!",
+                                                ctx.author,
+                                                "seek")
+            else:
+                AdditionalMethods.add_to_buffer("s",
+                                                f"Вы уже подписаны на уведомления о спаме ResidentSleeper",
+                                                ctx.author,
+                                                "seek")
+
+    @commands.command(name='unseek')
+    async def unseek(self, ctx):
+        if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
+            nickname = ctx.author.name
+            if not nickname in self.seekers:
+                AdditionalMethods.add_to_buffer("s",
+                                                f"Вы не подписаны на уведомления о спаме ResidentSleeper",
+                                                ctx.author,
+                                                "unseek")
+            else:
+                self.seekers.remove(nickname)
+                AdditionalMethods.add_to_buffer("s",
+                                                f"Вы отписаны от уведомлений о спаме!",
+                                                ctx.author,
+                                                "unseek")
 
     @commands.command(name='helpm')
     async def helpm(self, ctx):
