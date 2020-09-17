@@ -550,7 +550,8 @@ class CommandsBot(commands.Bot, ABC):
 
     @commands.command(name='pastа')
     async def pasta(self, ctx):
-        AdditionalMethods.add_to_buffer("s", AdditionalMethods.parse_simplefile_message("{}", "nadya"), ctx.author, "pastа")
+        if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
+            AdditionalMethods.add_to_buffer("e", AdditionalMethods.parse_simplefile_message("{}", "nadya"), ctx.author, "pastа")
 
     @commands.command(name='help')
     async def help(self, ctx):
