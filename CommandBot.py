@@ -52,7 +52,7 @@ class CommandsBot(commands.Bot, ABC):
                 with open(file='data/duel_rand.txt', mode='r', encoding='utf-8') as e:
                     data = json.loads(e.read())
                     randseq = random.choice(data)
-                await socket.send_privmsg(config.CHAN, f"Хлопок! {self.duel_nicknames[0]} выстреливает в {randname}{randseq['text']}.")
+                await socket.send_privmsg(config.CHAN, f"Хлопок! {self.duel_nicknames[0]} выстреливает в {randname}{randseq['text']} .")
                 await socket.send_privmsg(config.CHAN, f"/timeout {randname} {randseq['time']}")
             else:
                 await socket.send_privmsg(config.CHAN,
