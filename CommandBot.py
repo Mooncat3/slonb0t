@@ -49,8 +49,11 @@ class CommandsBot(commands.Bot, ABC):
                 randname = random.choice(self.duel_nicknames)
                 self.duel_nicknames.remove(randname)
                 await asyncio.sleep(8)
-                await socket.send_privmsg(config.CHAN, f"Хлопок! Точный выстрел убивает {randname}. Самая быстрая рука дикого запада – {self.duel_nicknames[0]} EZ")
-                await socket.send_privmsg(config.CHAN, f"/timeout {randname} 60")
+                with open(file='data/duel_rand.txt', mode='r', encoding='utf-8') as e:
+                    data = json.loads(e.read())
+                    randseq = random.choice(data)
+                await socket.send_privmsg(config.CHAN, f"Хлопок! {self.duel_nicknames[0]} выстреливает в {randname}{randseq['text']}.")
+                await socket.send_privmsg(config.CHAN, f"/timeout {randname} {randseq['time']}")
             else:
                 await socket.send_privmsg(config.CHAN,
                                           "Один из дуэлянтов бессмертен, поэтому они стреляют холостыми пулями monkaW . В любой момент они готовы достать револьвер из кобуры... PepeS")
@@ -208,8 +211,12 @@ class CommandsBot(commands.Bot, ABC):
                 self.duel_is_running = True
                 self.duel_nicknames.append(ctx.author.name)
                 self.duel_user = message.replace("@", "").lower()
-                await ctx.channel._ws.send_privmsg(config.CHAN,
+                if nickname != self.duel_user:
+                    await ctx.channel._ws.send_privmsg(config.CHAN,
                                                    f"{nickname} кидает перчатку в {message}, вызывая его на дуэль peepoCool . Чтобы принять вызов – напишите !acduel.")
+                else:
+                    await ctx.channel._ws.send_privmsg(config.CHAN,
+                                                       f"{nickname} направил ствол на ... самого себя blushW. Если вы уверены в своём выборе, напишите !acduel.")
                 asyncio.get_event_loop().create_task(self.duelent(self._ws))
             else:
                 await ctx.channel._ws.send_privmsg(config.CHAN,
