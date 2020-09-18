@@ -53,7 +53,10 @@ class CommandsBot(commands.Bot, ABC):
                     data = json.loads(e.read())
                     randseq = random.choice(data)
                 await socket.send_privmsg(config.CHAN, f"Хлопок! {self.duel_nicknames[0]} выстреливает в {randname}{randseq['text']}")
-                await socket.send_privmsg(config.CHAN, f"/timeout {randname} {randseq['time']}")
+                if int(randseq['time']) > 1:
+                    await socket.send_privmsg(config.CHAN, f"/timeout {randname} {randseq['time']}")
+                elif int(randseq['time']) > 0:
+                    await socket.send_privmsg(config.CHAN, f"/timeout {self.duel_nicknames[0]} 300")
             else:
                 await socket.send_privmsg(config.CHAN,
                                           "Один из дуэлянтов бессмертен, поэтому они стреляют холостыми пулями monkaW . В любой момент они готовы достать револьвер из кобуры... PepeS")
