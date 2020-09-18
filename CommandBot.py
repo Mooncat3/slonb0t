@@ -219,7 +219,7 @@ class CommandsBot(commands.Bot, ABC):
                                                    f"{nickname} кидает перчатку в {message}, вызывая его на дуэль peepoCool . Чтобы принять вызов – напишите !acduel.")
                 else:
                     await ctx.channel._ws.send_privmsg(config.CHAN,
-                                                       f"{nickname} направил ствол на ... самого себя blushW. Если вы уверены в своём выборе, напишите !acduel.")
+                                                       f"{nickname} направил ствол на ... самого себя blushW . Если вы уверены в своём выборе, напишите !acduel.")
                 asyncio.get_event_loop().create_task(self.duelent(self._ws))
             else:
                 await ctx.channel._ws.send_privmsg(config.CHAN,
