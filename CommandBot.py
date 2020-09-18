@@ -56,7 +56,7 @@ class CommandsBot(commands.Bot, ABC):
                 if int(randseq['time']) > 1:
                     await socket.send_privmsg(config.CHAN, f"/timeout {randname} {randseq['time']}")
                 elif int(randseq['time']) > 0:
-                    await socket.send_privmsg(config.CHAN, f"/timeout {self.duel_nicknames[0]} 300")
+                    await socket.send_privmsg(config.CHAN, f"/timeout {self.duel_nicknames[0]} 60")
             else:
                 await socket.send_privmsg(config.CHAN,
                                           "Один из дуэлянтов бессмертен, поэтому они стреляют холостыми пулями monkaW . В любой момент они готовы достать револьвер из кобуры... PepeS")
