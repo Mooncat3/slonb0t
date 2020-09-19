@@ -557,7 +557,33 @@ class CommandsBot(commands.Bot, ABC):
                 AdditionalMethods.add_to_buffer("e",
                                                 f"{nickname}, ваш IQ = {str(iq)}! Внимание! В чате гений WAYTOOSMART Clap",
                                                 ctx.author, "iq")
-
+        
+    @commands.command(name='заебало')
+    async def zaebalo(self, ctx):
+        nickname = ctx.author.name
+        url = "https://zaebalo.ru/?page=" + str(random.randrange(1,1600,1))
+        r = requests.get(url)
+        soup = BeautifulSoup(r.content, 'lxml')
+        d = soup.find_all('div', align='left')
+        res = random.choice(d)
+        res = re.sub(r'<.*?>','',str(res)).replace("    ","")
+        res = re.sub(r'\n','',res)
+        with open('data/osujdau.txt', 'r', encoding='utf-8') as f:
+            l = [line.strip() for line in f]
+        while any(x in res.lower() for x in l):
+            url = "https://zaebalo.ru/?page=" + str(random.randrange(1,1600,1))
+            r = requests.get(url)
+            soup = BeautifulSoup(r.content, 'lxml')
+            d = soup.find_all('div', align='left')
+            res = random.choice(d)
+            res = re.sub(r'<.*?>','',str(res)).replace("    ","")
+            res = re.sub(r'\n','',res)
+        if len(res) > 500:
+            res = res[:300] + '...'
+            AdditionalMethods.add_to_buffer("e", f"{nickname}, {res}", ctx.author, "zaebalo")
+        else:
+            AdditionalMethods.add_to_buffer("e", f"{nickname}, {res}", ctx.author, "zaebalo")
+                                                            
     @commands.command(name='pastа')
     async def pasta(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
