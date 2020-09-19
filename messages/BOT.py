@@ -7,7 +7,7 @@ from selenium.webdriver.chrome.options import Options
 from cook import COOKIES
 import time
 
-channel = 'danantur'
+channel = 'mooncat3'
 OAUTH = '14y5qalllj1i65rg3m9dip1rpq5ugd'
 
 bot = commands.Bot(
@@ -53,7 +53,7 @@ async def skolko(ctx):
         time.sleep(0.5)
         for i in range(0, 1000):
             actions.key_down(Keys.HOME).perform()
-            print(round(i/10))
+            time.sleep(0.01)
 
         actions.key_up(Keys.HOME).perform()
         soup = BeautifulSoup(str(driver.page_source), 'lxml')
