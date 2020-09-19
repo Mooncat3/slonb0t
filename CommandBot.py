@@ -134,12 +134,17 @@ class CommandsBot(commands.Bot, ABC):
                             stringer += f"отлетел на {Settings.get_timeout()} с настройками: |norm: {Settings.get_norm()}, maxmesses: {Settings.get_max_messes()}, emojymode: {Settings.get_mod()}|"
                             for f in self.seekers:
                                 await self._ws.send_privmsg(config.CHAN, f"/w {f} {nickname} отлетел на {Settings.get_timeout()}")
+                            await self._ws.send_privmsg(config.CHAN,  f"/timeout {nickname} {Settings.get_timeout()} спам, automated by SLONB0T")
+                            await self._ws.send_privmsg(config.CHAN,
+                                                        f"/w {nickname} Вы получили слишком много предупреждений и временно отстраняетесь от чата MrDestructoid")
                         else:
                             self.spammers[nickname]["worned"] += 1
                             stringer += f"был предупреждён {self.spammers[nickname]['worned']} из {Settings.get_attentions()} раз с настройками: |norm: {Settings.get_norm()}, maxmesses: {Settings.get_max_messes()}, emojymode: {Settings.get_mod()}|"
                             for f in self.seekers:
                                 await self._ws.send_privmsg(config.CHAN,
                                                       f"/w {f} {nickname} был предупреждён {self.spammers[nickname]['worned']} из {Settings.get_attentions()} раз")
+                            await self._ws.send_privmsg(config.CHAN,
+                                                        f"/w {nickname} вы слишком часто отправляете сообщения на канале jesusavgn, это {self.spammers[nickname]['worned']} из {Settings.get_attentions()} предупреждений MrDestructoid")
                         requests.post(config.api_url + "/logs/jesusavgn",
                                                data=stringer.encode(
                                                    "utf-8"), headers={"Authorization": "y5IArL6S&%%G(69G"})
