@@ -3,11 +3,13 @@ from bs4 import BeautifulSoup
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
-from cook import COOKIES
+from cook import COOKIES, PREFS
 import time
 
 chrome_options = Options()
-chrome_options.add_argument("--headless")
+#chrome_options.add_argument("--headless")
+chrome_options.add_argument("disable-infobars")
+chrome_options.add_experimental_option("prefs", PREFS)
 driver = webdriver.Chrome(options=chrome_options)
 
 nickname = 'justririll'

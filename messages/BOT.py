@@ -5,8 +5,9 @@ from bs4 import BeautifulSoup
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
-from cook import COOKIES
+from cook import COOKIES, PREFS
 import time
+import datetime
 
 channel = 'jesusavgn'
 OAUTH = '14y5qalllj1i65rg3m9dip1rpq5ugd'
@@ -44,12 +45,14 @@ async def skolko(ctx):
         name = json_r[i]['name']
         listnames.append(name)
         i += 1
-    if nickname in listnames:
+    if nickname.lower() in listnames:
         await ctx.channel.send(ctx.author.name + ", данный пользователь уже находится в топе 100 чаттеров")
     else:
-        await ctx.channel.send(ctx.author.name + ", идёт сканирование сообщений пользователя " + nickname + "...")
+        await ctx.channel.send(ctx.author.name + ", идёт сканирование сообщений пользователя " + nickname + " Waiting")
         chrome_options = Options()
         chrome_options.add_argument("--headless")
+        chrome_options.add_argument("disable-infobars")
+        chrome_options.add_experimental_option("prefs", PREFS)
         driver = webdriver.Chrome(options=chrome_options)
 
         url = 'https://www.twitch.tv/popout/jesusavgn/viewercard/' + nickname
@@ -58,26 +61,31 @@ async def skolko(ctx):
         driver.add_cookie(COOKIES[0])
         driver.get(url)
         time.sleep(4)
+        
         try:
-            actions = ActionChains(driver)
-            driver.find_element_by_xpath('//span[starts-with(@class, "text-fragment")]').click()
-            element = driver.find_element_by_class_name('simplebar-scrollbar')
-            time.sleep(0.5)
-            actions.key_down(Keys.HOME).perform()
-            while element.is_displayed():
-                actions.key_down(Keys.HOME).perform()
-            actions.key_up(Keys.HOME).perform()
             soup = BeautifulSoup(str(driver.page_source), 'lxml')
-            d = soup.find_all('div', class_='tw-pd-x-1 tw-pd-y-05')
-            print(f"{ctx.author.name}, пользователь {nickname} написал {str(len(d))} сообщений! (с 01.06.2017)")
-            await ctx.channel.send(
-                f"{ctx.author.name}, пользователь {nickname} написал {str(len(d))} сообщений! (с 01.06.2017)")
-            driver.quit()
-            print(str(time.time() - timee) + ' секунд')
+            count = soup.find('p', class_='tw-c-text-link tw-font-size-5 tw-strong').get_text()
+            if count != "999+":
+                await ctx.channel.send(f"{ctx.author.name}, пользователь {nickname} написал {count} сообщений! (с 01.06.2017)")
+                driver.quit()
+            else:
+                actions = ActionChains(driver)
+                driver.find_element_by_xpath('//span[starts-with(@class, "text-fragment")]').click()
+                element = driver.find_element_by_class_name('simplebar-scrollbar')
+                time.sleep(0.5)
+                actions.key_down(Keys.HOME).perform()
+                while element.is_displayed():
+                    actions.key_down(Keys.HOME).perform()
+                actions.key_up(Keys.HOME).perform()
+                soup = BeautifulSoup(str(driver.page_source), 'lxml')
+                d = soup.find_all('div', class_='tw-pd-x-1 tw-pd-y-05')
+                data = str(datetime.timedelta(seconds=round(time.time() - timee)))
+                print(f"{ctx.author.name}, пользователь {nickname} написал {str(len(d))} сообщений!")
+                await ctx.channel.send(f"{ctx.author.name}, пользователь {nickname} написал {str(len(d))} сообщений! (с 01.06.2017) (Поиск выполнен за {data})")
+                driver.quit()
         except:
-            await ctx.channel.send(ctx.author.name + ", пользователь не найден PepoG")
+            await ctx.channel.send(ctx.author.name + ", не удалось узнать кол-во сообщений данного пользователя PepoG")
             driver.quit()
-            print(str(time.time() - timee) + ' секунд')
 
 
 bot.run()
