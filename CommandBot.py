@@ -92,10 +92,7 @@ class CommandsBot(commands.Bot, ABC):
             mod = Settings.get_mod()
             if mod != "all" and (mod == "skip" or mod == "skip_with"):
                 with open(file='data/SMILES.txt', mode='r', encoding='utf-8') as e:
-                    try:
-                        smiles = json.loads(e.read())
-                    except:
-                        smiles = []
+                    smiles = json.loads(e.read())
                 if mod == "skip":
                     docheck = False
                     arraymess = str.split(message.content, " ")
