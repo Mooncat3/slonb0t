@@ -32,6 +32,7 @@ class CommandsBot(commands.Bot, ABC):
         self.spammers = {}
         self.seekers = []
         self.logs = []
+        self.japtest = {'kanji': '', 'tr': '', 'example': '', 'tr_example': '', 'active': False}
         
     async def event_command_error(self, ctx, error):
         pass
@@ -1019,6 +1020,96 @@ class CommandsBot(commands.Bot, ABC):
         message = ctx.message.content
         goroskop = AdditionalMethods.get_goroskop(message, nickname)
         AdditionalMethods.add_to_buffer("e", goroskop, ctx.author, "гороскоп")
+                                                        
+    @commands.command(name='japtest')
+    async def japtest(self, ctx):
+        nickname = ctx.author.name
+        if not self.japtest['active']:
+            self.japtest['active'] = True
+            message = ctx.message.content
+            category = str.split(message, " ")[1].lower()
+            if category == "n1" or category == "n2" or category == "n3" or category == "n4" or category == "n5":
+                with open('data/kanji.txt', 'r', encoding='utf_8') as f:
+                    all = f.read()
+                if category == "n5":
+                    rd = random.randint(0, 103)
+                elif category == "n4":
+                    rd = random.randint(104, 284)
+                elif category == "n3":
+                    rd = random.randint(285, 650)
+                elif category == "n2":
+                    rd = random.randint(651, 1023)
+                elif category == "n1":
+                    rd = random.randint(1024, 1273)
+                else:
+                    rd = 0
+                result = all[rd: rd + 1]
+                i = 1
+                r = requests.get(f"https://jlptsensei.com/page/{i}/?s={result}")
+                soup = BeautifulSoup(r.content, 'lxml')
+                mass = soup.findAll('a', class_='btn btn-dark')
+                e = True
+                url = ""
+                if category != "n1":
+                    while e:
+                        for q in mass:
+                            if "learn-japanese-kanji" in q.get("href"):
+                                url = q.get("href")
+                                e = False
+                        i += 1
+                        await asyncio.sleep(0.2)
+                        r = requests.get(f"https://jlptsensei.com/page/{i}/?s={result}")
+                        soup = BeautifulSoup(r.content, 'lxml')
+                        mass = soup.findAll('a', class_='btn btn-dark')
+                        if soup.find('span', class_='jp'):
+                            e = False
+                if len(url) == 0:
+                    dataa = {"text": result}
+                    url = "https://translate.yandex.net/api/v1/tr.json/translate?id=9bade3aa.5f5e1930.ae218027.74722d74657874-5-0&srv=tr-text&lang=ja-en&reason=auto&format=text"
+                    await asyncio.sleep(0.2)
+                    r = requests.get(url, data=dataa)
+                    resultat = str(r.text).partition('t":["')[-1].replace('"]}', "")
+                    self.japtest['kanji'] = result
+                    self.japtest['tr'] = resultat
+                    AdditionalMethods.add_to_buffer("e", f"{nickname}, {result}, чтобы увидеть перевод напишите !tr", ctx.author, "japtest")
+                else:
+                    r = requests.get(url)
+                    sp = BeautifulSoup(r.content, 'lxml')
+                    translation = sp.find('p', class_='eng-definition p-lg').string
+                    self.japtest['kanji'] = result
+                    self.japtest['tr'] = translation
+                    if sp.find('p', class_='m-0 jp'):
+                        ex = sp.find('p', class_='m-0 jp').text
+                        ex_translation = sp.find('div', class_='alert alert-primary').text
+                        self.japtest['example'] = ex
+                        self.japtest['tr_example'] = ex_translation
+                    else:
+                        self.japtest['example'] = ""
+                        self.japtest['tr_example'] = ""
+                    if len(self.japtest['example']) > 0:
+                        AdditionalMethods.add_to_buffer("e", f"{nickname}, {result}, example: {self.japtest['example']}, чтобы увидеть перевод напишите !tr",
+                                                        ctx.author, "japtest")
+                    else:
+                        AdditionalMethods.add_to_buffer("e", f"{nickname}, {result}, чтобы увидеть перевод напишите !tr",
+                                                        ctx.author, "japtest")
+            else:
+                AdditionalMethods.add_to_buffer("e", f"{nickname}, введите категорию кандзи японского языка 'n1-n5'", ctx.author, "japtest")
+            self.japtest['active'] = False
+        else:
+            AdditionalMethods.add_to_buffer("s", f"{nickname}, сейчас работает поиск другого кандзи PepoG",
+                                            ctx.author, "japtest")
+
+    @commands.command(name='tr')
+    async def tr(self, ctx):
+        nickname = ctx.author.name
+        if len(self.japtest['kanji']) > 0:
+            AdditionalMethods.add_to_buffer("e", f"{nickname}, {self.japtest['kanji']} - {self.japtest['tr']}, example: {self.japtest['example']} - {self.japtest['tr_example']}",
+                                            ctx.author, "japtest")
+            self.japtest = {'kanji': '', 'tr': '', 'example': '', 'tr_example': ''}
+        else:
+            AdditionalMethods.add_to_buffer("e",
+                                            f"{nickname}, сейчас никаких кандзи нет в очереди PepoG",
+                                            ctx.author, "japtest")
 
 
 subprocess.Popen([sys.executable, 'ChatBot.py'])
