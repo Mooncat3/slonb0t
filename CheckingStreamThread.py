@@ -106,84 +106,10 @@ def checkingthread():
         if active:
             if additint == 6:
                 additint = 0
-                array = []
-                try:
-                    url = f"https://decapi.me/twitch/subscriber_emotes/jesusavgn"
-                    request = urllib.request.Request(url=url)
-                    response = urllib.request.urlopen(request).read()
-                    array += str.split(str(response).replace("'", "").replace("b", ""), " ")
-                    url = f"https://decapi.me/bttv/emotes?channel=jesusavgn"
-                    request = urllib.request.Request(url=url)
-                    response = urllib.request.urlopen(request).read()
-                    array += str.split(str(response).replace("'", "").replace("b", ""), " ")
-                    url = f"https://decapi.me/ffz/emotes/jesusavgn"
-                    request = urllib.request.Request(url=url)
-                    response = urllib.request.urlopen(request).read()
-                    array += str.split(str(response).replace("'", "").replace("b", ""), " ")
-                    request = urllib.request.Request(url="https://twitchemotes.com/")
-                    soup = BeautifulSoup(urllib.request.urlopen(request).read(), 'lxml')
-                    r = soup.find_all('div', class_='col-md-2')
-                    timear = []
-                    for e in r:
-                        text = str(e.getText)
-                        if len(text) > 210:
-                            timear.append(e.find('img', class_='emote expandable-emote').get("data-regex"))
-                        else:
-                            timear.append(text[text.find("<br/>")+5:text.find("</center>")].replace("&gt;", ">").replace("&lt;", "<"))
-                    array += timear
-                    url = f"https://api.betterttv.net/3/cached/emotes/global"
-                    request = urllib.request.Request(url=url)
-                    resp = json.loads(str(urllib.request.urlopen(request).read())[2:len(str(urllib.request.urlopen(request).read()))-1].replace("\\", ""))
-                    timear = []
-                    for r in resp:
-                        timear.append(r['code'])
-                    array += timear
-                    array += ["CatBag", "LaterSooner", "LilZ", "ZliL", "ZreknarF", "BORT", "BeanieHipster", "ManChicken", "YellowFever", "YooHoo"]
-                    with open(file='data/SMILES.txt', mode='w', encoding='utf-8') as q:
-                        q.write(json.dumps(array))
-                except:
-                    print("Error on getting smiles")
             else:
                 additint += 1
             time.sleep(10)
         if not active:
-            array = []
-            try:
-                url = f"https://decapi.me/twitch/subscriber_emotes/jesusavgn"
-                request = urllib.request.Request(url=url)
-                response = urllib.request.urlopen(request).read()
-                array += str.split(str(response).replace("'", "").replace("b", ""), " ")
-                url = f"https://decapi.me/bttv/emotes?channel=jesusavgn"
-                request = urllib.request.Request(url=url)
-                response = urllib.request.urlopen(request).read()
-                array += str.split(str(response).replace("'", "").replace("b", ""), " ")
-                url = f"https://decapi.me/ffz/emotes/jesusavgn"
-                request = urllib.request.Request(url=url)
-                response = urllib.request.urlopen(request).read()
-                array += str.split(str(response).replace("'", "").replace("b", ""), " ")
-                request = urllib.request.Request(url="https://twitchemotes.com/")
-                soup = BeautifulSoup(urllib.request.urlopen(request).read(), 'lxml')
-                r = soup.find_all('div', class_='col-md-2')
-                timear = []
-                for e in r:
-                    text = str(e.getText)
-                    if len(text) > 210:
-                        timear.append(e.find('img', class_='emote expandable-emote').get("data-regex"))
-                    else:
-                        timear.append(text[text.find("<br/>")+5:text.find("</center>")].replace("&gt;", ">").replace("&lt;", "<"))
-                array += timear
-                url = f"https://api.betterttv.net/3/cached/emotes/global"
-                request = urllib.request.Request(url=url)
-                resp = json.loads(str(urllib.request.urlopen(request).read())[2:len(str(urllib.request.urlopen(request).read()))-1].replace("\\", ""))
-                timear = []
-                for r in resp:
-                    timear.append(r['code'])
-                array += timear
-                array += ["CatBag", "LaterSooner", "LilZ", "ZliL", "ZreknarF", "BORT", "BeanieHipster", "ManChicken", "YellowFever", "YooHoo"]
-                with open(file='data/SMILES.txt', mode='w', encoding='utf-8') as q:
-                    q.write(json.dumps(array))
-            except:
-                print("Error on getting smiles")
             time.sleep(60)
 
 
