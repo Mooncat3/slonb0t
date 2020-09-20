@@ -1044,6 +1044,7 @@ class CommandsBot(commands.Bot, ABC):
                 else:
                     rd = 0
                 result = all[rd: rd + 1]
+                print(result)
                 i = 1
                 r = requests.get(f"https://jlptsensei.com/page/{i}/?s={result}")
                 soup = BeautifulSoup(r.content, 'lxml')
@@ -1053,16 +1054,19 @@ class CommandsBot(commands.Bot, ABC):
                 if category != "n1":
                     while e:
                         for q in mass:
+                            print(q)
                             if "learn-japanese-kanji" in q.get("href"):
                                 url = q.get("href")
                                 e = False
                         i += 1
                         await asyncio.sleep(0.2)
                         r = requests.get(f"https://jlptsensei.com/page/{i}/?s={result}")
+                        print(f"https://jlptsensei.com/page/{i}/?s={result}")
                         soup = BeautifulSoup(r.content, 'lxml')
                         mass = soup.findAll('a', class_='btn btn-dark')
                         if soup.find('span', class_='jp'):
                             e = False
+                print(url)
                 if len(url) == 0:
                     dataa = {"text": result}
                     url = "https://translate.yandex.net/api/v1/tr.json/translate?id=9bade3aa.5f5e1930.ae218027.74722d74657874-5-0&srv=tr-text&lang=ja-en&reason=auto&format=text"
@@ -1086,15 +1090,16 @@ class CommandsBot(commands.Bot, ABC):
                     else:
                         self.japtest['example'] = ""
                         self.japtest['tr_example'] = ""
+                    print(self.japtest)
                     if len(self.japtest['example']) > 0:
                         AdditionalMethods.add_to_buffer("e", f"{nickname}, {result}, example: {self.japtest['example']}, чтобы увидеть перевод напишите !tr",
                                                         ctx.author, "japtest")
                     else:
                         AdditionalMethods.add_to_buffer("e", f"{nickname}, {result}, чтобы увидеть перевод напишите !tr",
                                                         ctx.author, "japtest")
+                    self.japtest['active'] = False
             else:
                 AdditionalMethods.add_to_buffer("e", f"{nickname}, введите категорию кандзи японского языка 'n1-n5'", ctx.author, "japtest")
-            self.japtest['active'] = False
         else:
             AdditionalMethods.add_to_buffer("s", f"{nickname}, сейчас работает поиск другого кандзи PepoG",
                                             ctx.author, "japtest")
@@ -1105,7 +1110,7 @@ class CommandsBot(commands.Bot, ABC):
         if len(self.japtest['kanji']) > 0:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, {self.japtest['kanji']} - {self.japtest['tr']}, example: {self.japtest['example']} - {self.japtest['tr_example']}",
                                             ctx.author, "japtest")
-            self.japtest = {'kanji': '', 'tr': '', 'example': '', 'tr_example': ''}
+            self.japtest = {'kanji': '', 'tr': '', 'example': '', 'tr_example': '', 'active': False}
         else:
             AdditionalMethods.add_to_buffer("e",
                                             f"{nickname}, сейчас никаких кандзи нет в очереди PepoG",
