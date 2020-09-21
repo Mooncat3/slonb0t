@@ -1127,7 +1127,7 @@ class CommandsBot(commands.Bot, ABC):
         except wikipedia.exceptions.PageError:
             return
         info = re.sub(r"\([^()]*\)", "", info)
-        finaly = f"{justririll}, {info}"
+        finaly = f"{ctx.author.name}, {info}"
         AdditionalMethods.add_to_buffer("c", finaly, ctx.author, "wiki")
 
                                                         
