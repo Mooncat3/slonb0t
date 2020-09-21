@@ -1116,20 +1116,22 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='wiki')
     async def wiki(self, ctx):
         content = ctx.message.content
-        content = content.replace('!wiki', '')
+        content = content.replace('!wiki ', '')
         wikipedia.set_lang("ru")
         try:
-            info = wikipedia.summary(content, chars=400)
+            info = wikipedia.summary(content, chars=300)
         except wikipedia.DisambiguationError as e:
             p = e.options
             s = random.choice(e.options)
-            info = wikipedia.summary(content, chars=400)
+            info = wikipedia.summary(content, chars=300)
         except wikipedia.exceptions.PageError:
             return
         info = re.sub(r"\([^()]*\)", "", info)
         finaly = f"{justririll}, {info}"
         AdditionalMethods.add_to_buffer("c", finaly, ctx.author, "wiki")
 
+                                                        
+                                                        
 subprocess.Popen([sys.executable, 'ChatBot.py'])
 subprocess.Popen([sys.executable, 'BufferCleaner.py'])
 subprocess.Popen([sys.executable, 'CheckingStreamThread.py'])
