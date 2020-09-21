@@ -1,38 +1,61 @@
+import requests
 from selenium import webdriver
-from bs4 import BeautifulSoup
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
 from cook import COOKIES, PREFS
 import time
 
-chrome_options = Options()
-#chrome_options.add_argument("--headless")
-chrome_options.add_argument("disable-infobars")
-chrome_options.add_experimental_option("prefs", PREFS)
-driver = webdriver.Chrome(options=chrome_options)
+nickname = ''
 
-nickname = 'justririll'
+url = "https://api.streamelements.com/kappa/v2/chatstats/jesusavgn/stats"
+r = requests.get(url)
+json_r = r.json()['chatters']
 
-url = 'https://www.twitch.tv/popout/jesusavgn/viewercard/' + nickname
+listnames = []
+for i in range(0, 100):
+    name = json_r[i]['name']
+    listnames.append(name)
 
-driver.get(url)
-driver.add_cookie(COOKIES[0])
-driver.get(url)
-print('Сайт загружен...')
-time.sleep(5)
+if nickname.lower() in listnames:
+    print("Данный пользователь уже находится в топе 100 чаттеров!")
 
-actions = ActionChains(driver)
-driver.find_element_by_xpath('//span[starts-with(@class, "text-fragment")]').click()
-element = driver.find_element_by_class_name('simplebar-scrollbar')
-time.sleep(0.5)
-print('Выполняется сканирование сообщений...')
-actions.key_down(Keys.HOME).perform()
-while element.is_displayed():
-    actions.key_down(Keys.HOME).perform()
-actions.key_up(Keys.HOME).perform()
-soup = BeautifulSoup(str(driver.page_source), 'lxml')
-d = soup.find_all('div', class_='tw-pd-x-1 tw-pd-y-05')
-print("Пользователь " + nickname + " написал " + str(len(d)) + " сообщений!")
-driver.quit()
-input()
+else:
+
+    print("Идёт сканирование сообщений пользователя " + nickname + "...")
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")
+    chrome_options.add_experimental_option("prefs", PREFS)
+    driver = webdriver.Chrome(options=chrome_options)
+
+    url = 'https://www.twitch.tv/popout/jesusavgn/viewercard/' + nickname
+
+    driver.get(url)
+    driver.add_cookie(COOKIES[0])
+    driver.get(url)
+    time.sleep(4)
+
+    try:
+        count = driver.find_element_by_xpath('//p[starts-with(@class, "tw-c-text-link")]').text
+        if count != "999+":
+            print(f"Пользователь {nickname} написал {count} сообщений!")
+            driver.quit()
+
+        else:
+            actions = ActionChains(driver)
+            driver.find_element_by_xpath('//span[starts-with(@class, "text-fragment")]').click()
+            element = driver.find_element_by_class_name('simplebar-scrollbar')
+
+            while element.is_displayed():
+                actions.key_down(Keys.HOME).perform()
+
+            mess = str(len(driver.find_elements_by_xpath('//span[starts-with(@class, "text-fragment")]')))
+
+            print(f"Пользователь {nickname} написал {mess} сообщений!")
+            driver.quit()
+
+    except NoSuchElementException:
+
+        print("Не удалось узнать кол-во сообщений данного пользователя PepoG")
+        driver.quit()
