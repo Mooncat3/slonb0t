@@ -340,12 +340,11 @@ class CommandsBot(commands.Bot, ABC):
         r = requests.get('https://market.csgo.com/?s=name&r=&q=&p=' + str(randstr) + '&h=&fst=0')
         soup = BeautifulSoup(r.content, 'lxml')
         d = soup.find_all('a', class_='item')
-        skin = str(random.choice(d)).partition(';"></div>')[2]
-        skinorig = re.sub('<div class="price">', '', skin)
-        skinorig = re.sub("\n", '', skinorig)
-        skin = skinorig.partition(';">')[2].replace('</div></a>', '')
-        price = skinorig.rpartition('<s')[0]
-        price = re.sub(" ", '', price)
+        skin = str(random.choice(d))
+        skin = re.sub("\n", '', skin)
+        soupskin = BeautifulSoup(skin, 'lxml')
+        price = soupskin.find('div', class_='price').get_text().replace(' ','')
+        name = soupskin.find('div', class_='name').get_text()
         if float(price) < 100:
             price = str(price) + " ₽ Lohich"
         elif float(price) < 500:
@@ -359,9 +358,9 @@ class CommandsBot(commands.Bot, ABC):
         elif float(price) < 100000:
             price = str(price) + " ₽ Pog"
         elif float(price) > 100000:
-            price = str(price) + " ₽ Pog Clap"
+            price = str(price) + " ₽ monkaX"
         AdditionalMethods.add_to_buffer("e",
-                                        f"{nickname}, вам выпал " + skin + " Стоимость: " + price,
+                                        f"{nickname}, вам выпал " + name + " Стоимость: " + price,
                                         ctx.author, "case")
 
     @commands.command(name='history')
