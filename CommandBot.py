@@ -337,7 +337,7 @@ class CommandsBot(commands.Bot, ABC):
     async def case(self, ctx):
         nickname = ctx.author.name
         randstr = random.randint(1, 178)
-        r = requests.get('https://market.csgo.com/?s=name&r=&q=&p=' + str(randstr) + '&h=&fst=0')
+        r = requests.get('https://market.csgo.com/?s=name&r=&q=&p=' + str(randstr))
         soup = BeautifulSoup(r.content, 'lxml')
         d = soup.find_all('a', class_='item')
         skin = str(random.choice(d))
