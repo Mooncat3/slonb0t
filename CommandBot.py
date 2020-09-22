@@ -572,10 +572,6 @@ class CommandsBot(commands.Bot, ABC):
         with open('data/osujdau.txt', 'r', encoding='utf-8') as f:
             l = [line.strip() for line in f]
         while any(x in res.lower() for x in l):
-            url = "https://zaebalo.ru/?page=" + str(random.randrange(1,1600,1))
-            r = requests.get(url)
-            soup = BeautifulSoup(r.content, 'lxml')
-            d = soup.find_all('div', align='left')
             res = random.choice(d)
             res = re.sub(r'<.*?>','',str(res)).replace("    ","")
             res = re.sub(r'\n','',res)
