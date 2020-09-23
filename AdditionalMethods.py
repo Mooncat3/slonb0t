@@ -21,63 +21,6 @@ def check_on_max_or_not(arg: str) -> bool:
         return False
     return True
 
-def summvalue(start: str, end: str, value: float, dollar: float, euro: float, iens: float, grivn: float):
-    result = "неккоректно написаны валюты, пишите в именительном падеже (рубль-доллар и т.д.)"
-    splited = start + end
-    if splited.find("рубль") != -1:
-        if start == "рубль":
-            if end == "доллар":
-                result = f"{value} RUB = {round(value / dollar, 2)} USD"
-            elif end == "евро":
-                result = f"{value} RUB = {round(value / euro, 2)} EUR"
-            elif end == "йена":
-                result = f"{value} RUB = {round(value / iens, 2)} JPY"
-            elif end == "гривны":
-                result = f"{value} RUB = {round(value / grivn, 2)} UAH"
-        else:
-            if start == "доллар":
-                result = f"{value} USD = {round(value * dollar, 2)} RUB"
-            elif start == "евро":
-                result = f"{value} EUR = {round(value * euro, 2)} RUB"
-            elif start == "йена":
-                result = f"{value} JPY = {round(value * iens, 2)} RUB"
-            elif start == "гривны":
-                result = f"{value} UAH = {round(value * grivn, 2)} RUB"
-    elif splited.find("доллар") != -1:
-        if start == "доллар":
-            if end == "евро":
-                result = f"{value} USD = {round(value * dollar / euro, 2)} EUR"
-            elif end == "йена":
-                result = f"{value} USD = {round(value * dollar / iens, 2)} JPY"
-            elif end == "гривны":
-                result = f"{value} USD = {round(value * dollar / grivn, 2)} UAH"
-        else:
-            if start == "евро":
-                result = f"{value} EUR = {round(value * euro / dollar, 2)} USD"
-            elif start == "йена":
-                result = f"{value} JPY = {round(value * iens / dollar, 2)} USD"
-            elif start == "гривны":
-                result = f"{value} UAH = {round(value * grivn / dollar, 2)} USD"
-    elif splited.find("йена") != -1:
-        if start == "йена":
-            if end == "евро":
-                result = f"{value} JPY = {round(value * iens / euro, 2)} EUR"
-            elif end == "гривны":
-                result = f"{value} JPY = {round(value * iens / grivn, 2)} UAH"
-        else:
-            if start == "евро":
-                result = f"{value} EUR = {round(value * euro / iens, 2)} JPY"
-            elif start == "гривны":
-                result = f"{value} UAH = {round(value * grivn / iens, 2)} JPY"
-    else:
-        if start == "евро":
-            result = f"{value} EUR = {round(value * euro / grivn, 2)} UAH"
-        elif end == "гривны":
-            result = f"{value} UAH = {round(value * grivn / euro, 2)} EUR"
-    return result
-
-
-
 def sendPaste(paste):
     url = "https://pastebin.com/api/api_post.php"
     req = requests.post(url, data=paste)
@@ -286,17 +229,13 @@ def parse_standartfile_message(nickname, formatable, message, command, name_of_f
     if message == command:
         return f"{nickname}, введите {command} [message]"
     else:
-        if message.find('.') != -1 or message.find('suicide') != -1 or message.find('kill') != -1 or message.find(
-                'заходите') != -1:
-            return f"{nickname}, думал забанить меня? WeirdChamp "
-        else:
-            with open(f'data/{name_of_file}.txt', 'r', encoding='utf-8') as c:
-                List = list(c)
-                randomm = random.choice(List)
-                randomm = re.sub("\n", '', randomm)
-                subject = str.replace(message, f'{command} ', '')
-                subject = re.sub("\n", '', subject)
-                return formatable.format(nickname=nickname, filestr=randomm, messagestr=subject)
+        with open(f'data/{name_of_file}.txt', 'r', encoding='utf-8') as c:
+            List = list(c)
+            randomm = random.choice(List)
+            randomm = re.sub("\n", '', randomm)
+            subject = str.replace(message, f'{command} ', '')
+            subject = re.sub("\n", '', subject)
+            return formatable.format(nickname=nickname, filestr=randomm, messagestr=subject)
 
 
 def parse_simplefile_message(formatable, name_of_file) -> str:
