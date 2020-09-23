@@ -426,7 +426,7 @@ class CommandsBot(commands.Bot, ABC):
                 userlang = message.split(" ")[1]
                 word = message.replace("!перевод " + userlang,"")
                 dataa = {"text":word}
-                url = "https://translate.yandex.net/api/v1/tr.json/translate?id=9bade3aa.5f5e1930.ae218027.74722d74657874-5-0&srv=tr-text&lang="+userlang.lower()+"&reason=auto&format=text"
+                url = "https://translate.yandex.net/api/v1/tr.json/translate?id=c71cd46e.5f6b52d5.c8b396f8.74722d74657874-0-0&srv=tr-text&lang="+userlang.lower()+"&reason=auto&format=text"
                 r = requests.get(url, data=dataa)
                 if str(r.status_code) == "400":
                     AdditionalMethods.add_to_buffer("с", "Неправильно указаны языки. Ссылка со всеми языками: https://pastebin.com/raw/nk1n1KxD", ctx.author, "перевод")
