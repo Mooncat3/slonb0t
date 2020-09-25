@@ -129,7 +129,7 @@ class CommandsBot(commands.Bot, ABC):
                             stringer += f"{r['timenow']}: {r['content']} || time: {r['messtime']} || messes: {r['messes']}<br>"
                         if self.spammers[nickname]["worned"] == Settings.get_attentions():
                             self.spammers[nickname]["worned"] = 0
-                            stringer += f"отлетел на {Settings.get_timeout()} с настройками: |norm: {Settings.get_norm()}, maxmesses: {Settings.get_max_messes()}, emojymode: {Settings.get_mod()}|"
+                            stringer += f"отлетел на {Settings.get_timeout()} с настройками: |norm: {Settings.get_norm()}, maxmesses: {Settings.get_max_messes()}, emojimode: {Settings.get_mod()}|"
                             for f in self.seekers:
                                 await self._ws.send_privmsg(config.CHAN, f"/w {f} {nickname} отлетел на {Settings.get_timeout()}")
                             await self._ws.send_privmsg(config.CHAN,  f"/timeout {nickname} {Settings.get_timeout()} спам, automated by SLONB0T")
@@ -137,7 +137,7 @@ class CommandsBot(commands.Bot, ABC):
                                                         f"/w {nickname} Вы получили слишком много предупреждений и временно отстраняетесь от чата MrDestructoid")
                         else:
                             self.spammers[nickname]["worned"] += 1
-                            stringer += f"был предупреждён {self.spammers[nickname]['worned']} из {Settings.get_attentions()} раз с настройками: |norm: {Settings.get_norm()}, maxmesses: {Settings.get_max_messes()}, emojymode: {Settings.get_mod()}|"
+                            stringer += f"был предупреждён {self.spammers[nickname]['worned']} из {Settings.get_attentions()} раз с настройками: |norm: {Settings.get_norm()}, maxmesses: {Settings.get_max_messes()}, emojimode: {Settings.get_mod()}|"
                             for f in self.seekers:
                                 await self._ws.send_privmsg(config.CHAN,
                                                       f"/w {f} {nickname} был предупреждён {self.spammers[nickname]['worned']} из {Settings.get_attentions()} раз")
@@ -646,17 +646,17 @@ class CommandsBot(commands.Bot, ABC):
                     data["attentions"] = int(timeout)
                     b.write(json.dumps(data))
                     AdditionalMethods.add_to_buffer("s",
-                                                    f"{nickname} attentions: {data['attentions']}, emojymod: {data['emojymod']}, timeout: {data['timeout']}",
+                                                    f"{nickname} attentions: {data['attentions']}, emojimod: {data['emojimod']}, timeout: {data['timeout']}",
                                                     ctx.author, "attentions")
                 except:
                     AdditionalMethods.add_to_buffer("s", f"{nickname}, не удалось прочесть число PepoG ", ctx.author,
                                                     "attentions")
 
-    @commands.command(name='emojymod')
-    async def emojymod(self, ctx):
+    @commands.command(name='emojimod')
+    async def emojimod(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
             nickname = ctx.author.name
-            timeout = str.replace(ctx.message.content, '!emojymod ', '')
+            timeout = str.replace(ctx.message.content, '!emojimod ', '')
             timeout = re.sub("\n", '', timeout)
             timeout = str.replace(timeout, ",", ".")
             try:
@@ -666,15 +666,15 @@ class CommandsBot(commands.Bot, ABC):
                 data = {}
             with open('data/settings.txt', 'w', encoding='utf-8') as b:
                 if timeout == "all" or timeout == "skip" or timeout == "skip_with":
-                    data["emojymod"] = timeout
+                    data["emojimod"] = timeout
                     b.write(json.dumps(data))
                     AdditionalMethods.add_to_buffer("s",
-                                                    f"{nickname} attentions: {data['attentions']}, emojymod: {data['emojymod']}, timeout: {data['timeout']}",
-                                                    ctx.author, "emojymod")
+                                                    f"{nickname} attentions: {data['attentions']}, emojimod: {data['emojimod']}, timeout: {data['timeout']}",
+                                                    ctx.author, "emojimod")
                 else:
                     AdditionalMethods.add_to_buffer("s",
                                                     f"{nickname}, есть только три фильтра для emogy: all, skip, skip_with",
-                                                    ctx.author, "emojymod")
+                                                    ctx.author, "emojimod")
 
     @commands.command(name='timeout')
     async def timeout(self, ctx):
@@ -693,7 +693,7 @@ class CommandsBot(commands.Bot, ABC):
                     data["timeout"] = int(timeout)
                     b.write(json.dumps(data))
                     AdditionalMethods.add_to_buffer("s",
-                                                    f"{nickname} attentions: {data['attentions']}, emojymod: {data['emojymod']}, timeout: {data['timeout']}",
+                                                    f"{nickname} attentions: {data['attentions']}, emojimod: {data['emojimod']}, timeout: {data['timeout']}",
                                                     ctx.author, "timeout")
                 except:
                     AdditionalMethods.add_to_buffer("s",
