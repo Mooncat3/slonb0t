@@ -646,17 +646,17 @@ class CommandsBot(commands.Bot, ABC):
                     data["attentions"] = int(timeout)
                     b.write(json.dumps(data))
                     AdditionalMethods.add_to_buffer("s",
-                                                    f"{nickname} attentions: {data['attentions']}, emojimod: {data['emojimod']}, timeout: {data['timeout']}",
+                                                    f"{nickname} attentions: {data['attentions']}, emojimode: {data['emojimode']}, timeout: {data['timeout']}",
                                                     ctx.author, "attentions")
                 except:
                     AdditionalMethods.add_to_buffer("s", f"{nickname}, не удалось прочесть число PepoG ", ctx.author,
                                                     "attentions")
 
-    @commands.command(name='emojimod')
-    async def emojimod(self, ctx):
+    @commands.command(name='emojimode')
+    async def emojimode(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
             nickname = ctx.author.name
-            timeout = str.replace(ctx.message.content, '!emojimod ', '')
+            timeout = str.replace(ctx.message.content, '!emojimode ', '')
             timeout = re.sub("\n", '', timeout)
             timeout = str.replace(timeout, ",", ".")
             try:
@@ -666,15 +666,15 @@ class CommandsBot(commands.Bot, ABC):
                 data = {}
             with open('data/settings.txt', 'w', encoding='utf-8') as b:
                 if timeout == "all" or timeout == "skip" or timeout == "skip_with":
-                    data["emojimod"] = timeout
+                    data["emojimode"] = timeout
                     b.write(json.dumps(data))
                     AdditionalMethods.add_to_buffer("s",
-                                                    f"{nickname} attentions: {data['attentions']}, emojimod: {data['emojimod']}, timeout: {data['timeout']}",
-                                                    ctx.author, "emojimod")
+                                                    f"{nickname} attentions: {data['attentions']}, emojimode: {data['emojimode']}, timeout: {data['timeout']}",
+                                                    ctx.author, "emojimode")
                 else:
                     AdditionalMethods.add_to_buffer("s",
                                                     f"{nickname}, есть только три фильтра для emogy: all, skip, skip_with",
-                                                    ctx.author, "emojimod")
+                                                    ctx.author, "emojimode")
 
     @commands.command(name='timeout')
     async def timeout(self, ctx):
@@ -693,7 +693,7 @@ class CommandsBot(commands.Bot, ABC):
                     data["timeout"] = int(timeout)
                     b.write(json.dumps(data))
                     AdditionalMethods.add_to_buffer("s",
-                                                    f"{nickname} attentions: {data['attentions']}, emojimod: {data['emojimod']}, timeout: {data['timeout']}",
+                                                    f"{nickname} attentions: {data['attentions']}, emojimode: {data['emojimode']}, timeout: {data['timeout']}",
                                                     ctx.author, "timeout")
                 except:
                     AdditionalMethods.add_to_buffer("s",
