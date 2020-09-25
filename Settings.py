@@ -21,7 +21,7 @@ def get_mod() -> str:
     with open(file='data/settings.txt', mode='r', encoding='utf-8') as e:
         try:
             data = json.loads(e.read())
-            return data['emojymod']
+            return data['emojimode']
         except:
             return "all"
 
