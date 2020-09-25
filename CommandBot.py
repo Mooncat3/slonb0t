@@ -188,7 +188,7 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='helpm')
     async def helpm(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
-            AdditionalMethods.add_to_buffer("s", f"!bufferdelay [time], !buffermax [time], !entertain [0-1], !settings, !norm [time], !maxmesses [int], !attentions [int], !emojymod [mod], !timeout []",
+            AdditionalMethods.add_to_buffer("s", f"!bufferdelay [time], !buffermax [time], !entertain [0-1], !settings, !norm [time], !maxmesses [int], !attentions [int], !emojimode [mod], !timeout []",
                                             ctx.author, "helpm")
     @commands.command(name='acduel')
     async def acduel(self, ctx):
@@ -602,7 +602,7 @@ class CommandsBot(commands.Bot, ABC):
                 AdditionalMethods.add_to_buffer("s", f"Настройки пустые", ctx.author, "settings")
             else:
                 AdditionalMethods.add_to_buffer("s",
-                                                f"max: {data['buffermax']}, delay: {data['bufferdelay']}, entertain: {data['entertain']}, norm: {data['norm']}, maxmesses: {data['maxmesses']}, attentions: {data['attentions']}, emojymod: {data['emojymod']}, timeout: {data['timeout']}",
+                                                f"max: {data['buffermax']}, delay: {data['bufferdelay']}, entertain: {data['entertain']}, norm: {data['norm']}, maxmesses: {data['maxmesses']}, attentions: {data['attentions']}, emojimode: {data['emojimode']}, timeout: {data['timeout']}",
                                                 ctx.author, "settings")
 
     @commands.command(name='bufferdelay')
