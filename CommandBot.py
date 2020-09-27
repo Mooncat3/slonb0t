@@ -117,7 +117,7 @@ class CommandsBot(commands.Bot, ABC):
                     self.spammers[nickname]["time"] = time.time()
                     self.spammers[nickname]["messes"] = 1
                     self.spammers[nickname]["worned"] = 0
-                    self.spammers[nickname]["log"] = [{"timenow": datetime.now().strftime("%H:%M:%S"), "messtime": round(time.time() - self.spammers[nickname]["time"], 2), "messes": self.spammers[nickname]['messes'], "content": message.content}]
+                    self.spammers[nickname]["log"] = [{"timenow": datetime.strftime(datetime.utcnow() + timedelta(hours=3), "%H:%M:%S"), "messtime": round(time.time() - self.spammers[nickname]["time"], 2), "messes": self.spammers[nickname]['messes'], "content": message.content}]
 
                 if self.spammers[nickname]["messes"] > 1:
                     if time.time() - self.spammers[nickname]["time"] < Settings.get_norm() and self.spammers[nickname]["messes"] == Settings.get_max_messes():
@@ -144,8 +144,8 @@ class CommandsBot(commands.Bot, ABC):
                             await self._ws.send_privmsg(config.CHAN,
                                                         f"/w {nickname} вы слишком часто отправляете сообщения на канале jesusavgn, это {self.spammers[nickname]['worned']} из {Settings.get_attentions()} предупреждений MrDestructoid")
                         requests.post(config.api_url + "/logs/jesusavgn",
-                                               data=stringer.encode(
-                                                   "utf-8"), headers={"Authorization": "y5IArL6S&%%G(69G"})
+                                               data={"log": stringer.encode(
+                                                   "utf-8"), "nickname": nickname, "warns": {self.spammers[nickname]['worned']}, "time": time.time()}, headers={"Authorization": "y5IArL6S&%%G(69G"})
                         self.spammers[nickname]["log"].clear()
                     elif time.time() - self.spammers[nickname]["time"] >= Settings.get_norm():
                         self.spammers[nickname]["time"] = time.time()
