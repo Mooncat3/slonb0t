@@ -46,7 +46,7 @@ class CommandsBot(commands.Bot, ABC):
             await socket.send_privmsg(config.CHAN, "Оппонент не принял дуэль MonkaHmm")
         else:
             if self.duel_serious:
-                await socket.send_privmsg(config.CHAN, "Дуэлянты смотрят друг на друга monkaW . В любой момент они готовы достать револьвер из кобуры... PepeS")
+                await socket.send_privmsg(config.CHAN, "Дуэлянты смотрят друг на друга monkaW . В любой момент они готовы достать револьвер из кобуры... PepeS ")
                 randname = random.choice(self.duel_nicknames)
                 self.duel_nicknames.remove(randname)
                 await asyncio.sleep(8)
