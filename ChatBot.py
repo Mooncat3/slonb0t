@@ -36,7 +36,7 @@ async def chat(ctx):
             response = session.request(method="post", url=url, data={"query": jsonquery}, timeout=3)
         content = response.content.decode('utf8').replace("'", '"')
         data = json.loads(content)
-        AdditionalMethods.add_to_buffer("e", "@" + nickname + ", " + AdditionalMethods.parse_response_query(data),
+        AdditionalMethods.add_to_buffer("e", nickname + ", " + AdditionalMethods.parse_response_query(data),
                                         ctx.author, "SLONB0T")
     except:
         AdditionalMethods.add_to_buffer("e", nickname + ", На данный момент чатбот не доступен roflanPominy",
@@ -56,7 +56,7 @@ async def chat1(ctx):
             response = session.request(method="post", url=url, data={"query": jsonquery}, timeout=3)
         content = response.content.decode('utf8').replace("'", '"')
         data = json.loads(content)
-        AdditionalMethods.add_to_buffer("e", "@" + nickname + ", " + AdditionalMethods.parse_response_query(data),
+        AdditionalMethods.add_to_buffer("e", nickname + ", " + AdditionalMethods.parse_response_query(data),
                                         ctx.author, "SLONB0T")
     except:
         AdditionalMethods.add_to_buffer("e", nickname + ", На данный момент чатбот не доступен roflanPominy",
@@ -76,7 +76,7 @@ async def chat2(ctx):
             response = session.request(method="post", url=url, data={"query": jsonquery}, timeout=3)
         content = response.content.decode('utf8').replace("'", '"')
         data = json.loads(content)
-        AdditionalMethods.add_to_buffer("e", "@" + nickname + ", " + AdditionalMethods.parse_response_query(data),
+        AdditionalMethods.add_to_buffer("e", nickname + ", " + AdditionalMethods.parse_response_query(data),
                                         ctx.author, "SLONB0T")
     except:
         AdditionalMethods.add_to_buffer("e", nickname + ", На данный момент чатбот не доступен roflanPominy",
