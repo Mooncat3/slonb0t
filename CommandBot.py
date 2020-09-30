@@ -839,6 +839,7 @@ class CommandsBot(commands.Bot, ABC):
         else:
             do = str.replace(message, '!do ', '')
             do = re.sub("\n", '', do)
+            do = do.replace('@','')
             with open('data/do.txt', 'r', encoding='utf-8') as c:
                 listme = list(c)
                 randomdo = random.choice(listme)
