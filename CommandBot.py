@@ -842,17 +842,17 @@ class CommandsBot(commands.Bot, ABC):
             AdditionalMethods.add_to_buffer("e", randomm.format(nickname), ctx.author, "me")
 																										
     @commands.command(name='кто')
-    async def kto(self, ctx):
-        message = ctx.message.content
-        ktoo = message.replace('!кто ','')
-        global namess
-        seet = set(namess)
-        rand = random.choice(list(seet))
-	    if message == '!кто':
-            result = rand + ' OpieOP'
-	    else:
-	        result = ktoo + ' - ' + rand + ' OpieOP'
-        AdditionalMethods.add_to_buffer("e", result, ctx.author, "кто")
+	async def kto(self, ctx):
+		message = ctx.message.content
+		ktoo = message.replace('!кто ','')
+		global namess
+		seet = set(namess)
+		rand = random.choice(list(seet))
+		if message == '!кто':
+			result = rand + ' OpieOP'
+		else:
+			result = ktoo + ' - ' + rand + ' OpieOP'
+		AdditionalMethods.add_to_buffer("e", result, ctx.author, "кто")
 																												
     @commands.command(name='do')
     async def do(self, ctx):
