@@ -888,9 +888,9 @@ class CommandsBot(commands.Bot, ABC):
         seet = set(namess)
         rand = random.choice(list(seet))
         if message == '!кто':
-            result = rand + ' OpieOP'
+            result = 'OpieOP ' + rand
         else:
-            result = ktoo + ' - ' + rand + ' OpieOP'
+            result =  rand + ' - ' + ktoo + ' OpieOP'
         AdditionalMethods.add_to_buffer("e", result, ctx.author, "кто")
 
     @commands.command(name='do')
