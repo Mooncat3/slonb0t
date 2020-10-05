@@ -585,11 +585,6 @@ class CommandsBot(commands.Bot, ABC):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
             AdditionalMethods.add_to_buffer("e", AdditionalMethods.parse_simplefile_message("{}", "nadya"), ctx.author, "pastа")
                                                         
-    @commands.command(name='кто')
-    async def kto(self, ctx):
-        r = requests.get('https://2g.be/twitch/randomviewer.php?channel=jesusavgn')
-        AdditionalMethods.add_to_buffer("e", r.text + " дурачок OpieOP", ctx.author, "кто")
-
     @commands.command(name='help')
     async def help(self, ctx):
         nickname = ctx.author.name
