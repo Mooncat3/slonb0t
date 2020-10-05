@@ -843,10 +843,12 @@ class CommandsBot(commands.Bot, ABC):
 																										
     @commands.command(name='кто')
     async def kto(self, ctx):
+	message = ctx.message.content
+	ktoo = message.replace('!кто ','')
         global namess
         seet = set(namess)
         rand = random.choice(list(seet))
-        AdditionalMethods.add_to_buffer("e", rand + ' дурачок OpieOP', ctx.author, "кто")
+        AdditionalMethods.add_to_buffer("e", ktoo + ' - ' + rand + ' OpieOP', ctx.author, "кто")
 																												
     @commands.command(name='do')
     async def do(self, ctx):
