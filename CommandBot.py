@@ -84,9 +84,20 @@ class CommandsBot(commands.Bot, ABC):
 
     async def event_ready(self):
         print(f'Ready {str(self.__class__.__name__)} | {self.nick} on {self.initial_channels}')
+        global namess
+        namess = []
+        global ii
+        ii = 0
 
     async def event_message(self, message):
         nickname = message.author.name
+        global ii
+        global namess
+        namess.append(nickname)
+        if ii < 100:
+            ii+=1
+        else:
+            del namess[0]    
         if not AdditionalMethods.vip(message.author.is_mod, nickname) and not nickname == "slonb0t":
             docheck = True
             mod = Settings.get_mod()
@@ -829,7 +840,14 @@ class CommandsBot(commands.Bot, ABC):
             randomm = random.choice(listme)
             randomm = re.sub("\n", '', randomm)
             AdditionalMethods.add_to_buffer("e", randomm.format(nickname), ctx.author, "me")
-
+																										
+    @commands.command(name='кто')
+    async def kto(self, ctx):
+        global namess
+        seet = set(namess)
+        rand = random.choice(list(seet))
+        AdditionalMethods.add_to_buffer("e", rand + ' дурачок OpieOP', ctx.author, "кто")
+																												
     @commands.command(name='do')
     async def do(self, ctx):
         message = ctx.message.content
