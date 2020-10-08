@@ -606,13 +606,13 @@ class CommandsBot(commands.Bot, ABC):
         soup = BeautifulSoup(r.content, 'lxml')
         d = soup.find_all('div', align='left')
         res = random.choice(d)
-        res = re.sub(r'<.*?>', '', str(res)).replace("    ", "")
+        res = res.get_text()
         res = re.sub(r'\n', '', res)
         with open('data/osujdau.txt', 'r', encoding='utf-8') as f:
             l = [line.strip() for line in f]
         while any(x in res.lower() for x in l):
             res = random.choice(d)
-            res = re.sub(r'<.*?>', '', str(res)).replace("    ", "")
+            res = res.get_text()
             res = re.sub(r'\n', '', res)
         if len(res) > 500:
             res = res[:300] + '...'
@@ -1096,7 +1096,7 @@ class CommandsBot(commands.Bot, ABC):
                 else:
                     rd = 0
                 result = all[rd: rd + 1]
-                print(result)
+                #print(result)
                 i = 1
                 r = requests.get(f"https://jlptsensei.com/page/{i}/?s={result}")
                 soup = BeautifulSoup(r.content, 'lxml')
@@ -1106,19 +1106,19 @@ class CommandsBot(commands.Bot, ABC):
                 if category != "n1":
                     while e:
                         for q in mass:
-                            print(q)
+                            #print(q)
                             if "learn-japanese-kanji" in q.get("href"):
                                 url = q.get("href")
                                 e = False
                         i += 1
                         await asyncio.sleep(0.2)
                         r = requests.get(f"https://jlptsensei.com/page/{i}/?s={result}")
-                        print(f"https://jlptsensei.com/page/{i}/?s={result}")
+                        #print(f"https://jlptsensei.com/page/{i}/?s={result}")
                         soup = BeautifulSoup(r.content, 'lxml')
                         mass = soup.findAll('a', class_='btn btn-dark')
                         if soup.find('span', class_='jp'):
                             e = False
-                print(url)
+                #print(url)
                 if len(url) == 0:
                     dataa = {"text": result}
                     url = "https://translate.yandex.net/api/v1/tr.json/translate?id=9bade3aa.5f5e1930.ae218027.74722d74657874-5-0&srv=tr-text&lang=ja-en&reason=auto&format=text"
@@ -1143,7 +1143,7 @@ class CommandsBot(commands.Bot, ABC):
                     else:
                         self.japtest['example'] = ""
                         self.japtest['tr_example'] = ""
-                    print(self.japtest)
+                    #print(self.japtest)
                     if len(self.japtest['example']) > 0:
                         AdditionalMethods.add_to_buffer("e",
                                                         f"{nickname}, {result}, example: {self.japtest['example']}, чтобы увидеть перевод напишите !tr",
