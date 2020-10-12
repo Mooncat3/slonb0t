@@ -268,37 +268,39 @@ async def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "
             for p in data["data"]:
                 return {"code": "0", "url": p['url']}
         elif id_game == "-1":
-            config.istopcliprunning = True
-            clips = []
-            while True:
-                if ever:
-                    if 'cursor' in data['pagination'].keys():
-                        url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&after={}&first=100".format(config.BROADCASTER_ID,
-                                                                                                    data['pagination'][
-                                                                                                        'cursor'])
+            try:
+                config.istopcliprunning = True
+                clips = []
+                while True:
+                    if ever:
+                        if 'cursor' in data['pagination'].keys():
+                            url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&after={}&first=100".format(config.BROADCASTER_ID,
+                                                                                                        data['pagination'][
+                                                                                                            'cursor'])
+                        else:
+                            config.istopcliprunning = False
+                            return {"code": "5", "url": random.choice(clips)}
                     else:
+                        if 'cursor' in data['pagination'].keys():
+                            url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&after={}&started_at={}&ended_at={}&first=100".format(
+                                config.BROADCASTER_ID, data['pagination']['cursor'], datepast, datenow)
+                        else:
+                            config.istopcliprunning = False
+                            return {"code": "5", "url": random.choice(clips)}
+                    request = urllib.request.Request(url=url, headers={"Authorization": "Bearer {}".format(config.OAUTH),
+                                                                       "Client-ID": "{}".format(config.CLIENT_ID)})
+                    response = urllib.request.urlopen(request).read()
+                    data = json.loads(response)
+                    for p in data["data"]:
+                        clips.append(p['url'])
+                    if ident == count:
                         config.istopcliprunning = False
                         return {"code": "5", "url": random.choice(clips)}
-                else:
-                    if 'cursor' in data['pagination'].keys():
-                        url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&after={}&started_at={}&ended_at={}&first=100".format(
-                            config.BROADCASTER_ID, data['pagination']['cursor'], datepast, datenow)
                     else:
-                        config.istopcliprunning = False
-                        return {"code": "5", "url": random.choice(clips)}
-                request = urllib.request.Request(url=url, headers={"Authorization": "Bearer {}".format(config.OAUTH),
-                                                                   "Client-ID": "{}".format(config.CLIENT_ID)})
-                response = urllib.request.urlopen(request).read()
-                data = json.loads(response)
-                #print(data)
-                for p in data["data"]:
-                    clips.append(p['url'])
-                if ident == count:
-                    config.istopcliprunning = False
-                    return {"code": "5", "url": random.choice(clips)}
-                else:
-                    ident += 1
-                await asyncio.sleep(0.1)
+                        ident += 1
+                    await asyncio.sleep(0.1)
+            except Exception as ex:
+                print(ex)
         else:
             config.istopcliprunning = True
             while True:
