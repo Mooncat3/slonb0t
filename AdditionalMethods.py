@@ -249,99 +249,100 @@ def parse_simplefile_message(formatable, name_of_file) -> str:
 async def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "", year: int = 0) -> str:
     # -------------------------------------checking for clip--------------------------------------
     async def do_request_for_getting_clip(id_game: str = "0", days_before: int = 0, ever: bool = False) -> {str: str}:
-        if ever:
-            if year == 0:
-                url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&first=100".format(config.BROADCASTER_ID)
-            elif year > 0:
-                print()
-                datepast = rfc3339.format(datetime.strptime(f"{year}.01.01", '%Y.%m.%d').date(),
-                                          utc=True,
+        try:
+            if ever:
+                if year == 0:
+                    url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&first=100".format(config.BROADCASTER_ID)
+                elif year > 0:
+                    print()
+                    datepast = rfc3339.format(datetime.strptime(f"{year}.01.01", '%Y.%m.%d').date(),
+                                              utc=True,
+                                              use_system_timezone=False)
+                    datenow = rfc3339.format(datetime.strptime(f"{year+1}.01.01", '%Y.%m.%d').date(), utc=True,
+                                             use_system_timezone=False)
+                    url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&started_at={}&ended_at={}&first=100".format(
+                        config.BROADCASTER_ID, datepast,
+                        datenow)
+            else:
+                datepast = rfc3339.format((datetime.utcnow() + timedelta(hours=3)) - timedelta(days=days_before), utc=True,
                                           use_system_timezone=False)
-                datenow = rfc3339.format(datetime.strptime(f"{year+1}.01.01", '%Y.%m.%d').date(), utc=True,
-                                         use_system_timezone=False)
+                datenow = rfc3339.format(datetime.utcnow() + timedelta(hours=3), utc=True, use_system_timezone=False)
                 url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&started_at={}&ended_at={}&first=100".format(
                     config.BROADCASTER_ID, datepast,
                     datenow)
-        else:
-            datepast = rfc3339.format((datetime.utcnow() + timedelta(hours=3)) - timedelta(days=days_before), utc=True,
-                                      use_system_timezone=False)
-            datenow = rfc3339.format(datetime.utcnow() + timedelta(hours=3), utc=True, use_system_timezone=False)
-            url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&started_at={}&ended_at={}&first=100".format(
-                config.BROADCASTER_ID, datepast,
-                datenow)
-        request = urllib.request.Request(url=url, headers={"Authorization": "Bearer {}".format(config.OAUTH),
-                                                           "Client-ID": "{}".format(config.CLIENT_ID)})
-        response = urllib.request.urlopen(request).read()
-        data: dict = json.loads(response)
-        ident: int = 1
-        if id_game == "0":
-            for p in data["data"]:
-                return {"code": "0", "url": p['url']}
-        elif id_game == "-1":
-            try:
-                config.istopcliprunning = True
-                clips = []
-                while True:
-                    if ever:
-                        if year == 0:
+            request = urllib.request.Request(url=url, headers={"Authorization": "Bearer {}".format(config.OAUTH),
+                                                               "Client-ID": "{}".format(config.CLIENT_ID)})
+            response = urllib.request.urlopen(request).read()
+            data: dict = json.loads(response)
+            ident: int = 1
+            if id_game == "0":
+                for p in data["data"]:
+                    return {"code": "0", "url": p['url']}
+            elif id_game == "-1":
+                    config.istopcliprunning = True
+                    clips = []
+                    while True:
+                        if ever:
+                            if year == 0:
+                                if 'cursor' in data['pagination'].keys():
+                                    url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&after={}&first=100".format(config.BROADCASTER_ID,
+                                                                                                                data['pagination'][
+                                                                                                                    'cursor'])
+                                else:
+                                    config.istopcliprunning = False
+                                    return {"code": "5", "url": random.choice(clips)}
+                            else:
+                                if 'cursor' in data['pagination'].keys():
+                                    url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&started_at={}&ended_at={}&after={}&first=100".format(config.BROADCASTER_ID,
+                                                                                                                datepast,
+                                                                                                                datenow,
+                                                                                                                data['pagination'][
+                                                                                                                    'cursor'])
+                                else:
+                                    config.istopcliprunning = False
+                                    return {"code": "5", "url": random.choice(clips)}
+                        else:
                             if 'cursor' in data['pagination'].keys():
-                                url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&after={}&first=100".format(config.BROADCASTER_ID,
-                                                                                                            data['pagination'][
-                                                                                                                'cursor'])
+                                url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&after={}&started_at={}&ended_at={}&first=100".format(
+                                    config.BROADCASTER_ID, data['pagination']['cursor'], datepast, datenow)
                             else:
                                 config.istopcliprunning = False
                                 return {"code": "5", "url": random.choice(clips)}
-                        else:
-                            if 'cursor' in data['pagination'].keys():
-                                url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&started_at={}&ended_at={}&after={}&first=100".format(config.BROADCASTER_ID,
-                                                                                                            datepast,
-                                                                                                            datenow,
-                                                                                                            data['pagination'][
-                                                                                                                'cursor'])
-                            else:
-                                config.istopcliprunning = False
-                                return {"code": "5", "url": random.choice(clips)}
-                    else:
-                        if 'cursor' in data['pagination'].keys():
-                            url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&after={}&started_at={}&ended_at={}&first=100".format(
-                                config.BROADCASTER_ID, data['pagination']['cursor'], datepast, datenow)
-                        else:
+                        request = urllib.request.Request(url=url, headers={"Authorization": "Bearer {}".format(config.OAUTH),
+                                                                           "Client-ID": "{}".format(config.CLIENT_ID)})
+                        response = urllib.request.urlopen(request).read()
+                        data = json.loads(response)
+                        for p in data["data"]:
+                            clips.append(p['url'])
+                        if ident == count:
                             config.istopcliprunning = False
                             return {"code": "5", "url": random.choice(clips)}
+                        else:
+                            ident += 1
+                        await asyncio.sleep(0.1)
+            else:
+                config.istopcliprunning = True
+                while True:
+                    for p in data["data"]:
+                        if p['game_id'] == id_game:
+                            config.istopcliprunning = False
+                            return {"code": "1", "url": p['url']}
+                    if ever:
+                            config.istopcliprunning = False
+                            return {"code": "3", "url": ""}
                     request = urllib.request.Request(url=url, headers={"Authorization": "Bearer {}".format(config.OAUTH),
                                                                        "Client-ID": "{}".format(config.CLIENT_ID)})
                     response = urllib.request.urlopen(request).read()
                     data = json.loads(response)
-                    for p in data["data"]:
-                        clips.append(p['url'])
                     if ident == count:
                         config.istopcliprunning = False
-                        return {"code": "5", "url": random.choice(clips)}
+                        return {"code": "3", "url": ""}
                     else:
                         ident += 1
-                    await asyncio.sleep(0.1)
-            except Exception as ex:
-                print(ex)
-        else:
-            config.istopcliprunning = True
-            while True:
-                for p in data["data"]:
-                    if p['game_id'] == id_game:
-                        config.istopcliprunning = False
-                        return {"code": "1", "url": p['url']}
-                if ever:
-                        config.istopcliprunning = False
-                        return {"code": "3", "url": ""}
-                request = urllib.request.Request(url=url, headers={"Authorization": "Bearer {}".format(config.OAUTH),
-                                                                   "Client-ID": "{}".format(config.CLIENT_ID)})
-                response = urllib.request.urlopen(request).read()
-                data = json.loads(response)
-                if ident == count:
-                    config.istopcliprunning = False
-                    return {"code": "3", "url": ""}
-                else:
-                    ident += 1
-                await asyncio.sleep(0.5)
+                    await asyncio.sleep(0.5)
+        except:
+            config.istopcliprunning = False
+            return {"code": "3", "url": ""}
 
     # -------------------------------------making response string--------------------------------------
     def make_response_string(response: {}, dat: int) -> str:
