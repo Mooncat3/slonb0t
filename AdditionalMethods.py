@@ -370,7 +370,7 @@ async def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "
         elif response['code'] == "2":
             return "{}, такой категории нет FeelsBadMan ".format(nickname)
         elif response['code'] == "3":
-            return "{}, из 3000 клипов не было найдено ни одного с такой категорией DaUj ".format(nickname)
+            return "{}, из 1000 клипов не было найдено ни одного с такой категорией DaUj ".format(nickname)
         elif response['code'] == "4":
             return "{}, сейчас идёт поиск другого клипа ".format(nickname)
         elif response['code'] == "5":
