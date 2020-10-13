@@ -246,11 +246,22 @@ def parse_simplefile_message(formatable, name_of_file) -> str:
         return formatable.format(str(randomm))
 
 
-async def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "") -> str:
+async def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "", year: int = 0) -> str:
     # -------------------------------------checking for clip--------------------------------------
     async def do_request_for_getting_clip(id_game: str = "0", days_before: int = 0, ever: bool = False) -> {str: str}:
         if ever:
-            url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&first=100".format(config.BROADCASTER_ID)
+            if year == 0:
+                url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&first=100".format(config.BROADCASTER_ID)
+            elif year > 0:
+                print()
+                datepast = rfc3339.format(datetime.strptime(f"{year}.01.01", '%Y.%m.%d').date(),
+                                          utc=True,
+                                          use_system_timezone=False)
+                datenow = rfc3339.format(datetime.strptime(f"{year+1}.01.01", '%Y.%m.%d').date(), utc=True,
+                                         use_system_timezone=False)
+                url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&started_at={}&ended_at={}&first=100".format(
+                    config.BROADCASTER_ID, datepast,
+                    datenow)
         else:
             datepast = rfc3339.format((datetime.utcnow() + timedelta(hours=3)) - timedelta(days=days_before), utc=True,
                                       use_system_timezone=False)
@@ -258,7 +269,6 @@ async def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "
             url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&started_at={}&ended_at={}&first=100".format(
                 config.BROADCASTER_ID, datepast,
                 datenow)
-
         request = urllib.request.Request(url=url, headers={"Authorization": "Bearer {}".format(config.OAUTH),
                                                            "Client-ID": "{}".format(config.CLIENT_ID)})
         response = urllib.request.urlopen(request).read()
@@ -273,13 +283,24 @@ async def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "
                 clips = []
                 while True:
                     if ever:
-                        if 'cursor' in data['pagination'].keys():
-                            url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&after={}&first=100".format(config.BROADCASTER_ID,
-                                                                                                        data['pagination'][
-                                                                                                            'cursor'])
+                        if year == 0:
+                            if 'cursor' in data['pagination'].keys():
+                                url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&after={}&first=100".format(config.BROADCASTER_ID,
+                                                                                                            data['pagination'][
+                                                                                                                'cursor'])
+                            else:
+                                config.istopcliprunning = False
+                                return {"code": "5", "url": random.choice(clips)}
                         else:
-                            config.istopcliprunning = False
-                            return {"code": "5", "url": random.choice(clips)}
+                            if 'cursor' in data['pagination'].keys():
+                                url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&started_at={}&ended_at={}&after={}&first=100".format(config.BROADCASTER_ID,
+                                                                                                            datepast,
+                                                                                                            datenow,
+                                                                                                            data['pagination'][
+                                                                                                                'cursor'])
+                            else:
+                                config.istopcliprunning = False
+                                return {"code": "5", "url": random.choice(clips)}
                     else:
                         if 'cursor' in data['pagination'].keys():
                             url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&after={}&started_at={}&ended_at={}&first=100".format(
@@ -333,8 +354,10 @@ async def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "
                 return "за месяц"
             if dt == 365:
                 return "за год"
-            if dt == 0:
+            if dt == 0 and year == 0:
                 return "за всё время"
+            else:
+                return f"за {year} год"
 
         if response["code"] == "0":
             return "{}, самый топовый клип {} PogU {} ".format(nickname, get_needed_datestring(dat),
@@ -352,13 +375,14 @@ async def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "
         elif response['code'] == "5":
             return "{}, случайный клип {} PogU {} ".format(nickname, get_needed_datestring(dat),
                                                                    response["url"])
+        elif response['code'] == "6":
+            return "{}, {}".format(nickname, response["url"])
 
     # ------------------------------------helping with abreviatures---------------------------
     def abreviatur_helper(argument: str) -> str:
         with open('data/abreviatures.txt') as n:
             ad = json.loads(n.read())
             if argument in ad:
-                #print(ad[argument])
                 return ad[argument]
             return ""
 
