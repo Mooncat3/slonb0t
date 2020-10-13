@@ -520,9 +520,25 @@ class CommandsBot(commands.Bot, ABC):
         message = ctx.message.content
         top = str.replace(message, '!clipever ', '')
         top = re.sub("\n", '', top)
+        year = 0
         if top == "!clipever":
             top = ""
-        AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(0, top, nickname), ctx.author, "clip")
+        if " " in top and len(top.split(" ")) >= 2:
+            try:
+                if len(str(int(top.split(" ")[len(top.split(" "))-1]))) == 4:
+                    year = int(top.split(" ")[len(top.split(" "))-1])
+                    top = top[0:top.find(str(year))-1]
+            except:
+                AdditionalMethods.add_to_buffer("c", f"{nickname}, Возникла ошибка, убедитесь, что пишете аргументы правильно (!clipever [тэг] [год])",
+                                                ctx.author, "clip")
+                return
+        else:
+            if top.isdigit():
+                year = int(top)
+                top = ""
+            else:
+                year = 0
+        AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(0, top, nickname, year), ctx.author, "clip")
 
     @commands.command(name='clipyear')
     async def topclipyear(self, ctx):
