@@ -340,7 +340,8 @@ async def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "
                     else:
                         ident += 1
                     await asyncio.sleep(0.5)
-        except:
+        except Exception as ex:
+            print(f"EXCEPTION IN CLIPS:  {ex}")
             config.istopcliprunning = False
             return {"code": "3", "url": ""}
 
