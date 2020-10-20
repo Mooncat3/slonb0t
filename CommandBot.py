@@ -1068,7 +1068,7 @@ class CommandsBot(commands.Bot, ABC):
         result = AdditionalMethods.parse_standartfile_message(nickname,
                                                               "{nickname}, когда {messagestr}? Hmmm {filestr}", message,
                                                               "!когда", "kogda")
-        if not AdditionalMethods.check_on_toomuchbool(result):
+        if not len(message) > 50:
             AdditionalMethods.add_to_buffer("e", result, ctx.author, "когда")
         else:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, пишите меньше символов WeirdChamp", ctx.author, "когда")
