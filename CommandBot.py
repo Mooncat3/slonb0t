@@ -912,7 +912,7 @@ class CommandsBot(commands.Bot, ABC):
                 randomdo = random.choice(listme)
                 randomdo = re.sub("\n", '', randomdo)
                 result = randomdo.format(nickname, do)
-                if not AdditionalMethods.check_on_toomuchbool(result):
+                if not len(message) > 50:
                     AdditionalMethods.add_to_buffer("e", randomdo.format(nickname, do), ctx.author, "do")
                 else:
                     AdditionalMethods.add_to_buffer("e", f"{nickname}, пишите меньше символов WeirdChamp ", ctx.author,
@@ -945,14 +945,14 @@ class CommandsBot(commands.Bot, ABC):
             steal = str.replace(message, '!steal ', '')
             steal = re.sub("\n", '', steal)
             if procent >= 33:
-                if not AdditionalMethods.check_on_toomuchbool(f"{nickname} украл у {str(steal)} {str(ruble)} руб. BOP"):
+                if not len(message) > 50:
                     AdditionalMethods.add_to_buffer("e", f"{nickname} украл у {str(steal)} {str(ruble)} руб. BOP",
                                                     ctx.author, "steal")
                 else:
                     AdditionalMethods.add_to_buffer("e", f"{nickname} пишите меньше символов WeirdChamp",
                                                     ctx.author, "steal")
             else:
-                if not AdditionalMethods.check_on_toomuchbool(f"{nickname} ничего не украл у {str(steal)} KeK Lohich"):
+                if not len(message) > 50:
                     AdditionalMethods.add_to_buffer("e", f"{nickname} ничего не украл у {str(steal)} KeK Lohich",
                                                     ctx.author, "steal")
                 else:
@@ -966,7 +966,7 @@ class CommandsBot(commands.Bot, ABC):
         result = AdditionalMethods.parse_standartfile_message(nickname,
                                                               "{nickname} попробовал {messagestr}... {filestr}",
                                                               message, "!try", "try")
-        if not AdditionalMethods.check_on_toomuchbool(result):
+        if not len(message) > 50:
             AdditionalMethods.add_to_buffer("e", result, ctx.author, "try")
         else:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, пишите меньше символов WeirdChamp",
@@ -1081,7 +1081,7 @@ class CommandsBot(commands.Bot, ABC):
                                                               "{nickname} {filestr} приветствует {messagestr} "
                                                               "peepoHey peepoLove",
                                                               message, "!привет", "privet")
-        if not AdditionalMethods.check_on_toomuchbool(result):
+        if not len(message) > 50:
             AdditionalMethods.add_to_buffer("e", result, ctx.author, "привет")
         else:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, пишите меньше символов WeirdChamp", ctx.author, "привет")
