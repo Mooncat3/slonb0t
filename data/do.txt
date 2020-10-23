@@ -55,3 +55,7 @@ polarExtreme {} ебёт {} polarExtreme
 {} pepePoint {}
 {} подарит саб {} pepeWOW
 {} потрогал {} YEP 
+{} украл у {} вкусняшку D:
+{} взломал {} HACKERMANS 
+{} и {} танцуют вместе PeepoWeen 
+{} подарил розу {} peepoFlower 
