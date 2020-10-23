@@ -54,3 +54,4 @@ polarExtreme {} ебёт {} polarExtreme
 {} гониться за {} , но никак не может его догнать peepoSprint
 {} pepePoint {}
 {} подарит саб {} pepeWOW
+{} потрогал {} YEP 
