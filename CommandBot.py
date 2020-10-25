@@ -154,14 +154,8 @@ class CommandsBot(commands.Bot, ABC):
                             self.spammers[nickname]["worned"] += 1
                             stringer += f"был предупреждён {self.spammers[nickname]['worned']} из {Settings.get_attentions()} раз с настройками: |norm: {Settings.get_norm()}, maxmesses: {Settings.get_max_messes()}, emojimode: {Settings.get_mod()}|"
                             for f in self.seekers:
-                                if Settings.get_attentions() == 1:
-                                    await self._ws.send_privmsg(config.CHAN, f"/w {f} {nickname} был предупреждён о спаме (одно предупреждение)")
-                                else:
-                                    await self._ws.send_privmsg(config.CHAN, f"/w {f} {nickname} был предупреждён {self.spammers[nickname]['worned']} из {Settings.get_attentions()} раз")
-                            if Settings.get_attentions() == 1:
-                                await self._ws.send_privmsg(config.CHAN, f"/w {nickname} вы слишком часто отправляете сообщения на канале Jesusavgn! MrDestructoid")
-                            else:
-                                await self._ws.send_privmsg(config.CHAN, f"/w {nickname} вы слишком часто отправляете сообщения на канале Jesusavgn, это {self.spammers[nickname]['worned']} из {Settings.get_attentions()} предупреждений MrDestructoid")
+                                await self._ws.send_privmsg(config.CHAN, f"/w {f} {nickname} был предупреждён {self.spammers[nickname]['worned']} из {Settings.get_attentions()} раз")
+                            await self._ws.send_privmsg(config.CHAN, f"/w {nickname} вы слишком часто отправляете сообщения на канале Jesusavgn, это {self.spammers[nickname]['worned']} из {Settings.get_attentions()} предупреждений MrDestructoid")
                         requests.post(config.api_url + "/logs/jesusavgn",
                                       data={"log": stringer.encode(
                                           "utf-8"), "nickname": nickname, "warns": {self.spammers[nickname]['worned']},
