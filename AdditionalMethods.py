@@ -106,12 +106,12 @@ def add_to_buffer(type: str, message: str, author: User, command: str):
 
 def check_active(shouldchecksettings = True) -> bool:
     if shouldchecksettings:
-        with open(file='data/settings.txt', mode='r', encoding='utf-8') as q:
-            dat = json.loads(q.read())
+        with open('data/settings.txt') as q:
+            dat = json.loads(str(q.read()))
             if not dat['entertain']:
                 return True
-    with open(file='data/TRASHMASSIVE.txt', mode='r', encoding='utf-8') as q:
-        dat = json.loads(q.read())
+    with open('data/TRASHMASSIVE.txt') as q:
+        dat = json.loads(str(q.read()))
         return dat['active']
 
 
