@@ -91,6 +91,10 @@ class CommandsBot(commands.Bot, ABC):
         namess = []
         global ii
         ii = 0
+        await self.synch()
+
+    async def synch(self):
+        self.seekers = requests.get(config.api_url + "/seekers/jesusavgn", headers={"Authorization": "y5IArL6S&%%G(69G"}).json()['answer']
 
     async def event_message(self, message):
         nickname = message.author.name
@@ -134,6 +138,12 @@ class CommandsBot(commands.Bot, ABC):
                 if self.spammers[nickname]["messes"] > 1:
                     if time.time() - self.spammers[nickname]["time"] < Settings.get_norm() and self.spammers[nickname][
                         "messes"] == Settings.get_max_messes():
+                        if "warntime" in self.spammers[nickname].keys():
+                            if time.time() - self.spammers[nickname]["warntime"] > Settings.get_forget_kd():
+                                self.spammers[nickname]["worned"] = 0
+                            self.spammers[nickname]["warntime"] = time.time()
+                        else:
+                            self.spammers[nickname]["warntime"] = time.time()
                         self.spammers[nickname]["time"] = time.time()
                         self.spammers[nickname]["messes"] = 0
                         stringer = "|--------------------------------------------------|<br>"
@@ -173,10 +183,16 @@ class CommandsBot(commands.Bot, ABC):
             nickname = ctx.author.name
             if not nickname in self.seekers:
                 self.seekers.append(nickname)
-                AdditionalMethods.add_to_buffer("s",
-                                                f"Вы подписаны на уведомления о спаме!",
-                                                ctx.author,
-                                                "seek")
+                if requests.post(config.api_url + "/seekers/jesusavgn", data={'nick': nickname, 'enabled': 1}, headers={"Authorization": "y5IArL6S&%%G(69G"}).json()['type'] == "error":
+                    AdditionalMethods.add_to_buffer("s",
+                                                    f"Вы подписаны на уведомления о спаме! (это изменение не было сохраненно в постоянную базу данных)",
+                                                    ctx.author,
+                                                    "seek")
+                else:
+                    AdditionalMethods.add_to_buffer("s",
+                                                    f"Вы подписаны на уведомления о спаме!",
+                                                    ctx.author,
+                                                    "seek")
             else:
                 AdditionalMethods.add_to_buffer("s",
                                                 f"Вы уже подписаны на уведомления о спаме ResidentSleeper",
@@ -194,10 +210,16 @@ class CommandsBot(commands.Bot, ABC):
                                                 "unseek")
             else:
                 self.seekers.remove(nickname)
-                AdditionalMethods.add_to_buffer("s",
-                                                f"Вы отписаны от уведомлений о спаме!",
-                                                ctx.author,
-                                                "unseek")
+                if requests.post(config.api_url + "/seekers/jesusavgn", data={'nick': nickname, 'enabled': 0}, headers={"Authorization": "y5IArL6S&%%G(69G"}).json()['type'] == "error":
+                    AdditionalMethods.add_to_buffer("s",
+                                                    f"Вы отписаны от уведомлений о спаме! (это изменение не было сохраненно в постоянную базу данных)",
+                                                    ctx.author,
+                                                    "unseek")
+                else:
+                    AdditionalMethods.add_to_buffer("s",
+                                                    f"Вы отписаны от уведомлений о спаме!",
+                                                    ctx.author,
+                                                    "unseek")
 
     @commands.command(name='helpm')
     async def helpm(self, ctx):
