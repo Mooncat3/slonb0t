@@ -725,7 +725,8 @@ class CommandsBot(commands.Bot, ABC):
                     data["attentions"] = int(timeout)
                     b.write(json.dumps(data))
                     AdditionalMethods.add_to_buffer("s",
-                                                    f"{nickname} attentions: {data['attentions']}, emojimode: {data['emojimode']}, timeout: {data['timeout']}",
+                                                    f"{nickname} attentions: {data['attentions']}, emojimode: {data['emojimode']}, timeout: {data['timeout']}"
+                                                    f" forget: {data['forget']}",
                                                     ctx.author, "attentions")
                 except:
                     AdditionalMethods.add_to_buffer("s", f"{nickname}, не удалось прочесть число PepoG ", ctx.author,
@@ -748,7 +749,8 @@ class CommandsBot(commands.Bot, ABC):
                     data["emojimode"] = timeout
                     b.write(json.dumps(data))
                     AdditionalMethods.add_to_buffer("s",
-                                                    f"{nickname} attentions: {data['attentions']}, emojimode: {data['emojimode']}, timeout: {data['timeout']}",
+                                                    f"{nickname} attentions: {data['attentions']}, emojimode: {data['emojimode']}, timeout: {data['timeout']}"
+                                                    f" forget: {data['forget']}",
                                                     ctx.author, "emojimode")
                 else:
                     AdditionalMethods.add_to_buffer("s",
@@ -772,7 +774,8 @@ class CommandsBot(commands.Bot, ABC):
                     data["timeout"] = int(timeout)
                     b.write(json.dumps(data))
                     AdditionalMethods.add_to_buffer("s",
-                                                    f"{nickname} attentions: {data['attentions']}, emojimode: {data['emojimode']}, timeout: {data['timeout']}",
+                                                    f"{nickname} attentions: {data['attentions']}, emojimode: {data['emojimode']}, timeout: {data['timeout']},"
+                                                    f" forget: {data['forget']}",
                                                     ctx.author, "timeout")
                 except:
                     AdditionalMethods.add_to_buffer("s",
@@ -848,8 +851,9 @@ class CommandsBot(commands.Bot, ABC):
                     data["maxmesses"] = int(timeout)
                     b.write(json.dumps(data))
                     AdditionalMethods.add_to_buffer("s",
-                                                    f"{nickname} norm: {data['norm']},"
-                                                    f" maxmesses: {data['maxmesses']}",
+                                                    f"{nickname}, norm: {data['norm']},"
+                                                    f" maxmesses: {data['maxmesses']}"
+                                                    f" forget: {data['forget']}",
                                                     ctx.author, "maxmesses")
                 except:
                     AdditionalMethods.add_to_buffer("s",
@@ -874,12 +878,37 @@ class CommandsBot(commands.Bot, ABC):
                     data["norm"] = float(timeout)
                     b.write(json.dumps(data))
                     AdditionalMethods.add_to_buffer("s",
-                                                    f"{nickname} norm: {data['norm']},"
-                                                    f" maxmesses: {data['maxmesses']}",
+                                                    f"{nickname}, norm: {data['norm']},"
+                                                    f" maxmesses: {data['maxmesses']}"
+                                                    f" forget: {data['forget']}",
                                                     ctx.author, "norm")
                 except:
                     AdditionalMethods.add_to_buffer("s", f"{nickname}, не удалось прочесть число PepoG ", ctx.author,
                                                     "norm")
+
+    @commands.command(name='forget')
+    async def norm(self, ctx):
+        if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
+            nickname = ctx.author.name
+            timeout = str.replace(ctx.message.content, '!forget ', '')
+            timeout = re.sub("\n", '', timeout)
+            timeout = str.replace(timeout, ",", ".")
+            try:
+                with open('data/settings.txt', 'r', encoding='utf-8') as b:
+                    data = json.loads(b.read())
+            except:
+                data = {}
+            with open('data/settings.txt', 'w', encoding='utf-8') as b:
+                try:
+                    data["forget"] = float(timeout)
+                    b.write(json.dumps(data))
+                    AdditionalMethods.add_to_buffer("s",
+                                                    f"{nickname} attentions: {data['attentions']}, emojimode: {data['emojimode']}, timeout: {data['timeout']},"
+                                                    f" forget: {data['forget']}",
+                                                    ctx.author, "forget")
+                except:
+                    AdditionalMethods.add_to_buffer("s", f"{nickname}, не удалось прочесть число PepoG", ctx.author,
+                                                    "forget")
 
     @commands.command(name='temp')
     async def temp(self, ctx):
