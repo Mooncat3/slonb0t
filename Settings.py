@@ -58,3 +58,11 @@ def get_bufer_timeout() -> float:
             return data['bufferdelay']
         except:
             return 1.0
+        
+def get_forget_kd() -> float:
+    with open(file='data/settings.txt', mode='r', encoding='utf-8') as e:
+        try:
+            data = json.loads(e.read())
+            return data['forget']
+        except:
+            return 1800.0
