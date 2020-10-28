@@ -6,7 +6,9 @@ from twitchioc import Client
 import asyncio
 
 import AdditionalMethods
+import Settings
 import config
+
 import json
 import time
 
@@ -113,7 +115,7 @@ class BufferCleaner(Client, ABC):
                     await asyncio.sleep(0.1)
                 if rest['vip'] and rest['type'] != "s":
                     await sock.send_privmsg(config.CHAN, mess)
-                elif rest['type'] == "s" or x - excluding > AdditionalMethods.get_bufer_max():
+                elif rest['type'] == "s" or x - excluding > Settings.get_bufer_max():
                     await asyncio.sleep(resert['timeout'])
                     await sock.send_privmsg(config.CHAN, f"/w {rest['nickname']} !{resert['cmd']} ▶ {mess}")
             await asyncio.sleep(0.2)
@@ -128,7 +130,7 @@ class BufferCleaner(Client, ABC):
                         res = dat[x]
                         if res['vip'] or res['type'] == "s":
                             excluding += 1
-                        if res['vip'] or res['type'] == "s" or x - excluding >= AdditionalMethods.get_bufer_max():
+                        if res['vip'] or res['type'] == "s" or x - excluding >= Settings.get_bufer_max():
                             ondeleting.append(res)
                             if res['type'] != "r":
                                 reser = {"mes": res['message'], "cmd": res['command'], "timeout": 0.0}
@@ -175,7 +177,7 @@ class BufferCleaner(Client, ABC):
                     await asyncio.sleep(0.1)
                 #print(resert['timeout'])
                 if rest['type'] == "e" or rest['type'] == "r":
-                    if not AdditionalMethods.check_active():
+                    if not Settings.check_active():
                         await asyncio.sleep(resert['timeout'])
                         dat.remove(rest)
                         await sock.send_privmsg(config.CHAN, mess)
@@ -185,7 +187,7 @@ class BufferCleaner(Client, ABC):
                     await sock.send_privmsg(config.CHAN, mess)
 
             await asyncio.sleep(0.2)
-            if time.time() - (tttime + timer) > AdditionalMethods.get_bufer_timeout():
+            if time.time() - (tttime + timer) > Settings.get_bufer_timeout():
                 tttime = time.time()
                 timer = 0.0
             with open(file='data/buffer.txt', mode='r', encoding='utf-8') as e:
@@ -194,7 +196,7 @@ class BufferCleaner(Client, ABC):
                 except:
                     dat = []
                 if len(dat) > 0:
-                    while len(dat) > AdditionalMethods.get_bufer_max():
+                    while len(dat) > Settings.get_bufer_max():
                         await asyncio.sleep(0.2)
                         with open(file='data/buffer.txt', mode='r', encoding='utf-8') as e:
                             try:
@@ -207,7 +209,7 @@ class BufferCleaner(Client, ABC):
                             ondeleting.append(res)
                             if res['type'] != "r":
                                 reser = {"timeout": timer, "mes": res['message'], "cmd": res['command']}
-                                timer = AdditionalMethods.get_bufer_timeout()
+                                timer = Settings.get_bufer_timeout()
                                 tttime = time.time()
                                 await send_mess(self._ws, reser, res)
                             else:
@@ -215,7 +217,7 @@ class BufferCleaner(Client, ABC):
                                     if dopbol:
                                         dopbol = False
                                         reser = {"timeout": timer, "mes": res['message'], "cmd": res['command']}
-                                        timer = AdditionalMethods.get_bufer_timeout()
+                                        timer = Settings.get_bufer_timeout()
                                         tttime = time.time()
                                         await send_mess(self._ws, reser, res)
                                     else:
