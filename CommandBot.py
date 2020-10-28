@@ -175,6 +175,8 @@ class CommandsBot(commands.Bot, ABC):
                         self.spammers[nickname]["time"] = time.time()
                         self.spammers[nickname]["log"].clear()
                         self.spammers[nickname]["messes"] = 0
+        if message.content[0:2] == "! ":
+            return
         await self.handle_commands(message)
 
     @commands.command(name='seek')
