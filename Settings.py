@@ -64,7 +64,7 @@ def change_set(set: str, newvalue):
             for e in data.keys():
                 strer += f"{e}: {data[e]}"
                 if e != list(data.keys())[len(list(data.keys())) - 1]:
-                    strer += ","
+                    strer += ", "
             return strer
         except:
             return f"Ошибка сохранения"
