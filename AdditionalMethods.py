@@ -13,6 +13,7 @@ import config
 import asyncio
 from twitchioc.dataclasses import User
 
+import Settings
 
 def check_on_max_or_not(arg: str) -> bool:
     if arg == "анекдот":
@@ -37,39 +38,6 @@ def createPaste(code, name, format_, private, date):
     p['api_paste_private'] = private
     p['api_paste_expire_date'] = date
     return p
-
-def get_norm() -> float:
-    with open(file='data/settings.txt', mode='r', encoding='utf-8') as e:
-        try:
-            data = json.loads(e.read())
-            return data['norm']
-        except:
-            return 2.0
-
-def get_max_messes() -> float:
-    with open(file='data/settings.txt', mode='r', encoding='utf-8') as e:
-        try:
-            data = json.loads(e.read())
-            return data['maxmesses']
-        except:
-            return 3
-
-def get_bufer_max() -> float:
-    with open(file='data/settings.txt', mode='r', encoding='utf-8') as e:
-        try:
-            data = json.loads(e.read())
-            return data['buffermax']
-        except:
-            return 5
-
-
-def get_bufer_timeout() -> float:
-    with open(file='data/settings.txt', mode='r', encoding='utf-8') as e:
-        try:
-            data = json.loads(e.read())
-            return data['bufferdelay']
-        except:
-            return 1.0
 
 
 def check_on_toomuchsimbols(string):
@@ -106,10 +74,8 @@ def add_to_buffer(type: str, message: str, author: User, command: str):
 
 def check_active(shouldchecksettings = True) -> bool:
     if shouldchecksettings:
-        with open('data/settings.txt') as q:
-            dat = json.loads(str(q.read()))
-            if not dat['entertain']:
-                return True
+        if not Settings.get_entertain():
+            return True
     with open('data/TRASHMASSIVE.txt') as q:
         dat = json.loads(str(q.read()))
         return dat['active']
