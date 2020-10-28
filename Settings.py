@@ -34,31 +34,35 @@ def get_set(set: str):
                 return 3
             elif set == TIMEOUT:
                 return 300
+            elif set == ENTERTAIN:
+                return True
             else:
                 return None
+
 
 def change_set(set: str, newvalue):
     try:
         with open('data/settings.txt', 'r', encoding='utf-8') as b:
             data = json.loads(b.read())
     except:
-        data = {}
+        data = {ENTERTAIN: True, BUFFERDELAY: 2.0, BUFFERMAX: 3, MAXMESSES: 3, NORM: 10.0, MODE: "skip", ATTENTIONS: 3, FORGET: 1800.0}
+    if set == ENTERTAIN:
+        if newvalue == "0":
+            data[set] = False
+        elif newvalue == "1":
+            data[set] = True
+        else:
+            return "!entertain [0,1]"
+    elif set == MODE:
+        print(newvalue)
+        if newvalue == 'all' or newvalue == 'skip' or newvalue == 'skip_with':
+            data[set] = newvalue
+        else:
+            return "!mode [all,skip,skip_with]"
+    else:
+        data[set] = newvalue
     with open('data/settings.txt', 'w', encoding='utf-8') as b:
         try:
-            if set == ENTERTAIN:
-                if newvalue == "0":
-                    data[set] = False
-                elif newvalue == "1":
-                    data[set] = True
-                else:
-                    return "!entertain [0,1]"
-            elif set == MODE:
-                if newvalue == 'all' or newvalue == 'skip' or newvalue == 'skip_with':
-                    data[set] = newvalue
-                else:
-                    return "!mode [all,skip,skip_with]"
-            else:
-                data[set] = newvalue
             b.write(json.dumps(data))
             strer = ""
             for e in data.keys():
