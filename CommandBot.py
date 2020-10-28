@@ -122,7 +122,7 @@ class CommandsBot(commands.Bot, ABC):
                     if self.spammers[nickname]["messes"] == 1:
                         self.spammers[nickname]["time"] = time.time()
                     self.spammers[nickname]["log"].append(
-                        {"timenow": datetime.now().strftime("%H:%M:%S"),
+                        {"timenow": datetime.strftime(datetime.utcnow() + timedelta(hours=3), "%H:%M:%S"),
                          "messtime": round(time.time() - self.spammers[nickname]["time"], 2),
                          "messes": self.spammers[nickname]['messes'], "content": message.content})
                 else:
