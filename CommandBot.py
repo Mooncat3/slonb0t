@@ -227,7 +227,7 @@ class CommandsBot(commands.Bot, ABC):
     async def helpm(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
             AdditionalMethods.add_to_buffer("s",
-                                            f"!bufferdelay [time], !buffermax [time], !entertain [0-1], !settings, !norm [time], !maxmesses [int], !attentions [int], !emojimode [mod], !timeout []",
+                                            f"!bufferdelay [time], !buffermax [int], !entertain [0-1], !settings, !norm [time], !maxmesses [int], !attentions [int], !mode [all,skip,skip_with], !timeout [int], !forget [time]",
                                             ctx.author, "helpm")
 
     @commands.command(name='acduel')
