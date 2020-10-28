@@ -54,7 +54,6 @@ def change_set(set: str, newvalue):
         else:
             return "!entertain [0,1]"
     elif set == MODE:
-        print(newvalue)
         if newvalue == 'all' or newvalue == 'skip' or newvalue == 'skip_with':
             data[set] = newvalue
         else:
