@@ -177,7 +177,7 @@ class BufferCleaner(Client, ABC):
                     await asyncio.sleep(0.1)
                 #print(resert['timeout'])
                 if rest['type'] == "e" or rest['type'] == "r":
-                    if not Settings.check_active():
+                    if not AdditionalMethods.check_active():
                         await asyncio.sleep(resert['timeout'])
                         dat.remove(rest)
                         await sock.send_privmsg(config.CHAN, mess)
