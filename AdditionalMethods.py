@@ -22,6 +22,8 @@ def check_on_max_or_not(arg: str) -> bool:
         return False
     elif arg == "creepypasta":
         return False
+    elif arg == "creep":
+        return False
     return True
 
 def sendPaste(paste):
