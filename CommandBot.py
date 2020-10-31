@@ -807,7 +807,7 @@ class CommandsBot(commands.Bot, ABC):
                                                     f"{nickname}, ваша температура {str(temp)} °C! Вызывайте дурку! Durka",
                                                     ctx.author, "temp")
 
-    @commands.command(name='me')
+    @commands.command(name='me', aliases=['я', 'йа'])
     async def me(self, ctx):
         nickname = ctx.author.name
         with open('data/me.txt', 'r', encoding='utf-8') as b:
