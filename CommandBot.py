@@ -1134,7 +1134,7 @@ class CommandsBot(commands.Bot, ABC):
         AdditionalMethods.add_to_buffer("c", finaly, ctx.author, "wiki")
                                                         
     @commands.command(name='creepypasta', aliases=['creep'])
-    async def tr(self, ctx):
+    async def creep(self, ctx):
         with open(f'data/creep.txt', 'r', encoding='utf-8') as n:
             List = n.read().split("\n")
             strrr = random.choice(List) + " monkaW"
