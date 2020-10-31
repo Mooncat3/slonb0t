@@ -128,6 +128,8 @@ class BufferCleaner(Client, ABC):
                         await sock.send_privmsg(config.CHAN, strrr2)
                     else:
                         await sock.send_privmsg(config.CHAN, mess)
+                else:
+                    await sock.send_privmsg(config.CHAN, mess)
             await asyncio.sleep(0.2)
             with open(file='data/buffer.txt', mode='r', encoding='utf-8') as e:
                 try:
@@ -218,6 +220,10 @@ class BufferCleaner(Client, ABC):
                                                     f"/w {rest['nickname']} !{resert['cmd']} ▶ " + strrr1 + " monkaW")
                         else:
                             await sock.send_privmsg(config.CHAN, f"/w {rest['nickname']} !{resert['cmd']} ▶ " + mess + " monkaW")
+                else:
+                    await asyncio.sleep(resert['timeout'])
+                    dat.remove(rest)
+                    await sock.send_privmsg(config.CHAN, mess)
             await asyncio.sleep(0.2)
             if time.time() - (tttime + timer) > Settings.get_bufer_timeout():
                 tttime = time.time()
