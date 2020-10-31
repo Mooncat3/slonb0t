@@ -323,7 +323,7 @@ class CommandsBot(commands.Bot, ABC):
     async def porf(self, ctx):
         nickname = ctx.author.name
         word = str.replace(ctx.message.content, '!porf ', "")
-        url = "https://models.dobro.ai/gpt2/medium/"
+        url = "https://pelevin.gpt.dobro.ai/generate/"
         if word == "!porf":
             AdditionalMethods.add_to_buffer("e", f"{nickname}, Впишите какое-либо предложение", ctx.author, "porf")
         elif len(word) > 300:
