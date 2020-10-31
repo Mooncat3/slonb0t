@@ -309,7 +309,7 @@ class CommandsBot(commands.Bot, ABC):
             await self._ws.send_privmsg(config.CHAN, f"/me {word} {word}")
             await self._ws.send_privmsg(config.CHAN, "/color BlueViolet")
             await self._ws.send_privmsg(config.CHAN, f"/me {word}")
-            await self._ws.send_privmsg(config.CHAN, "/color orangered")
+            await self._ws.send_privmsg(config.CHAN, "/color SpringGreen")
 
     @commands.command(name='ауф')
     async def auf(self, ctx):
