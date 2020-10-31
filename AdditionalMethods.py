@@ -20,6 +20,8 @@ def check_on_max_or_not(arg: str) -> bool:
         return False
     elif arg == "ауф":
         return False
+    elif arg == "creepypasta":
+        return False
     return True
 
 def sendPaste(paste):
