@@ -12,4 +12,4 @@ buferchanged = False
 istopcliprunning = False
 helpUrl = "https://pastebin.com/raw/hZ4GGw4z"
 abreviationsUrl = "https://pastebin.com/raw/h546CMvM"
-api_url = "https://sl0n.herokuapp.com/"
+api_url = "https://sl0n.herokuapp.com"
