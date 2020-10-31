@@ -25,6 +25,8 @@ class BufferCleaner(Client, ABC):
         self.loop.create_task(self.listen_to_buffer_delaied())
         self.loop.create_task(self.listen_to_buffer_undelaied())
         self.messes = []
+        self.times = {}
+        self.creepkd = 120.0
 
     async def event_webhook(self, data):
         pass
