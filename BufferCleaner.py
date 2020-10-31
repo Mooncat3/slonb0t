@@ -118,6 +118,15 @@ class BufferCleaner(Client, ABC):
                 elif rest['type'] == "s" or x - excluding > Settings.get_bufer_max():
                     await asyncio.sleep(resert['timeout'])
                     await sock.send_privmsg(config.CHAN, f"/w {rest['nickname']} !{resert['cmd']} ▶ {mess}")
+                elif rest['type'] == "cr":
+                    self.times["cr"] = time.time()
+                    if len(mess) > 500:
+                        strrr1 = mess[0:mess.rfind(" ", 0, 500)]
+                        strrr2 = mess[mess.rfind(" ", 0, 500):len(mess)]
+                        await sock.send_privmsg(config.CHAN, strrr1)
+                        await sock.send_privmsg(config.CHAN, strrr2)
+                    else:
+                        await sock.send_privmsg(config.CHAN, mess)
             await asyncio.sleep(0.2)
             with open(file='data/buffer.txt', mode='r', encoding='utf-8') as e:
                 try:
@@ -175,17 +184,42 @@ class BufferCleaner(Client, ABC):
                 mess = resert['mes']
                 while sock._websocket is None:
                     await asyncio.sleep(0.1)
-                #print(resert['timeout'])
                 if rest['type'] == "e" or rest['type'] == "r":
                     if not AdditionalMethods.check_active():
                         await asyncio.sleep(resert['timeout'])
                         dat.remove(rest)
                         await sock.send_privmsg(config.CHAN, mess)
-                else:
+                elif rest['type'] == "r":
                     await asyncio.sleep(resert['timeout'])
                     dat.remove(rest)
                     await sock.send_privmsg(config.CHAN, mess)
-
+                elif res['type'] == "cr":
+                    if not "cr" in self.times.keys():
+                        self.times["cr"] = time.time()
+                        if len(mess) > 500:
+                            strrr1 = mess[0:mess.rfind(" ", 0, 500)]
+                            strrr2 = mess[mess.rfind(" ", 0, 500):len(mess)]
+                            await sock.send_privmsg(config.CHAN, strrr1)
+                            await sock.send_privmsg(config.CHAN, strrr2)
+                        else:
+                            await sock.send_privmsg(config.CHAN, mess)
+                    elif time.time() - self.times["cr"] > self.creepkd:
+                        self.times["cr"] = time.time()
+                        if len(mess) > 500:
+                            strrr1 = mess[0:mess.rfind(" ", 0, 500)]
+                            strrr2 = mess[mess.rfind(" ", 0, 500):len(mess)]
+                            await sock.send_privmsg(config.CHAN, strrr1)
+                            await sock.send_privmsg(config.CHAN, strrr2)
+                        else:
+                            await sock.send_privmsg(config.CHAN, mess)
+                    else:
+                        if len(mess) > 450:
+                            strrr1 = mess[0:mess.rfind(" ", 0, 450)]
+                            print(strrr1)
+                            await sock.send_privmsg(config.CHAN,
+                                                    f"/w {rest['nickname']} !{resert['cmd']} ▶ " + strrr1 + " monkaW")
+                        else:
+                            await sock.send_privmsg(config.CHAN, f"/w {rest['nickname']} !{resert['cmd']} ▶ " + mess + " monkaW")
             await asyncio.sleep(0.2)
             if time.time() - (tttime + timer) > Settings.get_bufer_timeout():
                 tttime = time.time()
