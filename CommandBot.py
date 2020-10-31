@@ -1132,6 +1132,13 @@ class CommandsBot(commands.Bot, ABC):
         info = re.sub(r"\([^()]*\)", "", info)
         finaly = f"{ctx.author.name}, {info}"
         AdditionalMethods.add_to_buffer("c", finaly, ctx.author, "wiki")
+                                                        
+    @commands.command(name='creepypasta', aliases=['creep'])
+    async def tr(self, ctx):
+        with open(f'data/creep.txt', 'r', encoding='utf-8') as n:
+            List = n.read().split("\n")
+            strrr = random.choice(List) + " monkaW"
+            AdditionalMethods.add_to_buffer("cr", strrr, ctx.author, "creepypasta")
 
 
 #subprocess.Popen([sys.executable, 'ChatBot.py'])
