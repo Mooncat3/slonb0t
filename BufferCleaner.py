@@ -7,8 +7,8 @@ import asyncio
 
 import AdditionalMethods
 import Settings
-import config
 
+import config
 import json
 import time
 
@@ -112,13 +112,12 @@ class BufferCleaner(Client, ABC):
         dopbol = True
         while True:
             async def send_mess(sock, resert, rest):
-                mess = resert['mes']
+                mess = str(resert['mes'])
                 while sock._websocket is None:
                     await asyncio.sleep(0.1)
-                if rest['vip'] and rest['type'] != "s":
+                if rest['vip'] and rest['type'] != "s" and rest['type'] != "cr":
                     await sock.send_privmsg(config.CHAN, mess)
-                elif rest['type'] == "s" or x - excluding > Settings.get_bufer_max():
-                    await asyncio.sleep(resert['timeout'])
+                elif (rest['type'] == "s" or x - excluding > Settings.get_bufer_max()) and rest['type'] != "cr":
                     await sock.send_privmsg(config.CHAN, f"/w {rest['nickname']} !{resert['cmd']} ▶ {mess}")
                 elif rest['type'] == "cr":
                     self.times["cr"] = time.time()
@@ -145,14 +144,12 @@ class BufferCleaner(Client, ABC):
                             ondeleting.append(res)
                             if res['type'] != "r":
                                 reser = {"mes": res['message'], "cmd": res['command'], "timeout": 0.0}
-                                #print("MESS = " + res['message'])
                                 await send_mess(self._ws, reser, res)
-                            else:
+                            elif res['type'] == "r":
                                 if time.time() - recepttime > 20:
                                     if dopbol:
                                         dopbol = False
                                         reser = {"mes": res['message'], "cmd": res['command'], "timeout": 0.0}
-                                        #print("MESS = " + res['message'])
                                         await send_mess(self._ws, reser, res)
                                     else:
                                         dopbol = True
@@ -217,7 +214,6 @@ class BufferCleaner(Client, ABC):
                     else:
                         if len(mess) > 450:
                             strrr1 = mess[0:mess.rfind(" ", 0, 450)]
-                            print(strrr1)
                             await sock.send_privmsg(config.CHAN,
                                                     f"/w {rest['nickname']} !{resert['cmd']} ▶ " + strrr1 + " monkaW")
                         else:
