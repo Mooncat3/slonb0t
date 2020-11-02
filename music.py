@@ -8,7 +8,7 @@ from twitchio.ext import commands
 from urllib.parse import quote
 import random
 
-channel = 'mooncat3'
+channel = 'jesusavgn'
 OAUTH = '14y5qalllj1i65rg3m9dip1rpq5ugd'
 
 bot = commands.Bot(
@@ -79,7 +79,7 @@ async def music(ctx):
                                 u = 1
                                 break
                             for slovo in song_lyric.split(' '):
-                                if slovo == strr.lower() and len(slovo) > 1:
+                                if slovo == strr.lower() and len(slovo) > 3:
                                     res = res[res.index(stroka):]
                                     u = 1
                                     break
