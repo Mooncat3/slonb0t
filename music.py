@@ -21,7 +21,7 @@ bot = commands.Bot(
 
 @bot.event
 async def event_ready():
-    pass
+    print('Музыка запущена!')
 
 
 @bot.event
@@ -57,8 +57,7 @@ async def music(ctx):
             else:
                 try:
                     search = driver.find_element_by_xpath(
-                        '//a[starts-with(@class,"b-serp-item__title-link")]').get_attribute(
-                        'href')
+                        '//a[starts-with(@class,"b-serp-item__title-link")]').get_attribute('href')
                     driver.close()
                     print(search)
                     r = requests.get(search)
@@ -69,24 +68,21 @@ async def music(ctx):
                     except AttributeError:
                         text = soup.find('td', style='vertical-align: top; width: 50%;').get_text().replace(ist, '')
 
-                        if text.find('\n\n') != -1:
-                            text = text.split('\n')
-
                     text = re.sub(r'\n[\[].*?[\]]', '', '\n' + str(''.join(text)))
                     res = [x for x in text.split('\r\n') if len(x) > 2]
                     if len(res) == 1:
                         res = [x for x in text.split('\n') if len(x) > 2]
                     u = 0
-                    for stroka in res:
+                    for stroke in res:
                         if u == 0:
-                            for strr in stroka.split(' '):
-                                if song_lyric == stroka.lower():
-                                    res = res[res.index(stroka):]
+                            for stderr in stroke.split(' '):
+                                if song_lyric == stroke.lower():
+                                    res = res[res.index(stroke):]
                                     u = 1
                                     break
-                                for slovo in song_lyric.split(' '):
-                                    if slovo == strr.lower() and len(slovo) > 3:
-                                        res = res[res.index(stroka):]
+                                for solves in song_lyric.split(' '):
+                                    if solves == stderr.lower() and len(solves) > 3:
+                                        res = res[res.index(stroke):]
                                         u = 1
                                         break
                     res = emote.join(res[:random.randint(4, 5)])
@@ -97,10 +93,10 @@ async def music(ctx):
                         if word.lower() in osu:
                             res = res.replace(word, '*' * len(word))
 
-                    await ctx.channel.send(res[:200] + emote)
+                    await ctx.channel.send(res[:210] + emote)
                 except NoSuchElementException:
                     await ctx.channel.send(nick + ', такой песни не найдено!')
-            print('-' * 50)
+            print('-' * 80)
 
 
 bot.run()
