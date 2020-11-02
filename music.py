@@ -2,11 +2,13 @@ import re
 from selenium import webdriver
 import requests
 from selenium.webdriver.chrome.options import Options
+from selenium.common.exceptions import NoSuchElementException
 from bs4 import BeautifulSoup
 from twitchio.ext import commands
 from urllib.parse import quote
+import random
 
-channel = 'jesusavgn'
+channel = 'mooncat3'
 OAUTH = '14y5qalllj1i65rg3m9dip1rpq5ugd'
 
 bot = commands.Bot(
@@ -38,49 +40,62 @@ async def music(ctx):
         emote += ' '
         chrome_options = Options()
         chrome_options.add_argument("--headless")
+        # chrome_options.add_argument('--user-data-dir=data')
         driver = webdriver.Chrome(options=chrome_options)
-        url = 'https://teksty-pesenok.ru/search/?searchid=2236269&text=' + quote(song_lyric) + '&web=0'
+        url = 'https://teksty-pesenok.ru/search/?searchid=2236269&text=' + quote(song_lyric)
         driver.get(url)
         est = driver.find_element_by_xpath('//yass-div[starts-with(@class, "b-head__found")]').text
         if est == 'найдёт всё. Со временем':
             await ctx.channel.send(nick + ', такой песни не найдено!')
             driver.close()
         else:
-            search = driver.find_element_by_xpath('//a[starts-with(@class,"b-serp-item__title-link")]').get_attribute(
-                'href')
-            driver.close()
-            print(est, search)
-            r = requests.get(search)
-            soup = BeautifulSoup(r.text, 'lxml')
-            ist = '\nИсточник teksty-pesenok.ru'
             try:
-                text = soup.find('div', class_='textPesni').get_text().replace(ist, '')
-            except AttributeError:
-                text = soup.find('td', style='vertical-align: top; width: 50%;').get_text().replace(ist, '')
+                search = driver.find_element_by_xpath(
+                    '//a[starts-with(@class,"b-serp-item__title-link")]').get_attribute(
+                    'href')
+                driver.close()
+                print(search)
+                r = requests.get(search)
+                soup = BeautifulSoup(r.text, 'lxml')
+                ist = '\nИсточник teksty-pesenok.ru'
+                try:
+                    text = soup.find('div', class_='textPesni').get_text().replace(ist, '')
+                except AttributeError:
+                    text = soup.find('td', style='vertical-align: top; width: 50%;').get_text().replace(ist, '')
 
-                if text.find('\n\n') != -1:
-                    text = text.split('\n')
+                    if text.find('\n\n') != -1:
+                        text = text.split('\n')
 
-            text_edit_pre = re.sub(r'\n[\[].*?[\]]', '', '\n' + str(''.join(text)))
-            text_edit = re.sub(r'[^\w\s\n\r]', ' ', text_edit_pre).lower()
+                text = re.sub(r'\n[\[].*?[\]]', '', '\n' + str(''.join(text)))
+                res = [x for x in text.split('\r\n') if len(x) > 2]
+                if len(res) == 1:
+                    res = [x for x in text.split('\n') if len(x) > 2]
+                u = 0
+                for stroka in res:
+                    if u == 0:
+                        for strr in stroka.split(' '):
+                            if song_lyric == stroka.lower():
+                                res = res[res.index(stroka):]
+                                u = 1
+                                break
+                            for slovo in song_lyric.split(' '):
+                                if slovo == strr.lower() and len(slovo) > 1:
+                                    res = res[res.index(stroka):]
+                                    u = 1
+                                    break
+                print(res)
+                res = emote.join(res[:random.randint(4, 5)])
+                with open('osujdau.txt', encoding='utf-8') as f:
+                    osu = f.read().split('\n')
+                res_prov = re.sub(r'\W+', ' ', res)
+                for word in res_prov.split(' '):
+                    if word.lower() in osu:
+                        res = res.replace(word, '*' * len(word))
 
-            try:
-                text = ''.join(text)[text_edit.index(song_lyric) - 1:]
-            except ValueError:
-                pass
-
-            res = [x for x in text.split('\r\n') if x != '\r' and x != '' and x != '\r\r' and x != '\n']
-            if len(res) == 1:
-                res = [x for x in text.split('\n') if x != '\r' and x != '' and x != '\r\r' and x != '\n']
-            res = emote.join(res[:5])
-            with open('osujdau.txt', encoding='utf-8') as f:
-                osu = f.read().split('\n')
-            res_prov = re.sub(r'\W+', ' ', res)
-            for word in res_prov.split(' '):
-                if word.lower() in osu:
-                    res = res.replace(word, '*' * len(word))
-            res = re.sub(r'[\[].*?[\]]', '', res)
-            await ctx.channel.send(res[:250] + emote)
+                await ctx.channel.send(res[:200] + emote)
+            except NoSuchElementException:
+                await ctx.channel.send(nick + ', такой песни не найдено!')
+    print('-' * 50)
 
 
 bot.run()
