@@ -85,7 +85,7 @@ async def music(ctx):
                                     break
                 print(res)
                 res = emote.join(res[:random.randint(4, 5)])
-                with open('osujdau.txt', encoding='utf-8') as f:
+                with open('data/osujdau.txt', encoding='utf-8') as f:
                     osu = f.read().split('\n')
                 res_prov = re.sub(r'\W+', ' ', res)
                 for word in res_prov.split(' '):
