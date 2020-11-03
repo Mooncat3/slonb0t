@@ -75,28 +75,30 @@ async def music(ctx):
                     u = 0
                     for stroke in res:
                         if u == 0:
+                            stroke_orig = stroke
+                            stroke = re.sub(r'[^\w ]', '', stroke)
                             for stderr in stroke.split(' '):
                                 if song_lyric == stroke.lower():
-                                    res = res[res.index(stroke):]
+                                    res = res[res.index(stroke_orig):]
                                     u = 1
                                     break
                                 for solves in song_lyric.split(' '):
-                                    if solves == stderr.lower() and len(solves) > 3:
-                                        res = res[res.index(stroke):]
+                                    solves = re.sub(r'[^\w]', '', solves)
+                                    if stderr.lower().find(solves) != -1 and len(solves) > 3:
+                                        res = res[res.index(stroke_orig):]
                                         u = 1
                                         break
                     res = emote.join(res[:random.randint(4, 5)])
                     with open('data/osujdau.txt', encoding='utf-8') as f:
-                        osu = f.read().split('\n')
-                    res_prov = re.sub(r'\W+', ' ', res)
+                        osu = f.read().lower().split('\n')
+                    res_prov = re.sub(r'[^\w ]', '', res)
                     for word in res_prov.split(' '):
                         if word.lower() in osu:
                             res = res.replace(word, '*' * len(word))
-
                     await ctx.channel.send(res[:210] + emote)
                 except NoSuchElementException:
                     await ctx.channel.send(nick + ', такой песни не найдено!')
-            print('-' * 80)
+                print('-' * 80)
 
 
 bot.run()
