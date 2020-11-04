@@ -60,6 +60,7 @@ def vip(mod: bool, name: str) -> bool:
 
 
 def add_to_buffer(type: str, message: str, author: User, command: str):
+    message = '/me ' + message
     try:
         with open(file='data/buffer.txt', mode='r', encoding='utf-8') as e:
             dat = json.loads(e.read())
