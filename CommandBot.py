@@ -746,7 +746,7 @@ class CommandsBot(commands.Bot, ABC):
     async def entertain(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
             nickname = ctx.author.name
-            AdditionalMethods.add_to_buffer("s", f"{nickname}, {Settings.change_set(Settings.ENTERTAIN, AdditionalMethods.parse_command(ctx.message.content, 'entertain'))}", ctx.author,
+            AdditionalMethods.add_to_buffer("s", f"{nickname}, {Settings.change_set(Settings.ENTERTAIN, ctx.message.content.replace('!entertain ',''))}", ctx.author,
                                             "entertain")
 
     @commands.command(name='maxmesses')
