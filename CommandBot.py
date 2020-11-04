@@ -318,7 +318,7 @@ class CommandsBot(commands.Bot, ABC):
         soup = BeautifulSoup(r.content, 'lxml')
         d = soup.find('h1', class_='b-quote__text').get_text()
         AdditionalMethods.add_to_buffer("e", f"{nickname}, {d} AUFFF", ctx.author, "ауф")
-
+    '''
     @commands.command(name='porf')
     async def porf(self, ctx):
         nickname = ctx.author.name
@@ -345,7 +345,7 @@ class CommandsBot(commands.Bot, ABC):
                     json_response = response.json()
                     result = json_response['replies'][4]
                 AdditionalMethods.add_to_buffer("e", f"{nickname}, " + word + result, ctx.author, "porf")
-
+    '''
     @commands.command(name='save')
     async def logs(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
