@@ -691,7 +691,7 @@ class CommandsBot(commands.Bot, ABC):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
             nickname = ctx.author.name
             try:
-                chislo = float(AdditionalMethods.parse_command(ctx.message.content, 'bufferdelay'))
+                chislo = float(ctx.message.content.replace('!bufferdelay ', ''))
                 AdditionalMethods.add_to_buffer("s", f"{nickname}, {Settings.change_set(Settings.BUFFERDELAY, chislo)}", ctx.author, "bufferdelay")
             except:
                 AdditionalMethods.add_to_buffer("s", f"{nickname}, не удалось прочесть число PepoG ", ctx.author,
@@ -702,7 +702,7 @@ class CommandsBot(commands.Bot, ABC):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
             nickname = ctx.author.name
             try:
-                chislo = int(AdditionalMethods.parse_command(ctx.message.content, 'attentions'))
+                chislo = int(ctx.message.content.replace('!attentions ', ''))
                 AdditionalMethods.add_to_buffer("s", f"{nickname}, {Settings.change_set(Settings.ATTENTIONS, chislo)}", ctx.author,
                                                 "attentions")
             except:
@@ -713,7 +713,7 @@ class CommandsBot(commands.Bot, ABC):
     async def mode(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
             nickname = ctx.author.name
-            AdditionalMethods.add_to_buffer("s", f"{nickname}, {Settings.change_set(Settings.MODE, AdditionalMethods.parse_command(ctx.message.content, 'mode'))}", ctx.author,
+            AdditionalMethods.add_to_buffer("s", f"{nickname}, {Settings.change_set(Settings.MODE, ctx.message.content.replace('!mode ', ''))}", ctx.author,
                                             "mode")
 
     @commands.command(name='timeout')
@@ -721,7 +721,7 @@ class CommandsBot(commands.Bot, ABC):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
             nickname = ctx.author.name
             try:
-                chislo = int(AdditionalMethods.parse_command(ctx.message.content, 'timeout'))
+                chislo = int(ctx.message.content.replace('!timeout ', ''))
                 AdditionalMethods.add_to_buffer("s", f"{nickname}, {Settings.change_set(Settings.TIMEOUT, chislo)}",
                                                 ctx.author,
                                                 "timeout")
@@ -734,7 +734,7 @@ class CommandsBot(commands.Bot, ABC):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
             nickname = ctx.author.name
             try:
-                chislo = int(AdditionalMethods.parse_command(ctx.message.content, 'buffermax'))
+                chislo = int(ctx.message.content.replace('!buffermax ', ''))
                 AdditionalMethods.add_to_buffer("s", f"{nickname}, {Settings.change_set(Settings.BUFFERMAX, chislo)}",
                                                 ctx.author,
                                                 "buffermax")
@@ -754,7 +754,7 @@ class CommandsBot(commands.Bot, ABC):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
             nickname = ctx.author.name
             try:
-                chislo = int(AdditionalMethods.parse_command(ctx.message.content, 'maxmesses'))
+                chislo = int(ctx.message.content.replace('!maxmesses ', ''))
                 AdditionalMethods.add_to_buffer("s", f"{nickname}, {Settings.change_set(Settings.MAXMESSES, chislo)}",
                                                 ctx.author,
                                                 "maxmesses")
@@ -767,7 +767,7 @@ class CommandsBot(commands.Bot, ABC):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
             nickname = ctx.author.name
             try:
-                chislo = float(AdditionalMethods.parse_command(ctx.message.content, 'norm'))
+                chislo = float(ctx.message.content.replace('!norm ', ''))
                 AdditionalMethods.add_to_buffer("s", f"{nickname}, {Settings.change_set(Settings.NORM, chislo)}",
                                                 ctx.author,
                                                 "norm")
@@ -780,7 +780,7 @@ class CommandsBot(commands.Bot, ABC):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
             nickname = ctx.author.name
             try:
-                chislo = float(AdditionalMethods.parse_command(ctx.message.content, 'forget'))
+                chislo = float(ctx.message.content.replace('!forget ', ''))
                 AdditionalMethods.add_to_buffer("s", f"{nickname}, {Settings.change_set(Settings.FORGET, chislo)}",
                                                 ctx.author,
                                                 "forget")
