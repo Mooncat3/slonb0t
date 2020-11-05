@@ -321,31 +321,31 @@ class CommandsBot(commands.Bot, ABC):
     
     @commands.command(name='porf')
     async def porf(self, ctx):
-        if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
-            nickname = ctx.author.name
-            word = str.replace(ctx.message.content, '!porf ', "")
-            url = "https://pelevin.gpt.dobro.ai/generate/"
-            if word == "!porf":
-                AdditionalMethods.add_to_buffer("e", f"{nickname}, Впишите какое-либо предложение", ctx.author, "porf")
-            elif len(word) > 300:
-                AdditionalMethods.add_to_buffer("e", f"{nickname}, Бот может принимать максимум 300 символов", ctx.author,
-                                                "porf")
+        #if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
+        nickname = ctx.author.name
+        word = str.replace(ctx.message.content, '!porf ', "")
+        url = "https://pelevin.gpt.dobro.ai/generate/"
+        if word == "!porf":
+            AdditionalMethods.add_to_buffer("e", f"{nickname}, Впишите какое-либо предложение", ctx.author, "porf")
+        elif len(word) > 300:
+            AdditionalMethods.add_to_buffer("e", f"{nickname}, Бот может принимать максимум 300 символов", ctx.author,
+                                            "porf")
+        else:
+            response = requests.post(url, json={'prompt': word, 'length': '30', 'num_samples': '5'})
+            if response.text == "Service Unavailable":
+                AdditionalMethods.add_to_buffer("e",
+                                                f"{nickname}, на данный момент Порфирьевич не работает. Попробуйте позже roflanPominy",
+                                                ctx.author, "porf")
             else:
-                response = requests.post(url, json={'prompt': word, 'length': '30', 'num_samples': '5'})
-                if response.text == "Service Unavailable":
-                    AdditionalMethods.add_to_buffer("e",
-                                                    f"{nickname}, на данный момент Порфирьевич не работает. Попробуйте позже roflanPominy",
-                                                    ctx.author, "porf")
-                else:
+                json_response = response.json()
+                result = json_response['replies'][4]
+                with open('data/osujdau.txt', 'r', encoding='utf-8') as f:
+                    l = [line.strip() for line in f]
+                while any(x in result.lower() for x in l):
+                    response = requests.post(url, json={'prompt': word, 'length': '30', 'num_samples': '5'})
                     json_response = response.json()
                     result = json_response['replies'][4]
-                    with open('data/osujdau.txt', 'r', encoding='utf-8') as f:
-                        l = [line.strip() for line in f]
-                    while any(x in result.lower() for x in l):
-                        response = requests.post(url, json={'prompt': word, 'length': '30', 'num_samples': '5'})
-                        json_response = response.json()
-                        result = json_response['replies'][4]
-                    AdditionalMethods.add_to_buffer("e", f"{nickname}, " + word + result, ctx.author, "porf")
+                AdditionalMethods.add_to_buffer("e", f"{nickname}, " + word + result, ctx.author, "porf")
     
     @commands.command(name='save')
     async def logs(self, ctx):
