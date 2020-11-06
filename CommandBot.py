@@ -323,7 +323,7 @@ class CommandsBot(commands.Bot, ABC):
     async def porf(self, ctx):
         #if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
         nickname = ctx.author.name
-        word = str.replace(ctx.message.content, '!porf ', "")
+        words = str.replace(ctx.message.content, '!porf ', "")
         url = "https://pelevin.gpt.dobro.ai/generate/"
         if words == "!porf":
             AdditionalMethods.add_to_buffer("e", f"{nickname}, Впишите какое-либо предложение", ctx.author, "porf")
