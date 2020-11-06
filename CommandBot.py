@@ -325,13 +325,13 @@ class CommandsBot(commands.Bot, ABC):
         nickname = ctx.author.name
         word = str.replace(ctx.message.content, '!porf ', "")
         url = "https://pelevin.gpt.dobro.ai/generate/"
-        if word == "!porf":
+        if words == "!porf":
             AdditionalMethods.add_to_buffer("e", f"{nickname}, Впишите какое-либо предложение", ctx.author, "porf")
-        elif len(word) > 300:
+        elif len(words) > 300:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, Бот может принимать максимум 300 символов", ctx.author,
                                             "porf")
         else:
-            response = requests.post(url, json={'prompt': word, 'length': '30', 'num_samples': '5'})
+            response = requests.post(url, json={'prompt': words, 'length': '30', 'num_samples': '5'})
             if response.text == "Service Unavailable":
                 AdditionalMethods.add_to_buffer("e",
                                                 f"{nickname}, на данный момент Порфирьевич не работает. Попробуйте позже roflanPominy",
@@ -339,13 +339,13 @@ class CommandsBot(commands.Bot, ABC):
             else:
                 json_response = response.json()
                 result = json_response['replies'][4]
-                with open('data/osujdau.txt', 'r', encoding='utf-8') as f:
-                    l = [line.strip() for line in f]
-                while any(x in result.lower() for x in l):
-                    response = requests.post(url, json={'prompt': word, 'length': '30', 'num_samples': '5'})
-                    json_response = response.json()
-                    result = json_response['replies'][4]
-                AdditionalMethods.add_to_buffer("e", f"{nickname}, " + word + result, ctx.author, "porf")
+                with open('data/osujdau.txt', encoding='utf-8') as f:
+                    osu = f.read().lower().split('\n')
+                res_prov = re.sub(r'[^\w ]', '', result)
+                for word in res_prov.split(' '):
+                    if word.lower() in osu:
+                        result = result.replace(word, '*' * len(word))
+                AdditionalMethods.add_to_buffer("e", f"{nickname}, {words}{result}", ctx.author, "porf")
     
     @commands.command(name='save')
     async def logs(self, ctx):
@@ -372,7 +372,7 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='slon')
     async def slon(self, ctx):
         nickname = ctx.author.name
-        story = nickname + ", дело было летом 2019 года, хесус играл в майнкрафт без модов и смог приручить себе кота, которого мы прозвали Слон, в один прекрасный солнечный день, он залез под блок, где была вода, и, медленно задыхаясь, умер peepoSad , этот бот будет вечным напоминанием о трагедии, которую никто не забудет roflanPominy "
+        story = nickname + ", дело было летом 2019 года, хесус играл в майнкрафт без модов и смог приручить себе кота, которого мы назвали Слон. В один прекрасный солнечный день, он залез под блок, где была вода, и, медленно задыхаясь, умер peepoSad , этот бот будет вечным напоминанием о трагедии, которую никто не забудет roflanPominy "
         AdditionalMethods.add_to_buffer("s", story, ctx.author, "slon")
 
     @commands.command(name='kogda')
@@ -450,7 +450,6 @@ class CommandsBot(commands.Bot, ABC):
         recept = soup.find('div', class_='randome_recept_right').get_text()
         receptt = 'Способ приготовления:'.join(recept.split('Способ приготовления:')[:-1])
         recept1 = recept[recept.find("Способ приготовления:") + 1:]
-        recept1 = (recept1[:495] + '...') if len(recept1) > 495 else recept1
         AdditionalMethods.add_to_buffer("s", f"{name} - {receptt}", ctx.author, "рецепт")
         await asyncio.sleep(2)
         AdditionalMethods.add_to_buffer("s", f"С{recept1}", ctx.author, "рецепт")
@@ -460,7 +459,7 @@ class CommandsBot(commands.Bot, ABC):
         r = requests.get('http://anecdotica.ru/')
         soup = BeautifulSoup(r.content, 'lxml')
         anekdot = soup.find('div', class_='item_text').get_text()
-        anekdott = (anekdot[:493] + '...') if len(anekdot) > 493 else anekdot
+        anekdott = (anekdot[:490] + '...') if len(anekdot) > 490 else anekdot
         AdditionalMethods.add_to_buffer("e", '{} KeK'.format(str.replace(anekdott, "\r\n", " ")), ctx.author, "анекдот")
 
     @commands.command(name='перевод')
@@ -639,31 +638,28 @@ class CommandsBot(commands.Bot, ABC):
 
     @commands.command(name='заебало')
     async def zaebalo(self, ctx):
-        if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
-            nickname = ctx.author.name
-            url = "https://zaebalo.ru/?page=" + str(random.randrange(1, 1600, 1))
-            r = requests.get(url)
-            soup = BeautifulSoup(r.content, 'lxml')
-            d = soup.find_all('div', align='left')
-            res = random.choice(d)
-            res = res.get_text()
-            res = re.sub(r'\n', '', res)
-            with open('data/osujdau.txt', 'r', encoding='utf-8') as f:
-                l = [line.strip() for line in f]
-            while any(x in res.lower() for x in l):
-                res = random.choice(d)
-                res = res.get_text()
-                res = re.sub(r'\n', '', res)
-            if len(res) > 500:
-                res = res[:300] + '...'
-                AdditionalMethods.add_to_buffer("e", f"{nickname}, {res}", ctx.author, "zaebalo")
-            else:
-                AdditionalMethods.add_to_buffer("e", f"{nickname}, {res}", ctx.author, "zaebalo")
+        #if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
+        nickname = ctx.author.name
+        url = "https://zaebalo.ru/?page=" + str(random.randrange(1, 1710, 1))
+        r = requests.get(url)
+        soup = BeautifulSoup(r.content, 'lxml')
+        d = soup.find_all('div', align='left')
+        res = random.choice(d).get_text()
+        res = re.sub(r'\n', '', res)
+        with open('data/osujdau.txt', encoding='utf-8') as f:
+            osu = f.read().lower().split('\n')
+        res_prov = re.sub(r'[^\w ]', '', res)
+        for word in res_prov.split(' '):
+            if word.lower() in osu:
+                res = res.replace(word, '*' * len(word))
+        if len(res) > 500:
+            res = res[:300] + '...'
+        AdditionalMethods.add_to_buffer("e", f"{nickname}, {res}", ctx.author, "zaebalo")
 
     @commands.command(name='pastа')
     async def pasta(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
-            AdditionalMethods.add_to_buffer("e", AdditionalMethods.parse_simplefile_message("{}", "nadya"), ctx.author,
+            AdditionalMethods.add_to_buffer("e", AdditionalMethods.parse_simplefile_message("{}", "nadya")[:490], ctx.author,
                                             "pastа")
 
     @commands.command(name='help')
@@ -837,7 +833,7 @@ class CommandsBot(commands.Bot, ABC):
                 randomdo = random.choice(listme)
                 randomdo = re.sub("\n", '', randomdo)
                 result = randomdo.format(nickname, do)
-                if not len(message) > 50:
+                if not len(message) > 100:
                     AdditionalMethods.add_to_buffer("e", randomdo.format(nickname, do), ctx.author, "do")
                 else:
                     AdditionalMethods.add_to_buffer("e", f"{nickname}, пишите меньше символов WeirdChamp ", ctx.author,
@@ -852,7 +848,7 @@ class CommandsBot(commands.Bot, ABC):
         else:
             bubu = str.replace(message, '!бубу ', '')
             bubu = re.sub("\n", '', bubu)
-            if len(bubu) < 117:
+            if len(bubu) < 100:
                 AdditionalMethods.add_to_buffer("e", f"Ну {str(bubu)} и {str(bubu)} Чё бубнить-то? ThumbUp", ctx.author,
                                                 "бубу")
             else:
@@ -870,14 +866,14 @@ class CommandsBot(commands.Bot, ABC):
             steal = str.replace(message, '!steal ', '')
             steal = re.sub("\n", '', steal)
             if procent >= 33:
-                if not len(message) > 50:
+                if not len(message) > 100:
                     AdditionalMethods.add_to_buffer("e", f"{nickname} украл у {str(steal)} {str(ruble)} руб. BOP",
                                                     ctx.author, "steal")
                 else:
                     AdditionalMethods.add_to_buffer("e", f"{nickname} пишите меньше символов WeirdChamp",
                                                     ctx.author, "steal")
             else:
-                if not len(message) > 50:
+                if not len(message) > 100:
                     AdditionalMethods.add_to_buffer("e", f"{nickname} ничего не украл у {str(steal)} KeK Lohich",
                                                     ctx.author, "steal")
                 else:
@@ -891,7 +887,7 @@ class CommandsBot(commands.Bot, ABC):
         result = AdditionalMethods.parse_standartfile_message(nickname,
                                                               "{nickname} попробовал {messagestr}... {filestr}",
                                                               message, "!try", "try")
-        if not len(message) > 50:
+        if not len(message) > 100:
             AdditionalMethods.add_to_buffer("e", result, ctx.author, "try")
         else:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, пишите меньше символов WeirdChamp",
@@ -936,7 +932,7 @@ class CommandsBot(commands.Bot, ABC):
         result = AdditionalMethods.parse_standartfile_message(nickname, "{nickname} {filestr} обнимает {messagestr} "
                                                                         "VoHiYo",
                                                               message, "!обнять", "hug")
-        if not len(message) > 50:
+        if not len(message) > 100:
             AdditionalMethods.add_to_buffer("e", result, ctx.author, "обнять")
         else:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, пишите меньше символов WeirdChamp", ctx.author, "обнять")
@@ -991,9 +987,9 @@ class CommandsBot(commands.Bot, ABC):
         message = ctx.message.content
         nickname = ctx.author.name
         result = AdditionalMethods.parse_standartfile_message(nickname,
-                                                              "{nickname}, когда {messagestr}? Hmmm {filestr}", message,
+                                                              "{nickname}, когда {messagestr}? Thonk {filestr}", message,
                                                               "!когда", "kogda")
-        if not len(message) > 50:
+        if not len(message) > 100:
             AdditionalMethods.add_to_buffer("e", result, ctx.author, "когда")
         else:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, пишите меньше символов WeirdChamp", ctx.author, "когда")
@@ -1006,7 +1002,7 @@ class CommandsBot(commands.Bot, ABC):
                                                               "{nickname} {filestr} приветствует {messagestr} "
                                                               "peepoHey peepoLove",
                                                               message, "!привет", "privet")
-        if not len(message) > 50:
+        if not len(message) > 100:
             AdditionalMethods.add_to_buffer("e", result, ctx.author, "привет")
         else:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, пишите меньше символов WeirdChamp", ctx.author, "привет")
