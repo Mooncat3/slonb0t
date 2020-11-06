@@ -1,13 +1,7 @@
 import json
 import re
-from selenium import webdriver
-import requests
-from selenium.webdriver.chrome.options import Options
-from selenium.common.exceptions import NoSuchElementException
-from bs4 import BeautifulSoup
+import lyricsgenius
 from twitchio.ext import commands
-from urllib.parse import quote
-import random
 
 channel = 'jesusavgn'
 OAUTH = '14y5qalllj1i65rg3m9dip1rpq5ugd'
@@ -42,63 +36,37 @@ async def music(ctx):
         if not mess[len(mess) - 1] in list_emotes:
             await ctx.channel.send(nick + ', введите - !music [строка из песни] [смайл]')
         else:
-            song_lyric = ' '.join(mess[1:]).replace(emote, '').lower()
-            emote += ' '
-            chrome_options = Options()
-            chrome_options.add_argument("--headless")
-            # chrome_options.add_argument('--user-data-dir=data')
-            driver = webdriver.Chrome(options=chrome_options)
-            url = 'https://teksty-pesenok.ru/search/?searchid=2236269&text=' + quote(song_lyric)
-            driver.get(url)
-            est = driver.find_element_by_xpath('//yass-div[starts-with(@class, "b-head__found")]').text
-            if est == 'найдёт всё. Со временем':
-                await ctx.channel.send(nick + ', такой песни не найдено!')
-                driver.close()
-            else:
-                try:
-                    search = driver.find_element_by_xpath(
-                        '//a[starts-with(@class,"b-serp-item__title-link")]').get_attribute('href')
-                    driver.close()
-                    print(search)
-                    r = requests.get(search)
-                    soup = BeautifulSoup(r.text, 'lxml')
-                    ist = '\nИсточник teksty-pesenok.ru'
-                    try:
-                        text = soup.find('div', class_='textPesni').get_text().replace(ist, '')
-                    except AttributeError:
-                        text = soup.find('td', style='vertical-align: top; width: 50%;').get_text().replace(ist, '')
-
-                    text = re.sub(r'\n[\[].*?[\]]', '', '\n' + str(''.join(text)))
-                    res = [x for x in text.split('\r\n') if len(x) > 2]
-                    if len(res) == 1:
-                        res = [x for x in text.split('\n') if len(x) > 2]
-                    u = 0
-                    for stroke in res:
-                        if u == 0:
-                            stroke_orig = stroke
-                            stroke = re.sub(r'[^\w ]', '', stroke)
-                            for stderr in stroke.split(' '):
-                                if song_lyric == stroke.lower():
-                                    res = res[res.index(stroke_orig):]
+            try:
+                song_lyric = ' '.join(mess[1:]).replace(emote, '').lower()
+                emote += ' '
+                genius = lyricsgenius.Genius("5Pj7QcUoV5Khbd-Hq5jSve8OzCQILJkY8nWojIIxqH30ItpsmXC7UmCRcgjmTVPY")
+                song = genius.search_song(song_lyric)
+                text = re.sub(r'[\[].*?[\]]', '', song.lyrics)
+                res = [x for x in text.split('\n') if len(x) > 2]
+                u = 0
+                for stroka in res:
+                    if u == 0:
+                        for strr in stroka.split(' '):
+                            if song_lyric == stroka.lower():
+                                res = res[res.index(stroka):]
+                                u = 1
+                                break
+                            for slovo in song_lyric.split(' '):
+                                if slovo == strr.lower() and len(slovo) > 3:
+                                    res = res[res.index(stroka):]
                                     u = 1
                                     break
-                                for solves in song_lyric.split(' '):
-                                    solves = re.sub(r'[^\w]', '', solves)
-                                    if stderr.lower().find(solves) != -1 and len(solves) > 3:
-                                        res = res[res.index(stroke_orig):]
-                                        u = 1
-                                        break
-                    res = emote.join(res[:random.randint(4, 5)])
-                    with open('data/osujdau.txt', encoding='utf-8') as f:
-                        osu = f.read().lower().split('\n')
-                    res_prov = re.sub(r'[^\w ]', '', res)
-                    for word in res_prov.split(' '):
-                        if word.lower() in osu:
-                            res = res.replace(word, '*' * len(word))
-                    await ctx.channel.send(res[:210] + emote)
-                except NoSuchElementException:
-                    await ctx.channel.send(nick + ', такой песни не найдено!')
+                res = emote.join(res[:4])
+                with open('data/osujdau.txt', encoding='utf-8') as f:
+                    osu = f.read().split('\n')
+                res_prov = re.sub(r'\W+', ' ', res)
+                for word in res_prov.split(' '):
+                    if word.lower() in osu:
+                        res = res.replace(word, '*' * len(word))
+                await ctx.channel.send(res[:210] + emote)
                 print('-' * 80)
+            except AttributeError:
+                await ctx.channel.send(nick + ', песня не найдена!')
 
 
 bot.run()
