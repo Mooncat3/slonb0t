@@ -260,7 +260,7 @@ class CommandsBot(commands.Bot, ABC):
                 self.duel_is_running = True
                 self.duel_nicknames.append(ctx.author.display_name)
                 self.duel_user = message.replace("@", "")
-                if nickname != self.duel_user:
+                if nickname.lower() != self.duel_user.lower():
                     await ctx.channel._ws.send_privmsg(config.CHAN,
                                                        f"{nickname} кидает перчатку в {message}, вызывая его на дуэль peepoCool . Чтобы принять вызов – напишите !acduel.")
                 else:
