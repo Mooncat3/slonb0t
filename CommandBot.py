@@ -17,6 +17,9 @@ import asyncio
 import time
 import wikipedia
 
+#вместо ctx.message.content ctx.message.clean_content, он выводит только текст после комманды
+#использовать ctx.author.display_name, но только там, где ники выводятся
+
 
 class CommandsBot(commands.Bot, ABC):
 
