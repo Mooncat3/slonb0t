@@ -838,7 +838,7 @@ class CommandsBot(commands.Bot, ABC):
             ruble = random.randrange(0, 2000, 1)
             if procent >= 33:
                 if not len(message) > 100:
-                    AdditionalMethods.add_to_buffer("e", f"{nickname} украл у {str(message)} {str(message)} руб. BOP",
+                    AdditionalMethods.add_to_buffer("e", f"{nickname} украл у {str(message)} {str(ruble)} руб. BOP",
                                                     ctx.author, "steal")
                 else:
                     AdditionalMethods.add_to_buffer("e", f"{nickname} пишите меньше символов WeirdChamp",
