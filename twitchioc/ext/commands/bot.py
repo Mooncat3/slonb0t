@@ -475,12 +475,12 @@ class Bot(Client):
         content = content[len(ctx.prefix)::].lstrip(' ')
         parsed = StringParser().process_string(content)
 
-        message.clean_content = ' '.join(parsed.values())
-
         try:
             command = str(parsed.pop(0)).lower()
         except KeyError:
             return
+        
+        message.clean_content = ' '.join(parsed.values())
 
         try:
             command = self._aliases[command]
