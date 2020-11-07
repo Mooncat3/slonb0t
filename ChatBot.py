@@ -26,7 +26,7 @@ async def event_command_error(ctx, error):
 async def chat(ctx):
     message = str(ctx.message.clean_content)
     nickname = ctx.author.name
-    if not re.search(r'[a-zA-Z]', message):
+    if not re.search(r'[a-zA-Z]', message) or AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
         url = "https://aiproject.ru/api/"
         query = {"ask": message, "userid": nickname, "key": ""}
         jsonquery = json.encoder.JSONEncoder.encode(self=json.encoder.JSONEncoder(), o=query)
