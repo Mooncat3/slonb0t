@@ -989,7 +989,7 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='гороскоп')
     async def goroskop(self, ctx):
         nickname = ctx.author.display_name
-        message = ctx.message.clean_content
+        message = ctx.message.content
         goroskop = AdditionalMethods.get_goroskop(message, nickname)
         AdditionalMethods.add_to_buffer("e", goroskop, ctx.author, "гороскоп")
 
