@@ -57,7 +57,7 @@ class CommandsBot(commands.Bot, ABC):
                 await asyncio.sleep(8)
                 with open(file='data/duel_rand.txt', mode='r', encoding='utf-8') as e:
                     data = json.loads(e.read())
-                    randseq = random.choice(data)
+                randseq = random.choice(data)
                 await socket.send_privmsg(config.CHAN,
                                           f"Хлопок! {self.duel_nicknames[0]} выстреливает в {randname}{randseq['text']}")
                 if int(randseq['time']) > 1:
@@ -789,7 +789,6 @@ class CommandsBot(commands.Bot, ABC):
         with open('data/me.txt', 'r', encoding='utf-8') as b:
             listme = list(b)
         randomm = random.choice(listme)
-        randomm = re.sub("\n", '', randomm)
         AdditionalMethods.add_to_buffer("e", randomm.format(nickname), ctx.author, "me")
 
     @commands.command(name='кто')
@@ -806,7 +805,6 @@ class CommandsBot(commands.Bot, ABC):
             with open('data/do.txt', 'r', encoding='utf-8') as c:
                 listme = list(c)
             randomdo = random.choice(listme)
-            #randomdo = re.sub("\n", '', randomdo)
             if not len(message) > 100:
                 AdditionalMethods.add_to_buffer("e", randomdo.format(nickname, message.replace('@','')), ctx.author, "do")
             else:
