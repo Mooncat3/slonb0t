@@ -1120,7 +1120,7 @@ class CommandsBot(commands.Bot, ABC):
             AdditionalMethods.add_to_buffer("e", strrr, ctx.author, "creepypasta")
 
     '''
-#subprocess.Popen([sys.executable, 'ChatBot.py'])
+subprocess.Popen([sys.executable, 'ChatBot.py'])
 subprocess.Popen([sys.executable, 'BufferCleaner.py'])
 subprocess.Popen([sys.executable, 'CheckingStreamThread.py'])
 bot = CommandsBot()
