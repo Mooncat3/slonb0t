@@ -788,9 +788,9 @@ class CommandsBot(commands.Bot, ABC):
         nickname = ctx.author.display_name
         with open('data/me.txt', 'r', encoding='utf-8') as b:
             listme = list(b)
-            randomm = random.choice(listme)
-            randomm = re.sub("\n", '', randomm)
-            AdditionalMethods.add_to_buffer("e", randomm.format(nickname), ctx.author, "me")
+        randomm = random.choice(listme)
+        randomm = re.sub("\n", '', randomm)
+        AdditionalMethods.add_to_buffer("e", randomm.format(nickname), ctx.author, "me")
 
     @commands.command(name='кто')
     async def kto(self, ctx):
@@ -805,11 +805,10 @@ class CommandsBot(commands.Bot, ABC):
         else:
             with open('data/do.txt', 'r', encoding='utf-8') as c:
                 listme = list(c)
-                randomdo = random.choice(listme)
-                randomdo = re.sub("\n", '', randomdo)
-                result = randomdo.format(nickname, message)
+            randomdo = random.choice(listme)
+            #randomdo = re.sub("\n", '', randomdo)
                 if not len(message) > 100:
-                    AdditionalMethods.add_to_buffer("e", randomdo.format(nickname, message), ctx.author, "do")
+                    AdditionalMethods.add_to_buffer("e", randomdo.format(nickname, message.replace('@','')), ctx.author, "do")
                 else:
                     AdditionalMethods.add_to_buffer("e", f"{nickname}, пишите меньше символов WeirdChamp ", ctx.author,
                                                     "do")
