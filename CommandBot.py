@@ -821,7 +821,7 @@ class CommandsBot(commands.Bot, ABC):
         if len(message) == 0:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !бубу [something]", ctx.author, "")
         else:
-            if len(bubu) < 100:
+            if len(message) < 100:
                 AdditionalMethods.add_to_buffer("e", f"Ну {str(message)} и {str(message)} Чё бубнить-то? ThumbUp", ctx.author,
                                                 "бубу")
             else:
