@@ -262,7 +262,7 @@ class CommandsBot(commands.Bot, ABC):
                 self.duel_user = message.replace("@", "")
                 if nickname.lower() != self.duel_user.lower():
                     await ctx.channel._ws.send_privmsg(config.CHAN,
-                                                       f"{nickname} кидает перчатку в {message}, вызывая его на дуэль peepoCool . Чтобы принять вызов – напишите !acduel.")
+                                                       f"{nickname} кидает перчатку в {message.replace('@','')}, вызывая его на дуэль peepoCool . Чтобы принять вызов – напишите !acduel.")
                 else:
                     await ctx.channel._ws.send_privmsg(config.CHAN,
                                                        f"{nickname} направил ствол на ... самого себя blushW . Если вы уверены в своём выборе, напишите !acduel.")
