@@ -425,12 +425,12 @@ def get_goroskop(message: str, nickname) -> str:
         return '{} {} {} {}'.format(nickname, goroskop_day, choose_string_for_response(name), goroskop)
 
     # ----------------------ifs----------------------------------------
-    if message == "+гороскоп":
-        return "{}, введите +гороскоп [знак зодиака]".format(nickname)
+    if message == "!гороскоп":
+        return "{}, введите !гороскоп [знак зодиака]".format(nickname)
 
     with open(file='data/goroskopdictionary.txt', encoding='utf_8') as q:
         gors = json.loads(q.read())
-        if message.lower() in gors['query_strings']:
-            return parse_goroskop(gors['query_strings'][message.lower()])
-        else:
-            return f"{nickname} введите правильный знак зодиака WeirdChamp"
+    if message.lower() in gors['query_strings']:
+        return parse_goroskop(gors['query_strings'][message.lower()])
+    else:
+        return f"{nickname} введите правильный знак зодиака WeirdChamp"
