@@ -807,11 +807,11 @@ class CommandsBot(commands.Bot, ABC):
                 listme = list(c)
             randomdo = random.choice(listme)
             #randomdo = re.sub("\n", '', randomdo)
-                if not len(message) > 100:
-                    AdditionalMethods.add_to_buffer("e", randomdo.format(nickname, message.replace('@','')), ctx.author, "do")
-                else:
-                    AdditionalMethods.add_to_buffer("e", f"{nickname}, пишите меньше символов WeirdChamp ", ctx.author,
-                                                    "do")
+            if not len(message) > 100:
+                AdditionalMethods.add_to_buffer("e", randomdo.format(nickname, message.replace('@','')), ctx.author, "do")
+            else:
+                AdditionalMethods.add_to_buffer("e", f"{nickname}, пишите меньше символов WeirdChamp ", ctx.author,
+                                                "do")
 
     @commands.command(name='бубу')
     async def bubu(self, ctx):
