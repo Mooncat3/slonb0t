@@ -1111,7 +1111,7 @@ class CommandsBot(commands.Bot, ABC):
         AdditionalMethods.add_to_buffer("c", finaly, ctx.author, "wiki")
                                                        
     @commands.command(name='music')
-    async def music(ctx):
+    async def music(self, ctx):
         nick = ctx.author.display_name
         message = ctx.message.clean_content
         if len(message) == 0:
