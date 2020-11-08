@@ -1125,7 +1125,7 @@ class CommandsBot(commands.Bot, ABC):
                 AdditionalMethods.add_to_buffer("e", nick + ', введите - !music [строка из песни] [смайл]', ctx.author, 'music')
             else:
                 try:
-                    song_lyric = ' '.join(mess[1:]).replace(emote, '')
+                    song_lyric = ' '.join(mess).replace(emote, '')
                     emote += ' '
                     genius = lg.Genius("5Pj7QcUoV5Khbd-Hq5jSve8OzCQILJkY8nWojIIxqH30ItpsmXC7UmCRcgjmTVPY")
                     song = genius.search_song(song_lyric)
