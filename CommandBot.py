@@ -15,6 +15,7 @@ import json
 from urllib.parse import quote
 import asyncio
 import time
+import lyricsgenius as lg
 import wikipedia
 
 #вместо ctx.message.content ctx.message.clean_content, он выводит только текст после комманды
@@ -387,7 +388,7 @@ class CommandsBot(commands.Bot, ABC):
         r = requests.get('https://market.csgo.com/?s=name&r=&q=&p=' + str(randstr))
         soup = BeautifulSoup(r.content, 'lxml')
         d = soup.find_all('a', class_='item')
-        skin = str(random.choice(d))
+        skin = random.choice(d)
         skin = re.sub("\n", '', skin)
         soupskin = BeautifulSoup(skin, 'lxml')
         price = soupskin.find('div', class_='price').get_text().replace(' ', '')
@@ -1108,15 +1109,53 @@ class CommandsBot(commands.Bot, ABC):
         info = re.sub(r"\([^()]*\)", "", info)
         finaly = f"{ctx.author.display_name}, {info}"
         AdditionalMethods.add_to_buffer("c", finaly, ctx.author, "wiki")
-    '''
-    @commands.command(name='creepypasta', aliases=['creep'])
-    async def creep(self, ctx):
-        with open(f'data/creep.txt', 'r', encoding='utf-8') as n:
-            List = n.read().split("\n")
-            strrr = random.choice(List) + " monkaW"
-            AdditionalMethods.add_to_buffer("e", strrr, ctx.author, "creepypasta")
-
-    '''
+                                                       
+    @commands.command(name='music')
+    async def music(ctx):
+        nick = ctx.author.display_name
+        message = ctx.message.clean_content
+        if len(message) == 0:
+            AdditionalMethods.add_to_buffer("e", nick + ', введите - !music [строка из песни] [смайл]', ctx.author, 'music')
+        else:
+            mess = message.split(' ')
+            emote = ' ' + mess[len(mess) - 1]
+            with open('data/SMILES.txt', encoding='utf-8') as g:
+                list_emotes = json.loads(g.read())
+            if not mess[len(mess) - 1] in list_emotes:
+                AdditionalMethods.add_to_buffer("e", nick + ', введите - !music [строка из песни] [смайл]', ctx.author, 'music')
+            else:
+                try:
+                    song_lyric = ' '.join(mess[1:]).replace(emote, '')
+                    emote += ' '
+                    genius = lg.Genius("5Pj7QcUoV5Khbd-Hq5jSve8OzCQILJkY8nWojIIxqH30ItpsmXC7UmCRcgjmTVPY")
+                    song = genius.search_song(song_lyric)
+                    text = re.sub(r'[\[].*?[\]]', '', song.lyrics)
+                    res = [x for x in text.split('\n') if len(x) > 2]
+                    u = 0
+                    for stroka in res:
+                        if u == 0:
+                            for strr in stroka.split(' '):
+                                if song_lyric.lower() == stroka.lower():
+                                    res = res[res.index(stroka):]
+                                    u = 1
+                                    break
+                                for slovo in song_lyric.lower().split(' '):
+                                    if slovo == strr.lower() and len(slovo) > 4:
+                                        res = res[res.index(stroka):]
+                                        u = 1
+                                        break
+                    res = emote.join(res[:4])
+                    with open('data/osujdau.txt', encoding='utf-8') as f:
+                        osu = f.read().split('\n')
+                    res_prov = re.sub(r'\W+', ' ', res)
+                    for word in res_prov.split(' '):
+                        if word.lower() in osu:
+                            res = res.replace(word, '*' * len(word))
+                    AdditionalMethods.add_to_buffer("e", res[:250] + emote, ctx.author, 'music')
+                except AttributeError:
+                    AdditionalMethods.add_to_buffer("e", nick + ', песня не найдена!', ctx.author, 'music')
+                                                       
+                                                       
 subprocess.Popen([sys.executable, 'ChatBot.py'])
 subprocess.Popen([sys.executable, 'BufferCleaner.py'])
 subprocess.Popen([sys.executable, 'CheckingStreamThread.py'])
