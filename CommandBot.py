@@ -319,7 +319,7 @@ class CommandsBot(commands.Bot, ABC):
         r = requests.get('https://socratify.net/quotes/random')
         soup = BeautifulSoup(r.content, 'lxml')
         d = soup.find('h1', class_='b-quote__text').get_text()
-        AdditionalMethods.add_to_buffer("e", f"{nickname}, {d} AUFFF", ctx.author, "ауф")
+        AdditionalMethods.add_to_buffer("e", f"{nickname}, {d[:200]} AUFFF", ctx.author, "ауф")
     
     @commands.command(name='porf')
     async def porf(self, ctx):
@@ -333,14 +333,14 @@ class CommandsBot(commands.Bot, ABC):
             AdditionalMethods.add_to_buffer("e", f"{nickname}, Бот может принимать максимум 300 символов", ctx.author,
                                             "porf")
         else:
-            response = requests.post(url, json={'prompt': words, 'length': '15', 'num_samples': '1'})
+            response = requests.post(url, json={'prompt': words, 'length': '15', 'num_samples': '5'})
             if response.text == "Service Unavailable":
                 AdditionalMethods.add_to_buffer("e",
                                                 f"{nickname}, на данный момент Порфирьевич не работает. Попробуйте позже roflanPominy",
                                                 ctx.author, "porf")
             else:
                 json_response = response.json()
-                result = json_response['replies'][0]
+                result = json_response['replies'][4]
                 with open('data/osujdau2.txt', encoding='utf-8') as f:
                     osu = f.read().lower().split('\n')
                 res_prov = re.sub(r'[^\w ]', '', result)
@@ -348,7 +348,7 @@ class CommandsBot(commands.Bot, ABC):
                     for asu in osu:
                         if word.lower().find(asu) != -1:
                             result = result.replace(word, '*' * len(word))
-                AdditionalMethods.add_to_buffer("e", f"{nickname}, {words}{result[:150]}", ctx.author, "porf")
+                AdditionalMethods.add_to_buffer("e", f"{nickname}, {words}{result}", ctx.author, "porf")
     
     @commands.command(name='save')
     async def logs(self, ctx):
