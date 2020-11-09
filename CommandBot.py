@@ -499,7 +499,7 @@ class CommandsBot(commands.Bot, ABC):
     async def kurs(self, ctx):
         nickname = ctx.author.display_name
         message = ctx.message.content
-        if message == '!курс ':
+        if message == '!курс':
             url = "https://free.currconv.com/api/v7/convert?q=USD_RUB,EUR_RUB&compact=ultra&apiKey=ee315cc429cbc167d4b7"
             url2 = "https://free.currconv.com/api/v7/convert?q=JPY_RUB,UAH_RUB&compact=ultra&apiKey=ee315cc429cbc167d4b7"
             r = requests.get(url)
@@ -916,7 +916,7 @@ class CommandsBot(commands.Bot, ABC):
 
     @commands.command(name='кнб')
     async def cnb(self, ctx):
-        message = ctx.message.clean_content
+        message = ctx.message.content
         nickname = ctx.author.display_name
         listcnb = ['⛰', '✂️', '📜']
         rndcnb1 = random.choice(listcnb)
