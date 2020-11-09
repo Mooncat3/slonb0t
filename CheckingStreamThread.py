@@ -23,6 +23,7 @@ def checkingthread():
             data = json.loads(response)
             games[id] = data['data'][0]['name']
         return games[id]
+
     active = False
     times = time.time()
     safer = 0
@@ -42,7 +43,8 @@ def checkingthread():
                     dat = json.loads(q.read())
                 if not dat['active']:
                     dat['active'] = True
-                    dat['TRASHMASS'].append({"date": datetime.datetime.strftime(datetime.datetime.now(), "%m.%e.%y"), "MASS": []})
+                    dat['TRASHMASS'].append(
+                        {"date": datetime.datetime.strftime(datetime.datetime.now(), "%m.%e.%y"), "MASS": []})
                     while len(dat['TRASHMASS']) > 10:
                         dat['TRASHMASS'].remove(dat['TRASHMASS'][0])
                     with open(file='data/TRASHMASSIVE.txt', mode='w', encoding='utf-8') as q:
@@ -54,17 +56,22 @@ def checkingthread():
                     active = True
             if safer > 0:
                 safer = 0
-                res = {"GAME_ID": "Timeout", "ViewerCount": data['data'][0]['viewer_count'], "time_of_update": time.time() - times}
+                res = {"GAME_ID": "Timeout", "ViewerCount": data['data'][0]['viewer_count'],
+                       "time_of_update": time.time() - times}
                 dat['duration'] = time.time() - times
                 with open(file='data/TRASHMASSIVE.txt', mode='w', encoding='utf-8') as q:
                     dat['TRASHMASS'][len(dat['TRASHMASS']) - 1]['MASS'].append(res)
                     q.write(json.dumps(dat))
-            res = {"GAME_ID": get_game_name(data['data'][0]['game_id']), "ViewerCount": data['data'][0]['viewer_count'], "time_of_update": time.time() - times}
-            if len(dat['TRASHMASS'][len(dat['TRASHMASS'])-1]['MASS']) > 0:
-                if res['GAME_ID'] != dat['TRASHMASS'][len(dat['TRASHMASS'])-1]['MASS'][len(dat['TRASHMASS'][len(dat['TRASHMASS'])-1]['MASS']) - 1]["GAME_ID"] or res['ViewerCount'] != dat['TRASHMASS'][len(dat['TRASHMASS'])-1]['MASS'][len(dat['TRASHMASS'][len(dat['TRASHMASS'])-1]['MASS']) - 1]["ViewerCount"]:
+            res = {"GAME_ID": get_game_name(data['data'][0]['game_id']), "ViewerCount": data['data'][0]['viewer_count'],
+                   "time_of_update": time.time() - times}
+            if len(dat['TRASHMASS'][len(dat['TRASHMASS']) - 1]['MASS']) > 0:
+                if res['GAME_ID'] != dat['TRASHMASS'][len(dat['TRASHMASS']) - 1]['MASS'][
+                    len(dat['TRASHMASS'][len(dat['TRASHMASS']) - 1]['MASS']) - 1]["GAME_ID"] or res['ViewerCount'] != \
+                        dat['TRASHMASS'][len(dat['TRASHMASS']) - 1]['MASS'][
+                            len(dat['TRASHMASS'][len(dat['TRASHMASS']) - 1]['MASS']) - 1]["ViewerCount"]:
                     dat['TRASHMASS'][len(dat['TRASHMASS']) - 1]['duration'] = time.time() - times
                     with open(file='data/TRASHMASSIVE.txt', mode='w', encoding='utf-8') as q:
-                        dat['TRASHMASS'][len(dat['TRASHMASS'])-1]['MASS'].append(res)
+                        dat['TRASHMASS'][len(dat['TRASHMASS']) - 1]['MASS'].append(res)
                         q.write(json.dumps(dat))
             else:
                 dat['TRASHMASS'][len(dat['TRASHMASS']) - 1]['duration'] = time.time() - times
@@ -93,8 +100,12 @@ def checkingthread():
                         dat['active'] = False
                         dat['TRASHMASS'][len(dat['TRASHMASS']) - 1]['duration'] = time.time() - times
                         with open(file='data/TRASHMASSIVE.txt', mode='w', encoding='utf-8') as q:
-                            dat['TRASHMASS'][len(dat['TRASHMASS']) - 1]['MASS'].append(dat['TRASHMASS'][len(dat['TRASHMASS']) - 1]['MASS'][len(dat['TRASHMASS'][len(dat['TRASHMASS']) - 1]['MASS']) - 1])
-                            dat['TRASHMASS'][len(dat['TRASHMASS']) - 1]['MASS'][len(dat['TRASHMASS'][len(dat['TRASHMASS']) - 1]['MASS']) - 1]['time_of_update'] = time.time() - times
+                            dat['TRASHMASS'][len(dat['TRASHMASS']) - 1]['MASS'].append(
+                                dat['TRASHMASS'][len(dat['TRASHMASS']) - 1]['MASS'][
+                                    len(dat['TRASHMASS'][len(dat['TRASHMASS']) - 1]['MASS']) - 1])
+                            dat['TRASHMASS'][len(dat['TRASHMASS']) - 1]['MASS'][
+                                len(dat['TRASHMASS'][len(dat['TRASHMASS']) - 1]['MASS']) - 1][
+                                'time_of_update'] = time.time() - times
                             q.write(json.dumps(dat))
                     safer += 1
                 else:
@@ -111,7 +122,6 @@ def checkingthread():
             time.sleep(10)
         if not active:
             time.sleep(60)
-
 
 
 checkingthread()
