@@ -341,8 +341,9 @@ class CommandsBot(commands.Bot, ABC):
             else:
                 json_response = response.json()
                 result = json_response['replies'][4]
-                with open('data/osujdau2.txt', encoding='utf-8') as f:
-                    osu = f.read().split('\n')[:1]
+                with open('data/osujdau2.txt') as f:
+                    osu = f.read()
+                osu = [x for x in osu.split('\n') if len(x) > 1]
                 res_prov = re.sub(r'[^\w ]', '', result)
                 for word in res_prov.split(' '):
                     for asu in osu:
@@ -626,8 +627,9 @@ class CommandsBot(commands.Bot, ABC):
         d = soup.find_all('div', align='left')
         res = random.choice(d).get_text()
         res = re.sub(r'\n', '', res)
-        with open('data/osujdau2.txt', encoding='utf-8') as f:
-            osu = f.read().split('\n')[:1]
+        with open('data/osujdau2.txt') as f:
+            osu = f.read()
+        osu = [x for x in osu.split('\n') if len(x) > 1]
         res_prov = re.sub(r'[^\w ]', '', res)
         for word in res_prov.split(' '):
             for asu in osu:
@@ -1147,8 +1149,9 @@ class CommandsBot(commands.Bot, ABC):
                                         u = 1
                                         break
                     res = emote.join(res[:4])
-                    with open('data/osujdau2.txt', encoding='utf-8') as f:
-                        osu = f.read().split('\n')[:1]
+                    with open('data/osujdau2.txt') as f:
+                        osu = f.read()
+                    osu = [x for x in osu.split('\n') if len(x) > 1]
                     res_prov = re.sub(r'\W+', ' ', res)
                     for word in res_prov.split(' '):
                         for asu in osu:
