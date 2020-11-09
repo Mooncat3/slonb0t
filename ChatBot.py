@@ -40,9 +40,9 @@ async def chat(ctx):
         except:
             AdditionalMethods.add_to_buffer("e", ctx.author.display_name + ", На данный момент чатбот не доступен roflanPominy",
                                             ctx.author, "SLONB0T")
-    else:
-        AdditionalMethods.add_to_buffer("e", ctx.author.display_name + ", спик рашн WeirdChamp",
-                                            ctx.author, "SLONB0T")
+    #else:
+        #AdditionalMethods.add_to_buffer("e", ctx.author.display_name + ", спик рашн WeirdChamp",
+                                            #ctx.author, "SLONB0T")
 
     
 bot.run()
