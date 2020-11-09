@@ -12,8 +12,8 @@ import re
 import config
 import asyncio
 from twitchioc.dataclasses import User
-
 import Settings
+
 
 def check_on_max_or_not(arg: str) -> bool:
     if arg == "анекдот":
@@ -26,21 +26,17 @@ def check_on_max_or_not(arg: str) -> bool:
         return False
     return True
 
+
 def sendPaste(paste):
     url = "https://pastebin.com/api/api_post.php"
     req = requests.post(url, data=paste)
     return req.text
 
+
 def createPaste(code, name, format_, private, date):
     dev_key = "6Dg9D7qLYfBZdZrq--nH5wfZ0507TjnN"
-    p = {}
-    p['api_dev_key'] = dev_key
-    p['api_option'] = 'paste'
-    p['api_paste_code'] = code
-    p['api_paste_name'] = name
-    p['api_paste_format'] = format_
-    p['api_paste_private'] = private
-    p['api_paste_expire_date'] = date
+    p = {'api_dev_key': dev_key, 'api_option': 'paste', 'api_paste_code': code, 'api_paste_name': name,
+         'api_paste_format': format_, 'api_paste_private': private, 'api_paste_expire_date': date}
     return p
 
 
@@ -60,7 +56,7 @@ def vip(mod: bool, name: str) -> bool:
 
 
 def add_to_buffer(type: str, message: str, author: User, command: str):
-    #message = '/me ' + message
+    # message = '/me ' + message
     try:
         with open(file='data/buffer.txt', mode='r', encoding='utf-8') as e:
             dat = json.loads(e.read())
@@ -72,12 +68,13 @@ def add_to_buffer(type: str, message: str, author: User, command: str):
     if check_on_max_or_not(command):
         message = check_on_toomuchsimbols(message)
     with open(file='data/buffer.txt', mode='w', encoding='utf-8') as q:
-        dat.append({"vip": vip(author.is_mod, author.name), "nickname": author.name, "type": type, "message": message, "command": command})
+        dat.append({"vip": vip(author.is_mod, author.name), "nickname": author.name, "type": type, "message": message,
+                    "command": command})
         q.write(json.dumps(dat))
     config.buferchanged = False
 
 
-def check_active(shouldchecksettings = True) -> bool:
+def check_active(shouldchecksettings=True) -> bool:
     if shouldchecksettings:
         if not Settings.get_entertain():
             return True
@@ -93,6 +90,7 @@ def parse_stream_stat(nickname: str, tag: str, TRASHMASSIVE: dict, author: User,
             if 'time' in t.keys():
                 timeq = timeq + float(t['time'])
         return timeq
+
     def parse_time(timetet: time, secs: bool) -> str:
         rounded = ""
         timestart = timetet
@@ -109,6 +107,7 @@ def parse_stream_stat(nickname: str, tag: str, TRASHMASSIVE: dict, author: User,
                 rounded += " "
             rounded += f"{int(timestart)}s"
         return rounded
+
     id = len(TRASHMASSIVE['TRASHMASS']) - 1 - id
     strim_name = TRASHMASSIVE['TRASHMASS'][id]['name']
     strim_duration = parse_time(TRASHMASSIVE['TRASHMASS'][id]['duration'], True)
@@ -121,7 +120,10 @@ def parse_stream_stat(nickname: str, tag: str, TRASHMASSIVE: dict, author: User,
         viewsummcount += dat['ViewerCount']
         if dat['ViewerCount'] > maxviewcount:
             maxviewcount = dat['ViewerCount']
-        if len(game_mass) > 0 and (id_game != dat['GAME_ID'] or (dat == TRASHMASSIVE['TRASHMASS'][id]['MASS'][len(TRASHMASSIVE['TRASHMASS'][id]['MASS']) - 1] and dat['GAME_ID'] == TRASHMASSIVE['TRASHMASS'][id]['MASS'][len(TRASHMASSIVE['TRASHMASS'][id]['MASS']) - 2]['GAME_ID'])):
+        if len(game_mass) > 0 and (id_game != dat['GAME_ID'] or (
+                dat == TRASHMASSIVE['TRASHMASS'][id]['MASS'][len(TRASHMASSIVE['TRASHMASS'][id]['MASS']) - 1] and dat[
+            'GAME_ID'] == TRASHMASSIVE['TRASHMASS'][id]['MASS'][len(TRASHMASSIVE['TRASHMASS'][id]['MASS']) - 2][
+                    'GAME_ID'])):
             game_mass[len(game_mass) - 1]['time'] = dat['time_of_update'] - timet
         if id_game != dat['GAME_ID']:
             if dat['GAME_ID'] != "Timeout":
@@ -135,10 +137,11 @@ def parse_stream_stat(nickname: str, tag: str, TRASHMASSIVE: dict, author: User,
                 game_mass[len(game_mass) - 1]['time'] = dat['time_of_update']
             else:
                 game_mass[len(game_mass) - 1]['time'] = dat['time_of_update'] - summ_times()
-    streamstat = {"Games": game_mass, "middleviewcount": viewsummcount / len(TRASHMASSIVE['TRASHMASS'][id]['MASS']), "StreamName": strim_name,
+    streamstat = {"Games": game_mass, "middleviewcount": viewsummcount / len(TRASHMASSIVE['TRASHMASS'][id]['MASS']),
+                  "StreamName": strim_name,
                   "StreamDuration": strim_duration}
     categorystr = ""
-    if len(tag) > 1 and len(tag) <= 26 and tag.find(" ") == -1:
+    if 1 < len(tag) <= 26 and tag.find(" ") == -1:
         seter = ' ' + tag
         nickname = ''
     else:
@@ -161,12 +164,20 @@ def parse_stream_stat(nickname: str, tag: str, TRASHMASSIVE: dict, author: User,
             if r != streamstat['Games'][len(streamstat['Games']) - 1]:
                 categorystr += " » "
         if not crash:
-            crash = len(f"{nickname}{seter} {date} стрим: {streamstat['StreamName']} [{streamstat['StreamDuration']}] || среднее зр: {int(streamstat['middleviewcount'])} || {categorystr}") >= 500
+            crash = len(
+                f"{nickname}{seter} {date} стрим: {streamstat['StreamName']} [{streamstat['StreamDuration']}] || среднее зр: {int(streamstat['middleviewcount'])} || {categorystr}") >= 500
         if crash and not already:
             already = True
-            while len(f"{nickname}{seter} {date} стрим: {streamstat['StreamName']} [{streamstat['StreamDuration']}] || среднее зр: {int(streamstat['middleviewcount'])} || {categorystr}") > 500 or categorystr[categorystr.rfind("»")+2: len(categorystr)] == f"{r['name']} [{rounded}]":
-                categorystr = categorystr[0:categorystr.rfind("»")-1]
-            add_to_buffer("c", f"{nickname}{seter} {date} стрим: {streamstat['StreamName']} [{streamstat['StreamDuration']}] || среднее зр: {int(streamstat['middleviewcount'])} || {categorystr}", author, "history")
+            while len(
+                    f"{nickname}{seter} {date} стрим: {streamstat['StreamName']} [{streamstat['StreamDuration']}] || "
+                    f"среднее зр: {int(streamstat['middleviewcount'])} || {categorystr}") > 500 or categorystr[
+                                                                                                   categorystr.rfind(
+                                                                                                       "»") + 2: len(
+                                                                                                       categorystr)] == f"{r['name']} [{rounded}]":
+                categorystr = categorystr[0:categorystr.rfind("»") - 1]
+            add_to_buffer("c",
+                          f"{nickname}{seter} {date} стрим: {streamstat['StreamName']} [{streamstat['StreamDuration']}] || среднее зр: {int(streamstat['middleviewcount'])} || {categorystr}",
+                          author, "history")
             categorystr = ""
             if len(rounded) > 0:
                 categorystr += f"{r['name']} [{rounded}]"
@@ -229,13 +240,14 @@ async def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "
                     datepast = rfc3339.format(datetime.strptime(f"{year}.01.01", '%Y.%m.%d').date(),
                                               utc=True,
                                               use_system_timezone=False)
-                    datenow = rfc3339.format(datetime.strptime(f"{year+1}.01.01", '%Y.%m.%d').date(), utc=True,
+                    datenow = rfc3339.format(datetime.strptime(f"{year + 1}.01.01", '%Y.%m.%d').date(), utc=True,
                                              use_system_timezone=False)
                     url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&started_at={}&ended_at={}&first=100".format(
                         config.BROADCASTER_ID, datepast,
                         datenow)
             else:
-                datepast = rfc3339.format((datetime.utcnow() + timedelta(hours=3)) - timedelta(days=days_before), utc=True,
+                datepast = rfc3339.format((datetime.utcnow() + timedelta(hours=3)) - timedelta(days=days_before),
+                                          utc=True,
                                           use_system_timezone=False)
                 datenow = rfc3339.format(datetime.utcnow() + timedelta(hours=3), utc=True, use_system_timezone=False)
                 url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&started_at={}&ended_at={}&first=100".format(
@@ -250,47 +262,50 @@ async def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "
                 for p in data["data"]:
                     return {"code": "0", "url": p['url']}
             elif id_game == "-1":
-                    config.istopcliprunning = True
-                    clips = []
-                    while True:
-                        if ever:
-                            if year == 0:
-                                if 'cursor' in data['pagination'].keys():
-                                    url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&after={}&first=100".format(config.BROADCASTER_ID,
-                                                                                                                data['pagination'][
-                                                                                                                    'cursor'])
-                                else:
-                                    config.istopcliprunning = False
-                                    return {"code": "5", "url": random.choice(clips)}
-                            else:
-                                if 'cursor' in data['pagination'].keys():
-                                    url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&started_at={}&ended_at={}&after={}&first=100".format(config.BROADCASTER_ID,
-                                                                                                                datepast,
-                                                                                                                datenow,
-                                                                                                                data['pagination'][
-                                                                                                                    'cursor'])
-                                else:
-                                    config.istopcliprunning = False
-                                    return {"code": "5", "url": random.choice(clips)}
-                        else:
+                config.istopcliprunning = True
+                clips = []
+                while True:
+                    if ever:
+                        if year == 0:
                             if 'cursor' in data['pagination'].keys():
-                                url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&after={}&started_at={}&ended_at={}&first=100".format(
-                                    config.BROADCASTER_ID, data['pagination']['cursor'], datepast, datenow)
+                                url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&after={}&first=100".format(
+                                    config.BROADCASTER_ID,
+                                    data['pagination'][
+                                        'cursor'])
                             else:
                                 config.istopcliprunning = False
                                 return {"code": "5", "url": random.choice(clips)}
-                        request = urllib.request.Request(url=url, headers={"Authorization": "Bearer {}".format(config.OAUTH),
-                                                                           "Client-ID": "{}".format(config.CLIENT_ID)})
-                        response = urllib.request.urlopen(request).read()
-                        data = json.loads(response)
-                        for p in data["data"]:
-                            clips.append(p['url'])
-                        if ident == count:
+                        else:
+                            if 'cursor' in data['pagination'].keys():
+                                url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&started_at={}&ended_at={}&after={}&first=100".format(
+                                    config.BROADCASTER_ID,
+                                    datepast,
+                                    datenow,
+                                    data['pagination'][
+                                        'cursor'])
+                            else:
+                                config.istopcliprunning = False
+                                return {"code": "5", "url": random.choice(clips)}
+                    else:
+                        if 'cursor' in data['pagination'].keys():
+                            url = "https://api.twitch.tv/helix/clips?broadcaster_id={}&after={}&started_at={}&ended_at={}&first=100".format(
+                                config.BROADCASTER_ID, data['pagination']['cursor'], datepast, datenow)
+                        else:
                             config.istopcliprunning = False
                             return {"code": "5", "url": random.choice(clips)}
-                        else:
-                            ident += 1
-                        await asyncio.sleep(0.1)
+                    request = urllib.request.Request(url=url,
+                                                     headers={"Authorization": "Bearer {}".format(config.OAUTH),
+                                                              "Client-ID": "{}".format(config.CLIENT_ID)})
+                    response = urllib.request.urlopen(request).read()
+                    data = json.loads(response)
+                    for p in data["data"]:
+                        clips.append(p['url'])
+                    if ident == count:
+                        config.istopcliprunning = False
+                        return {"code": "5", "url": random.choice(clips)}
+                    else:
+                        ident += 1
+                    await asyncio.sleep(0.1)
             else:
                 config.istopcliprunning = True
                 while True:
@@ -299,10 +314,11 @@ async def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "
                             config.istopcliprunning = False
                             return {"code": "1", "url": p['url']}
                     if ever:
-                            config.istopcliprunning = False
-                            return {"code": "3", "url": ""}
-                    request = urllib.request.Request(url=url, headers={"Authorization": "Bearer {}".format(config.OAUTH),
-                                                                       "Client-ID": "{}".format(config.CLIENT_ID)})
+                        config.istopcliprunning = False
+                        return {"code": "3", "url": ""}
+                    request = urllib.request.Request(url=url,
+                                                     headers={"Authorization": "Bearer {}".format(config.OAUTH),
+                                                              "Client-ID": "{}".format(config.CLIENT_ID)})
                     response = urllib.request.urlopen(request).read()
                     data = json.loads(response)
                     if ident == count:
@@ -334,11 +350,11 @@ async def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "
 
         if response["code"] == "0":
             return "{}, самый топовый клип {} PogU {} ".format(nickname, get_needed_datestring(dat),
-                                                                   response["url"])
+                                                               response["url"])
         elif response["code"] == "1":
             return "{}, самый топовый клип по категории {} {} PogU {} ".format(nickname, argument,
-                                                                                   get_needed_datestring(dat),
-                                                                                   response["url"])
+                                                                               get_needed_datestring(dat),
+                                                                               response["url"])
         elif response['code'] == "2":
             return "{}, такой категории нет FeelsBadMan ".format(nickname)
         elif response['code'] == "3":
@@ -347,7 +363,7 @@ async def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "
             return "{}, сейчас идёт поиск другого клипа ".format(nickname)
         elif response['code'] == "5":
             return "{}, случайный клип {} PogU {} ".format(nickname, get_needed_datestring(dat),
-                                                                   response["url"])
+                                                           response["url"])
         elif response['code'] == "6":
             return "{}, {}".format(nickname, response["url"])
 
@@ -390,7 +406,8 @@ async def gettopclip(days_before: int = 0, argument: str = "", nickname: str = "
     if days_before == 0:
         return make_response_string(await do_request_for_getting_clip(id_game=id_game, ever=True), days_before)
     else:
-        return make_response_string(await do_request_for_getting_clip(id_game=id_game, days_before=days_before), days_before)
+        return make_response_string(await do_request_for_getting_clip(id_game=id_game, days_before=days_before),
+                                    days_before)
 
 
 def parse_response_query(data: json) -> str:

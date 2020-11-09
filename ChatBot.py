@@ -1,11 +1,9 @@
-# -*- coding: utf8 -*-
 from twitchioc.ext import commands
 import json
 import AdditionalMethods
 import re
 import requests
 import config
-
 
 bot = commands.Bot(
     irc_token=f'oauth:{config.OAUTH}',
@@ -14,13 +12,16 @@ bot = commands.Bot(
     prefix='@',
     initial_channels=config.CHANNELS)
 
+
 @bot.event
 async def event_ready():
     print(f'Ready ChatBot | {config.BOT} on {config.CHANNELS}')
 
+
 @bot.event
 async def event_command_error(ctx, error):
     pass
+
 
 @bot.command(name='SLONB0T', aliases=["slonb0t,", "slonb0t"])
 async def chat(ctx):
@@ -35,13 +36,17 @@ async def chat(ctx):
                 response = session.request(method="post", url=url, data={"query": jsonquery}, timeout=3)
             content = response.content.decode('utf8').replace("'", '"')
             data = json.loads(content)
-            AdditionalMethods.add_to_buffer("e", ctx.author.display_name + ", " + AdditionalMethods.parse_response_query(data),
+            AdditionalMethods.add_to_buffer("e",
+                                            ctx.author.display_name + ", " + AdditionalMethods.parse_response_query(
+                                                data),
                                             ctx.author, "SLONB0T")
         except:
-            AdditionalMethods.add_to_buffer("e", ctx.author.display_name + ", На данный момент чатбот не доступен roflanPominy",
+            AdditionalMethods.add_to_buffer("e", ctx.author.display_name + ", На данный момент чатбот не доступен "
+                                                                           "roflanPominy",
                                             ctx.author, "SLONB0T")
     else:
-        AdditionalMethods.add_to_buffer("s", ctx.author.display_name + ", бот может общаться с вами только на русском языке", ctx.author, "SLONB0T")
+        AdditionalMethods.add_to_buffer("s", ctx.author.display_name + ", бот может общаться с вами только на русском "
+                                                                       "языке", ctx.author, "SLONB0T")
 
-    
+
 bot.run()

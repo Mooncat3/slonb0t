@@ -1,13 +1,9 @@
-import sys
-import traceback
 import uuid
 from abc import ABC
 from twitchioc import Client
 import asyncio
-
 import AdditionalMethods
 import Settings
-
 import config
 import json
 import time
@@ -26,7 +22,7 @@ class BufferCleaner(Client, ABC):
         self.loop.create_task(self.listen_to_buffer_undelaied())
         self.messes = []
         self.times = {}
-        self.creepkd = 120.0
+        self.creepkd = 120
 
     async def event_webhook(self, data):
         pass
@@ -40,7 +36,7 @@ class BufferCleaner(Client, ABC):
     async def pubsub_subscribe(self, token: str, *topics):
         nonce = uuid.uuid4().hex
 
-        connection = await self._ws._pubsub_pool.delegate(*topics)
+        connection = await self._ws.pubsub_pool.delegate(*topics)
         await connection.subscribe(token, nonce, *topics)
 
         return nonce
@@ -219,7 +215,7 @@ class BufferCleaner(Client, ABC):
                             await sock.send_privmsg(config.CHAN,
                                                     f"/w {rest['nickname']} !{resert['cmd']} ▶ " + strrr1 + " monkaW")
                         else:
-                            await sock.send_privmsg(config.CHAN, f"/w {rest['nickname']} !{resert['cmd']} ▶ " + mess + " monkaW")
+                            await sock.send_privmsg(config.CHAN, f"/w {rest['nickname']} !{resert['cmd']} ▶ " + mess + "monkaW")
                 else:
                     await asyncio.sleep(resert['timeout'])
                     dat.remove(rest)
