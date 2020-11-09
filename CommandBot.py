@@ -347,7 +347,7 @@ class CommandsBot(commands.Bot, ABC):
                 for word in res_prov.split(' '):
                     for asu in osu:
                         if word.lower().find(asu) != -1:
-                            res = res.replace(word, '*' * len(word))
+                            result = result.replace(word, '*' * len(word))
                 AdditionalMethods.add_to_buffer("e", f"{nickname}, {words}{result[:150]}", ctx.author, "porf")
     
     @commands.command(name='save')
