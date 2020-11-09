@@ -341,7 +341,7 @@ class CommandsBot(commands.Bot, ABC):
             else:
                 json_response = response.json()
                 result = json_response['replies'][0]
-                with open('data/osujdau.txt', encoding='utf-8') as f:
+                with open('data/osujdau2.txt', encoding='utf-8') as f:
                     osu = f.read().lower().split('\n')
                 res_prov = re.sub(r'[^\w ]', '', result)
                 for word in res_prov.split(' '):
@@ -626,7 +626,7 @@ class CommandsBot(commands.Bot, ABC):
         d = soup.find_all('div', align='left')
         res = random.choice(d).get_text()
         res = re.sub(r'\n', '', res)
-        with open('data/osujdau.txt', encoding='utf-8') as f:
+        with open('data/osujdau2.txt', encoding='utf-8') as f:
             osu = f.read().lower().split('\n')
         res_prov = re.sub(r'[^\w ]', '', res)
         for word in res_prov.split(' '):
