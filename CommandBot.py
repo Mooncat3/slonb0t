@@ -872,7 +872,7 @@ class CommandsBot(commands.Bot, ABC):
     async def time(self, ctx):
         nickname = ctx.author.display_name
         loc = ctx.message.clean_content
-        if len(message) == 0:
+        if len(loc) == 0:
             AdditionalMethods.add_to_buffer("c", datetime.strftime(datetime.now() + timedelta(hours=3),
                                                                    f"{nickname}, Чичас %H:%M по МСК Waiting"),
                                             ctx.author, "время")
