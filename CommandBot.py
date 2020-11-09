@@ -992,7 +992,7 @@ class CommandsBot(commands.Bot, ABC):
         nickname = ctx.author.display_name
         message = ctx.message.content
         goroskop = AdditionalMethods.get_goroskop(message, nickname)
-        AdditionalMethods.add_to_buffer("e", goroskop, ctx.author, "гороскоп")
+        AdditionalMethods.add_to_buffer("s", goroskop, ctx.author, "гороскоп")
 
     @commands.command(name='japtest')
     async def japtest(self, ctx):
