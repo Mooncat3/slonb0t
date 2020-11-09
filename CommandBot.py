@@ -941,7 +941,7 @@ class CommandsBot(commands.Bot, ABC):
                 AdditionalMethods.add_to_buffer("e",
                                                 f"{nickname} поставил(а) ⛰ , а Бот поставил 📜 . Победа Бота Lohich",
                                                 ctx.author, "кнб")
-            if usercnb == 'камень' and rndcnb1 == '✂️':
+            if message == 'камень' and rndcnb1 == '✂️':
                 AdditionalMethods.add_to_buffer("e",
                                                 f"{nickname} поставил(а) ⛰ , а Бот поставил ✂️ . Победа {nickname} EZ Clap",
                                                 ctx.author, "кнб")
