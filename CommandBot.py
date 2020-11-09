@@ -333,21 +333,22 @@ class CommandsBot(commands.Bot, ABC):
             AdditionalMethods.add_to_buffer("e", f"{nickname}, Бот может принимать максимум 300 символов", ctx.author,
                                             "porf")
         else:
-            response = requests.post(url, json={'prompt': words, 'length': '30', 'num_samples': '5'})
+            response = requests.post(url, json={'prompt': words, 'length': '15', 'num_samples': '1'})
             if response.text == "Service Unavailable":
                 AdditionalMethods.add_to_buffer("e",
                                                 f"{nickname}, на данный момент Порфирьевич не работает. Попробуйте позже roflanPominy",
                                                 ctx.author, "porf")
             else:
                 json_response = response.json()
-                result = json_response['replies'][4]
+                result = json_response['replies'][0]
                 with open('data/osujdau.txt', encoding='utf-8') as f:
                     osu = f.read().lower().split('\n')
                 res_prov = re.sub(r'[^\w ]', '', result)
                 for word in res_prov.split(' '):
-                    if word.lower() in osu:
-                        result = result.replace(word, '*' * len(word))
-                AdditionalMethods.add_to_buffer("e", f"{nickname}, {words}{result}", ctx.author, "porf")
+                    for asu in osu:
+                        if word.lower().find(asu) != -1:
+                            res = res.replace(word, '*' * len(word))
+                AdditionalMethods.add_to_buffer("e", f"{nickname}, {words}{result[:150]}", ctx.author, "porf")
     
     @commands.command(name='save')
     async def logs(self, ctx):
@@ -498,7 +499,7 @@ class CommandsBot(commands.Bot, ABC):
     async def kurs(self, ctx):
         nickname = ctx.author.display_name
         message = ctx.message.content
-        if len(message) == 0:
+        if message == '!курс ':
             url = "https://free.currconv.com/api/v7/convert?q=USD_RUB,EUR_RUB&compact=ultra&apiKey=ee315cc429cbc167d4b7"
             url2 = "https://free.currconv.com/api/v7/convert?q=JPY_RUB,UAH_RUB&compact=ultra&apiKey=ee315cc429cbc167d4b7"
             r = requests.get(url)
@@ -629,10 +630,11 @@ class CommandsBot(commands.Bot, ABC):
             osu = f.read().lower().split('\n')
         res_prov = re.sub(r'[^\w ]', '', res)
         for word in res_prov.split(' '):
-            if word.lower() in osu:
-                res = res.replace(word, '*' * len(word))
+            for asu in osu:
+                if word.lower().find(asu) != -1:
+                    res = res.replace(word, '*' * len(word))
         if len(res) > 500:
-            res = res[:300] + '...'
+            res = res[:200] + '...'
         AdditionalMethods.add_to_buffer("e", f"{nickname}, {res}", ctx.author, "zaebalo")
 
     @commands.command(name='pastа')
@@ -869,7 +871,7 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='время')
     async def time(self, ctx):
         nickname = ctx.author.display_name
-        message = ctx.message.clean_content
+        loc = ctx.message.clean_content
         if len(message) == 0:
             AdditionalMethods.add_to_buffer("c", datetime.strftime(datetime.now() + timedelta(hours=3),
                                                                    f"{nickname}, Чичас %H:%M по МСК Waiting"),
