@@ -1,7 +1,5 @@
 import json
 
-
-
 TIMEOUT = 'timeout'
 ATTENTIONS = 'attentions'
 MODE = 'emojimode'
@@ -11,6 +9,7 @@ BUFFERMAX = 'buffermax'
 BUFFERDELAY = 'bufferdelay'
 FORGET = 'forget'
 ENTERTAIN = 'entertain'
+
 
 def get_set(set: str):
     with open(file='data/settings.txt', mode='r', encoding='utf-8') as e:
@@ -45,11 +44,12 @@ def change_set(set: str, newvalue):
         with open('data/settings.txt', 'r', encoding='utf-8') as b:
             data = json.loads(b.read())
     except:
-        data = {ENTERTAIN: True, BUFFERDELAY: 2.0, BUFFERMAX: 3, MAXMESSES: 3, NORM: 10.0, MODE: "skip", ATTENTIONS: 3, FORGET: 1800.0}
+        data = {ENTERTAIN: True, BUFFERDELAY: 2.0, BUFFERMAX: 3, MAXMESSES: 3, NORM: 10.0, MODE: "skip", ATTENTIONS: 3,
+                FORGET: 1800.0}
     if set == ENTERTAIN:
-        if newvalue == "0":
+        if newvalue == 0:
             data[set] = False
-        elif newvalue == "1":
+        elif newvalue == 0:
             data[set] = True
         else:
             return "!entertain [0,1]"

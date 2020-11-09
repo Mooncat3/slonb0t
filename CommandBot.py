@@ -730,7 +730,7 @@ class CommandsBot(commands.Bot, ABC):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
             nickname = ctx.author.display_name
             AdditionalMethods.add_to_buffer("s",
-                                            f"{nickname}, {Settings.change_set(Settings.ENTERTAIN, int(ctx.message.content.replace('!entertain ', '')))}",
+                                            f"{nickname}, {Settings.change_set(Settings.ENTERTAIN, int(ctx.message.clean_content))}",
                                             ctx.author,
                                             "entertain")
 
