@@ -1115,14 +1115,14 @@ class CommandsBot(commands.Bot, ABC):
         nick = ctx.author.display_name
         message = ctx.message.clean_content
         if len(message) == 0:
-            AdditionalMethods.add_to_buffer("e", nick + ', введите - !music [строка из песни] [смайл]', ctx.author, 'music')
+            AdditionalMethods.add_to_buffer("m", nick + ', введите - !music [строка из песни] [смайл]', ctx.author, 'music')
         else:
             mess = message.split(' ')
             emote = ' ' + mess[len(mess) - 1]
             with open('data/SMILES.txt', encoding='utf-8') as g:
                 list_emotes = json.loads(g.read())
             if not mess[len(mess) - 1] in list_emotes:
-                AdditionalMethods.add_to_buffer("e", nick + ', введите - !music [строка из песни] [смайл]', ctx.author, 'music')
+                AdditionalMethods.add_to_buffer("m", nick + ', введите - !music [строка из песни] [смайл]', ctx.author, 'music')
             else:
                 try:
                     song_lyric = ' '.join(mess).replace(emote, '')
@@ -1152,9 +1152,9 @@ class CommandsBot(commands.Bot, ABC):
                         for asu in osu:
                             if word.lower().find(asu) != -1:
                                 res = res.replace(word, '*' * len(word))
-                    AdditionalMethods.add_to_buffer("e", res[:150] + emote, ctx.author, 'music')
+                    AdditionalMethods.add_to_buffer("m", res[:150] + emote, ctx.author, 'music')
                 except AttributeError:
-                    AdditionalMethods.add_to_buffer("e", nick + ', песня не найдена!', ctx.author, 'music')
+                    AdditionalMethods.add_to_buffer("m", nick + ', песня не найдена!', ctx.author, 'music')
                                                        
                                                        
 subprocess.Popen([sys.executable, 'ChatBot.py'])
