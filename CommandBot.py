@@ -1133,7 +1133,7 @@ class CommandsBot(commands.Bot, ABC):
                                                 'music')
             else:
                 try:
-                    song_lyric = ' '.join(mess).replace(emote, '')
+                    song_lyric = ' '.join(mess).replace(emote, '').replace('ё', 'е')
                     emote += ' '
                     genius = lg.Genius("5Pj7QcUoV5Khbd-Hq5jSve8OzCQILJkY8nWojIIxqH30ItpsmXC7UmCRcgjmTVPY")
                     song = genius.search_song(song_lyric)
