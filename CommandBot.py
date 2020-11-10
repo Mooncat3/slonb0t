@@ -1140,6 +1140,7 @@ class CommandsBot(commands.Bot, ABC):
                     res = [x for x in song.lyrics.split('\n') if len(x) > 2]
                     u = 0
                     pripev = ['Chorus', 'Припев', 'Hook']
+                    print(res)
                     for stroka in res:
                         if u == 0:
                             for strr in stroka.split(' '):
@@ -1156,7 +1157,6 @@ class CommandsBot(commands.Bot, ABC):
                                         break
                     res = [re.sub(r'[\[].*?[\]]', '', i) for i in res]
                     res = [x for x in res if len(x) > 1]
-                    print(res)
                     res = emote.join(res[:4])
                     with open('data/osujdau2.txt') as f:
                         osu = [x for x in f.read().split('\n') if len(x) > 1]
