@@ -49,7 +49,7 @@ def change_set(set: str, newvalue):
     if set == ENTERTAIN:
         if newvalue == 0:
             data[set] = False
-        elif newvalue == 0:
+        elif newvalue == 1:
             data[set] = True
         else:
             return "!entertain [0,1]"
