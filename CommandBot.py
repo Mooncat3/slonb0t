@@ -1138,27 +1138,28 @@ class CommandsBot(commands.Bot, ABC):
                     genius = lg.Genius("5Pj7QcUoV5Khbd-Hq5jSve8OzCQILJkY8nWojIIxqH30ItpsmXC7UmCRcgjmTVPY")
                     song = genius.search_song(song_lyric)
                     res = [x for x in song.lyrics.split('\n') if len(x) > 2]
-                    u = 0
-                    pripev = ['Chorus', 'Припев', 'Hook']
+                    pripev = ['[Chorus', '[Припев', '[Hook', 'Chorus', 'Припев', 'Hook']
                     print(res)
                     flag = False
                     for stroka in res:
-                        if u == 0:
-                            for strr in stroka.split(' '):
-                                for prip in pripev:
-                                    if stroka.find(prip) != -1:
-                                        res = res[res.index(stroka)+1:]
-                                        print('Найдено по припеву')
-                                        flag = True
-                                        u = 1
-                                        break
-                                if flag:
+                        for strr in stroka.split(' '):
+                            for prip in pripev:
+                                if stroka.find(prip) != -1:
+                                    res = res[res.index(stroka)+1:]
+                                    print('Найдено по припеву')
+                                    flag = True
                                     break
-                                for slovo in song_lyric.lower().split(' '):
-                                    if slovo == strr.lower() and len(slovo) > 4:
-                                        res = res[res.index(stroka):]
-                                        u = 1
-                                        break
+                            if flag:
+                                break
+                            for slovo in song_lyric.lower().split(' '):
+                                if slovo == strr.lower() and len(slovo) > 4:
+                                    res = res[res.index(stroka):]
+                                    flag = True
+                                    break
+                            if flag:
+                                break
+                        if flag:
+                            break
                     res = [re.sub(r'[\[].*?[\]]', '', i) for i in res]
                     res = [x for x in res if len(x) > 1]
                     res = emote.join(res[:4])
