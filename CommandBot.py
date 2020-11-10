@@ -1143,10 +1143,9 @@ class CommandsBot(commands.Bot, ABC):
                     flag = False
                     for stroka in res:
                         for strr in stroka.split(' '):
-                            for prip in pripev:
-                                if stroka.find(prip) != -1:
-                                    res = res[res.index(stroka)+1:]
-                                    print('Найдено по припеву')
+                            for slovo in song_lyric.lower().split(' '):
+                                if slovo == strr.lower() and len(slovo) > 4:
+                                    res = res[res.index(stroka):]
                                     flag = True
                                     break
                             if flag:
@@ -1156,9 +1155,10 @@ class CommandsBot(commands.Bot, ABC):
                     if not flag:
                         for stroka in res:
                             for strr in stroka.split(' '):
-                                for slovo in song_lyric.lower().split(' '):
-                                    if slovo == strr.lower() and len(slovo) > 4:
-                                        res = res[res.index(stroka):]
+                                for prip in pripev:
+                                    if stroka.find(prip) != -1:
+                                        res = res[res.index(stroka)+1:]
+                                        print('Найдено по припеву')
                                         flag = True
                                         break
                                 if flag:
