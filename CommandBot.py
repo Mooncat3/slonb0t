@@ -1137,21 +1137,23 @@ class CommandsBot(commands.Bot, ABC):
                     emote += ' '
                     genius = lg.Genius("5Pj7QcUoV5Khbd-Hq5jSve8OzCQILJkY8nWojIIxqH30ItpsmXC7UmCRcgjmTVPY")
                     song = genius.search_song(song_lyric)
-                    text = re.sub(r'[\[].*?[\]]', '', song.lyrics)
-                    res = [x for x in text.split('\n') if len(x) > 2]
+                    res = [x for x in song.lyrics.split('\n') if len(x) > 2]
                     u = 0
+                    pripev = ['Chorus', 'Припев', 'Hook']
                     for stroka in res:
                         if u == 0:
                             for strr in stroka.split(' '):
-                                if song_lyric.lower() == stroka.lower():
-                                    res = res[res.index(stroka):]
-                                    u = 1
-                                    break
+                                for prip in pripev:
+                                    if stroka.find(prip) != -1:
+                                        res = res[res.index(stroka)+1:]
+                                        u = 1
+                                        break
                                 for slovo in song_lyric.lower().split(' '):
-                                    if slovo == strr.lower() and len(slovo) > 4:
+                                    if slovo == strr.lower() and len(slovo) > 3:
                                         res = res[res.index(stroka):]
                                         u = 1
                                         break
+                    res = [re.sub(r'[\[].*?[\]]\n', '', i) for i in res]
                     res = emote.join(res[:4])
                     with open('data/osujdau2.txt') as f:
                         osu = [x for x in f.read().split('\n') if len(x) > 1]
