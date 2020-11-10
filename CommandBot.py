@@ -1146,14 +1146,16 @@ class CommandsBot(commands.Bot, ABC):
                                 for prip in pripev:
                                     if stroka.find(prip) != -1:
                                         res = res[res.index(stroka)+1:]
+                                        print('Найдено по припеву')
                                         u = 1
                                         break
                                 for slovo in song_lyric.lower().split(' '):
-                                    if slovo == strr.lower() and len(slovo) > 3:
+                                    if slovo == strr.lower() and len(slovo) > 4:
                                         res = res[res.index(stroka):]
                                         u = 1
                                         break
                     res = [re.sub(r'[\[].*?[\]]\n', '', i) for i in res]
+                    print(res)
                     res = emote.join(res[:4])
                     with open('data/osujdau2.txt') as f:
                         osu = [x for x in f.read().split('\n') if len(x) > 1]
