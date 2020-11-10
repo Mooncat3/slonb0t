@@ -1147,6 +1147,7 @@ class CommandsBot(commands.Bot, ABC):
                                 if stroka.find(prip) != -1:
                                     res = res[res.index(stroka)+1:]
                                     print('Найдено по припеву')
+                                    print(stroka)
                                     flag = True
                                     break
                             if flag:
