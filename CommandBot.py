@@ -40,10 +40,10 @@ class CommandsBot(commands.Bot, ABC):
         self.logs = []
         self.japtest = {'kanji': '', 'tr': '', 'example': '', 'tr_example': '', 'active': False}
 
-    '''
+    
     async def event_command_error(self, ctx, error):
         pass
-    '''
+    
 
     async def duelent(self, socket):
         i: int = 0
@@ -248,7 +248,6 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='acduel')
     async def acduel(self, ctx):
         if self.duel_is_running:
-            # print(self.duel_user)
             if ctx.author.name == self.duel_user.lower():
                 if self.duel_serious:
                     if ctx.author.is_mod:
@@ -304,7 +303,7 @@ class CommandsBot(commands.Bot, ABC):
         elif self.duel_is_running:
             AdditionalMethods.add_to_buffer("s", f"{ctx.author.display_name}, сейчас идёт дуэль", ctx.author,
                                             "omgroulette")
-
+    '''
     @commands.command(name='пирамида')
     async def piramide(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
@@ -324,7 +323,7 @@ class CommandsBot(commands.Bot, ABC):
             await self._ws.send_privmsg(config.CHAN, "/color BlueViolet")
             await self._ws.send_privmsg(config.CHAN, f"/me {word}")
             await self._ws.send_privmsg(config.CHAN, "/color SpringGreen")
-
+    '''
     @commands.command(name='ауф')
     async def auf(self, ctx):
         nickname = ctx.author.display_name
@@ -344,7 +343,7 @@ class CommandsBot(commands.Bot, ABC):
             AdditionalMethods.add_to_buffer("e", f"{nickname}, Бот может принимать максимум 300 символов", ctx.author,
                                             "porf")
         else:
-            response = requests.post(url, json={'prompt': words, 'length': '15', 'num_samples': '5'})
+            response = requests.post(url, json={'prompt': words, 'length': '18', 'num_samples': '5'})
             if response.text == "Service Unavailable":
                 AdditionalMethods.add_to_buffer("e",
                                                 f"{nickname}, на данный момент Порфирьевич не работает. Попробуйте позже roflanPominy",
@@ -392,7 +391,7 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='kogda')
     async def strim(self, ctx):
         AdditionalMethods.add_to_buffer("c", "Стрим через час Jebaited", ctx.author, "kogda")
-
+    '''
     @commands.command(name='case')
     async def case(self, ctx):
         nickname = ctx.author.display_name
@@ -422,7 +421,7 @@ class CommandsBot(commands.Bot, ABC):
         AdditionalMethods.add_to_buffer("e",
                                         f"{nickname}, вам выпал " + name + " Стоимость: " + price,
                                         ctx.author, "case")
-
+    '''
     @commands.command(name='history')
     async def stream(self, ctx):
         nickname = ctx.author.display_name
@@ -592,7 +591,7 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='iq')
     async def iq(self, ctx):
         nickname = ctx.author.display_name
-        iq = random.randrange(55, 180, 1)
+        iq = random.randint(40, 190)
         if iq == 110:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, ваш IQ = {str(iq)}! Вы Хесус?! PogU", ctx.author, "iq")
         if iq == 89:
@@ -633,7 +632,7 @@ class CommandsBot(commands.Bot, ABC):
                 if word.lower().find(asu) != -1:
                     res = res.replace(word, '*' * len(word))
         if len(res) > 500:
-            res = res[:200] + '...'
+            res = res[:300] + '...'
         AdditionalMethods.add_to_buffer("e", f"{nickname}, {res[:300]}", ctx.author, "zaebalo")
 
     @commands.command(name='pastа')
@@ -972,7 +971,7 @@ class CommandsBot(commands.Bot, ABC):
                                                                   "{nickname}, когда {messagestr}? Thonk {filestr}",
                                                                   message,
                                                                   "!когда", "kogda")
-            if not len(message) > 100:
+            if not len(message) > 200:
                 AdditionalMethods.add_to_buffer("e", result, ctx.author, "когда")
             else:
                 AdditionalMethods.add_to_buffer("e", f"{nickname}, пишите меньше символов WeirdChamp", ctx.author,
@@ -1025,7 +1024,6 @@ class CommandsBot(commands.Bot, ABC):
                 else:
                     rd = 0
                 result = all[rd: rd + 1]
-                # print(result)
                 i = 1
                 r = requests.get(f"https://jlptsensei.com/page/{i}/?s={result}")
                 soup = BeautifulSoup(r.content, 'lxml')
@@ -1035,7 +1033,6 @@ class CommandsBot(commands.Bot, ABC):
                 if category != "n1":
                     while e:
                         for q in mass:
-                            # print(q)
                             if "learn-japanese-kanji" in q.get("href"):
                                 url = q.get("href")
                                 e = False
@@ -1139,7 +1136,6 @@ class CommandsBot(commands.Bot, ABC):
                     song = genius.search_song(song_lyric)
                     res = [x for x in song.lyrics.split('\n') if len(x) > 2]
                     pripev = ['[Chorus', '[Припев', '[Hook']#, 'Chorus', 'Припев', 'Hook']
-                    print(res)
                     flag = False
                     for stroka in res:
                         for strr in stroka.split(' '):
@@ -1158,7 +1154,6 @@ class CommandsBot(commands.Bot, ABC):
                                 for prip in pripev:
                                     if stroka.find(prip) != -1:
                                         res = res[res.index(stroka)+1:]
-                                        print('Найдено по припеву')
                                         flag = True
                                         break
                                 if flag:
@@ -1175,7 +1170,7 @@ class CommandsBot(commands.Bot, ABC):
                         for asu in osu:
                             if word.lower().find(asu) != -1:
                                 res = res.replace(word, '*' * len(word))
-                    AdditionalMethods.add_to_buffer("e", res[:180] + emote, ctx.author, 'music')
+                    AdditionalMethods.add_to_buffer("e", res[:200] + emote, ctx.author, 'music')
                 except AttributeError:
                     AdditionalMethods.add_to_buffer("e", nick + ', песня не найдена!', ctx.author, 'music')
 
