@@ -343,7 +343,7 @@ class CommandsBot(commands.Bot, ABC):
             AdditionalMethods.add_to_buffer("e", f"{nickname}, Бот может принимать максимум 300 символов", ctx.author,
                                             "porf")
         else:
-            response = requests.post(url, json={'prompt': words, 'length': '18', 'num_samples': '5'})
+            response = requests.post(url, json={'prompt': words, 'length': '15', 'num_samples': '5'})
             if response.text == "Service Unavailable":
                 AdditionalMethods.add_to_buffer("e",
                                                 f"{nickname}, на данный момент Порфирьевич не работает. Попробуйте позже roflanPominy",
@@ -358,7 +358,7 @@ class CommandsBot(commands.Bot, ABC):
                     for asu in osu:
                         if word.lower().find(asu) != -1:
                             result = result.replace(word, '*' * len(word))
-                AdditionalMethods.add_to_buffer("e", f"{nickname}, {words}{result}", ctx.author, "porf")
+                AdditionalMethods.add_to_buffer("e", f"{nickname}, {result}", ctx.author, "porf")
 
     @commands.command(name='save')
     async def logs(self, ctx):
