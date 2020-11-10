@@ -1154,7 +1154,8 @@ class CommandsBot(commands.Bot, ABC):
                                         res = res[res.index(stroka):]
                                         u = 1
                                         break
-                    res = [re.sub(r'[\[].*?[\]]\n', '', i) for i in res]
+                    res = [re.sub(r'[\[].*?[\]]', '', i) for i in res]
+                    res = [x for x in res if len(x) > 1]
                     print(res)
                     res = emote.join(res[:4])
                     with open('data/osujdau2.txt') as f:
