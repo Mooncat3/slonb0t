@@ -1141,6 +1141,7 @@ class CommandsBot(commands.Bot, ABC):
                     u = 0
                     pripev = ['Chorus', 'Припев', 'Hook']
                     print(res)
+                    flag = False
                     for stroka in res:
                         if u == 0:
                             for strr in stroka.split(' '):
@@ -1148,8 +1149,11 @@ class CommandsBot(commands.Bot, ABC):
                                     if stroka.find(prip) != -1:
                                         res = res[res.index(stroka)+1:]
                                         print('Найдено по припеву')
+                                        flag = True
                                         u = 1
                                         break
+                                if flag:
+                                    break
                                 for slovo in song_lyric.lower().split(' '):
                                     if slovo == strr.lower() and len(slovo) > 4:
                                         res = res[res.index(stroka):]
