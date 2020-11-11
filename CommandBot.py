@@ -1163,7 +1163,7 @@ class CommandsBot(commands.Bot, ABC):
                     res = [re.sub(r'[\[].*?[\]]', '', i) for i in res]
                     res = [x for x in res if len(x) > 1]
                     res = emote.join(res[:4])
-                    with open('data/osujdau2.txt') as f:
+                    with open('data/osujdau2.txt', 'r', encoding='utf-8') as f:
                         osu = [x for x in f.read().split('\n') if len(x) > 1]
                     res_prov = re.sub(r'\W+', ' ', res)
                     for word in res_prov.split(' '):
