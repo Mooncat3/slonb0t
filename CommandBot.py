@@ -109,6 +109,12 @@ class CommandsBot(commands.Bot, ABC):
 
     async def event_message(self, message):
         nickname = message.author.name
+        global namess
+        global ii
+        if ii > 100:
+	    	del names[0]
+		namess.append(message.author.display_name)
+		ii+=1
         if not AdditionalMethods.vip(message.author.is_mod, nickname) and not nickname == "slonb0t":
             docheck = True
             mod = Settings.get_mod()
@@ -801,7 +807,9 @@ class CommandsBot(commands.Bot, ABC):
 
     @commands.command(name='кто')
     async def kto(self, ctx):
-        pass
+        global namess
+	    name = random.choice(list(set(namess)))
+	    AdditionalMethods.add_to_buffer("e", name + 'ᅠпридурок KeK', ctx.author, "кто")
 
     @commands.command(name='do')
     async def do(self, ctx):
