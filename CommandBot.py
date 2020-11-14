@@ -113,8 +113,8 @@ class CommandsBot(commands.Bot, ABC):
         global ii
         if ii > 100:
             del names[0]
-	namess.append(message.author.display_name)
-	ii+=1
+        namess.append(message.author.display_name)
+        ii+=1
         if not AdditionalMethods.vip(message.author.is_mod, nickname) and not nickname == "slonb0t":
             docheck = True
             mod = Settings.get_mod()
