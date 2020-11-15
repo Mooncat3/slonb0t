@@ -828,17 +828,17 @@ class CommandsBot(commands.Bot, ABC):
         answer = random.choice(me_classic).format(nickname)
         name = random.choice(namess)
         v = random.randint(0, 100)
-        if 0 < v <= 10:
+        if 0 < v <= 15:
             answer = random.choice(search).format(nickname, random.choice(things))
-        if 10 < v <= 15:
+        if 15 < v <= 17:
             kol = round(random.uniform(90, 250), 2)
             answer = "Однажды {} приснилось, что {} теперь стоит {} рублей! Какой ужас D:".format(nickname, currency_rand,
                                                                                                   kol)
-        if 15 < v <= 20:
+        if 17 < v <= 19:
             kol = round(random.uniform(0, 80), 2)
             answer = "Однажды {} приснилось, что {} теперь стоит {} рублей! Какое счастье PogU".format(nickname,
                                                                                                        currency_rand, kol)
-        if 20 < v <= 30:
+        if 19 < v <= 30:
             answer = random.choice(stories).format(nickname, name, thing)
         if 30 < v <= 80:
             answer = random.choice(me_classic).format(nickname)
