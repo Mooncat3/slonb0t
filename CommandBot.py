@@ -885,11 +885,12 @@ class CommandsBot(commands.Bot, ABC):
 
         AdditionalMethods.add_to_buffer("e", answer, ctx.author, "me")
                                                        
-    @commands.command(name='кто')
-    async def kto(self, ctx):
+    @commands.command(name='пук')
+    async def puk(self, ctx):
         global namess
+        nickname = ctx.author.display_name
         name = random.choice(list(set(namess)))
-        AdditionalMethods.add_to_buffer("e", name + 'ᅠпридурок KeK', ctx.author, "кто")
+        AdditionalMethods.add_to_buffer("e", nickname + ' пукнул на ' + name + ' (puke) ThumbUp', ctx.author, "пук")
 
     @commands.command(name='do')
     async def do(self, ctx):
