@@ -868,15 +868,15 @@ class CommandsBot(commands.Bot, ABC):
             answer = '{} сегодня прошёл тест на дату смерти. monkaW Дата смерти {} - {} roflanPominy'.format(nickname,
                                                                                                              nickname,
                                                                                                              random_date)
-        if 80 < v < 85:
+        if 80 < v <= 85:
             name2 = random.choice(namess)
             answer = '{} решил украсть у {} {} , но в чате пробежал {} и засёк преступление. {} теперь за решёткой BOP'.format(nickname, name, thing, name2, nickname)
 
-        if 85 < v < 90:
+        if 85 < v <= 90:
             age = random.randint(5, 90)
             answer = '{} скрывает свой возраст. Но я знаю, что {} уже {} лет SeriousSloth'.format(nickname, nickname, age)
 
-        if 90 < v < 100:
+        if 90 < v <= 100:
             first_name = random.choice(first_names)
             answer = '{} скрывает своё имя. Но я знаю, что {} на самом деле зовут {} monkaX'.format(nickname, nickname, first_name)
 
