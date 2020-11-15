@@ -2,7 +2,7 @@ import sys
 from abc import ABC
 from github import Github
 from twitchioc.ext import commands
-from datetime import timedelta, datetime
+from datetime import timedelta, datetime, date
 from bs4 import BeautifulSoup
 import requests
 import AdditionalMethods
@@ -796,15 +796,92 @@ class CommandsBot(commands.Bot, ABC):
         elif temp > 40 or temp < 32:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, ваша температура {str(temp)} °C! Вызывайте дурку! Durka",
                                             ctx.author, "temp")
-    '''
+
     @commands.command(name='me', aliases=['я', 'йа'])
-    async def me(self, ctx):
-				nickname = ctx.author.display_name
-        with open('data/me.txt', 'r', encoding='utf-8') as b:
-            listme = list(b)
-        randomm = random.choice(listme)
-        AdditionalMethods.add_to_buffer("e", randomm.format(nickname), ctx.author, "me")
-    '''
+    async def me(ctx):
+        nickname = ctx.author.display_name
+        with open('me/search.txt', encoding='utf-8') as p:
+            search = [x for x in p.read().split('\n') if len(x) > 1]
+
+        with open('me/things.txt', encoding='utf-8') as pr:
+            things = [x for x in pr.read().split('\n') if len(x) > 1]
+
+        with open('me/stories.txt', encoding='utf-8') as s:
+            stories = [x for x in s.read().split('\n') if len(x) > 1]
+
+        with open('me/meme.txt', encoding='utf-8') as m:
+            me_classic = [x for x in m.read().split('\n') if len(x) > 1]
+
+        with open('me/clothes.txt', encoding='utf-8') as cl:
+            clothes = [x for x in cl.read().split('\n') if len(x) > 1]
+
+        with open('me/first_names.txt', encoding='utf-8') as f:
+            first_names = [x for x in f.read().split('\n') if len(x) > 1]
+
+        currency = ['доллар', 'фунт', 'евро', 'франк', 'крона']
+        symbols = ['$', '£', '€', '₽']
+        curr = random.choice(symbols)
+        currency_rand = random.choice(currency)
+        thing = random.choice(things)
+        global namess
+        namess = list(set(namess))
+        answer = random.choice(me_classic).format(nickname)
+        name = random.choice(namess)
+        v = random.randint(0, 100)
+        if 0 < v <= 20:
+            answer = random.choice(search).format(nickname, random.choice(things))
+        if 20 < v <= 22:
+            kol = round(random.uniform(90, 250), 2)
+            answer = "Однажды {} приснилось, что {} теперь стоит {} рублей! Какой ужас D:".format(nickname, currency_rand,
+                                                                                                  kol)
+        if 22 < v <= 24:
+            kol = round(random.uniform(0, 80), 2)
+            answer = "Однажды {} приснилось, что {} теперь стоит {} рублей! Какое счастье PogU".format(nickname,
+                                                                                                       currency_rand, kol)
+        if 24 < v <= 30:
+            answer = random.choice(stories).format(nickname, name, thing)
+        if 30 < v <= 50:
+            answer = random.choice(me_classic).format(nickname)
+        if 50 < v <= 58:
+            answer = '{} умрёт через {} дней roflanPominy'.format(nickname, random.randint(1, 30))
+        if 58 < v <= 60:
+            answer = 'У {} - {} IQ WAYTOOSMART Clap'.format(nickname, random.randint(80, 200))
+        if 60 < v <= 65:
+            answer = '{} украл у {} {} BOP'.format(nickname, name, thing)
+        if 65 < v <= 70:
+            kol = round(random.uniform(0, 5000), 2)
+            answer = '{} украл у {} {} {} BOP'.format(nickname, name, kol, curr)
+        if 70 < v <= 74:
+            kol = round(random.uniform(0, 100000), 2)
+            answer = '{} хвастается {} за {} {} peepoCool'.format(nickname, random.choice(clothes), kol, curr)
+        if 74 < v <= 77:
+            kol = round(random.uniform(0, 5000), 2)
+            answer = '{} выиграл в лотерее {} {} PepoParty Поздравляем! PepoParty'.format(nickname, kol, curr)
+        if 77 < v <= 80:
+            start_date = datetime.now()
+            end_date = date(2033, 1, 1)
+            time_between_dates = end_date - start_date
+            days_between_dates = time_between_dates.days
+            random_number_of_days = random.randrange(days_between_dates)
+            random_date = start_date + timedelta(days=random_number_of_days)
+            random_date = random_date.strftime('%d.%m.%Y')
+            answer = '{} сегодня прошёл тест на дату смерти. monkaW Дата смерти {} - {} roflanPominy'.format(nickname,
+                                                                                                             nickname,
+                                                                                                             random_date)
+        if 80 < v < 85:
+            name2 = random.choice(names)
+            answer = '{} решил украсть у {} {} , но в чате пробежал {} и засёк преступление. {} теперь за решёткой BOP'.format(nickname, name, thing, name2, nickname)
+
+        if 85 < v < 90:
+            age = random.randint(5, 90)
+            answer = '{} скрывает свой возраст. Но я знаю, что {} уже {} лет SeriousSloth'.format(nickname, nickname, age)
+
+        if 90 < v < 100:
+            first_name = random.choice(first_names)
+            answer = '{} скрывает своё имя. Но я знаю, что {} на самом деле зовут {} monkaX'.format(nickname, nickname, first_name)
+
+        AdditionalMethods.add_to_buffer("e", answer, ctx.author, "me")
+                                                       
     @commands.command(name='кто')
     async def kto(self, ctx):
         global namess
