@@ -808,8 +808,8 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='кто')
     async def kto(self, ctx):
         global namess
-	    name = random.choice(list(set(namess)))
-	    AdditionalMethods.add_to_buffer("e", name + 'ᅠпридурок KeK', ctx.author, "кто")
+    	name = random.choice(list(set(namess)))
+    	AdditionalMethods.add_to_buffer("e", name + 'ᅠпридурок KeK', ctx.author, "кто")
 
     @commands.command(name='do')
     async def do(self, ctx):
