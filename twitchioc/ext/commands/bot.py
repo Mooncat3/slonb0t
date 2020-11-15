@@ -479,7 +479,6 @@ class Bot(Client):
             command = str(parsed.pop(0)).lower()
         except KeyError:
             return
-        print(command)
         
         message.clean_content = ' '.join(parsed.values())
 
