@@ -798,7 +798,7 @@ class CommandsBot(commands.Bot, ABC):
                                             ctx.author, "temp")
 
     @commands.command(name='me', aliases=['я', 'йа'])
-    async def me(ctx):
+    async def me(self, ctx):
         nickname = ctx.author.display_name
         with open('me/search.txt', encoding='utf-8') as p:
             search = [x for x in p.read().split('\n') if len(x) > 1]
