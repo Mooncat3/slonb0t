@@ -858,8 +858,8 @@ class CommandsBot(commands.Bot, ABC):
             kol = round(random.uniform(0, 5000), 2)
             answer = '{} выиграл в лотерее {} {} PepoParty Поздравляем! PepoParty'.format(nickname, kol, curr)
         if 77 < v <= 80:
-            start_date = datetime.now()
-            end_date = date(2033, 1, 1)
+            start_date = date(2021, 1, 1)
+            end_date = date(2035, 1, 1)
             time_between_dates = end_date - start_date
             days_between_dates = time_between_dates.days
             random_number_of_days = random.randrange(days_between_dates)
