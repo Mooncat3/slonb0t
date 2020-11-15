@@ -2,7 +2,7 @@ import sys
 from abc import ABC
 from github import Github
 from twitchioc.ext import commands
-from datetime import timedelta, datetime, dateЗаебало
+from datetime import timedelta, datetime, date
 from bs4 import BeautifulSoup
 import requests
 import AdditionalMethods
