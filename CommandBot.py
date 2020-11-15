@@ -800,22 +800,22 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='me', aliases=['я', 'йа'])
     async def me(self, ctx):
         nickname = ctx.author.display_name
-        with open('me/search.txt', encoding='utf-8') as p:
+        with open('data/me/search.txt', encoding='utf-8') as p:
             search = [x for x in p.read().split('\n') if len(x) > 1]
 
-        with open('me/things.txt', encoding='utf-8') as pr:
+        with open('data/me/things.txt', encoding='utf-8') as pr:
             things = [x for x in pr.read().split('\n') if len(x) > 1]
 
-        with open('me/stories.txt', encoding='utf-8') as s:
+        with open('data/me/stories.txt', encoding='utf-8') as s:
             stories = [x for x in s.read().split('\n') if len(x) > 1]
 
         with open('data/me.txt', encoding='utf-8') as m:
             me_classic = [x for x in m.read().split('\n') if len(x) > 1]
 
-        with open('me/clothes.txt', encoding='utf-8') as cl:
+        with open('data/me/clothes.txt', encoding='utf-8') as cl:
             clothes = [x for x in cl.read().split('\n') if len(x) > 1]
 
-        with open('me/first_names.txt', encoding='utf-8') as f:
+        with open('data/me/first_names.txt', encoding='utf-8') as f:
             first_names = [x for x in f.read().split('\n') if len(x) > 1]
 
         currency = ['доллар', 'фунт', 'евро', 'франк', 'крона']
