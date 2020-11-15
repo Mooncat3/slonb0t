@@ -2,7 +2,7 @@ import sys
 from abc import ABC
 from github import Github
 from twitchioc.ext import commands
-from datetime import timedelta, datetime, date
+from datetime import timedelta, datetime, dateЗаебало
 from bs4 import BeautifulSoup
 import requests
 import AdditionalMethods
@@ -640,9 +640,9 @@ class CommandsBot(commands.Bot, ABC):
             for asu in osu:
                 if word.lower().find(asu) != -1:
                     res = res.replace(word, '*' * len(word))
-        if len(res) > 500:
-            res = res[:300] + '...'
-        AdditionalMethods.add_to_buffer("e", f"{nickname}, {res[:300]}", ctx.author, "zaebalo")
+        if len(res) > 160:
+            res = res[:150] + '...'
+        AdditionalMethods.add_to_buffer("e", f"{nickname}, {res}", ctx.author, "zaebalo")
 
     @commands.command(name='pastа')
     async def pasta(self, ctx):
