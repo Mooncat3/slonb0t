@@ -817,6 +817,9 @@ class CommandsBot(commands.Bot, ABC):
 
         with open('data/me/first_names.txt', encoding='utf-8') as f:
             first_names = [x for x in f.read().split('\n') if len(x) > 1]
+                                                       
+        with open('data/me/age.txt', encoding='utf-8') as f:
+            ages = [x for x in f.read().split('\n') if len(x) > 1]
 
         currency = ['доллар', 'фунт', 'евро', 'франк', 'крона']
         symbols = ['$', '£', '€', '₽']
@@ -873,8 +876,8 @@ class CommandsBot(commands.Bot, ABC):
             answer = '{} решил украсть у {} {} , но в чате пробежал {} и засёк преступление. {} теперь за решёткой BOP'.format(nickname, name, thing, name2, nickname)
 
         if 96 < v <= 98:
-            age = random.randint(5, 90)
-            answer = '{} скрывает свой возраст. Но я знаю, что {} уже {} лет SeriousSloth'.format(nickname, nickname, age)
+            age = random.choice(ages)
+            answer = '{} скрывает свой возраст. Но я знаю, что {} уже {} SeriousSloth'.format(nickname, nickname, age)
 
         if 98 < v <= 100:
             first_name = random.choice(first_names)
