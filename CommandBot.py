@@ -869,7 +869,7 @@ class CommandsBot(commands.Bot, ABC):
                                                                                                              nickname,
                                                                                                              random_date)
         if 80 < v < 85:
-            name2 = random.choice(names)
+            name2 = random.choice(namess)
             answer = '{} решил украсть у {} {} , но в чате пробежал {} и засёк преступление. {} теперь за решёткой BOP'.format(nickname, name, thing, name2, nickname)
 
         if 85 < v < 90:
