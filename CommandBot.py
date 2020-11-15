@@ -799,7 +799,7 @@ class CommandsBot(commands.Bot, ABC):
 		'''
     @commands.command(name='me', aliases=['я', 'йа'])
     async def me(self, ctx):
-        nickname = ctx.author.display_name
+				nickname = ctx.author.display_name
         with open('data/me.txt', 'r', encoding='utf-8') as b:
             listme = list(b)
         randomm = random.choice(listme)
@@ -807,9 +807,9 @@ class CommandsBot(commands.Bot, ABC):
 		'''
     @commands.command(name='кто')
     async def kto(self, ctx):
-        global namess
-    	name = random.choice(list(set(namess)))
-    	AdditionalMethods.add_to_buffer("e", name + 'ᅠпридурок KeK', ctx.author, "кто")
+				global namess
+				name = random.choice(list(set(namess)))
+				AdditionalMethods.add_to_buffer("e", name + 'ᅠпридурок KeK', ctx.author, "кто")
 
     @commands.command(name='do')
     async def do(self, ctx):
