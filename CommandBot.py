@@ -809,7 +809,7 @@ class CommandsBot(commands.Bot, ABC):
         with open('me/stories.txt', encoding='utf-8') as s:
             stories = [x for x in s.read().split('\n') if len(x) > 1]
 
-        with open('me/meme.txt', encoding='utf-8') as m:
+        with open('data/me.txt', encoding='utf-8') as m:
             me_classic = [x for x in m.read().split('\n') if len(x) > 1]
 
         with open('me/clothes.txt', encoding='utf-8') as cl:
