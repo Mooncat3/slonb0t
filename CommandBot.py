@@ -796,7 +796,7 @@ class CommandsBot(commands.Bot, ABC):
         elif temp > 40 or temp < 32:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, ваша температура {str(temp)} °C! Вызывайте дурку! Durka",
                                             ctx.author, "temp")
-		'''
+    '''
     @commands.command(name='me', aliases=['я', 'йа'])
     async def me(self, ctx):
 				nickname = ctx.author.display_name
@@ -804,12 +804,12 @@ class CommandsBot(commands.Bot, ABC):
             listme = list(b)
         randomm = random.choice(listme)
         AdditionalMethods.add_to_buffer("e", randomm.format(nickname), ctx.author, "me")
-		'''
+    '''
     @commands.command(name='кто')
     async def kto(self, ctx):
-				global namess
-				name = random.choice(list(set(namess)))
-				AdditionalMethods.add_to_buffer("e", name + 'ᅠпридурок KeK', ctx.author, "кто")
+        global namess
+        name = random.choice(list(set(namess)))
+        AdditionalMethods.add_to_buffer("e", name + 'ᅠпридурок KeK', ctx.author, "кто")
 
     @commands.command(name='do')
     async def do(self, ctx):
