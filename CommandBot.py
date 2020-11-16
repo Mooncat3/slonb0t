@@ -889,8 +889,8 @@ class CommandsBot(commands.Bot, ABC):
     async def puk(self, ctx):
         global namess
         nickname = ctx.author.display_name
-        name = random.choice(list(set(namess)))
-        AdditionalMethods.add_to_buffer("e", nickname + ' пукнул на ' + name + ' (puke) ThumbUp', ctx.author, "пук")
+        namess = list(set(namess))
+        AdditionalMethods.add_to_buffer("e", nickname + ' пукнул на ' + random.choice(namess) + ' (puke) ThumbUp', ctx.author, "пук")
 
     @commands.command(name='do')
     async def do(self, ctx):
