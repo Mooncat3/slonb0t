@@ -827,29 +827,29 @@ class CommandsBot(commands.Bot, ABC):
         currency_rand = random.choice(currency)
         thing = random.choice(things)
         global namess
-        namess = list(set(namess))
+        namessss = list(set(namess))
         answer = random.choice(me_classic).format(nickname)
-        name = random.choice(namess)
+        name = random.choice(namessss)
         v = random.randint(0, 100)
         if 0 < v <= 15:
             answer = random.choice(search).format(nickname, random.choice(things))
-        if 15 < v <= 17:
+        if 15 < v <= 18:
             kol = round(random.uniform(90, 250), 2)
             answer = "Однажды {} приснилось, что {} теперь стоит {} рублей! Какой ужас D:".format(nickname, currency_rand,
                                                                                                   kol)
-        if 17 < v <= 19:
+        if 18 < v <= 20:
             kol = round(random.uniform(0, 80), 2)
             answer = "Однажды {} приснилось, что {} теперь стоит {} рублей! Какое счастье PogU".format(nickname,
                                                                                                        currency_rand, kol)
-        if 19 < v <= 30:
+        if 20 < v <= 35:
             answer = random.choice(stories).format(nickname, name, thing)
-        if 30 < v <= 80:
+        if 35 < v <= 75:
             answer = random.choice(me_classic).format(nickname)
-        if 80 < v <= 82:
+        if 75 < v <= 80:
             answer = '{} умрёт через {} дней roflanPominy'.format(nickname, random.randint(1, 30))
-        if 82 < v <= 84:
+        if 80 < v <= 82:
             answer = 'У {} - {} IQ WAYTOOSMART Clap'.format(nickname, random.randint(80, 200))
-        if 84 < v <= 86:
+        if 82 < v <= 86:
             answer = '{} украл у {} {} BOP'.format(nickname, name, thing)
         if 86 < v <= 88:
             kol = round(random.uniform(0, 5000), 2)
