@@ -3,15 +3,15 @@ from twitchio.ext import commands
 
 with open('1.txt', 'r', encoding='utf_8') as t:
     global one
-    one = t.read().split('\n')
+    one = list(set(t.read().split('\n')))
     
 with open('2.txt', 'r', encoding='utf_8') as j:
     global two
-    two = j.read().split('\n')
+    two = list(set(j.read().split('\n')))
     
 with open('3.txt', 'r', encoding='utf_8') as k:
     global three
-    three = k.read().split('\n')
+    three = list(set(k.read().split('\n')))
 print(one, two, three)
 bot = commands.Bot(
         irc_token='oauth:14y5qalllj1i65rg3m9dip1rpq5ugd',
@@ -39,8 +39,8 @@ async def event_message(ctx):
             if any(mess.find(x) != -1 for x in one):
                 if any(mess.find(x) != -1 for x in two):
                     if any(mess.find(x) != -1 for x in three):
-                        #await ctx.channel.send(ctx.author.name+", стрима сегодня не будет. Вся инфа в телеге - https://t.me/jesusavgntwitch PunOko")
-                        await ctx.channel.send(ctx.author.name+", стрима сегодня не будет FeelsBadMan")
+                        #await ctx.channel.send(ctx.author.display_name+", стрима сегодня не будет. Вся инфа в телеге - https://t.me/jesusavgntwitch PunOko")
+                        await ctx.channel.send(ctx.author.display_name+", стрима сегодня не будет FeelsBadMan")
                         i += 1
                         print(i, end='\r')
     await bot.handle_commands(ctx)
