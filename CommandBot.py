@@ -832,14 +832,18 @@ class CommandsBot(commands.Bot, ABC):
         name = random.choice(namessss)
         v = random.randint(0, 100)
         if 0 < v <= 15:
-            answer = random.choice(search).format(nickname, random.choice(things))
+            rand_num = random.randint(0, 1)
+            if rand_num == 0:
+                answer = random.choice(search).format(nickname, random.choice(things))
+            else:
+                answer = random.choice(search).format(nickname, name)
         if 15 < v <= 18:
             kol = round(random.uniform(90, 250), 2)
-            answer = "Однажды {} приснилось, что {} теперь стоит {} рублей! Какой ужас D:".format(nickname, currency_rand,
+            answer = "Однажды {} приснилось, что {} теперь стоит {}₽! Какой ужас D:".format(nickname, currency_rand,
                                                                                                   kol)
         if 18 < v <= 20:
             kol = round(random.uniform(0, 80), 2)
-            answer = "Однажды {} приснилось, что {} теперь стоит {} рублей! Какое счастье PogU".format(nickname,
+            answer = "Однажды {} приснилось, что {} теперь стоит {}₽! Какое счастье PogU".format(nickname,
                                                                                                        currency_rand, kol)
         if 20 < v <= 35:
             answer = random.choice(stories).format(nickname, name, thing)
@@ -856,10 +860,10 @@ class CommandsBot(commands.Bot, ABC):
             answer = '{} украл у {} {} {} BOP'.format(nickname, name, kol, curr)
         if 88 < v <= 90:
             kol = round(random.uniform(0, 100000), 2)
-            answer = '{} хвастается {} за {} {} peepoCool'.format(nickname, random.choice(clothes), kol, curr)
+            answer = '{} хвастается {} за {}{} peepoCool'.format(nickname, random.choice(clothes), kol, curr)
         if 90 < v <= 92:
             kol = round(random.uniform(0, 5000), 2)
-            answer = '{} выиграл в лотерее {} {} PepoParty Поздравляем! PepoParty'.format(nickname, kol, curr)
+            answer = '{} выиграл в лотерее {}{} PepoParty Поздравляем! PepoParty'.format(nickname, kol, curr)
         if 92 < v <= 94:
             start_date = date(2021, 1, 1)
             end_date = date(2035, 1, 1)
