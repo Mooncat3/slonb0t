@@ -32,6 +32,16 @@ cтpиm
 кoгда
 kогда
 koгда
+кoгда
+кoгда
+koгда
+koгда
+koгда
+koгда
+koгда
+koгда
+kogda
+strim
 chbv
 cnhbv
 gjlhe
@@ -39,4 +49,4 @@ gjnjr
 rjulf
 stream
 strm
-cTрим
+ctрим
