@@ -494,7 +494,8 @@ class CommandsBot(commands.Bot, ABC):
                 userlang = message.split(" ")[1]
                 word = message.replace("!перевод " + userlang, "")
                 dataa = {"text": word}
-                url = "https://translate.yandex.net/api/v1/tr.json/translate?id=c71cd46e.5f6b52d5.c8b396f8.74722d74657874-0-0&srv=tr-text&lang=" + userlang.lower() + "&reason=auto&format=text"
+                key = 'a505696f.5fb53169.ab0307c9.74722d74657874-1-0'
+                url = "https://translate.yandex.net/api/v1/tr.json/translate?id="+key+"&srv=tr-text&lang=" + userlang.lower() + "&reason=auto&format=text"
                 r = requests.get(url, data=dataa)
                 if str(r.status_code) == "400":
                     AdditionalMethods.add_to_buffer("с",
