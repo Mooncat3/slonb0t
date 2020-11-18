@@ -921,7 +921,7 @@ class CommandsBot(commands.Bot, ABC):
             AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !бубу [something]", ctx.author, "")
         else:
             if len(message) < 100:
-                AdditionalMethods.add_to_buffer("e", f"Ну {str(message)} и {str(message)} Чё бубнить-то? ThumbUp",
+                AdditionalMethods.add_to_buffer("e", f"Ну {message} и {message} Чё бубнить-то? ThumbUp",
                                                 ctx.author,
                                                 "бубу")
             else:
@@ -934,14 +934,22 @@ class CommandsBot(commands.Bot, ABC):
         if len(message) == 0:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !steal [nickname]", ctx.author, "steal")
         else:
-            procent = random.randrange(0, 100, 1)
-            ruble = random.randrange(0, 2000, 1)
+            procent = random.randint(0, 100)
+            ruble = random.randint(0, 1500)
             if not len(message) > 100:
                 if procent >= 33:
-                    AdditionalMethods.add_to_buffer("e", f"{nickname} украл у {str(message)} {str(ruble)} руб. BOP",
-                                                    ctx.author, "steal")
+                    with open('data/me/things.txt', encoding='utf-8') as pr:
+                        thingss = [x for x in pr.read().split('\n') if len(x) > 1]
+                    rand_steal = random.randint(0, 100)
+                    if 0 < rand_steal <= 70:
+                        AdditionalMethods.add_to_buffer("e", f"{nickname} украл у {message} {random.choice(thingss)} BOP",
+                                                        ctx.author, "steal")
+                    else:
+                        symbols = ['$', '£', '€', '₽']
+                        AdditionalMethods.add_to_buffer("e", f"{nickname} украл у {message} {ruble}{random.choice(symbols)} BOP",
+                                                        ctx.author, "steal")
                 else:
-                    AdditionalMethods.add_to_buffer("e", f"{nickname} ничего не украл у {str(message)} KeK Lohich",
+                    AdditionalMethods.add_to_buffer("e", f"{nickname} ничего не украл у {message} KeK Lohich",
                                                     ctx.author, "steal")
             else:
                 AdditionalMethods.add_to_buffer("e", f"{nickname} пишите меньше символов WeirdChamp", ctx.author,
