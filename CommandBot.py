@@ -1240,7 +1240,8 @@ class CommandsBot(commands.Bot, ABC):
                     genius = lg.Genius("5Pj7QcUoV5Khbd-Hq5jSve8OzCQILJkY8nWojIIxqH30ItpsmXC7UmCRcgjmTVPY")
                     song = genius.search_song(song_lyric)
                     res = [x for x in song.lyrics.split('\n') if len(x) > 2]
-                    pripev = ['[Chorus', '[Припев', '[Hook']#, 'Chorus', 'Припев', 'Hook']
+                    with open('data/Pripev', 'r', encoding='utf-8') as f:
+                        pripev = [x for x in f.read().split('\n') if len(x) > 1]
                     flag = False
                     for stroka in res:
                         for strr in stroka.split(' '):
