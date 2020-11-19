@@ -423,7 +423,7 @@ def parse_response_query(data: json) -> str:
         newrubname = json.loads(q.read().replace("'", '"'))
         if data['newrubname'] in emotions:
             return data['aiml'] + " " + newrubname[data['newrubname']]
-    return data['aiml'] + " P226Smug"
+    return data['aiml'] + " catFax"
 
 
 def get_goroskop(message: str, nickname) -> str:
