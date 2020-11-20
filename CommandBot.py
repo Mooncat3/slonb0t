@@ -825,7 +825,7 @@ class CommandsBot(commands.Bot, ABC):
         with open('data/me/age.txt', encoding='utf-8') as f:
             ages = [x for x in f.read().split('\n') if len(x) > 1]
 
-        currency = ['доллар', 'фунт', 'евро', 'франк', 'крона']
+        currency = ['доллар', 'фунт', 'евро', 'франк']
         symbols = ['$', '£', '€', '₽']
         curr = random.choice(symbols)
         currency_rand = random.choice(currency)
@@ -835,40 +835,40 @@ class CommandsBot(commands.Bot, ABC):
         answer = random.choice(me_classic).format(nickname)
         name = random.choice(namessss)
         v = random.randint(0, 100)
-        if 0 < v <= 15:
+        if 0 < v <= 17:
             rand_num = random.randint(0, 100)
-            if 0 < rand_num <= 90:
+            if 0 < rand_num <= 95:
                 answer = random.choice(search).format(nickname, random.choice(things))
             else:
                 answer = random.choice(search).format(nickname, name)
-        if 15 < v <= 18:
+        if 17 < v <= 18:
             kol = round(random.uniform(90, 250), 2)
-            answer = "Однажды {} приснилось, что {} теперь стоит {}₽! Какой ужас D:".format(nickname, currency_rand,
+            answer = "Однажды {} приснилось, что {} теперь стоит {} ₽! Какой ужас Sadge".format(nickname, currency_rand,
                                                                                                   kol)
-        if 18 < v <= 20:
+        if 18 < v <= 19:
             kol = round(random.uniform(0, 80), 2)
-            answer = "Однажды {} приснилось, что {} теперь стоит {}₽! Какое счастье PogU".format(nickname,
+            answer = "Однажды {} приснилось, что {} теперь стоит {} ₽! Какое счастье PogU".format(nickname,
                                                                                                        currency_rand, kol)
-        if 20 < v <= 35:
+        if 19 < v <= 35:
             answer = random.choice(stories).format(nickname, name, thing)
-        if 35 < v <= 75:
+        if 35 < v <= 79:
             answer = random.choice(me_classic).format(nickname)
-        if 75 < v <= 80:
+        if 79 < v <= 80:
             answer = '{} умрёт через {} дней roflanPominy'.format(nickname, random.randint(1, 30))
         if 80 < v <= 82:
             answer = 'У {} - {} IQ WAYTOOSMART Clap'.format(nickname, random.randint(80, 200))
-        if 82 < v <= 86:
+        if 82 < v <= 88:
             answer = '{} украл у {} {} BOP'.format(nickname, name, thing)
-        if 86 < v <= 88:
+        if 88 < v <= 89:
             kol = round(random.uniform(0, 5000), 2)
             answer = '{} украл у {} {} {} BOP'.format(nickname, name, kol, curr)
-        if 88 < v <= 90:
+        if 89 < v <= 92:
             kol = round(random.uniform(0, 100000), 2)
-            answer = '{} хвастается {} за {}{} peepoCool'.format(nickname, random.choice(clothes), kol, curr)
-        if 90 < v <= 92:
+            answer = '{} хвастается {} за {} {} 💸 peepoCool'.format(nickname, random.choice(clothes), kol, curr)
+        if 92 < v <= 93:
             kol = round(random.uniform(0, 5000), 2)
-            answer = '{} выиграл в лотерее {}{} PepoParty Поздравляем! PepoParty'.format(nickname, kol, curr)
-        if 92 < v <= 94:
+            answer = '{} выиграл в лотерее {} {} PeepoClap Поздравляем! PeepoClap'.format(nickname, kol, curr)
+        if 93 < v <= 95:
             start_date = date(2021, 1, 1)
             end_date = date(2035, 1, 1)
             time_between_dates = end_date - start_date
@@ -876,16 +876,16 @@ class CommandsBot(commands.Bot, ABC):
             random_number_of_days = random.randrange(days_between_dates)
             random_date = start_date + timedelta(days=random_number_of_days)
             random_date = random_date.strftime('%d.%m.%Y')
-            answer = '{} сегодня прошёл тест на дату смерти. monkaW Дата смерти {} - {} roflanPominy'.format(nickname,
-                                                                                                             nickname,
-                                                                                                             random_date)
-        if 94 < v <= 96:
+            answer = '{} сегодня прошёл тест на дату смерти. monkaW Дата смерти {} - {} monkaX roflanPominy'.format(nickname,
+                                                                                                                nickname,
+                                                                                                                random_date)
+        if 95 < v <= 96:
             name2 = random.choice(namess)
-            answer = '{} решил украсть у {} {} , но в чате пробежал {} и засёк преступление. {} теперь за решёткой BOP'.format(nickname, name, thing, name2, nickname)
+            answer = '{} решил украсть у {} {} , но в чате пробежал {} и засёк преступление monkaFLASH {} теперь за решёткой BOP'.format(nickname, name, thing, name2, nickname)
 
         if 96 < v <= 98:
             age = random.choice(ages)
-            answer = '{} скрывает свой возраст. Но я знаю, что {} уже {} SeriousSloth'.format(nickname, nickname, age)
+            answer = '{} скрывает свой возраст. Но я знаю, что {} уже {} hehDed'.format(nickname, nickname, age)
 
         if 98 < v <= 100:
             first_name = random.choice(first_names)
@@ -899,6 +899,14 @@ class CommandsBot(commands.Bot, ABC):
         nickname = ctx.author.display_name
         namesss = list(set(namess))
         AdditionalMethods.add_to_buffer("e", nickname + ' пукнул на ' + random.choice(namesss) + ' (puke) ThumbUp', ctx.author, "пук")
+                                                       
+    @commands.command(name='кто')
+    async def kto(self, ctx):
+        global namess
+        nickname = ctx.author.display_name
+        message = ctx.message.clean_content
+        namesss = list(set(namess))
+        AdditionalMethods.add_to_buffer("e", random.choice(namesss) + ' ' + message + ' OpieOP', ctx.author, "пук")
 
     @commands.command(name='do')
     async def do(self, ctx):
