@@ -95,7 +95,7 @@ class CommandsBot(commands.Bot, ABC):
         self.roulette_is_running = False
 
     async def event_ready(self):
-        print(f'Ready {str(self.__class__.__name__)} | {self.nick} on {self.initial_channels}')
+        print(f'Ready {str(self.__class__.__name__)} | {self.nick} on {self.initial_channels[0]}')
         global namess
         namess = []
         global ii
