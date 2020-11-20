@@ -836,8 +836,8 @@ class CommandsBot(commands.Bot, ABC):
         name = random.choice(namessss)
         v = random.randint(0, 100)
         if 0 < v <= 15:
-            rand_num = random.randint(0, 1)
-            if rand_num == 0:
+            rand_num = random.randint(0, 100)
+            if 0 < rand_num <= 90:
                 answer = random.choice(search).format(nickname, random.choice(things))
             else:
                 answer = random.choice(search).format(nickname, name)
