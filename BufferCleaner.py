@@ -74,7 +74,7 @@ class BufferCleaner(Client, ABC):
         pass
 
     async def event_ready(self):
-        print(f'Ready {str(self.__class__.__name__)} | {config.BOT} on {config.CHANNELS}')
+        print(f'Ready {str(self.__class__.__name__)} | {config.BOT} on {config.CHANNELS[0]}')
         pass
 
     async def event_raw_data(self, data):
