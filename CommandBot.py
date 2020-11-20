@@ -457,7 +457,7 @@ class CommandsBot(commands.Bot, ABC):
             AdditionalMethods.add_to_buffer("c", AdditionalMethods.get_archive_stream_stat(id, nickname, tag,
                                                                                            ctx.author).format(nickname,
                                                                                                               id),
-                                            ctx.author, "history")
+                                            ctx.author, "archive")
         except:
             AdditionalMethods.add_to_buffer("с", f'{nickname} !archive [0-9]', ctx.author, "archive")
 
