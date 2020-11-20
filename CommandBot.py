@@ -503,13 +503,13 @@ class CommandsBot(commands.Bot, ABC):
                                                     ctx.author, "перевод")
                 else:
                     resultat = str(r.text).partition('t":["')[-1].replace('"]}', "")
-                    with open('data/osujdau.txt', 'r', encoding='utf_8') as f:
-                        l = [line.strip() for line in f]
-                    if any(x in resultat.lower() for x in l):
+                    with open('data/osujdau2.txt', 'r', encoding='utf-8') as f:
+                        l = f.read().split('\n')
+                    if any(resultat.find(x) != -1 for x in l):
                         AdditionalMethods.add_to_buffer("с", f"{nickname}, в переводе мы обнаружили бан-ворд PepoG",
                                                         ctx.author, "перевод")
                     else:
-                        AdditionalMethods.add_to_buffer("с", f"{nickname}, {resultat}", ctx.author, "курс")
+                        AdditionalMethods.add_to_buffer("с", f"{nickname}, {resultat}", ctx.author, "перевод")
             except:
                 AdditionalMethods.add_to_buffer("с",
                                                 f"{nickname}, неправильно указаны параметры. Ссылка со всеми языками: https://pastebin.com/raw/nk1n1KxD",
@@ -528,14 +528,17 @@ class CommandsBot(commands.Bot, ABC):
             json_r2 = r2.json()
             now = datetime.now() + timedelta(hours=3)
             today = now.strftime("%d.%m")
-            resik = f"Курс валют на {today}: USD = {round(json_r['USD_RUB'], 2)} RUB | EUR = {round(json_r['EUR_RUB'], 2)} RUB | JPY = {round(json_r2['JPY_RUB'], 4)} RUB | UAH = {round(json_r2['UAH_RUB'], 2)} RUB"
-            AdditionalMethods.add_to_buffer("с", resik, ctx.author, "курс")
+            try:
+                resik = f'Курс валют на {today}: USD = {round(json_r["USD_RUB"], 2)} RUB | EUR = {round(json_r["EUR_RUB"], 2)} RUB | JPY = {round(json_r2["JPY_RUB"], 4)} RUB | UAH = {round(json_r2["UAH_RUB"], 2)} RUB'
+                AdditionalMethods.add_to_buffer("с", resik, ctx.author, "курс")
+            except KeyError:
+                AdditionalMethods.add_to_buffer("с", nickname+', не удаётся получить курс валют, попробуйте позже PepoG', ctx.author, "курс")
         else:
             userkurs = message.split(" ")[1]
             try:
                 count = message.split(" ")[2]
             except:
-                AdditionalMethods.add_to_buffer("с", f"{nickname}, введите число", ctx.author, "курс")
+                AdditionalMethods.add_to_buffer("с", f"{nickname}, введите число PepoG", ctx.author, "курс")
             url = "https://free.currconv.com/api/v7/convert?q=" + userkurs.replace("-",
                                                                                    "_").upper() + "&compact=ultra&apiKey=ee315cc429cbc167d4b7"
             r = requests.get(url)
