@@ -40,10 +40,10 @@ class CommandsBot(commands.Bot, ABC):
         self.logs = []
         self.japtest = {'kanji': '', 'tr': '', 'example': '', 'tr_example': '', 'active': False}
 
-    
+    '''
     async def event_command_error(self, ctx, error):
         pass
-    
+    '''
 
     async def duelent(self, socket):
         i: int = 0
