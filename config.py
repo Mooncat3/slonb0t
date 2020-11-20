@@ -1,6 +1,6 @@
 
 
-CHAN = "jesusavgn"
+CHAN = "JesusAVGN"
 
 
 BROADCASTER_ID = "34711476"
