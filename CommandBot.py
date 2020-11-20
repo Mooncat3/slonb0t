@@ -111,7 +111,7 @@ class CommandsBot(commands.Bot, ABC):
         nickname = message.author.name
         global namess
         global ii
-        if ii > 100:
+        if ii > 50:
             del namess[0]
         namess.append(message.author.display_name)
         ii+=1
