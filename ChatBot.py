@@ -15,7 +15,7 @@ bot = commands.Bot(
 
 @bot.event
 async def event_ready():
-    print(f'Ready ChatBot | {config.BOT} on {config.CHANNELS}')
+    print(f'Ready ChatBot | {config.BOT} on {config.CHANNELS[0]}')
 
 
 @bot.event
