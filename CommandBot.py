@@ -506,12 +506,13 @@ class CommandsBot(commands.Bot, ABC):
                 else:
                     resultat = str(r.text).partition('t":["')[-1].replace('"]}', "")
                     with open('data/osujdau2.txt', 'r', encoding='utf-8') as f:
-                        l = f.read().split('\n')
-                    if any(resultat.find(x) != -1 for x in l):
-                        AdditionalMethods.add_to_buffer("с", f"{nickname}, в переводе мы обнаружили бан-ворд PepoG",
-                                                        ctx.author, "перевод")
-                    else:
-                        AdditionalMethods.add_to_buffer("с", f"{nickname}, {resultat}", ctx.author, "перевод")
+                        osu = [x for x in l.read().split('\n') if len(x) > 1]
+                    res_prov = re.sub(r'\W+', ' ', resultat)
+                    for word in res_prov.split(' '):
+                        for asu in osu:
+                            if word.lower().find(asu) != -1:
+                                resultat = resultat.replace(word, '*' * len(word))
+                    AdditionalMethods.add_to_buffer("с", f"{nickname}, {resultat}", ctx.author, "перевод")
             except:
                 AdditionalMethods.add_to_buffer("с",
                                                 f"{nickname}, неправильно указаны параметры. Ссылка со всеми языками: https://pastebin.com/raw/nk1n1KxD",
