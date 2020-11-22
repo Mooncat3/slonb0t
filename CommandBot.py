@@ -90,8 +90,8 @@ class CommandsBot(commands.Bot, ABC):
             await socket.send_privmsg(config.CHAN, "Кто же умрёт? Hmmm ...")
             randname = random.choice(self.roulette_nicknames)
             await asyncio.sleep(5)
-            await socket.send_privmsg(config.CHAN, "А умирает сегодня " + randname + ", ББ!")
-            await socket.send_privmsg(config.CHAN, f"/timeout {randname} 60")
+            await socket.send_privmsg(config.CHAN, "А умирает сегодня " + randname['label'] + ", ББ!")
+            await socket.send_privmsg(config.CHAN, f"/timeout {randname['str_id']} 60")
         self.roulette_nicknames.clear()
         self.roulette_is_running = False
 
@@ -295,8 +295,8 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='accept')
     async def accept(self, ctx):
         if self.roulette_is_running:
-            if not ctx.author.display_name in self.roulette_nicknames:
-                self.roulette_nicknames.append(ctx.author.display_name)
+            if not {"label": ctx.author.display_name, "str_id": ctx.author.name} in self.roulette_nicknames:
+                self.roulette_nicknames.append({"label": ctx.author.display_name, "str_id": ctx.author.name})
 
     @commands.command(name='omgroulette')
     async def omgroulette(self, ctx):
@@ -304,7 +304,7 @@ class CommandsBot(commands.Bot, ABC):
                 not AdditionalMethods.check_active() or AdditionalMethods.vip(ctx.author.is_mod,
                                                                               ctx.author.name)) and not self.duel_is_running:
             self.roulette_is_running = True
-            self.roulette_nicknames.append(ctx.author.display_name)
+            self.roulette_nicknames.append({"label": ctx.author.display_name, "str_id": ctx.author.name})
             await ctx.channel._ws.send_privmsg(config.CHAN,
                                                "Рулетка началась! У вас есть 20 секунд! Чтобы учавствовать напишите !accept")
             asyncio.get_event_loop().create_task(self.rand(self._ws))
