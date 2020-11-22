@@ -64,13 +64,13 @@ class CommandsBot(commands.Bot, ABC):
                     data = json.loads(e.read())
                 randseq = random.choice(data)
                 await socket.send_privmsg(config.CHAN,
-                                          f"Хлопок! {self.duel_nicknames[0]["label"]} выстреливает в {randname["label"]}{randseq['text']}")
+                                          f"Хлопок! {self.duel_nicknames[0]['label']} выстреливает в {randname['label']}{randseq['text']}")
                 if int(randseq['time']) > 1:
-                    print(f"/timeout {randname["str_id"]} {randseq['time']}")
+                    print(f"/timeout {randname['str_id']} {randseq['time']}")
                     await asyncio.sleep(0.5)
-                    await socket.send_privmsg(config.CHAN, f"/timeout {randname["str_id"]} {randseq['time']}")
+                    await socket.send_privmsg(config.CHAN, f"/timeout {randname['str_id']} {randseq['time']}")
                 elif int(randseq['time']) > 0:
-                    await socket.send_privmsg(config.CHAN, f"/timeout {self.duel_nicknames[0]["str_id"]} 60")
+                    await socket.send_privmsg(config.CHAN, f"/timeout {self.duel_nicknames[0]['str_id']} 60")
             else:
                 await socket.send_privmsg(config.CHAN,
                                           "Один из дуэлянтов бессмертен, поэтому они стреляют холостыми пулями monkaW "
@@ -79,7 +79,7 @@ class CommandsBot(commands.Bot, ABC):
                 self.duel_nicknames.remove(randname)
                 await asyncio.sleep(8)
                 await socket.send_privmsg(config.CHAN,
-                                          f"Хлопок! Точный выстрел заставляет {randname} сдаться. Самая быстрая рука дикого запада – {self.duel_nicknames[0]["label"]} EZ")
+                                          f"Хлопок! Точный выстрел заставляет {randname} сдаться. Самая быстрая рука дикого запада – {self.duel_nicknames[0]['label']} EZ")
         self.duel_is_running = False
 
     async def rand(self, socket):
