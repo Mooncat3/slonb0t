@@ -351,7 +351,7 @@ class CommandsBot(commands.Bot, ABC):
             AdditionalMethods.add_to_buffer("e", f"{nickname}, Бот может принимать максимум 300 символов", ctx.author,
                                             "porf")
         else:
-            response = requests.post(url, json={'prompt': words, 'length': '18', 'num_samples': '5'})
+            response = requests.post(url, json={'prompt': words, 'length': '20', 'num_samples': '5'})
             if response.text == "Service Unavailable":
                 AdditionalMethods.add_to_buffer("e",
                                                 f"{nickname}, на данный момент Порфирьевич не работает. Попробуйте позже roflanPominy",
@@ -366,7 +366,7 @@ class CommandsBot(commands.Bot, ABC):
                     for asu in osu:
                         if word.lower().find(asu) != -1:
                             result = result.replace(word, '*' * len(word))
-                if len(result) > 90:
+                if len(result) > 50 and len(words) > 40:
                     AdditionalMethods.add_to_buffer("e", f"{nickname}, {result}", ctx.author, "porf")
                 else:
                     AdditionalMethods.add_to_buffer("e", f"{nickname}, {words}{result}", ctx.author, "porf")
@@ -506,7 +506,7 @@ class CommandsBot(commands.Bot, ABC):
                 else:
                     resultat = str(r.text).partition('t":["')[-1].replace('"]}', "")
                     with open('data/osujdau2.txt', 'r', encoding='utf-8') as f:
-                        osu = [x for x in l.read().split('\n') if len(x) > 1]
+                        osu = [x for x in f.read().split('\n') if len(x) > 1]
                     res_prov = re.sub(r'\W+', ' ', resultat)
                     for word in res_prov.split(' '):
                         for asu in osu:
