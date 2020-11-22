@@ -57,8 +57,13 @@ class CommandsBot(commands.Bot, ABC):
                 await socket.send_privmsg(config.CHAN,
                                           "Дуэлянты смотрят друг на друга monkaW . В любой момент они готовы достать "
                                           "револьвер из кобуры... PepeS ")
-                randname = random.choice(self.duel_nicknames)
-                self.duel_nicknames.remove(randname)
+                if "Danantur" in self.duel_nicknames:
+                    self.duel_nicknames.remove("Danantur")
+                    randname = self.duel_nicknames[0]
+                    self.duel_nicknames = ["Danantur"]
+                else:
+                    randname = random.choice(self.duel_nicknames)
+                    self.duel_nicknames.remove(randname)
                 await asyncio.sleep(8)
                 with open(file='data/duel_rand.txt', mode='r', encoding='utf-8') as e:
                     data = json.loads(e.read())
