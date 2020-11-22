@@ -57,25 +57,20 @@ class CommandsBot(commands.Bot, ABC):
                 await socket.send_privmsg(config.CHAN,
                                           "Дуэлянты смотрят друг на друга monkaW . В любой момент они готовы достать "
                                           "револьвер из кобуры... PepeS ")
-                if "Danantur" in self.duel_nicknames:
-                    self.duel_nicknames.remove("Danantur")
-                    randname = self.duel_nicknames[0]
-                    self.duel_nicknames = ["Danantur"]
-                else:
-                    randname = random.choice(self.duel_nicknames)
-                    self.duel_nicknames.remove(randname)
+                randname = random.choice(self.duel_nicknames)
+                self.duel_nicknames.remove(randname)
                 await asyncio.sleep(8)
                 with open(file='data/duel_rand.txt', mode='r', encoding='utf-8') as e:
                     data = json.loads(e.read())
                 randseq = random.choice(data)
                 await socket.send_privmsg(config.CHAN,
-                                          f"Хлопок! {self.duel_nicknames[0]} выстреливает в {randname}{randseq['text']}")
+                                          f"Хлопок! {self.duel_nicknames[0]["label"]} выстреливает в {randname["label"]}{randseq['text']}")
                 if int(randseq['time']) > 1:
-                    print(f"/timeout {randname} {randseq['time']}")
+                    print(f"/timeout {randname["str_id"]} {randseq['time']}")
                     await asyncio.sleep(0.5)
-                    await socket.send_privmsg(config.CHAN, f"/timeout {randname} {randseq['time']}")
+                    await socket.send_privmsg(config.CHAN, f"/timeout {randname["str_id"]} {randseq['time']}")
                 elif int(randseq['time']) > 0:
-                    await socket.send_privmsg(config.CHAN, f"/timeout {self.duel_nicknames[0]} 60")
+                    await socket.send_privmsg(config.CHAN, f"/timeout {self.duel_nicknames[0]["str_id"]} 60")
             else:
                 await socket.send_privmsg(config.CHAN,
                                           "Один из дуэлянтов бессмертен, поэтому они стреляют холостыми пулями monkaW "
@@ -84,7 +79,7 @@ class CommandsBot(commands.Bot, ABC):
                 self.duel_nicknames.remove(randname)
                 await asyncio.sleep(8)
                 await socket.send_privmsg(config.CHAN,
-                                          f"Хлопок! Точный выстрел заставляет {randname} сдаться. Самая быстрая рука дикого запада – {self.duel_nicknames[0]} EZ")
+                                          f"Хлопок! Точный выстрел заставляет {randname} сдаться. Самая быстрая рука дикого запада – {self.duel_nicknames[0]["label"]} EZ")
         self.duel_nicknames.clear()
         self.duel_is_running = False
 
@@ -261,13 +256,13 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='acduel')
     async def acduel(self, ctx):
         if self.duel_is_running:
-            if ctx.author.display_name == self.duel_user:
+            if ctx.author.display_name.lower() == self.duel_user.lower() or ctx.author.name.lower() == self.duel_user.lower():
                 if self.duel_serious:
                     if ctx.author.is_mod:
                         self.duel_serious = False
                     else:
                         self.duel_serious = True
-                self.duel_nicknames.append(ctx.author.display_name)
+                self.duel_nicknames.append({"label": ctx.author.display_name, "str_id": ctx.author.name})
 
     @commands.command(name='duel')
     async def duel(self, ctx):
@@ -282,7 +277,7 @@ class CommandsBot(commands.Bot, ABC):
             message = ctx.message.clean_content
             if len(message) > 1 and len(message) <= 26 and message.find(" ") == -1:
                 self.duel_is_running = True
-                self.duel_nicknames.append(ctx.author.display_name)
+                self.duel_nicknames.append({"label": ctx.author.display_name, "str_id": ctx.author.name})
                 self.duel_user = message.replace("@", "")
                 if nickname.lower() != self.duel_user.lower():
                     await ctx.channel._ws.send_privmsg(config.CHAN,
