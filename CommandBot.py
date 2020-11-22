@@ -32,7 +32,7 @@ class CommandsBot(commands.Bot, ABC):
         self.roulette_is_running = False
         self.roulette_nicknames = []
         self.duel_is_running = False
-        self.duel_nicknames = [{"label": "", "str_id": ""}]
+        self.duel_nicknames = []
         self.duel_user = ""
         self.duel_serious = True
         self.spammers = {}
@@ -80,6 +80,7 @@ class CommandsBot(commands.Bot, ABC):
                 await asyncio.sleep(8)
                 await socket.send_privmsg(config.CHAN,
                                           f"Хлопок! Точный выстрел заставляет {randname} сдаться. Самая быстрая рука дикого запада – {self.duel_nicknames[0]['label']} EZ")
+        self.duel_nicknames.clear()
         self.duel_is_running = False
 
     async def rand(self, socket):
@@ -265,7 +266,6 @@ class CommandsBot(commands.Bot, ABC):
 
     @commands.command(name='duel')
     async def duel(self, ctx):
-        self.duel_nicknames = []
         nickname = ctx.author.display_name
         if not self.duel_is_running and (
                 not AdditionalMethods.check_active() or AdditionalMethods.vip(ctx.author.is_mod,
