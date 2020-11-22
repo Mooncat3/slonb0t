@@ -71,6 +71,8 @@ class CommandsBot(commands.Bot, ABC):
                 await socket.send_privmsg(config.CHAN,
                                           f"Хлопок! {self.duel_nicknames[0]} выстреливает в {randname}{randseq['text']}")
                 if int(randseq['time']) > 1:
+                    print(f"/timeout {randname} {randseq['time']}")
+                    await asyncio.sleep(0.5)
                     await socket.send_privmsg(config.CHAN, f"/timeout {randname} {randseq['time']}")
                 elif int(randseq['time']) > 0:
                     await socket.send_privmsg(config.CHAN, f"/timeout {self.duel_nicknames[0]} 60")
@@ -259,7 +261,7 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='acduel')
     async def acduel(self, ctx):
         if self.duel_is_running:
-            if ctx.author.name == self.duel_user.lower():
+            if ctx.author.display_name == self.duel_user:
                 if self.duel_serious:
                     if ctx.author.is_mod:
                         self.duel_serious = False
