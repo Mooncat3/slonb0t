@@ -27,25 +27,20 @@ class stream(commands.Bot):
         
         word = f"{nick_dis}, стримов в ближающую неделю не будет. Вся информация в телеграм-канале - https://t.me/jesusavgntwitch FeelsBadMan"
 
-        if nick == 'slonb0t' or nick == 'moobot':
+        if nick == 'slonb0t' or nick == 'moobot' or mess[0] == '!' or len(mess) > 100 or nick == 'kryabot':
             pass
-        else:
-            if mess[0] == '!':
-                pass
-            elif len(mess) < 80:
-                if any(mess.find(x) != -1 for x in self.four):
-                    print(mess_orig, '| список | 1')
-                    if any(mess.find(x) != -1 for x in self.one):
-                        print(mess_orig, '| список | 2 |', 'Отправлено!')
-                        await send(word)
-                else:
-                    if any(mess.find(x) != -1 for x in self.one):
-                        print(mess_orig, '| 1')
-                        if any(mess.find(x) != -1 for x in self.two):
-                            print(mess_orig, '| 2')
-                            if any(mess.find(x) != -1 for x in self.three):
-                                print(mess_orig, '| 3 | Отправлено!')
-                                await send(word)
+        elif any(mess.find(x) != -1 for x in self.four):
+            print(mess_orig, '| СПИСОК | 1')
+            if any(mess.find(x) != -1 for x in self.one):
+                print(mess_orig, '| СПИСОК | 2 |', 'Отправлено!')
+                await send(word)
+        elif any(mess.find(x) != -1 for x in self.one):
+            print(mess_orig, '| 1')
+            if any(mess.find(x) != -1 for x in self.two):
+                print(mess_orig, '| 2')
+                if any(mess.find(x) != -1 for x in self.three):
+                    print(mess_orig, '| 3 | Отправлено!')
+                    await send(word)
         await bot.handle_commands(ctx)
 
 bot = stream()
