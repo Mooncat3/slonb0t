@@ -7,7 +7,7 @@ class CommandsBot(commands.Bot, ABC):
     def __init__(self):
         super().__init__(irc_token='oauth:14y5qalllj1i65rg3m9dip1rpq5ugd',
                          client_id="gp762nuuoqcoxypju8c569th9wz7q5", nick="SLONB0T", prefix='!',
-                         initial_channels=['mooncat3'])
+                         initial_channels=['jesusavgn'])
                          
     async def event_ready(self):
         with open('1.txt', encoding='utf-8') as t:
@@ -19,11 +19,15 @@ class CommandsBot(commands.Bot, ABC):
         with open('4.txt', encoding='utf-8') as nn:
             self.four = nn.read().split('\n')
         print('Бот запущен!')
-
+        
+    async def event_command_error(self, ctx, error):
+        pass
 
     async def event_message(self, ctx):
         mess = ctx.content.lower()
+        mess_orig = ctx.content
         nick = ctx.author.name
+        send = ctx.channel.send
         
         word = ctx.author.display_name+", стримов в ближающую неделю не будет. Вся информация в телеграм-канале - https://t.me/jesusavgntwitch FeelsBadMan"
 
@@ -34,18 +38,18 @@ class CommandsBot(commands.Bot, ABC):
                 pass
             elif len(mess) < 80:
                 if any(mess.find(x) != -1 for x in self.four):
-                    print(mess, '| из списка |', '1')
+                    print(mess_orig, '| из списка |', '1')
                     if any(mess.find(x) != -1 for x in self.one):
-                        print(mess, '| из списка |', 'Отправлено')
-                        await ctx.channel.send(word)
+                        print(mess_orig, '| из списка |', 'Отправлено')
+                        await send(word)
                 else:
                     if any(mess.find(x) != -1 for x in self.one):
-                        print(mess, '1')
+                        print(mess_orig, '1')
                         if any(mess.find(x) != -1 for x in self.two):
-                            print(mess, '2')
+                            print(mess_orig, '2')
                             if any(mess.find(x) != -1 for x in self.three):
-                                print(mess, 'Отправлено')
-                                await ctx.channel.send(word)
+                                print(mess_orig, 'Отправлено')
+                                await send(word)
         await bot.handle_commands(ctx)
 
 bot = CommandsBot()
