@@ -1037,7 +1037,7 @@ class CommandsBot(commands.Bot, ABC):
 
     @commands.command(name='кнб')
     async def cnb(self, ctx):
-        message = ctx.message.content
+        message = ctx.message.clean_content
         nickname = ctx.author.display_name
         listcnb = ['⛰', '✂️', '📜']
         rndcnb1 = random.choice(listcnb)
