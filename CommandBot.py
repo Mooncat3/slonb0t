@@ -1272,6 +1272,7 @@ class CommandsBot(commands.Bot, ABC):
                         for stroka in res:
                             for strr in stroka.split(' '):
                                 for prip in pripev:
+                                    prip = '[' + prip
                                     if stroka.find(prip) != -1:
                                         res = res[res.index(stroka)+1:]
                                         flag = True
