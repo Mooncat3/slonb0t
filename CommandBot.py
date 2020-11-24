@@ -1290,6 +1290,8 @@ class CommandsBot(commands.Bot, ABC):
                     AdditionalMethods.add_to_buffer("e", res[:200] + emote, ctx.author, 'music')
                 except AttributeError:
                     AdditionalMethods.add_to_buffer("e", nick + ', песня не найдена!', ctx.author, 'music')
+                except TypeError:
+                    AdditionalMethods.add_to_buffer("e", nick + ', не удалось выполнить поиск песни. Попробуйте ещё раз PepoG ', ctx.author, 'music')
 
 
 subprocess.Popen([sys.executable, 'ChatBot.py'])
