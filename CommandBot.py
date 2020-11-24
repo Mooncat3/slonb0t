@@ -909,7 +909,7 @@ class CommandsBot(commands.Bot, ABC):
         nickname = ctx.author.display_name
         message = ctx.message.clean_content
         namesss = list(set(namess))
-        AdditionalMethods.add_to_buffer("e", 'ᅠ'+random.choice(namesss) + ' ' + message + ' OpieOP', ctx.author, "кто")
+        AdditionalMethods.add_to_buffer("e", 'ᅠ'+random.choice(namesss) + ' ' + message[:150] + ' OpieOP', ctx.author, "кто")
 
     @commands.command(name='do')
     async def do(self, ctx):
@@ -1041,7 +1041,7 @@ class CommandsBot(commands.Bot, ABC):
         nickname = ctx.author.display_name
         listcnb = ['⛰', '✂️', '📜']
         rndcnb1 = random.choice(listcnb)
-        if message == '!кнб':
+        if len(message) == 0:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !кнб [камень, ножницы, бумага]", ctx.author,
                                             "кнб")
         else:
