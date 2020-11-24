@@ -1277,8 +1277,6 @@ class CommandsBot(commands.Bot, ABC):
                                     break
                             if flag:
                                 break
-                        if flag:
-                            break
                     res = [re.sub(r'[\[].*?[\]]', '', i) for i in res]
                     res = [x for x in res if len(x) > 1]
                     res = emote.join(res[:4])
