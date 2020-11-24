@@ -311,7 +311,7 @@ class CommandsBot(commands.Bot, ABC):
         elif self.duel_is_running:
             AdditionalMethods.add_to_buffer("s", f"{ctx.author.display_name}, сейчас идёт дуэль", ctx.author,
                                             "omgroulette")
-    '''
+                                                       
     @commands.command(name='пирамида')
     async def piramide(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
@@ -331,7 +331,7 @@ class CommandsBot(commands.Bot, ABC):
             await self._ws.send_privmsg(config.CHAN, "/color BlueViolet")
             await self._ws.send_privmsg(config.CHAN, f"/me {word}")
             await self._ws.send_privmsg(config.CHAN, "/color SpringGreen")
-    '''
+
     @commands.command(name='ауф')
     async def auf(self, ctx):
         nickname = ctx.author.display_name
