@@ -1259,6 +1259,17 @@ class CommandsBot(commands.Bot, ABC):
                     flag = False
                     for stroka in res:
                         for strr in stroka.split(' '):
+                            for prip in pripev:
+                                if stroka.find('[' + prip) != -1:
+                                    res = res[res.index(stroka)+1:]
+                                    flag = True
+                                    break
+                            if flag:
+                                break
+                        if flag:
+                            break
+                    if not flag:
+                        for strr in stroka.split(' '):
                             for slovo in song_lyric.lower().split(' '):
                                 if slovo == strr.lower() and len(slovo) > 4:
                                     res = res[res.index(stroka):]
@@ -1268,19 +1279,6 @@ class CommandsBot(commands.Bot, ABC):
                                 break
                         if flag:
                             break
-                    if not flag:
-                        for stroka in res:
-                            for strr in stroka.split(' '):
-                                for prip in pripev:
-                                    prip = '[' + prip
-                                    if stroka.find(prip) != -1:
-                                        res = res[res.index(stroka)+1:]
-                                        flag = True
-                                        break
-                                if flag:
-                                    break
-                            if flag:
-                                break
                     res = [re.sub(r'[\[].*?[\]]', '', i) for i in res]
                     res = [x for x in res if len(x) > 1]
                     res = emote.join(res[:4])
