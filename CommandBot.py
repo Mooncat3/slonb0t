@@ -1287,7 +1287,7 @@ class CommandsBot(commands.Bot, ABC):
                         for asu in osu:
                             if word.lower().find(asu) != -1:
                                 res = res.replace(word, '*' * len(word))
-                    AdditionalMethods.add_to_buffer("e", res[:200] + emote, ctx.author, 'music')
+                    AdditionalMethods.add_to_buffer("e", emote + ' ' + res[:180] + emote, ctx.author, 'music')
                 except AttributeError:
                     AdditionalMethods.add_to_buffer("e", nick + ', песня не найдена!', ctx.author, 'music')
                 except TypeError:
