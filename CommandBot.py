@@ -909,7 +909,7 @@ class CommandsBot(commands.Bot, ABC):
         nickname = ctx.author.display_name
         message = ctx.message.clean_content
         namesss = list(set(namess))
-        AdditionalMethods.add_to_buffer("e", 'ᅠ'+random.choice(namesss) + ' ' + message[:80] + ' CatFax', ctx.author, "кто")
+        AdditionalMethods.add_to_buffer("e", 'ᅠ'+random.choice(namesss) + ' ' + message[:80] + ' catFax', ctx.author, "кто")
 
     @commands.command(name='do')
     async def do(self, ctx):
