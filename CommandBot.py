@@ -915,7 +915,7 @@ class CommandsBot(commands.Bot, ABC):
     async def do(self, ctx):
         message = ctx.message.clean_content
         nickname = ctx.author.display_name
-        if len(message) == 0:
+        if len(message) == 0 or (message.find('@') != -1 and len(message.split('@')[1]) < 2):
             AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !do [message]", ctx.author, "do")
         else:
             with open('data/do.txt', 'r', encoding='utf-8') as c:
