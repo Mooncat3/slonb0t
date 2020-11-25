@@ -909,20 +909,20 @@ class CommandsBot(commands.Bot, ABC):
         nickname = ctx.author.display_name
         message = ctx.message.clean_content
         namesss = list(set(namess))
-        AdditionalMethods.add_to_buffer("e", 'ᅠ'+random.choice(namesss) + ' ' + message[:150] + ' OpieOP', ctx.author, "кто")
+        AdditionalMethods.add_to_buffer("e", 'ᅠ'+random.choice(namesss) + ' ' + message[:80] + ' CatFax', ctx.author, "кто")
 
     @commands.command(name='do')
     async def do(self, ctx):
-        message = ctx.message.clean_content
+        message = ctx.message.clean_content.replace('@', '')
         nickname = ctx.author.display_name
-        if len(message) == 0 or (message.find('@') != -1 and len(message.split('@')[1]) < 2):
+        if len(message) == 0:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !do [message]", ctx.author, "do")
         else:
             with open('data/do.txt', 'r', encoding='utf-8') as c:
                 listme = list(c)
             randomdo = random.choice(listme)
             if not len(message) > 100:
-                AdditionalMethods.add_to_buffer("e", randomdo.format(nickname, message.replace('@', '')), ctx.author,
+                AdditionalMethods.add_to_buffer("e", randomdo.format(nickname, message), ctx.author,
                                                 "do")
             else:
                 AdditionalMethods.add_to_buffer("e", f"{nickname}, пишите меньше символов WeirdChamp ", ctx.author,
