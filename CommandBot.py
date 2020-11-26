@@ -1234,21 +1234,21 @@ class CommandsBot(commands.Bot, ABC):
 
     @commands.command(name='music')
     async def music(self, ctx):
-        nick = ctx.author.display_name
-        message = ctx.message.clean_content
-        if len(message) == 0:
-            AdditionalMethods.add_to_buffer("e", nick + ', введите - !music [строка из песни] [смайл]', ctx.author,
-                                            'music')
-        else:
-            mess = message.split(' ')
-            emote = ' ' + mess[len(mess) - 1]
-            with open('data/SMILES.txt', encoding='utf-8') as g:
-                list_emotes = json.loads(g.read())
-            if not mess[len(mess) - 1] in list_emotes:
+        try:
+            nick = ctx.author.display_name
+            message = ctx.message.clean_content
+            if len(message) == 0:
                 AdditionalMethods.add_to_buffer("e", nick + ', введите - !music [строка из песни] [смайл]', ctx.author,
                                                 'music')
             else:
-                try:
+                mess = message.split(' ')
+                emote = ' ' + mess[len(mess) - 1]
+                with open('data/SMILES.txt', encoding='utf-8') as g:
+                    list_emotes = json.loads(g.read())
+                if not mess[len(mess) - 1] in list_emotes:
+                    AdditionalMethods.add_to_buffer("e", nick + ', введите - !music [строка из песни] [смайл]', ctx.author,
+                                                    'music')
+                else:
                     song_lyric = ' '.join(mess).replace(emote, '').replace('ё', 'е')
                     emote += ' '
                     genius = lg.Genius("5Pj7QcUoV5Khbd-Hq5jSve8OzCQILJkY8nWojIIxqH30ItpsmXC7UmCRcgjmTVPY")
@@ -1288,11 +1288,14 @@ class CommandsBot(commands.Bot, ABC):
                             if word.lower().find(asu) != -1:
                                 res = res.replace(word, '*' * len(word))
                     AdditionalMethods.add_to_buffer("e", emote + ' ' + res[:180] + emote, ctx.author, 'music')
-                except AttributeError:
-                    AdditionalMethods.add_to_buffer("e", nick + ', песня не найдена!', ctx.author, 'music')
-                except TypeError:
-                    AdditionalMethods.add_to_buffer("e", nick + ', не удалось выполнить поиск песни. Попробуйте ещё раз PepoG ', ctx.author, 'music')
-
+        except Exception as e:
+            print(e)
+        '''
+        except AttributeError:
+            AdditionalMethods.add_to_buffer("e", nick + ', песня не найдена!', ctx.author, 'music')
+        except TypeError:
+            AdditionalMethods.add_to_buffer("e", nick + ', не удалось выполнить поиск песни. Попробуйте ещё раз PepoG ', ctx.author, 'music')
+        '''
 
 subprocess.Popen([sys.executable, 'ChatBot.py'])
 subprocess.Popen([sys.executable, 'BufferCleaner.py'])
