@@ -402,7 +402,7 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='kogda')
     async def strim(self, ctx):
         AdditionalMethods.add_to_buffer("c", "Стрим через час Jebaited", ctx.author, "kogda")
-    '''
+    
     @commands.command(name='case')
     async def case(self, ctx):
         nickname = ctx.author.display_name
@@ -432,7 +432,7 @@ class CommandsBot(commands.Bot, ABC):
         AdditionalMethods.add_to_buffer("e",
                                         f"{nickname}, вам выпал " + name + " Стоимость: " + price,
                                         ctx.author, "case")
-    '''
+    
     @commands.command(name='history')
     async def stream(self, ctx):
         nickname = ctx.author.display_name
@@ -909,7 +909,7 @@ class CommandsBot(commands.Bot, ABC):
         nickname = ctx.author.display_name
         message = ctx.message.clean_content
         namesss = list(set(namess))
-        AdditionalMethods.add_to_buffer("e", 'ᅠ'+random.choice(namesss) + ' ' + message[:80] + ' catFax', ctx.author, "кто")
+        AdditionalMethods.add_to_buffer("e", '⠀'+random.choice(namesss) + ' ' + message[:80] + ' catFax', ctx.author, "кто")
 
     @commands.command(name='do')
     async def do(self, ctx):
