@@ -834,7 +834,7 @@ class CommandsBot(commands.Bot, ABC):
         currency_rand = random.choice(currency)
         thing = random.choice(things)
         global namess
-        namessss = list(set(namess))
+        namessss = list(set(namess)).pop('Moobot').pop('SLONB0T').pop('slonb0t')
         answer = random.choice(me_classic).format(nickname)
         name = random.choice(namessss)
         v = random.randint(0, 100)
@@ -908,7 +908,7 @@ class CommandsBot(commands.Bot, ABC):
         global namess
         nickname = ctx.author.display_name
         message = ctx.message.clean_content
-        namesss = list(set(namess))
+        namesss = list(set(namess)).pop('Moobot').pop('SLONB0T').pop('slonb0t')
         AdditionalMethods.add_to_buffer("e", random.choice(namesss) + '⠀' + message[:90] + ' catFax', ctx.author, "кто")
 
     @commands.command(name='do')
