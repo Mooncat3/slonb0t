@@ -835,7 +835,13 @@ class CommandsBot(commands.Bot, ABC):
         thing = random.choice(things)
         global namess
         namessss = list(set(namess))
-        namessss = namessss.remove(namessss.index('Moobot')).remove(namessss.index('SLONB0T')).remove(namessss.index('slonb0t'))
+        for name in namessss:
+            if name == 'slonb0t':
+                namessss.remove(namessss.index('slonb0t'))
+            if name == 'Moobot':
+                namessss.remove(namessss.index('Moobot'))
+            if name == 'SLONB0T':
+                namessss.remove(namessss.index('SLONB0T'))
         answer = random.choice(me_classic).format(nickname)
         name = random.choice(namessss)
         v = random.randint(0, 100)
@@ -910,7 +916,13 @@ class CommandsBot(commands.Bot, ABC):
         nickname = ctx.author.display_name
         message = ctx.message.clean_content
         namesss = list(set(namess))
-        namesss = namesss.remove(namesss.index('Moobot')).remove(namesss.index('SLONB0T')).remove(namesss.index('slonb0t'))
+        for name in namesss:
+            if name == 'slonb0t':
+                namesss.remove(namesss.index('slonb0t'))
+            if name == 'Moobot':
+                namesss.remove(namesss.index('Moobot'))
+            if name == 'SLONB0T':
+                namesss.remove(namesss.index('SLONB0T'))
         AdditionalMethods.add_to_buffer("e", random.choice(namesss) + '⠀' + message[:90] + ' catFax', ctx.author, "кто")
 
     @commands.command(name='do')
