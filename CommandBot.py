@@ -1253,6 +1253,7 @@ class CommandsBot(commands.Bot, ABC):
                     emote += ' '
                     genius = lg.Genius("5Pj7QcUoV5Khbd-Hq5jSve8OzCQILJkY8nWojIIxqH30ItpsmXC7UmCRcgjmTVPY")
                     song = genius.search_song(song_lyric)
+                    print(song.lyrics)
                     res = [x for x in song.lyrics.split('\n') if len(x) > 2]
                     with open('data/Pripev', 'r', encoding='utf-8') as f:
                         pripev = [x for x in f.read().split('\n') if len(x) > 1]
@@ -1288,14 +1289,10 @@ class CommandsBot(commands.Bot, ABC):
                             if word.lower().find(asu) != -1:
                                 res = res.replace(word, '*' * len(word))
                     AdditionalMethods.add_to_buffer("e", emote + ' ' + res[:180] + emote, ctx.author, 'music')
-        except Exception as e:
-            print(e)
-        '''
         except AttributeError:
             AdditionalMethods.add_to_buffer("e", nick + ', песня не найдена!', ctx.author, 'music')
         except TypeError:
-            AdditionalMethods.add_to_buffer("e", nick + ', не удалось выполнить поиск песни. Попробуйте ещё раз PepoG ', ctx.author, 'music')
-        '''
+            AdditionalMethods.add_to_buffer("e", nick + ', не удалось выполнить поиск. Попробуйте ещё раз PepoG ', ctx.author, 'music')
 
 subprocess.Popen([sys.executable, 'ChatBot.py'])
 subprocess.Popen([sys.executable, 'BufferCleaner.py'])
