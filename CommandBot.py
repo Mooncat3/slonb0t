@@ -116,7 +116,7 @@ class CommandsBot(commands.Bot, ABC):
         if nickname == 'moobot' or nickname == 'slonb0t' or nickname == 'kryabot':
             pass
         else:
-            if self.ii > 100:
+            if self.ii > 200:
                 del self.namess[0]
             self.namess.append(nnn)
             self.ii+=1
@@ -465,37 +465,8 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='kogda')
     async def strim(self, ctx):
         AdditionalMethods.add_to_buffer("c", "Стрим через час Jebaited", ctx.author, "kogda")
-    '''
-    @commands.command(name='case')
-    async def case(self, ctx):
-        nickname = ctx.author.display_name
-        randstr = random.randint(1, 178)
-        r = requests.get('https://market.csgo.com/?s=name&r=&q=&p=' + str(randstr))
-        soup = BeautifulSoup(r.content, 'lxml')
-        d = soup.find_all('a', class_='item')
-        skin = random.choice(d)
-        skin = re.sub("\n", '', skin)
-        soupskin = BeautifulSoup(skin, 'lxml')
-        price = soupskin.find('div', class_='price').get_text().replace(' ', '')
-        name = soupskin.find('div', class_='name').get_text()
-        if float(price) < 100:
-            price = str(price) + " ₽ Lohich"
-        elif float(price) < 500:
-            price = str(price) + " ₽ SeemsGood"
-        elif float(price) < 1000:
-            price = str(price) + " ₽ dedU"
-        elif float(price) < 5000:
-            price = str(price) + " ₽ PogU"
-        elif float(price) < 10000:
-            price = str(price) + " ₽ PogChamp"
-        elif float(price) < 100000:
-            price = str(price) + " ₽ Pog"
-        elif float(price) > 100000:
-            price = str(price) + " ₽ monkaX"
-        AdditionalMethods.add_to_buffer("e",
-                                        f"{nickname}, вам выпал " + name + " Стоимость: " + price,
-                                        ctx.author, "case")
-    '''
+                              ctx.author, "case")
+
     @commands.command(name='history')
     async def stream(self, ctx):
         nickname = ctx.author.display_name
@@ -963,6 +934,11 @@ class CommandsBot(commands.Bot, ABC):
         namesss = list(set(self.namess))
         AdditionalMethods.add_to_buffer("e", ctx.author.display_name + ' пукнул на ' + random.choice(namesss) + ' (puke) ThumbUp', ctx.author, "пук")
                                                        
+    @commands.command(name='корона')
+    async def corona(self, ctx):
+        namesss = list(set(self.namess))
+        AdditionalMethods.add_to_buffer("e", ctx.author.display_name + ' заразил короной ' + random.choice(namesss) + ' coronaS', ctx.author, "пук")
+                                                       
     @commands.command(name='кто')
     async def kto(self, ctx):
         message = ctx.message.clean_content.replace('@', '')
@@ -979,6 +955,9 @@ class CommandsBot(commands.Bot, ABC):
             with open('data/do.txt', 'r', encoding='utf-8') as c:
                 listme = list(c)
             randomdo = random.choice(listme)
+            for nick in self.namess:
+                if nick.lower() == message.lower():
+                    message = nick
             if not len(message) > 100:
                 AdditionalMethods.add_to_buffer("e", randomdo.format(nickname, message), ctx.author,
                                                 "do")
@@ -1009,6 +988,9 @@ class CommandsBot(commands.Bot, ABC):
         else:
             procent = random.randint(0, 100)
             ruble = random.randint(0, 1500)
+            for nick in self.namess:
+                if nick.lower() == message.lower():
+                    message = nick
             if not len(message) > 100:
                 if procent >= 33:
                     with open('data/me/things.txt', encoding='utf-8') as pr:
@@ -1036,6 +1018,9 @@ class CommandsBot(commands.Bot, ABC):
             AdditionalMethods.add_to_buffer("e", f"{nickname}, пишите try [действие]",
                                             ctx.author, "try")
         else:
+            for nick in self.namess:
+                if nick.lower() == message.lower():
+                    message = nick
             result = AdditionalMethods.parse_standartfile_message(nickname,
                                                                   "{nickname} попробовал {messagestr}... {filestr}",
                                                                   message, "!try", "try")
@@ -1083,6 +1068,9 @@ class CommandsBot(commands.Bot, ABC):
         if len(message) == 0:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !обнять [nickname]", ctx.author, "steal")
         else:
+            for nick in self.namess:
+                if nick.lower() == message.lower():
+                    message = nick
             result = AdditionalMethods.parse_standartfile_message(nickname,
                                                                   "{nickname} {filestr} обнимает {messagestr} "
                                                                   "VoHiYo",
@@ -1161,6 +1149,9 @@ class CommandsBot(commands.Bot, ABC):
         if len(message) == 0:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !привет [nickname]", ctx.author, "steal")
         else:
+            for nick in self.namess:
+                if nick.lower() == message.lower():
+                    message = nick
             result = AdditionalMethods.parse_standartfile_message(nickname,
                                                                   "{nickname} {filestr} приветствует {messagestr} "
                                                                   "peepoHey peepoLove",
