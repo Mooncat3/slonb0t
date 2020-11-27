@@ -39,6 +39,8 @@ class CommandsBot(commands.Bot, ABC):
         self.seekers = []
         self.logs = []
         self.japtest = {'kanji': '', 'tr': '', 'example': '', 'tr_example': '', 'active': False}
+        with open('blacklist.txt', encoding='utf-8') as black:
+            self.blacklist = black.read().split(' ')
 
     '''
     async def event_command_error(self, ctx, error):
@@ -200,10 +202,20 @@ class CommandsBot(commands.Bot, ABC):
                         self.spammers[nickname]["time"] = time.time()
                         self.spammers[nickname]["log"].clear()
                         self.spammers[nickname]["messes"] = 0
-        if message.content[0:2] == "! ":
+        if message.content[0:2] == "! " or nickname in self.blacklist:
             return
+        if nickname
         await self.handle_commands(message)
 
+    @commands.command(name='mute')
+    async def mute(self, ctx):
+        if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
+            message = ctx.message.clean_content
+            nickname = ctx.author.display_name
+            with open('blacklist.txt', encoding='utf-8') as f:
+                f.write(message.lower()+' ')
+            AdditionalMethods.add_to_buffer("s", f"Пользователь {message} теперь в чёрном списке бота!", ctx.author,"mute")
+                                                        
     @commands.command(name='seek')
     async def seek(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
@@ -383,6 +395,9 @@ class CommandsBot(commands.Bot, ABC):
 
             with open(file='data/settings.txt', mode='r', encoding='utf-8') as mm:
                 settings = mm.read()
+                                                       
+            with open(file='data/blacklist.txt', mode='r', encoding='utf-8') as bl:
+                black = bl.read()
 
             g = Github("f0011283768114fac26230cd23b3208ed10d0a54")
             repo = g.search_repositories("slonb0t")[0]
@@ -394,6 +409,10 @@ class CommandsBot(commands.Bot, ABC):
             contents1 = repo.get_contents("data/settings.txt")
             repo.delete_file(contents1.path, "", contents1.sha)
             repo.create_file("data/settings.txt", "", settings)
+                                                       
+            contents1 = repo.get_contents("data/blacklist.txt")
+            repo.delete_file(contents1.path, "", contents1.sha)
+            repo.create_file("data/blacklist.txt", "", black)
 
             AdditionalMethods.add_to_buffer("s", "Синхронизация статистик произошла успешно", ctx.author, "save")
 
