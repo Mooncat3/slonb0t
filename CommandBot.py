@@ -212,7 +212,7 @@ class CommandsBot(commands.Bot, ABC):
             messagee = ctx.message.clean_content
             print(messagee)
             nickname = ctx.author.display_name
-            with open('data/blacklist.txt', encoding='utf-8') as text:
+            with open('data/blacklist.txt', mode='w', encoding='utf-8') as text:
                 text.write(messagee.lower()+' ')
             AdditionalMethods.add_to_buffer("s", f"Пользователь {messagee} теперь в чёрном списке бота!", ctx.author,"mute")
                                                         
