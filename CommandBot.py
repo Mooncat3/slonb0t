@@ -1284,7 +1284,6 @@ class CommandsBot(commands.Bot, ABC):
                     emote += ' '
                     genius = lg.Genius("5Pj7QcUoV5Khbd-Hq5jSve8OzCQILJkY8nWojIIxqH30ItpsmXC7UmCRcgjmTVPY")
                     song = genius.search_song(song_lyric)
-                    print(song.lyrics)
                     res = [x for x in song.lyrics.split('\n') if len(x) > 2]
                     with open('data/Pripev', 'r', encoding='utf-8') as f:
                         pripev = [x for x in f.read().split('\n') if len(x) > 1]
