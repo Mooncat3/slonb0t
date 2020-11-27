@@ -114,12 +114,11 @@ class CommandsBot(commands.Bot, ABC):
         global namess
         global ii
         nnn = message.author.display_name
-        print(namess)
-        if ii > 100:
-            del namess[0]
         if nnn == 'Moobot' or nnn == 'slonb0t' or nnn == 'SLONB0T' or nnn == 'KryaBot':
             pass
         else:
+            if ii > 100:
+                del namess[0]
             namess.append(nnn)
             ii+=1
         if not AdditionalMethods.vip(message.author.is_mod, nickname) and not nickname == "slonb0t":
