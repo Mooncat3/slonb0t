@@ -113,10 +113,14 @@ class CommandsBot(commands.Bot, ABC):
         nickname = message.author.name
         global namess
         global ii
+        nnn = message.author.display_name
         if ii > 100:
             del namess[0]
-        namess.append(message.author.display_name)
-        ii+=1
+        if nnn == 'Moobot' or nnn == 'slonb0t' or nnn == 'SLONB0T':
+            pass
+        else:
+            namess.append(nnn)
+            ii+=1
         if not AdditionalMethods.vip(message.author.is_mod, nickname) and not nickname == "slonb0t":
             docheck = True
             mod = Settings.get_mod()
@@ -835,13 +839,6 @@ class CommandsBot(commands.Bot, ABC):
         thing = random.choice(things)
         global namess
         namessss = list(set(namess))
-        for name in namessss:
-            if name == 'Moobot':
-                del namessss[namessss.index('Moobot')]
-            if name == 'SLONB0T':
-                del namessss[namessss.index('SLONB0T')]
-            if name == 'slonb0t':
-                del namessss[namessss.index('slonb0t')]
         answer = random.choice(me_classic).format(nickname)
         name = random.choice(namessss)
         v = random.randint(0, 100)
@@ -916,13 +913,6 @@ class CommandsBot(commands.Bot, ABC):
         nickname = ctx.author.display_name
         message = ctx.message.clean_content
         namesss = list(set(namess))
-        for name in namesss:
-            if name == 'Moobot':
-                del namesss[namesss.index('Moobot')]
-            if name == 'SLONB0T':
-                del namesss[namesss.index('SLONB0T')]
-            if name == 'slonb0t':
-                del namesss[namesss.index('slonb0t')]
         AdditionalMethods.add_to_buffer("e", random.choice(namesss) + '⠀' + message[:90] + ' catFax', ctx.author, "кто")
 
     @commands.command(name='do')
