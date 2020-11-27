@@ -117,7 +117,7 @@ class CommandsBot(commands.Bot, ABC):
         print(namess)
         if ii > 100:
             del namess[0]
-        if nnn == 'Moobot' or nnn == 'slonb0t' or nnn == 'SLONB0T':
+        if nnn == 'Moobot' or nnn == 'slonb0t' or nnn == 'SLONB0T' or nnn == 'KryaBot':
             pass
         else:
             namess.append(nnn)
