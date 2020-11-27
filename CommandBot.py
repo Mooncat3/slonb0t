@@ -203,6 +203,35 @@ class CommandsBot(commands.Bot, ABC):
             if not AdditionalMethods.vip(message.author.is_mod, nickname):
                 return
         await self.handle_commands(message)
+                                                        
+    @commands.command(name="stat")
+    async def stat(self, ctx):
+        nickname = ctx.author.display_name
+        answer = json.loads(requests.get(config.api_url + f"/stats/jesusavgn?nickname={ctx.author.name}",
+                                         headers={"Authorization": "y5IArL6S&%%G(69G"}).content.decode("utf-8"))
+        if answer['type'] == 'success':
+            if ctx.message.clean_content == "info":
+                AdditionalMethods.add_to_buffer("c",
+                                                ctx.author.display_name + f", Данные бота актуальны с {answer['start_date']}, сообщения в скором времени будут актуальны с 2016 года",
+                                                ctx.author,
+                                                "stat")
+            else:
+                answer_str = ""
+                if 'count' in answer['answer'].keys():
+                    answer_str += "Сообщения: " + str(answer['answer']['count']) + " | "
+                if 'watch_time_offline' in answer['answer'].keys():
+                    answer_str += "Оффлайн: " + AdditionalMethods.parse_time(answer['answer']['watch_time_offline'] * 60, False) + " | "
+                if 'watch_time_online' in answer['answer'].keys():
+                    answer_str += "Онлайн: " + AdditionalMethods.parse_time(answer['answer']['watch_time_online'] * 60, False) + " | "
+                AdditionalMethods.add_to_buffer("c",
+                                                ctx.author.display_name + f", {answer_str[:len(answer_str)-3]}",
+                                                ctx.author,
+                                                "stat")
+        else:
+            AdditionalMethods.add_to_buffer("c",
+                                            f"{nickname}, Вас нет peepoJuiceSpin",
+                                            ctx.author,
+                                            "stat")
 
     @commands.command(name='mute')
     async def mute(self, ctx):
