@@ -38,10 +38,13 @@ class CommandsBot(commands.Bot, ABC):
         self.spammers = {}
         self.seekers = []
         self.logs = []
+        self.namess = []
+        self.ii = 0
+        self.blbl = []
         self.japtest = {'kanji': '', 'tr': '', 'example': '', 'tr_example': '', 'active': False}
         with open('data/blacklist.txt', encoding='utf-8') as black:
             self.blacklist = black.read().split(' ')
-        self.blbl = []
+        print(self.blacklist)
 
     '''
     async def event_command_error(self, ctx, error):
@@ -101,10 +104,6 @@ class CommandsBot(commands.Bot, ABC):
 
     async def event_ready(self):
         print(f'Ready {str(self.__class__.__name__)} | {self.nick} on {self.initial_channels[0]}')
-        global namess
-        namess = []
-        global ii
-        ii = 0
         await self.synch()
 
     async def synch(self):
@@ -114,16 +113,14 @@ class CommandsBot(commands.Bot, ABC):
 
     async def event_message(self, message):
         nickname = message.author.name
-        global namess
-        global ii
         nnn = message.author.display_name
-        if nnn == 'Moobot' or nnn == 'slonb0t' or nnn == 'SLONB0T' or nnn == 'KryaBot':
+        if nickname == 'moobot' or nickname == 'slonb0t' or nickname == 'kryabot':
             pass
         else:
-            if ii > 100:
-                del namess[0]
-            namess.append(nnn)
-            ii+=1
+            if self.ii > 100:
+                del self.namess[0]
+            self.namess.append(nnn)
+            self.ii+=1
         if not AdditionalMethods.vip(message.author.is_mod, nickname) and not nickname == "slonb0t":
             docheck = True
             mod = Settings.get_mod()
@@ -211,26 +208,25 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='mute')
     async def mute(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
-            messagee = ctx.message.clean_content
+            messagee = ctx.message.clean_content.replace('@','')
             nickname = ctx.author.display_name
             with open('data/blacklist.txt', mode='w', encoding='utf-8') as text:
                 text.write(messagee.lower()+' ')
             self.blbl.append(messagee.lower())
-            print(self.blbl)
             AdditionalMethods.add_to_buffer("s", f"Пользователь {messagee} теперь в чёрном списке бота!", ctx.author,"mute")
                                                         
     @commands.command(name='unmute')
     async def unmute(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
-            messagee = ctx.message.clean_content
+            messagee = ctx.message.clean_content.replace('@','')
             nickname = ctx.author.display_name
             if messagee.lower() in self.blbl:
                 del self.blbl[self.blbl.index(messagee.lower())]
-            print(self.blbl)
             with open('data/blacklist.txt', mode='r', encoding='utf-8') as textr:
                 text_pre = textr.read()
             if text_pre.find(messagee.lower()+' ') != -1:
                 text_pre = text_pre.replace(messagee.lower()+' ', '')
+            print(text_pre)
             with open('data/blacklist.txt', mode='w', encoding='utf-8') as textw:
                 textw.write(text_pre)
             AdditionalMethods.add_to_buffer("s", f"Пользователь {messagee} удалён из чёрного списка бота!", ctx.author,"mute")
@@ -309,7 +305,7 @@ class CommandsBot(commands.Bot, ABC):
                 self.duel_serious = False
             else:
                 self.duel_serious = True
-            message = ctx.message.clean_content
+            message = ctx.message.clean_content.replace('@', '')
             if len(message) > 1 and len(message) <= 26 and message.find(" ") == -1:
                 self.duel_is_running = True
                 self.duel_nicknames.append({"label": ctx.author.display_name, "str_id": ctx.author.name})
@@ -478,7 +474,7 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='history')
     async def stream(self, ctx):
         nickname = ctx.author.display_name
-        message = ctx.message.clean_content
+        message = ctx.message.clean_content.replace('@', '')
         while message[0:1] == "!" or message[0:1] == "/":
             message = message[1:len(message)]
         AdditionalMethods.add_to_buffer("c", AdditionalMethods.get_last_stream_stat(message, nickname, ctx.author),
@@ -487,7 +483,7 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='archive')
     async def streamh(self, ctx):
         nickname = ctx.author.display_name
-        message = ctx.message.clean_content
+        message = ctx.message.clean_content.replace('@', '')
         while message[0:1] == "!" or message[0:1] == "/":
             message = message[1:len(message)]
         try:
@@ -607,35 +603,35 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='clipever')
     async def topclipever(self, ctx):
         nickname = ctx.author.display_name
-        message = ctx.message.clean_content
+        message = ctx.message.clean_content.replace('@', '')
         AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(0, message, nickname), ctx.author,
                                         "clip")
 
     @commands.command(name='clipyear')
     async def topclipyear(self, ctx):
         nickname = ctx.author.display_name
-        message = ctx.message.clean_content
+        message = ctx.message.clean_content.replace('@', '')
         AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(365, message, nickname), ctx.author,
                                         "clip")
 
     @commands.command(name='clipweek')
     async def topclipweek(self, ctx):
         nickname = ctx.author.display_name
-        message = ctx.message.clean_content
+        message = ctx.message.clean_content.replace('@', '')
         AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(7, message, nickname), ctx.author,
                                         "clip")
 
     @commands.command(name='clipmonth')
     async def topclipmonth(self, ctx):
         nickname = ctx.author.display_name
-        message = ctx.message.clean_content
+        message = ctx.message.clean_content.replace('@', '')
         AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(30, message, nickname), ctx.author,
                                         "clip")
 
     @commands.command(name='cliptoday')
     async def topclipday(self, ctx):
         nickname = ctx.author.display_name
-        message = ctx.message.clean_content
+        message = ctx.message.clean_content.replace('@', '')
         AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(1, message, nickname), ctx.author,
                                         "clip")
 
@@ -875,8 +871,7 @@ class CommandsBot(commands.Bot, ABC):
         curr = random.choice(symbols)
         currency_rand = random.choice(currency)
         thing = random.choice(things)
-        global namess
-        namessss = list(set(namess))
+        namessss = list(set(self.namess))
         answer = random.choice(me_classic).format(nickname)
         name = random.choice(namessss)
         v = random.randint(0, 100)
@@ -940,22 +935,20 @@ class CommandsBot(commands.Bot, ABC):
                                                        
     @commands.command(name='пук')
     async def puk(self, ctx):
-        global namess
         nickname = ctx.author.display_name
-        namesss = list(set(namess))
+        namesss = list(set(self.namess))
         AdditionalMethods.add_to_buffer("e", nickname + ' пукнул на ' + random.choice(namesss) + ' (puke) ThumbUp', ctx.author, "пук")
                                                        
     @commands.command(name='кто')
     async def kto(self, ctx):
-        global namess
         nickname = ctx.author.display_name
-        message = ctx.message.clean_content
-        namesss = list(set(namess))
+        message = ctx.message.clean_content.replace('@', '')
+        namesss = list(set(self.namess))
         AdditionalMethods.add_to_buffer("e", random.choice(namesss) + '⠀' + message[:90] + ' catFax', ctx.author, "кто")
 
     @commands.command(name='do')
     async def do(self, ctx):
-        message = ctx.message.clean_content.replace('@', '')
+        message = ctx.message.clean_content.replace('@', '').replace('@', '')
         nickname = ctx.author.display_name
         if len(message) == 0:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !do [message]", ctx.author, "do")
@@ -972,7 +965,7 @@ class CommandsBot(commands.Bot, ABC):
 
     @commands.command(name='бубу')
     async def bubu(self, ctx):
-        message = ctx.message.clean_content
+        message = ctx.message.clean_content.replace('@', '')
         nickname = ctx.author.display_name
         if len(message) == 0:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !бубу [something]", ctx.author, "")
@@ -986,7 +979,7 @@ class CommandsBot(commands.Bot, ABC):
 
     @commands.command(name='steal')
     async def steal(self, ctx):
-        message = ctx.message.clean_content
+        message = ctx.message.clean_content.replace('@', '')
         nickname = ctx.author.display_name
         if len(message) == 0:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !steal [nickname]", ctx.author, "steal")
@@ -1014,7 +1007,7 @@ class CommandsBot(commands.Bot, ABC):
 
     @commands.command(name='try')
     async def ttry(self, ctx):
-        message = ctx.message.clean_content
+        message = ctx.message.clean_content.replace('@', '')
         nickname = ctx.author.display_name
         if len(message) == 0:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, пишите try [действие]",
@@ -1062,7 +1055,7 @@ class CommandsBot(commands.Bot, ABC):
 
     @commands.command(name='обнять')
     async def hug(self, ctx):
-        message = ctx.message.clean_content
+        message = ctx.message.clean_content.replace('@', '')
         nickname = ctx.author.display_name
         if len(message) == 0:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !обнять [nickname]", ctx.author, "steal")
@@ -1079,7 +1072,7 @@ class CommandsBot(commands.Bot, ABC):
 
     @commands.command(name='кнб')
     async def cnb(self, ctx):
-        message = ctx.message.clean_content
+        message = ctx.message.clean_content.replace('@', '')
         nickname = ctx.author.display_name
         listcnb = ['⛰', '✂️', '📜']
         rndcnb1 = random.choice(listcnb)
@@ -1123,7 +1116,7 @@ class CommandsBot(commands.Bot, ABC):
 
     @commands.command(name='когда')
     async def kogda(self, ctx):
-        message = ctx.message.clean_content
+        message = ctx.message.clean_content.replace('@', '')
         nickname = ctx.author.display_name
         if len(message) == 0:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !когда [action]", ctx.author, "steal")
@@ -1140,7 +1133,7 @@ class CommandsBot(commands.Bot, ABC):
 
     @commands.command(name='привет')
     async def privet(self, ctx):
-        message = ctx.message.clean_content
+        message = ctx.message.clean_content.replace('@', '')
         nickname = ctx.author.display_name
         if len(message) == 0:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !привет [nickname]", ctx.author, "steal")
@@ -1167,7 +1160,7 @@ class CommandsBot(commands.Bot, ABC):
         nickname = ctx.author.display_name
         if not self.japtest['active']:
             self.japtest['active'] = True
-            message = ctx.message.clean_content
+            message = ctx.message.clean_content.replace('@', '')
             category = message.lower()
             if category == "n1" or category == "n2" or category == "n3" or category == "n4" or category == "n5":
                 with open('data/kanji.txt', 'r', encoding='utf_8') as f:
@@ -1278,7 +1271,7 @@ class CommandsBot(commands.Bot, ABC):
     async def music(self, ctx):
         try:
             nick = ctx.author.display_name
-            message = ctx.message.clean_content
+            message = ctx.message.clean_content.replace('@', '')
             if len(message) == 0:
                 AdditionalMethods.add_to_buffer("e", nick + ', введите - !music [строка из песни] [смайл]', ctx.author,
                                                 'music')
