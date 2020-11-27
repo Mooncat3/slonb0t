@@ -120,7 +120,7 @@ def checkingthread():
         if not active:
             if additint == 20:
                 additint = 0
-                requests.get(api_url)
+                requests.get(config.api_url)
             else:
                 additint += 1
             time.sleep(60)
