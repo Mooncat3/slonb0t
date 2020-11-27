@@ -960,20 +960,18 @@ class CommandsBot(commands.Bot, ABC):
                                                        
     @commands.command(name='пук')
     async def puk(self, ctx):
-        nickname = ctx.author.display_name
         namesss = list(set(self.namess))
-        AdditionalMethods.add_to_buffer("e", nickname + ' пукнул на ' + random.choice(namesss) + ' (puke) ThumbUp', ctx.author, "пук")
+        AdditionalMethods.add_to_buffer("e", ctx.author.display_name + ' пукнул на ' + random.choice(namesss) + ' (puke) ThumbUp', ctx.author, "пук")
                                                        
     @commands.command(name='кто')
     async def kto(self, ctx):
-        nickname = ctx.author.display_name
         message = ctx.message.clean_content.replace('@', '')
         namesss = list(set(self.namess))
-        AdditionalMethods.add_to_buffer("e", random.choice(namesss) + '⠀' + message[:90] + ' catFax', ctx.author, "кто")
+        AdditionalMethods.add_to_buffer("e", random.choice(namesss) + '⠀ ' + message[:90] + ' catFax', ctx.author, "кто")
 
     @commands.command(name='do')
     async def do(self, ctx):
-        message = ctx.message.clean_content.replace('@', '').replace('@', '')
+        message = ctx.message.clean_content.replace('@', '')
         nickname = ctx.author.display_name
         if len(message) == 0:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !do [message]", ctx.author, "do")
@@ -1021,7 +1019,7 @@ class CommandsBot(commands.Bot, ABC):
                                                         ctx.author, "steal")
                     else:
                         symbols = ['$', '£', '€', '₽']
-                        AdditionalMethods.add_to_buffer("e", f"{nickname} украл у {message} {ruble}{random.choice(symbols)} BOP",
+                        AdditionalMethods.add_to_buffer("e", f"{nickname} украл у {message} {ruble} {random.choice(symbols)} BOP",
                                                         ctx.author, "steal")
                 else:
                     AdditionalMethods.add_to_buffer("e", f"{nickname} ничего не украл у {message} KeK Lohich",
