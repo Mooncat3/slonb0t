@@ -204,7 +204,8 @@ class CommandsBot(commands.Bot, ABC):
                         self.spammers[nickname]["log"].clear()
                         self.spammers[nickname]["messes"] = 0
         if message.content[0:2] == "! " or nickname in self.blacklist or nickname in self.blbl:
-            return
+            if not AdditionalMethods.vip(message.author.is_mod, nickname):
+                return
         await self.handle_commands(message)
 
     @commands.command(name='mute')
