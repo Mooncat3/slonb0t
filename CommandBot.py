@@ -215,7 +215,24 @@ class CommandsBot(commands.Bot, ABC):
             with open('data/blacklist.txt', mode='w', encoding='utf-8') as text:
                 text.write(messagee.lower()+' ')
             self.blbl.append(messagee.lower())
+            print(self.blbl)
             AdditionalMethods.add_to_buffer("s", f"Пользователь {messagee} теперь в чёрном списке бота!", ctx.author,"mute")
+                                                        
+    @commands.command(name='unmute')
+    async def unmute(self, ctx):
+        if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
+            messagee = ctx.message.clean_content
+            nickname = ctx.author.display_name
+            if messagee.lower() in self.blbl:
+                del self.blbl[self.blbl.index(messagee.lower())]
+            print(self.blbl)
+            with open('data/blacklist.txt', mode='r', encoding='utf-8') as textr:
+                text_pre = textr.read()
+            if text_pre.find(messagee.lower()+' ') != -1:
+                text_pre = text_pre.replace(messagee.lower()+' ', '')
+            with open('data/blacklist.txt', mode='w', encoding='utf-8') as textw:
+                textw.write(text_pre)
+            AdditionalMethods.add_to_buffer("s", f"Пользователь {messagee} удалён из чёрного списка бота!", ctx.author,"mute")
                                                         
     @commands.command(name='seek')
     async def seek(self, ctx):
