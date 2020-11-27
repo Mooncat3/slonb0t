@@ -209,11 +209,12 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='mute')
     async def mute(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
-            message = ctx.message.clean_content
+            messagee = ctx.message.clean_content
+            print(messagee)
             nickname = ctx.author.display_name
-            with open('data/blacklist.txt', encoding='utf-8') as f:
-                f.write(str(message).lower()+' ')
-            AdditionalMethods.add_to_buffer("s", f"Пользователь {message} теперь в чёрном списке бота!", ctx.author,"mute")
+            with open('data/blacklist.txt', encoding='utf-8') as text:
+                text.write(messagee.lower()+' ')
+            AdditionalMethods.add_to_buffer("s", f"Пользователь {messagee} теперь в чёрном списке бота!", ctx.author,"mute")
                                                         
     @commands.command(name='seek')
     async def seek(self, ctx):
