@@ -115,12 +115,13 @@ def checkingthread():
                     with open(file='data/TRASHMASSIVE.txt', mode='w', encoding='utf-8') as q:
                         q.write(json.dumps(dat))
         if active:
-            if additint == 6:
-                additint = 0
-            else:
-                additint += 1
             time.sleep(10)
         if not active:
+            if additint == 20:
+                additint = 0
+                requests.get(api_url)
+            else:
+                additint += 1
             time.sleep(60)
 
 
