@@ -204,7 +204,6 @@ class CommandsBot(commands.Bot, ABC):
                         self.spammers[nickname]["messes"] = 0
         if message.content[0:2] == "! " or nickname in self.blacklist:
             return
-        if nickname
         await self.handle_commands(message)
 
     @commands.command(name='mute')
