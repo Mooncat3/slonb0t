@@ -42,8 +42,8 @@ class CommandsBot(commands.Bot, ABC):
         self.ii = 0
         self.blbl = []
         self.japtest = {'kanji': '', 'tr': '', 'example': '', 'tr_example': '', 'active': False}
-        with open('data/blacklist.txt', encoding='utf-8') as black:
-            self.blacklist = black.read().split(' ')
+        with open('data/blacklist.txt', encoding='utf-8') as f:
+            self.blacklist = [x for x in f.read().split('\n') if len(x) > 1]
         print(self.blacklist)
 
     '''
@@ -209,9 +209,8 @@ class CommandsBot(commands.Bot, ABC):
     async def mute(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
             messagee = ctx.message.clean_content.replace('@','')
-            nickname = ctx.author.display_name
             with open('data/blacklist.txt', mode='w', encoding='utf-8') as text:
-                text.write(messagee.lower()+' ')
+                text.write(messagee.lower()+'\n')
             self.blbl.append(messagee.lower())
             AdditionalMethods.add_to_buffer("s", f"Пользователь {messagee} теперь в чёрном списке бота!", ctx.author,"mute")
                                                         
@@ -219,13 +218,12 @@ class CommandsBot(commands.Bot, ABC):
     async def unmute(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
             messagee = ctx.message.clean_content.replace('@','')
-            nickname = ctx.author.display_name
             if messagee.lower() in self.blbl:
                 del self.blbl[self.blbl.index(messagee.lower())]
             with open('data/blacklist.txt', mode='r', encoding='utf-8') as textr:
                 text_pre = textr.read()
-            if text_pre.find(messagee.lower()+' ') != -1:
-                text_pre = text_pre.replace(messagee.lower()+' ', '')
+            if text_pre.find(messagee.lower()+'\n') != -1:
+                text_pre = text_pre.replace(messagee.lower()+'\n', '')
             print(text_pre)
             with open('data/blacklist.txt', mode='w', encoding='utf-8') as textw:
                 textw.write(text_pre)
