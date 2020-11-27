@@ -211,7 +211,6 @@ class CommandsBot(commands.Bot, ABC):
     async def mute(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
             messagee = ctx.message.clean_content
-            print(messagee)
             nickname = ctx.author.display_name
             with open('data/blacklist.txt', mode='w', encoding='utf-8') as text:
                 text.write(messagee.lower()+' ')
