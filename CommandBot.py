@@ -464,7 +464,6 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='kogda')
     async def strim(self, ctx):
         AdditionalMethods.add_to_buffer("c", "Стрим через час Jebaited", ctx.author, "kogda")
-                              ctx.author, "case")
 
     @commands.command(name='history')
     async def stream(self, ctx):
