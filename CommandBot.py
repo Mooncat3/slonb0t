@@ -44,7 +44,6 @@ class CommandsBot(commands.Bot, ABC):
         self.japtest = {'kanji': '', 'tr': '', 'example': '', 'tr_example': '', 'active': False}
         with open('data/blacklist.txt', encoding='utf-8') as f:
             self.blacklist = [x for x in f.read().split('\n') if len(x) > 1]
-        print(self.blacklist)
 
     '''
     async def event_command_error(self, ctx, error):
@@ -224,7 +223,6 @@ class CommandsBot(commands.Bot, ABC):
                 text_pre = textr.read()
             if text_pre.find(messagee.lower()+'\n') != -1:
                 text_pre = text_pre.replace(messagee.lower()+'\n', '')
-            print(text_pre)
             with open('data/blacklist.txt', mode='w', encoding='utf-8') as textw:
                 textw.write(text_pre)
             AdditionalMethods.add_to_buffer("s", f"Пользователь {messagee} удалён из чёрного списка бота!", ctx.author,"mute")
