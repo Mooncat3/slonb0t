@@ -212,7 +212,7 @@ class CommandsBot(commands.Bot, ABC):
             message = ctx.message.clean_content
             nickname = ctx.author.display_name
             with open('data/blacklist.txt', encoding='utf-8') as f:
-                f.write(message.lower()+' ')
+                f.write(str(message).lower()+' ')
             AdditionalMethods.add_to_buffer("s", f"Пользователь {message} теперь в чёрном списке бота!", ctx.author,"mute")
                                                         
     @commands.command(name='seek')
