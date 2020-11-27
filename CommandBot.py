@@ -39,7 +39,7 @@ class CommandsBot(commands.Bot, ABC):
         self.seekers = []
         self.logs = []
         self.japtest = {'kanji': '', 'tr': '', 'example': '', 'tr_example': '', 'active': False}
-        with open('blacklist.txt', encoding='utf-8') as black:
+        with open('data/blacklist.txt', encoding='utf-8') as black:
             self.blacklist = black.read().split(' ')
 
     '''
@@ -211,7 +211,7 @@ class CommandsBot(commands.Bot, ABC):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
             message = ctx.message.clean_content
             nickname = ctx.author.display_name
-            with open('blacklist.txt', encoding='utf-8') as f:
+            with open('data/blacklist.txt', encoding='utf-8') as f:
                 f.write(message.lower()+' ')
             AdditionalMethods.add_to_buffer("s", f"Пользователь {message} теперь в чёрном списке бота!", ctx.author,"mute")
                                                         
