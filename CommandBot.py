@@ -559,7 +559,7 @@ class CommandsBot(commands.Bot, ABC):
                 userlang = message.split(" ")[1]
                 word = message.replace("!перевод " + userlang, "")
                 dataa = {"text": word}
-                key = 'a505696f.5fb53169.ab0307c9.74722d74657874-1-0'
+                key = '922d15fd.5fc16892.225a7322.74722d74657874-0-0'
                 url = "https://translate.yandex.net/api/v1/tr.json/translate?id="+key+"&srv=tr-text&lang=" + userlang.lower() + "&reason=auto&format=text"
                 r = requests.get(url, data=dataa)
                 if str(r.status_code) == "400":
