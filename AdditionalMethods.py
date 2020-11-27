@@ -81,7 +81,26 @@ def check_active(shouldchecksettings=True) -> bool:
     with open('data/TRASHMASSIVE.txt') as q:
         dat = json.loads(str(q.read()))
         return dat['active']
-
+    
+def parse_time(timetet: time, secs: bool) -> str:
+    rounded = ""
+    timestart = timetet
+    if timestart / 3600 >= 1:
+        rounded += f"{int(timestart / 3600)}h"
+        timestart = timestart % 3600
+    if timestart / 60 >= 1:
+        if rounded.find("h") != -1 and not secs:
+            rounded += " "
+        rounded += f"{int(timestart / 60)}m"
+        timestart = timestart % 60
+    if timestart >= 1 and (rounded.find("h") == -1 or secs):
+        if rounded.find("m") != -1 and not secs:
+            rounded += " "
+        rounded += f"{int(timestart)}s"
+    if rounded == "" and not secs:
+        return "0m"
+    else:
+        return rounded
 
 def parse_stream_stat(nickname: str, tag: str, TRASHMASSIVE: dict, author: User, date="", id=0, active=False):
     def summ_times() -> time:
@@ -90,23 +109,6 @@ def parse_stream_stat(nickname: str, tag: str, TRASHMASSIVE: dict, author: User,
             if 'time' in t.keys():
                 timeq = timeq + float(t['time'])
         return timeq
-
-    def parse_time(timetet: time, secs: bool) -> str:
-        rounded = ""
-        timestart = timetet
-        if timestart / 3600 >= 1:
-            rounded += f"{int(timestart / 3600)}h"
-            timestart = timestart % 3600
-        if timestart / 60 >= 1:
-            if rounded.find("h") != -1 and not secs:
-                rounded += " "
-            rounded += f"{int(timestart / 60)}m"
-            timestart = timestart % 60
-        if timestart >= 1 and (rounded.find("h") == -1 or secs):
-            if rounded.find("m") != -1 and not secs:
-                rounded += " "
-            rounded += f"{int(timestart)}s"
-        return rounded
 
     id = len(TRASHMASSIVE['TRASHMASS']) - 1 - id
     strim_name = TRASHMASSIVE['TRASHMASS'][id]['name']
