@@ -41,6 +41,7 @@ class CommandsBot(commands.Bot, ABC):
         self.japtest = {'kanji': '', 'tr': '', 'example': '', 'tr_example': '', 'active': False}
         with open('data/blacklist.txt', encoding='utf-8') as black:
             self.blacklist = black.read().split(' ')
+        self.blbl = []
 
     '''
     async def event_command_error(self, ctx, error):
@@ -202,7 +203,7 @@ class CommandsBot(commands.Bot, ABC):
                         self.spammers[nickname]["time"] = time.time()
                         self.spammers[nickname]["log"].clear()
                         self.spammers[nickname]["messes"] = 0
-        if message.content[0:2] == "! " or nickname in self.blacklist:
+        if message.content[0:2] == "! " or nickname in self.blacklist or nickname in self.blbl:
             return
         await self.handle_commands(message)
 
@@ -214,6 +215,7 @@ class CommandsBot(commands.Bot, ABC):
             nickname = ctx.author.display_name
             with open('data/blacklist.txt', mode='w', encoding='utf-8') as text:
                 text.write(messagee.lower()+' ')
+            self.blbl.append(messagee.lower())
             AdditionalMethods.add_to_buffer("s", f"Пользователь {messagee} теперь в чёрном списке бота!", ctx.author,"mute")
                                                         
     @commands.command(name='seek')
