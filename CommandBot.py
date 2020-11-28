@@ -118,7 +118,6 @@ class CommandsBot(commands.Bot, ABC):
             if self.ii > 100:
                 del self.namess[0]
             self.namess.append(nnn)
-            print(self.namess)
             self.ii += 1
         if not AdditionalMethods.vip(message.author.is_mod, nickname) and not nickname == "slonb0t":
             docheck = True
