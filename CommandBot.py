@@ -112,7 +112,9 @@ class CommandsBot(commands.Bot, ABC):
     async def event_message(self, message):
         nickname = message.author.name
         nnn = message.author.display_name
-        if nickname != 'moobot' or nickname != 'slonb0t' or nickname != 'kryabot' or nnn not in self.namess:
+        if nickname == 'moobot' or nickname == 'slonb0t' or nickname == 'kryabot':
+            pass
+        elif nnn not in self.namess:
             if self.ii > 100:
                 del self.namess[0]
             self.namess.append(nnn)
