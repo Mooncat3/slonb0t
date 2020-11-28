@@ -114,7 +114,7 @@ class CommandsBot(commands.Bot, ABC):
         nnn = message.author.display_name
         if nickname == 'moobot' or nickname == 'slonb0t' or nickname == 'kryabot':
             pass
-        elif nnn not in self.namess:
+        else:#elif nnn not in self.namess:
             print(self.namess)
             if self.ii > 200:
                 del self.namess[0]
