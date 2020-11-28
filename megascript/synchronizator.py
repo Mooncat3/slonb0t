@@ -28,7 +28,7 @@ for user in chatters:
 
     if answer['type'] == 'success':
         if 'count_state' in answer['answer'].keys():
-            if answer['answer']['count_state'] > 2:
+            if answer['answer']['count_state'] > 1:
                 should_pass = True
 
     r = requests.get("https://api.streamelements.com/kappa/v2/chatstats/jesusavgn/stats")
