@@ -957,8 +957,9 @@ class CommandsBot(commands.Bot, ABC):
                 listme = list(c)
             randomdo = random.choice(listme)
             for nick in self.names_exp:
-                if nick.lower() == message.lower():
-                    message = nick
+                for word in message.split(' '):
+                    if word.lower().find(nick.lower()) != -1:
+                        message = message.replce(word, nick)
             AdditionalMethods.add_to_buffer("e", randomdo.format(nickname, message[:90]), ctx.author, "do")
 
     @commands.command(name='бубу')
@@ -969,8 +970,9 @@ class CommandsBot(commands.Bot, ABC):
             AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !бубу [something]", ctx.author, "")
         else:
             for nick in self.names_exp:
-                if nick.lower() == message.lower():
-                    message = nick
+                for word in message.split(' '):
+                    if word.lower().find(nick.lower()) != -1:
+                        message = message.replce(word, nick)
             if len(message) < 100:
                 AdditionalMethods.add_to_buffer("e", f"Ну {message} и {message} Чё бубнить-то? ThumbUp",
                                                 ctx.author,
@@ -988,8 +990,9 @@ class CommandsBot(commands.Bot, ABC):
             procent = random.randint(0, 100)
             ruble = random.randint(0, 1500)
             for nick in self.names_exp:
-                if nick.lower() == message.lower():
-                    message = nick
+                for word in message.split(' '):
+                    if word.lower().find(nick.lower()) != -1:
+                        message = message.replce(word, nick)
             if not len(message) > 100:
                 if procent >= 33:
                     with open('data/me/things.txt', encoding='utf-8') as pr:
@@ -1018,8 +1021,9 @@ class CommandsBot(commands.Bot, ABC):
                                             ctx.author, "try")
         else:
             for nick in self.names_exp:
-                if nick.lower() == message.lower():
-                    message = nick
+                for word in message.split(' '):
+                    if word.lower().find(nick.lower()) != -1:
+                        message = message.replce(word, nick)
             result = AdditionalMethods.parse_standartfile_message(nickname,
                                                                   "{nickname} попробовал {messagestr}... {filestr}",
                                                                   message, "!try", "try")
@@ -1068,8 +1072,9 @@ class CommandsBot(commands.Bot, ABC):
             AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !обнять [nickname]", ctx.author, "steal")
         else:
             for nick in self.names_exp:
-                if nick.lower() == message.lower():
-                    message = nick
+                for word in message.split(' '):
+                    if word.lower().find(nick.lower()) != -1:
+                        message = message.replce(word, nick)
             result = AdditionalMethods.parse_standartfile_message(nickname,
                                                                   "{nickname} {filestr} обнимает {messagestr} "
                                                                   "VoHiYo",
@@ -1132,8 +1137,9 @@ class CommandsBot(commands.Bot, ABC):
             AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !когда [action]", ctx.author, "steal")
         else:
             for nick in self.names_exp:
-                if nick.lower() == message.lower():
-                    message = nick
+                for word in message.split(' '):
+                    if word.lower().find(nick.lower()) != -1:
+                        message = message.replce(word, nick)
             result = AdditionalMethods.parse_standartfile_message(nickname,
                                                                   "{nickname}, когда {messagestr}? Thonk {filestr}",
                                                                   message,
@@ -1152,8 +1158,9 @@ class CommandsBot(commands.Bot, ABC):
             AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !привет [nickname]", ctx.author, "steal")
         else:
             for nick in self.names_exp:
-                if nick.lower() == message.lower():
-                    message = nick
+                for word in message.split(' '):
+                    if word.lower().find(nick.lower()) != -1:
+                        message = message.replce(word, nick)
             result = AdditionalMethods.parse_standartfile_message(nickname,
                                                                   "{nickname} {filestr} приветствует {messagestr} "
                                                                   "peepoHey peepoLove",
