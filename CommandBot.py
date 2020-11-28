@@ -45,7 +45,7 @@ class CommandsBot(commands.Bot, ABC):
         self.japtest = {'kanji': '', 'tr': '', 'example': '', 'tr_example': '', 'active': False}
         with open('data/blacklist.txt', encoding='utf-8') as f:
             self.blacklist = [x for x in f.read().split('\n') if len(x) > 1]
-        print(self.blacklist)
+        print('Blacklist:',self.blacklist)
         
     '''
     async def event_command_error(self, ctx, error):
