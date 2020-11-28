@@ -257,7 +257,7 @@ class CommandsBot(commands.Bot, ABC):
                 text_pre = text_pre.replace(messagee.lower()+'\n', '')
             with open('data/blacklist.txt', mode='w', encoding='utf-8') as textw:
                 textw.write(text_pre)
-            AdditionalMethods.add_to_buffer("s", f"Пользователь {messagee} удалён из чёрного списка бота!", ctx.author,"mute")
+            AdditionalMethods.add_to_buffer("s", f"Пользователь {messagee} удалён из чёрного списка бота!", ctx.author,"unmute")
                                                         
     @commands.command(name='seek')
     async def seek(self, ctx):
@@ -272,25 +272,16 @@ class CommandsBot(commands.Bot, ABC):
                                                     ctx.author,
                                                     "seek")
                 else:
-                    AdditionalMethods.add_to_buffer("s",
-                                                    f"Вы подписаны на уведомления о спаме!",
-                                                    ctx.author,
-                                                    "seek")
+                    AdditionalMethods.add_to_buffer("s", f"Вы подписаны на уведомления о спаме!", ctx.author, "seek")
             else:
-                AdditionalMethods.add_to_buffer("s",
-                                                f"Вы уже подписаны на уведомления о спаме ResidentSleeper",
-                                                ctx.author,
-                                                "seek")
+                AdditionalMethods.add_to_buffer("s", f"Вы уже подписаны на уведомления о спаме ResidentSleeper", ctx.author, "seek")
 
     @commands.command(name='unseek')
     async def unseek(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
             nickname = ctx.author.name
             if not nickname in self.seekers:
-                AdditionalMethods.add_to_buffer("s",
-                                                f"Вы не подписаны на уведомления о спаме ResidentSleeper",
-                                                ctx.author,
-                                                "unseek")
+                AdditionalMethods.add_to_buffer("s", f"Вы не подписаны на уведомления о спаме ResidentSleeper", ctx.author, "unseek")
             else:
                 self.seekers.remove(nickname)
                 if requests.post(config.api_url + "/seekers/jesusavgn", data={'nick': nickname, 'enabled': 0},
@@ -300,10 +291,7 @@ class CommandsBot(commands.Bot, ABC):
                                                     ctx.author,
                                                     "unseek")
                 else:
-                    AdditionalMethods.add_to_buffer("s",
-                                                    f"Вы отписаны от уведомлений о спаме!",
-                                                    ctx.author,
-                                                    "unseek")
+                    AdditionalMethods.add_to_buffer("s", f"Вы отписаны от уведомлений о спаме!", ctx.author, "unseek")
 
     @commands.command(name='helpm')
     async def helpm(self, ctx):
@@ -508,16 +496,16 @@ class CommandsBot(commands.Bot, ABC):
         receptt = recept.partition('Способ приготовления:')[0]
         recept1 = recept.partition('Способ приготовления:')[2]
         AdditionalMethods.add_to_buffer("s", f"{name} - {receptt}", ctx.author, "рецепт")
-        await asyncio.sleep(2)
-        AdditionalMethods.add_to_buffer("s", f"Способ приготовления:{recept1}", ctx.author, "рецепт")
+        await asyncio.sleep(1)
+        AdditionalMethods.add_to_buffer("s", f"Способ приготовления: {recept1}", ctx.author, "рецепт")
 
     @commands.command(name='анекдот')
     async def anekdot(self, ctx):
         r = requests.get('http://anecdotica.ru/')
         soup = BeautifulSoup(r.content, 'lxml')
         anekdot = soup.find('div', class_='item_text').get_text()
-        anekdott = (anekdot[:300] + '...') if len(anekdot) > 300 else anekdot
-        AdditionalMethods.add_to_buffer("e", '{} KeK'.format(anekdott), ctx.author, "анекдот")
+        anekdott = (anekdot[:250] + '...') if len(anekdot) > 250 else anekdot
+        AdditionalMethods.add_to_buffer("e", f'{anekdott} KEKL', ctx.author, "анекдот")
 
     @commands.command(name='перевод')
     async def perevod(self, ctx):
@@ -535,7 +523,7 @@ class CommandsBot(commands.Bot, ABC):
                 key = '922d15fd.5fc16892.225a7322.74722d74657874-0-0'
                 url = "https://translate.yandex.net/api/v1/tr.json/translate?id="+key+"&srv=tr-text&lang=" + userlang.lower() + "&reason=auto&format=text"
                 r = requests.get(url, data=dataa)
-                if str(r.status_code) == "400":
+                if r.status_code == 400:
                     AdditionalMethods.add_to_buffer("с",
                                                     "Неправильно указаны языки. Ссылка со всеми языками: https://pastebin.com/raw/nk1n1KxD",
                                                     ctx.author, "перевод")
@@ -683,16 +671,13 @@ class CommandsBot(commands.Bot, ABC):
             for asu in osu:
                 if word.lower().find(asu) != -1:
                     res = res.replace(word, '*' * len(word))
-        if len(res) > 160:
-            res = res[:150] + '...'
+        res = (res[:195] + '...') if len(res) > 200
         AdditionalMethods.add_to_buffer("e", f"{nickname}, {res}", ctx.author, "zaebalo")
 
     @commands.command(name='pastа')
     async def pasta(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
-            AdditionalMethods.add_to_buffer("e", AdditionalMethods.parse_simplefile_message("{}", "nadya")[:490],
-                                            ctx.author,
-                                            "pastа")
+            AdditionalMethods.add_to_buffer("e", AdditionalMethods.parse_simplefile_message("{}", "nadya")[:499], ctx.author, "pastа")
 
     @commands.command(name='help')
     async def help(self, ctx):
@@ -973,12 +958,7 @@ class CommandsBot(commands.Bot, ABC):
                 for word in message.split(' '):
                     if word.lower().find(nick.lower()) != -1:
                         message = message.replace(word, nick)
-            if len(message) < 100:
-                AdditionalMethods.add_to_buffer("e", f"Ну {message} и {message} Чё бубнить-то? ThumbUp",
-                                                ctx.author,
-                                                "бубу")
-            else:
-                AdditionalMethods.add_to_buffer("e", "Слишком длинное бубу WeirdChamp ", ctx.author, "бубу")
+            AdditionalMethods.add_to_buffer("e", f"Ну {message[:90]} и {message[:90]} Чё бубнить-то? ThumbUp", ctx.author, "бубу")
 
     @commands.command(name='steal')
     async def steal(self, ctx):
@@ -993,24 +973,20 @@ class CommandsBot(commands.Bot, ABC):
                 for word in message.split(' '):
                     if word.lower().find(nick.lower()) != -1:
                         message = message.replace(word, nick)
-            if not len(message) > 100:
-                if procent >= 33:
-                    with open('data/me/things.txt', encoding='utf-8') as pr:
-                        thingss = [x for x in pr.read().split('\n') if len(x) > 1]
-                    rand_steal = random.randint(0, 100)
-                    if 0 < rand_steal <= 70:
-                        AdditionalMethods.add_to_buffer("e", f"{nickname} украл у {message} {random.choice(thingss)} BOP",
-                                                        ctx.author, "steal")
-                    else:
-                        symbols = ['$', '£', '€', '₽']
-                        AdditionalMethods.add_to_buffer("e", f"{nickname} украл у {message} {ruble} {random.choice(symbols)} BOP",
-                                                        ctx.author, "steal")
+            if procent >= 33:
+                with open('data/me/things.txt', encoding='utf-8') as pr:
+                    thingss = [x for x in pr.read().split('\n') if len(x) > 1]
+                rand_steal = random.randint(0, 100)
+                if 0 < rand_steal <= 70:
+                    AdditionalMethods.add_to_buffer("e", f"{nickname} украл у {message[:90]} {random.choice(thingss)} BOP",
+                                                    ctx.author, "steal")
                 else:
-                    AdditionalMethods.add_to_buffer("e", f"{nickname} ничего не украл у {message} KeK Lohich",
+                    symbols = ['$', '£', '€', '₽']
+                    AdditionalMethods.add_to_buffer("e", f"{nickname} украл у {message[:90]} {ruble} {random.choice(symbols)} BOP",
                                                     ctx.author, "steal")
             else:
-                AdditionalMethods.add_to_buffer("e", f"{nickname} пишите меньше символов WeirdChamp", ctx.author,
-                                                "steal")
+                AdditionalMethods.add_to_buffer("e", f"{nickname} ничего не украл у {message[:90]} KeK Lohich",
+                                                ctx.author, "steal")
 
     @commands.command(name='try')
     async def ttry(self, ctx):
@@ -1027,11 +1003,7 @@ class CommandsBot(commands.Bot, ABC):
             result = AdditionalMethods.parse_standartfile_message(nickname,
                                                                   "{nickname} попробовал {messagestr}... {filestr}",
                                                                   message, "!try", "try")
-            if not len(message) > 100:
-                AdditionalMethods.add_to_buffer("e", result, ctx.author, "try")
-            else:
-                AdditionalMethods.add_to_buffer("e", f"{nickname}, пишите меньше символов WeirdChamp",
-                                                ctx.author, "try")
+            AdditionalMethods.add_to_buffer("e", result[:90], ctx.author, "try")
 
     @commands.command(name='время')
     async def time(self, ctx):
@@ -1079,11 +1051,7 @@ class CommandsBot(commands.Bot, ABC):
                                                                   "{nickname} {filestr} обнимает {messagestr} "
                                                                   "VoHiYo",
                                                                   message, "!обнять", "hug")
-            if not len(message) > 100:
-                AdditionalMethods.add_to_buffer("e", result, ctx.author, "обнять")
-            else:
-                AdditionalMethods.add_to_buffer("e", f"{nickname}, пишите меньше символов WeirdChamp", ctx.author,
-                                                "обнять")
+            AdditionalMethods.add_to_buffer("e", result[:90], ctx.author, "обнять")
 
     @commands.command(name='кнб')
     async def cnb(self, ctx):
@@ -1144,11 +1112,7 @@ class CommandsBot(commands.Bot, ABC):
                                                                   "{nickname}, когда {messagestr}? Thonk {filestr}",
                                                                   message,
                                                                   "!когда", "kogda")
-            if not len(message) > 200:
-                AdditionalMethods.add_to_buffer("e", result, ctx.author, "когда")
-            else:
-                AdditionalMethods.add_to_buffer("e", f"{nickname}, пишите меньше символов WeirdChamp", ctx.author,
-                                                "когда")
+            AdditionalMethods.add_to_buffer("e", result[:90], ctx.author, "когда")
 
     @commands.command(name='привет')
     async def privet(self, ctx):
@@ -1165,11 +1129,7 @@ class CommandsBot(commands.Bot, ABC):
                                                                   "{nickname} {filestr} приветствует {messagestr} "
                                                                   "peepoHey peepoLove",
                                                                   message, "!привет", "privet")
-            if not len(message) > 100:
-                AdditionalMethods.add_to_buffer("e", result, ctx.author, "привет")
-            else:
-                AdditionalMethods.add_to_buffer("e", f"{nickname}, пишите меньше символов WeirdChamp", ctx.author,
-                                                "привет")
+            AdditionalMethods.add_to_buffer("e", result[:90], ctx.author, "привет")
 
     @commands.command(name='гороскоп')
     async def goroskop(self, ctx):
@@ -1279,11 +1239,11 @@ class CommandsBot(commands.Bot, ABC):
         content = ctx.message.clean_content
         wikipedia.set_lang("ru")
         try:
-            info = wikipedia.summary(content, chars=300)
+            info = wikipedia.summary(content, chars=150)
         except wikipedia.DisambiguationError as e:
             p = e.options
             s = random.choice(e.options)
-            info = wikipedia.summary(content, chars=300)
+            info = wikipedia.summary(content, chars=150)
         except wikipedia.exceptions.PageError:
             return
         info = re.sub(r"\([^()]*\)", "", info)
@@ -1329,7 +1289,7 @@ class CommandsBot(commands.Bot, ABC):
                     if not flag:
                         for strr in stroka.split(' '):
                             for slovo in song_lyric.lower().split(' '):
-                                if slovo == strr.lower() and len(slovo) > 4:
+                                if slovo == strr.lower() and len(slovo) > 3:
                                     res = res[res.index(stroka):]
                                     flag = True
                                     break
@@ -1347,9 +1307,9 @@ class CommandsBot(commands.Bot, ABC):
                                 res = res.replace(word, '*' * len(word))
                     AdditionalMethods.add_to_buffer("e", emote + ' ' + res[:180] + emote, ctx.author, 'music')
         except AttributeError:
-            AdditionalMethods.add_to_buffer("e", nick + ', песня не найдена!', ctx.author, 'music')
+            AdditionalMethods.add_to_buffer("e", nick + ', песня не найдена Sadge', ctx.author, 'music')
         except TypeError:
-            AdditionalMethods.add_to_buffer("e", nick + ', не удалось выполнить поиск. Попробуйте ещё раз PepoG ', ctx.author, 'music')
+            AdditionalMethods.add_to_buffer("e", nick + ', не удалось выполнить поиск. Попробуйте ещё раз PepoG', ctx.author, 'music')
 
 subprocess.Popen([sys.executable, 'ChatBot.py'])
 subprocess.Popen([sys.executable, 'BufferCleaner.py'])
