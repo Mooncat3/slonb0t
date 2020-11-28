@@ -47,10 +47,11 @@ class CommandsBot(commands.Bot, ABC):
             self.blacklist = [x for x in f.read().split('\n') if len(x) > 1]
         print('Blacklist:',self.blacklist)
         
-    
+    '''
     async def event_command_error(self, ctx, error):
         pass
-
+    '''
+    
     async def duelent(self, socket):
         i: int = 0
         while len(self.duel_nicknames) == 1 and i < 200:
