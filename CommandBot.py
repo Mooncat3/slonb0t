@@ -112,13 +112,11 @@ class CommandsBot(commands.Bot, ABC):
     async def event_message(self, message):
         nickname = message.author.name
         nnn = message.author.display_name
-        if nickname == 'moobot' or nickname == 'slonb0t' or nickname == 'kryabot':
-            pass
-        else:#elif nnn not in self.namess:
-            print(self.namess)
-            if self.ii > 200:
+        if nickname != 'moobot' or nickname != 'slonb0t' or nickname != 'kryabot' or nnn not in self.namess:
+            if self.ii > 100:
                 del self.namess[0]
             self.namess.append(nnn)
+            print(self.namess)
             self.ii += 1
         if not AdditionalMethods.vip(message.author.is_mod, nickname) and not nickname == "slonb0t":
             docheck = True
