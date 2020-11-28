@@ -670,7 +670,7 @@ class CommandsBot(commands.Bot, ABC):
             for asu in osu:
                 if word.lower().find(asu) != -1:
                     res = res.replace(word, '*' * len(word))
-        res = (res[:195] + '...') if len(res) > 200
+        res = (res[:200] + '...') if len(res) > 200 else res
         AdditionalMethods.add_to_buffer("e", f"{nickname}, {res}", ctx.author, "zaebalo")
 
     @commands.command(name='pastа')
