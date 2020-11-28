@@ -13,14 +13,15 @@ class ChatBot(commands.Bot, ABC):
 
     async def event_ready(self):
         print(f'Ready ChatBot | {config.BOT} on {config.CHANNELS[0]}')
-
+    '''
     async def event_command_error(self, ctx, error):
         pass
-
+    '''
     async def event_message(self, message):
         nickname = message.author.name
         with open('data/blacklist.txt', encoding='utf-8') as f:
             blacklist = [x for x in f.read().split('\n') if len(x) > 1]
+        print(blacklist)
         if nickname in blacklist and not AdditionalMethods.vip(message.author.is_mod, nickname):
             return
         
