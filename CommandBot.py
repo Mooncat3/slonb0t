@@ -929,7 +929,11 @@ class CommandsBot(commands.Bot, ABC):
     async def kto(self, ctx):
         message = ctx.message.clean_content.replace('@', '')
         name = random.choice(self.namess)
-        AdditionalMethods.add_to_buffer("e", name + '⠀ ' + message[:90] + ' catFax', ctx.author, "кто")
+        for nick in self.names_exp:
+            for word in message.split(' '):
+                if word.lower().find(nick.lower()) != -1:
+                    message = message.replace(word, nick)
+        AdditionalMethods.add_to_buffer("e", name + '⠀ ' + message[:90] + ' hehDed', ctx.author, "кто")
 
     @commands.command(name='do')
     async def do(self, ctx):
