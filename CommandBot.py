@@ -112,9 +112,10 @@ class CommandsBot(commands.Bot, ABC):
     async def event_message(self, message):
         nickname = message.author.name
         nnn = message.author.display_name
-        if nickname == 'moobot' or nickname == 'slonb0t' or nickname == 'kryabot':
+        if nickname == 'moobot' or nickname == 'slonb0t' or nickname == 'kryabot' or nickname in self.namess:
             pass
         else:
+            print(self.namess)
             if self.ii > 200:
                 del self.namess[0]
             self.namess.append(nnn)
@@ -865,9 +866,8 @@ class CommandsBot(commands.Bot, ABC):
         curr = random.choice(symbols)
         currency_rand = random.choice(currency)
         thing = random.choice(things)
-        namessss = list(set(self.namess))
         answer = random.choice(me_classic).format(nickname)
-        name = random.choice(namessss)
+        name = random.choice(self.namess)
         v = random.randint(0, 100)
         if 0 < v <= 17:
             rand_num = random.randint(0, 100)
@@ -929,19 +929,16 @@ class CommandsBot(commands.Bot, ABC):
                                                        
     @commands.command(name='пук')
     async def puk(self, ctx):
-        namesss = list(set(self.namess))
-        AdditionalMethods.add_to_buffer("e", ctx.author.display_name + ' пукнул на ' + random.choice(namesss) + ' (puke) ThumbUp', ctx.author, "пук")
+        AdditionalMethods.add_to_buffer("e", ctx.author.display_name + ' пукнул на ' + random.choice(self.namess) + ' (puke) ThumbUp', ctx.author, "пук")
                                                        
     @commands.command(name='корона')
     async def corona(self, ctx):
-        namesss = list(set(self.namess))
-        AdditionalMethods.add_to_buffer("e", ctx.author.display_name + ' заразил короной ' + random.choice(namesss) + ' coronaS', ctx.author, "пук")
+        AdditionalMethods.add_to_buffer("e", ctx.author.display_name + ' заразил короной ' + random.choice(self.namess) + ' coronaS', ctx.author, "пук")
                                                        
     @commands.command(name='кто')
     async def kto(self, ctx):
         message = ctx.message.clean_content.replace('@', '')
-        namesss = list(set(self.namess))
-        AdditionalMethods.add_to_buffer("e", random.choice(namesss) + '⠀ ' + message[:90] + ' catFax', ctx.author, "кто")
+        AdditionalMethods.add_to_buffer("e", random.choice(self.namess) + '⠀ ' + message[:90] + ' catFax', ctx.author, "кто")
 
     @commands.command(name='do')
     async def do(self, ctx):
