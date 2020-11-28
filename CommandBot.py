@@ -956,12 +956,7 @@ class CommandsBot(commands.Bot, ABC):
             for nick in self.namess:
                 if nick.lower() == message.lower():
                     message = nick
-            if not len(message) > 100:
-                AdditionalMethods.add_to_buffer("e", randomdo.format(nickname, message), ctx.author,
-                                                "do")
-            else:
-                AdditionalMethods.add_to_buffer("e", f"{nickname}, пишите меньше символов WeirdChamp ", ctx.author,
-                                                "do")
+            AdditionalMethods.add_to_buffer("e", randomdo.format(nickname, message[:90]), ctx.author, "do")
 
     @commands.command(name='бубу')
     async def bubu(self, ctx):
@@ -970,6 +965,9 @@ class CommandsBot(commands.Bot, ABC):
         if len(message) == 0:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !бубу [something]", ctx.author, "")
         else:
+            for nick in self.namess:
+                if nick.lower() == message.lower():
+                    message = nick
             if len(message) < 100:
                 AdditionalMethods.add_to_buffer("e", f"Ну {message} и {message} Чё бубнить-то? ThumbUp",
                                                 ctx.author,
@@ -1013,7 +1011,7 @@ class CommandsBot(commands.Bot, ABC):
         message = ctx.message.clean_content.replace('@', '')
         nickname = ctx.author.display_name
         if len(message) == 0:
-            AdditionalMethods.add_to_buffer("e", f"{nickname}, пишите try [действие]",
+            AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !try [action]",
                                             ctx.author, "try")
         else:
             for nick in self.namess:
@@ -1130,6 +1128,9 @@ class CommandsBot(commands.Bot, ABC):
         if len(message) == 0:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !когда [action]", ctx.author, "steal")
         else:
+            for nick in self.namess:
+                if nick.lower() == message.lower():
+                    message = nick
             result = AdditionalMethods.parse_standartfile_message(nickname,
                                                                   "{nickname}, когда {messagestr}? Thonk {filestr}",
                                                                   message,
