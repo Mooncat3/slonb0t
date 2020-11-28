@@ -39,6 +39,7 @@ class CommandsBot(commands.Bot, ABC):
         self.seekers = []
         self.logs = []
         self.namess = []
+        self.names_exp = []
         self.blbl = []
         self.ii = 0
         self.japtest = {'kanji': '', 'tr': '', 'example': '', 'tr_example': '', 'active': False}
@@ -116,10 +117,12 @@ class CommandsBot(commands.Bot, ABC):
         if nickname == 'moobot' or nickname == 'slonb0t' or nickname == 'kryabot':
             pass
         elif nnn not in self.namess:
-            if self.ii > 50:
+            if self.ii > 25:
                 del self.namess[0]
             self.namess.append(nnn)
             self.ii += 1
+        if nnn not in self.names_exp:
+            self.names_exp.append(nnn)
         if not AdditionalMethods.vip(message.author.is_mod, nickname) and not nickname == "slonb0t":
             docheck = True
             mod = Settings.get_mod()
@@ -953,7 +956,7 @@ class CommandsBot(commands.Bot, ABC):
             with open('data/do.txt', 'r', encoding='utf-8') as c:
                 listme = list(c)
             randomdo = random.choice(listme)
-            for nick in self.namess:
+            for nick in self.names_exp:
                 if nick.lower() == message.lower():
                     message = nick
             AdditionalMethods.add_to_buffer("e", randomdo.format(nickname, message[:90]), ctx.author, "do")
@@ -965,7 +968,7 @@ class CommandsBot(commands.Bot, ABC):
         if len(message) == 0:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !бубу [something]", ctx.author, "")
         else:
-            for nick in self.namess:
+            for nick in self.names_exp:
                 if nick.lower() == message.lower():
                     message = nick
             if len(message) < 100:
@@ -984,7 +987,7 @@ class CommandsBot(commands.Bot, ABC):
         else:
             procent = random.randint(0, 100)
             ruble = random.randint(0, 1500)
-            for nick in self.namess:
+            for nick in self.names_exp:
                 if nick.lower() == message.lower():
                     message = nick
             if not len(message) > 100:
@@ -1014,7 +1017,7 @@ class CommandsBot(commands.Bot, ABC):
             AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !try [action]",
                                             ctx.author, "try")
         else:
-            for nick in self.namess:
+            for nick in self.names_exp:
                 if nick.lower() == message.lower():
                     message = nick
             result = AdditionalMethods.parse_standartfile_message(nickname,
@@ -1064,7 +1067,7 @@ class CommandsBot(commands.Bot, ABC):
         if len(message) == 0:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !обнять [nickname]", ctx.author, "steal")
         else:
-            for nick in self.namess:
+            for nick in self.names_exp:
                 if nick.lower() == message.lower():
                     message = nick
             result = AdditionalMethods.parse_standartfile_message(nickname,
@@ -1128,7 +1131,7 @@ class CommandsBot(commands.Bot, ABC):
         if len(message) == 0:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !когда [action]", ctx.author, "steal")
         else:
-            for nick in self.namess:
+            for nick in self.names_exp:
                 if nick.lower() == message.lower():
                     message = nick
             result = AdditionalMethods.parse_standartfile_message(nickname,
@@ -1148,7 +1151,7 @@ class CommandsBot(commands.Bot, ABC):
         if len(message) == 0:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !привет [nickname]", ctx.author, "steal")
         else:
-            for nick in self.namess:
+            for nick in self.names_exp:
                 if nick.lower() == message.lower():
                     message = nick
             result = AdditionalMethods.parse_standartfile_message(nickname,
