@@ -39,12 +39,13 @@ class CommandsBot(commands.Bot, ABC):
         self.seekers = []
         self.logs = []
         self.namess = []
-        self.ii = 0
         self.blbl = []
+        self.ii = 0
         self.japtest = {'kanji': '', 'tr': '', 'example': '', 'tr_example': '', 'active': False}
         with open('data/blacklist.txt', encoding='utf-8') as f:
             self.blacklist = [x for x in f.read().split('\n') if len(x) > 1]
-
+        print(self.blacklist)
+        
     '''
     async def event_command_error(self, ctx, error):
         pass
@@ -115,7 +116,7 @@ class CommandsBot(commands.Bot, ABC):
         if nickname == 'moobot' or nickname == 'slonb0t' or nickname == 'kryabot':
             pass
         elif nnn not in self.namess:
-            if self.ii > 100:
+            if self.ii > 50:
                 del self.namess[0]
             self.namess.append(nnn)
             self.ii += 1
