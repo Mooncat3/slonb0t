@@ -3,9 +3,14 @@ from selenium import webdriver
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
-from megascript.cook import PREFS, COOKIES
+from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as ec
+from selenium.webdriver.support.wait import WebDriverWait
+from cook import PREFS, COOKIES
 import time
 import json
+
 
 
 #Екарны бабай, закидывай cook.py и chromedriver.exe со скриптом Pepechill
@@ -56,42 +61,28 @@ for user in chatters:
                             headers={"Authorization": "y5IArL6S&%%G(69G"}).content)
         chrome_options = Options()
         chrome_options.add_argument("--headless")
+        chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
         chrome_options.add_experimental_option("prefs", PREFS)
         driver = webdriver.Chrome(options=chrome_options)
-
         url = 'https://www.twitch.tv/popout/jesusavgn/viewercard/' + user
-
         driver.get(url)
         driver.add_cookie(COOKIES[0])
         driver.get(url)
-        time.sleep(4)
-
         try:
-            count = driver.find_element_by_xpath('//p[starts-with(@class, "tw-c-text-link")]').text
-            if count != "999+":
-                count = int(count)
-                print(f"Пользователь {user} написал {count} сообщений!")
-                driver.quit()
-            else:
-                actions = ActionChains(driver)
+            WebDriverWait(driver, timeout=6).until(ec.visibility_of_element_located((By.CLASS_NAME, "tw-c-text-link")))
+            mess = driver.find_element_by_xpath('//p[starts-with(@class, "tw-c-text-link tw-font-size-5 tw-strong")]').text
+            if mess == '999+':
+                WebDriverWait(driver, timeout=3).until(ec.visibility_of_element_located((By.CLASS_NAME, "text-fragment")))
                 driver.find_element_by_xpath('//span[starts-with(@class, "text-fragment")]').click()
-                element = driver.find_element_by_class_name('simplebar-scrollbar')
-
-                while element.is_displayed():
-                    actions.key_down(Keys.HOME).perform()
-
-                mess = str(len(driver.find_elements_by_xpath('//span[starts-with(@class, "text-fragment")]')))
-
-                count = int(mess)
-
-                print(f"Пользователь {user} написал {mess} сообщений!")
-                driver.quit()
-            print(
-                requests.post("https://sl0n.herokuapp.com/stats/jesusavgn",
-                              data={'type': 'add', 'nickname': user, 'count': count},
+                elem = driver.find_element_by_class_name('simplebar-scrollbar')
+                while elem.is_displayed():
+                    ActionChains(driver).key_down(Keys.HOME).perform()
+                mess = len(driver.find_elements_by_xpath('//span[starts-with(@class, "text-fragment")]'))
+            print(f"Пользователь {user} написал {str(mess)} сообщений!")
+            print(requests.post("https://sl0n.herokuapp.com/stats/jesusavgn",
+                              data={'type': 'add', 'nickname': user, 'count': mess},
                               headers={"Authorization": "y5IArL6S&%%G(69G"}).content)
-        except Exception as e:
-            print(f"Не удалось узнать кол-во сообщений {user} {e}")
-            driver.quit()
-
+        except TimeoutException:
+            print(f"Не удалось узнать кол-во сообщений {user}")
+        driver.quit()
 print(f"//------------- СКАНИРОВАНИЕ ЗАВЕРШЕНО -------------------//")
