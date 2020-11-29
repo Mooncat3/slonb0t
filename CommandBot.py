@@ -234,6 +234,16 @@ class CommandsBot(commands.Bot, ABC):
                                             f"{nickname}, Вас нет peepoJuiceSpin",
                                             ctx.author,
                                             "stat")
+                                                        
+    @commands.command(name='кто')	
+    async def kto(self, ctx):	
+        message = ctx.message.clean_content.replace('@', '')	
+        name = random.choice(self.namess)	
+        for nick in self.names_exp:	
+            for word in message.split(' '):	
+                if word.lower().find(nick.lower()) != -1:	
+                    message = message.replace(word, nick)	
+        AdditionalMethods.add_to_buffer("e", name + '⠀ ' + message[:90] + ' hehDed', ctx.author, "кто")
 
     @commands.command(name='mute')
     async def mute(self, ctx):
