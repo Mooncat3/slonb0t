@@ -8,3 +8,4 @@ lxml
 pytz
 wikipedia
 lyricsgenius
+emoji
