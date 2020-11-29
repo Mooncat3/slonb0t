@@ -418,7 +418,7 @@ class CommandsBot(commands.Bot, ABC):
                 json_response = response.json()
                 result = json_response['replies'][4]
                 with open('data/osujdau2.txt') as f:
-                    osu = [x for x in list(f) if len(x) > 1]
+                    osu = [x for x in f.read().split('\n') if len(x) > 1]
                 res_prov = re.sub(r'[^\w ]', '', result)
                 for word in res_prov.split():
                     for asu in osu:
@@ -535,7 +535,7 @@ class CommandsBot(commands.Bot, ABC):
                 else:
                     resultat = str(r.text).partition('t":["')[-1].replace('"]}', "")
                     with open('data/osujdau2.txt', 'r', encoding='utf-8') as f:
-                        osu = [x for x in list(f) if len(x) > 1]
+                        osu = [x for x in f.read().split('\n') if len(x) > 1]
                     res_prov = re.sub(r'\W+', ' ', resultat)
                     for word in res_prov.split():
                         for asu in osu:
@@ -670,7 +670,7 @@ class CommandsBot(commands.Bot, ABC):
         res = random.choice(d).get_text()
         res = re.sub(r'\n', '', res)
         with open('data/osujdau2.txt') as f:
-            osu = [x for x in list(f) if len(x) > 1]
+            osu = [x for x in f.read().split('\n') if len(x) > 1]
         res_prov = re.sub(r'[^\w ]', '', res)
         for word in res_prov.split():
             for asu in osu:
@@ -833,26 +833,26 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='me', aliases=['я', 'йа'])
     async def me(self, ctx):
         nickname = ctx.author.display_name
-        with open('data/me/search.txt', encoding='utf-8') as p:
-            search = [x for x in list(p) if len(x) > 1]
+        with open('data/me/search.txt', encoding='utf-8') as f:
+            search = [x for x in f.read().split('\n') if len(x) > 1]
 
-        with open('data/me/things.txt', encoding='utf-8') as pr:
-            things = [x for x in list(pr) if len(x) > 1]
+        with open('data/me/things.txt', encoding='utf-8') as f:
+            things = [x for x in f.read().split('\n') if len(x) > 1]
 
-        with open('data/me/stories.txt', encoding='utf-8') as s:
-            stories = [x for x in list(s) if len(x) > 1]
+        with open('data/me/stories.txt', encoding='utf-8') as f:
+            stories = [x for x in f.read().split('\n') if len(x) > 1]
 
-        with open('data/me.txt', encoding='utf-8') as m:
-            me_classic = [x for x in list(m) if len(x) > 1]
+        with open('data/me.txt', encoding='utf-8') as f:
+            me_classic = [x for x in f.read().split('\n') if len(x) > 1]
 
-        with open('data/me/clothes.txt', encoding='utf-8') as cl:
-            clothes = [x for x in list(cl) if len(x) > 1]
+        with open('data/me/clothes.txt', encoding='utf-8') as f:
+            clothes = [x for x in f.read().split('\n') if len(x) > 1]
 
         with open('data/me/first_names.txt', encoding='utf-8') as f:
-            first_names = [x for x in list(f) if len(x) > 1]
+            first_names = [x for x in f.read().split('\n') if len(x) > 1]
                                                        
         with open('data/me/age.txt', encoding='utf-8') as f:
-            ages = [x for x in list(f) if len(x) > 1]
+            ages = [x for x in f.read().split('\n') if len(x) > 1]
 
         currency = ['доллар', 'фунт', 'евро', 'франк']
         symbols = ['$', '£', '€', '₽']
@@ -950,8 +950,8 @@ class CommandsBot(commands.Bot, ABC):
                     if word.lower().find(nick.lower()) != -1:
                         message = message.replace(word, nick)
             if procent >= 33:
-                with open('data/me/things.txt', encoding='utf-8') as pr:
-                    thingss = [x for x in list(pr) if len(x) > 1]
+                with open('data/me/things.txt', encoding='utf-8') as f:
+                    thingss = [x for x in f.read().split('\n') if len(x) > 1]
                 rand_steal = random.randint(0, 100)
                 if 0 < rand_steal <= 70:
                     AdditionalMethods.add_to_buffer("e", f"{nickname} украл у {message[:90]} {random.choice(thingss)} BOP",
@@ -1103,7 +1103,7 @@ class CommandsBot(commands.Bot, ABC):
                     song = self.genius.search_song(song_lyric).lyrics
                     res = [x for x in song.split('\n') if len(x) > 2]
                     with open('data/Pripev', 'r', encoding='utf-8') as f:
-                        pripev = [x for x in list(f) if len(x) > 1]
+                        pripev = [x for x in f.read().split('\n') if len(x) > 1]
                     flag = False
                     for stroka in res:
                         for strr in stroka.split():
@@ -1119,7 +1119,7 @@ class CommandsBot(commands.Bot, ABC):
                     res = [x for x in [re.sub(r'[\[].*?[\]]', '', i) for i in res] if len(x) > 1]
                     res = emote.join(res[:random.randint(4,5)])
                     with open('data/osujdau2.txt', 'r', encoding='utf-8') as f:
-                        osu = [x for x in list(f) if len(x) > 1]
+                        osu = [x for x in f.read().split('\n') if len(x) > 1]
                     res_prov = re.sub(r'\W+', ' ', res)
                     for word in res_prov.split():
                         for asu in osu:
