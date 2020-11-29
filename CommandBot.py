@@ -44,7 +44,7 @@ class CommandsBot(commands.Bot, ABC):
         self.blbl = []
         self.ii = 0
         with open('data/blacklist.txt', encoding='utf-8') as f:
-            self.blacklist = [x for x in list(f) if len(x) > 1]
+            self.blacklist = [x for x in f.read().split('\n') if len(x) > 1]
         self.genius = lg.Genius("5Pj7QcUoV5Khbd-Hq5jSve8OzCQILJkY8nWojIIxqH30ItpsmXC7UmCRcgjmTVPY")
         print('Blacklist:', self.blacklist)
         
