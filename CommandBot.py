@@ -249,7 +249,7 @@ class CommandsBot(commands.Bot, ABC):
     async def mute(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
             messagee = ctx.message.clean_content.replace('@','')
-            with open('data/blacklist.txt', mode='w', encoding='utf-8') as text:
+            with open('data/blacklist.txt', mode='a', encoding='utf-8') as text:
                 text.write(messagee.lower()+'\n')
             self.blbl.append(messagee.lower())
             AdditionalMethods.add_to_buffer("s", f"Пользователь {messagee} теперь в чёрном списке бота!", ctx.author,"mute")
