@@ -1093,7 +1093,6 @@ class CommandsBot(commands.Bot, ABC):
             else:
                 mess = message.split()
                 emote = mess[len(mess) - 1]
-                print(emote)
                 with open('data/SMILES.txt', encoding='utf-8') as g:
                     list_emotes = json.loads(g.read())
                 if emote not in list_emotes and len([c for c in message if c in emoji.UNICODE_EMOJI]) == 0:
