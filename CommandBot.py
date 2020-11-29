@@ -12,6 +12,7 @@ import random
 import subprocess
 import config
 import json
+import emoji
 from urllib.parse import quote
 import asyncio
 import time
@@ -43,7 +44,8 @@ class CommandsBot(commands.Bot, ABC):
         self.blbl = []
         self.ii = 0
         with open('data/blacklist.txt', encoding='utf-8') as f:
-            self.blacklist = [x for x in f.read().split('\n') if len(x) > 1]
+            self.blacklist = [x for x in list(f) if len(x) > 1]
+        self.genius = lg.Genius("5Pj7QcUoV5Khbd-Hq5jSve8OzCQILJkY8nWojIIxqH30ItpsmXC7UmCRcgjmTVPY")
         print('Blacklist:', self.blacklist)
         
     '''
@@ -240,7 +242,7 @@ class CommandsBot(commands.Bot, ABC):
         message = ctx.message.clean_content.replace('@', '')	
         name = random.choice(self.namess)	
         for nick in self.names_exp:	
-            for word in message.split(' '):	
+            for word in message.split():	
                 if word.lower().find(nick.lower()) != -1:	
                     message = message.replace(word, nick)	
         AdditionalMethods.add_to_buffer("e", name + '⠀ ' + message[:90] + ' hehDed', ctx.author, "кто")
@@ -416,9 +418,9 @@ class CommandsBot(commands.Bot, ABC):
                 json_response = response.json()
                 result = json_response['replies'][4]
                 with open('data/osujdau2.txt') as f:
-                    osu = [x for x in f.read().split('\n') if len(x) > 1]
+                    osu = [x for x in list(f) if len(x) > 1]
                 res_prov = re.sub(r'[^\w ]', '', result)
-                for word in res_prov.split(' '):
+                for word in res_prov.split():
                     for asu in osu:
                         if word.lower().find(asu) != -1:
                             result = result.replace(word, '*' * len(word))
@@ -533,9 +535,9 @@ class CommandsBot(commands.Bot, ABC):
                 else:
                     resultat = str(r.text).partition('t":["')[-1].replace('"]}', "")
                     with open('data/osujdau2.txt', 'r', encoding='utf-8') as f:
-                        osu = [x for x in f.read().split('\n') if len(x) > 1]
+                        osu = [x for x in list(f) if len(x) > 1]
                     res_prov = re.sub(r'\W+', ' ', resultat)
-                    for word in res_prov.split(' '):
+                    for word in res_prov.split():
                         for asu in osu:
                             if word.lower().find(asu) != -1:
                                 resultat = resultat.replace(word, '*' * len(word))
@@ -668,9 +670,9 @@ class CommandsBot(commands.Bot, ABC):
         res = random.choice(d).get_text()
         res = re.sub(r'\n', '', res)
         with open('data/osujdau2.txt') as f:
-            osu = [x for x in f.read().split('\n') if len(x) > 1]
+            osu = [x for x in list(f) if len(x) > 1]
         res_prov = re.sub(r'[^\w ]', '', res)
-        for word in res_prov.split(' '):
+        for word in res_prov.split():
             for asu in osu:
                 if word.lower().find(asu) != -1:
                     res = res.replace(word, '*' * len(word))
@@ -832,25 +834,25 @@ class CommandsBot(commands.Bot, ABC):
     async def me(self, ctx):
         nickname = ctx.author.display_name
         with open('data/me/search.txt', encoding='utf-8') as p:
-            search = [x for x in p.read().split('\n') if len(x) > 1]
+            search = [x for x in list(p) if len(x) > 1]
 
         with open('data/me/things.txt', encoding='utf-8') as pr:
-            things = [x for x in pr.read().split('\n') if len(x) > 1]
+            things = [x for x in list(pr) if len(x) > 1]
 
         with open('data/me/stories.txt', encoding='utf-8') as s:
-            stories = [x for x in s.read().split('\n') if len(x) > 1]
+            stories = [x for x in list(s) if len(x) > 1]
 
         with open('data/me.txt', encoding='utf-8') as m:
-            me_classic = [x for x in m.read().split('\n') if len(x) > 1]
+            me_classic = [x for x in list(m) if len(x) > 1]
 
         with open('data/me/clothes.txt', encoding='utf-8') as cl:
-            clothes = [x for x in cl.read().split('\n') if len(x) > 1]
+            clothes = [x for x in list(cl) if len(x) > 1]
 
         with open('data/me/first_names.txt', encoding='utf-8') as f:
-            first_names = [x for x in f.read().split('\n') if len(x) > 1]
+            first_names = [x for x in list(f) if len(x) > 1]
                                                        
         with open('data/me/age.txt', encoding='utf-8') as f:
-            ages = [x for x in f.read().split('\n') if len(x) > 1]
+            ages = [x for x in list(f) if len(x) > 1]
 
         currency = ['доллар', 'фунт', 'евро', 'франк']
         symbols = ['$', '£', '€', '₽']
@@ -929,7 +931,7 @@ class CommandsBot(commands.Bot, ABC):
                 listme = list(c)
             randomdo = random.choice(listme)
             for nick in self.names_exp:
-                for word in message.split(' '):
+                for word in message.split():
                     if word.lower().find(nick.lower()) != -1:
                         message = message.replace(word, nick)
             AdditionalMethods.add_to_buffer("e", randomdo.format(nickname, message[:90]), ctx.author, "do")
@@ -944,12 +946,12 @@ class CommandsBot(commands.Bot, ABC):
             procent = random.randint(0, 100)
             ruble = random.randint(0, 1500)
             for nick in self.names_exp:
-                for word in message.split(' '):
+                for word in message.split():
                     if word.lower().find(nick.lower()) != -1:
                         message = message.replace(word, nick)
             if procent >= 33:
                 with open('data/me/things.txt', encoding='utf-8') as pr:
-                    thingss = [x for x in pr.read().split('\n') if len(x) > 1]
+                    thingss = [x for x in list(pr) if len(x) > 1]
                 rand_steal = random.randint(0, 100)
                 if 0 < rand_steal <= 70:
                     AdditionalMethods.add_to_buffer("e", f"{nickname} украл у {message[:90]} {random.choice(thingss)} BOP",
@@ -971,7 +973,7 @@ class CommandsBot(commands.Bot, ABC):
                                             ctx.author, "try")
         else:
             for nick in self.names_exp:
-                for word in message.split(' '):
+                for word in message.split():
                     if word.lower().find(nick.lower()) != -1:
                         message = message.replace(word, nick)
             result = AdditionalMethods.parse_standartfile_message(nickname,
@@ -1018,7 +1020,7 @@ class CommandsBot(commands.Bot, ABC):
             AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !обнять [nickname]", ctx.author, "steal")
         else:
             for nick in self.names_exp:
-                for word in message.split(' '):
+                for word in message.split():
                     if word.lower().find(nick.lower()) != -1:
                         message = message.replace(word, nick)
             result = AdditionalMethods.parse_standartfile_message(nickname,
@@ -1035,7 +1037,7 @@ class CommandsBot(commands.Bot, ABC):
             AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !когда [action]", ctx.author, "steal")
         else:
             for nick in self.names_exp:
-                for word in message.split(' '):
+                for word in message.split():
                     if word.lower().find(nick.lower()) != -1:
                         message = message.replace(word, nick)
             result = AdditionalMethods.parse_standartfile_message(nickname,
@@ -1052,7 +1054,7 @@ class CommandsBot(commands.Bot, ABC):
             AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !привет [nickname]", ctx.author, "steal")
         else:
             for nick in self.names_exp:
-                for word in message.split(' '):
+                for word in message.split():
                     if word.lower().find(nick.lower()) != -1:
                         message = message.replace(word, nick)
             result = AdditionalMethods.parse_standartfile_message(nickname,
@@ -1063,10 +1065,7 @@ class CommandsBot(commands.Bot, ABC):
 
     @commands.command(name='гороскоп')
     async def goroskop(self, ctx):
-        nickname = ctx.author.display_name
-        message = ctx.message.content
-        goroskop = AdditionalMethods.get_goroskop(message, nickname)
-        AdditionalMethods.add_to_buffer("s", goroskop, ctx.author, "гороскоп")
+        AdditionalMethods.add_to_buffer("s", AdditionalMethods.get_goroskop(ctx.message.content, ctx.author.display_name), ctx.author, "гороскоп")
 
     @commands.command(name='wiki')
     async def wiki(self, ctx):
@@ -1090,29 +1089,26 @@ class CommandsBot(commands.Bot, ABC):
             nick = ctx.author.display_name
             message = ctx.message.clean_content.replace('@', '')
             if len(message) == 0:
-                AdditionalMethods.add_to_buffer("e", nick + ', введите - !music [строка из песни] [смайл]', ctx.author,
-                                                'music')
+                AdditionalMethods.add_to_buffer("e", nick + ', введите - !music [строка из песни] [смайл]', ctx.author, 'music')
             else:
-                mess = message.split(' ')
-                emote = ' ' + mess[len(mess) - 1]
+                mess = message.split()
+                emote = mess[len(mess) - 1]
                 with open('data/SMILES.txt', encoding='utf-8') as g:
                     list_emotes = json.loads(g.read())
-                if not mess[len(mess) - 1] in list_emotes:
-                    AdditionalMethods.add_to_buffer("e", nick + ', введите - !music [строка из песни] [смайл]', ctx.author,
-                                                    'music')
+                if emote not in list_emotes or len([c for c in message if c in emoji.UNICODE_EMOJI]) == 0:
+                    AdditionalMethods.add_to_buffer("e", nick + ', введите - !music [строка из песни] [смайл]', ctx.author, 'music')
                 else:
-                    song_lyric = ' '.join(mess).replace(emote, '').replace('ё', 'е')
-                    emote += ' '
-                    genius = lg.Genius("5Pj7QcUoV5Khbd-Hq5jSve8OzCQILJkY8nWojIIxqH30ItpsmXC7UmCRcgjmTVPY")
-                    song = genius.search_song(song_lyric)
-                    res = [x for x in song.lyrics.split('\n') if len(x) > 2]
+                    song_lyric = message.replace(f' {emote}', '')
+                    emote = f' {emote} '
+                    song = self.genius.search_song(song_lyric).lyrics
+                    res = [x for x in song.split('\n') if len(x) > 2]
                     with open('data/Pripev', 'r', encoding='utf-8') as f:
-                        pripev = [x for x in f.read().split('\n') if len(x) > 1]
+                        pripev = [x for x in list(f) if len(x) > 1]
                     flag = False
                     for stroka in res:
-                        for strr in stroka.split(' '):
+                        for strr in stroka.split():
                             for prip in pripev:
-                                if stroka.find('[' + prip) != -1:
+                                if stroka.find(f'[{prip}') != -1:
                                     res = res[res.index(stroka)+1:]
                                     flag = True
                                     break
@@ -1120,26 +1116,16 @@ class CommandsBot(commands.Bot, ABC):
                                 break
                         if flag:
                             break
-                    if not flag:
-                        for strr in stroka.split(' '):
-                            for slovo in song_lyric.lower().split(' '):
-                                if slovo == strr.lower() and len(slovo) > 3:
-                                    res = res[res.index(stroka):]
-                                    flag = True
-                                    break
-                            if flag:
-                                break
-                    res = [re.sub(r'[\[].*?[\]]', '', i) for i in res]
-                    res = [x for x in res if len(x) > 1]
-                    res = emote.join(res[:4])
+                    res = [x for x in [re.sub(r'[\[].*?[\]]', '', i) for i in res] if len(x) > 1]
+                    res = emote.join(res[:random.randint(4,5)])
                     with open('data/osujdau2.txt', 'r', encoding='utf-8') as f:
-                        osu = [x for x in f.read().split('\n') if len(x) > 1]
+                        osu = [x for x in list(f) if len(x) > 1]
                     res_prov = re.sub(r'\W+', ' ', res)
-                    for word in res_prov.split(' '):
+                    for word in res_prov.split():
                         for asu in osu:
                             if word.lower().find(asu) != -1:
                                 res = res.replace(word, '*' * len(word))
-                    AdditionalMethods.add_to_buffer("e", emote + ' ' + res[:180] + emote, ctx.author, 'music')
+                    AdditionalMethods.add_to_buffer("e", f'{emote} {res[:200]} {emote}', ctx.author, 'music')
         except AttributeError:
             AdditionalMethods.add_to_buffer("e", nick + ', песня не найдена Sadge', ctx.author, 'music')
         except TypeError:
