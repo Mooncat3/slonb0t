@@ -384,7 +384,7 @@ class CommandsBot(commands.Bot, ABC):
         r = requests.get('https://socratify.net/quotes/random')
         soup = BeautifulSoup(r.content, 'lxml')
         d = soup.find('h1', class_='b-quote__text').get_text()
-        AdditionalMethods.add_to_buffer("e", f"{nickname}, {d[:200]} AUFFF", ctx.author, "ауф")
+        AdditionalMethods.add_to_buffer("e", f"{nickname}, {d[:100]} AUFFF", ctx.author, "ауф")
 
     @commands.command(name='porf')
     async def porf(self, ctx):
@@ -445,12 +445,6 @@ class CommandsBot(commands.Bot, ABC):
             repo.create_file("data/blacklist.txt", "", black)
 
             AdditionalMethods.add_to_buffer("s", "Синхронизация статистик произошла успешно", ctx.author, "save")
-
-    @commands.command(name='slon')
-    async def slon(self, ctx):
-        nickname = ctx.author.display_name
-        story = nickname + ", дело было летом 2019 года, хесус играл в майнкрафт без модов и смог приручить себе кота, которого мы назвали Слон. В один прекрасный солнечный день, он залез под блок, где была вода, и, медленно задыхаясь, умер peepoSad , этот бот будет вечным напоминанием о трагедии, которую никто не забудет roflanPominy "
-        AdditionalMethods.add_to_buffer("s", story, ctx.author, "slon")
 
     @commands.command(name='kogda')
     async def strim(self, ctx):
@@ -1069,11 +1063,11 @@ class CommandsBot(commands.Bot, ABC):
         content = ctx.message.clean_content
         wikipedia.set_lang("ru")
         try:
-            info = wikipedia.summary(content, chars=150)
+            info = wikipedia.summary(content, chars=200)
         except wikipedia.DisambiguationError as e:
             p = e.options
             s = random.choice(e.options)
-            info = wikipedia.summary(content, chars=150)
+            info = wikipedia.summary(content, chars=200)
         except wikipedia.exceptions.PageError:
             return
         info = re.sub(r"\([^()]*\)", "", info)
