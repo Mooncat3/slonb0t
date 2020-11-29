@@ -42,7 +42,6 @@ class CommandsBot(commands.Bot, ABC):
         self.names_exp = []
         self.blbl = []
         self.ii = 0
-        self.japtest = {'kanji': '', 'tr': '', 'example': '', 'tr_example': '', 'active': False}
         with open('data/blacklist.txt', encoding='utf-8') as f:
             self.blacklist = [x for x in f.read().split('\n') if len(x) > 1]
         print('Blacklist:', self.blacklist)
@@ -914,26 +913,6 @@ class CommandsBot(commands.Bot, ABC):
             answer = '{} скрывает своё имя. Но я знаю, что {} на самом деле зовут {} monkaX'.format(nickname, nickname, first_name)
 
         AdditionalMethods.add_to_buffer("e", answer, ctx.author, "me")
-                                                       
-    @commands.command(name='пук')
-    async def puk(self, ctx):
-        name = random.choice(self.namess)
-        AdditionalMethods.add_to_buffer("e", ctx.author.display_name + ' пукнул на ' + name + ' (puke) ThumbUp', ctx.author, "пук")
-                                                       
-    @commands.command(name='корона')
-    async def corona(self, ctx):
-        name = random.choice(self.namess)
-        AdditionalMethods.add_to_buffer("e", ctx.author.display_name + ' заразил короной ' + name + ' coronaS', ctx.author, "пук")
-                                                       
-    @commands.command(name='кто')
-    async def kto(self, ctx):
-        message = ctx.message.clean_content.replace('@', '')
-        name = random.choice(self.namess)
-        for nick in self.names_exp:
-            for word in message.split(' '):
-                if word.lower().find(nick.lower()) != -1:
-                    message = message.replace(word, nick)
-        AdditionalMethods.add_to_buffer("e", name + '⠀ ' + message[:90] + ' hehDed', ctx.author, "кто")
 
     @commands.command(name='do')
     async def do(self, ctx):
@@ -950,19 +929,6 @@ class CommandsBot(commands.Bot, ABC):
                     if word.lower().find(nick.lower()) != -1:
                         message = message.replace(word, nick)
             AdditionalMethods.add_to_buffer("e", randomdo.format(nickname, message[:90]), ctx.author, "do")
-
-    @commands.command(name='бубу')
-    async def bubu(self, ctx):
-        message = ctx.message.clean_content.replace('@', '')
-        nickname = ctx.author.display_name
-        if len(message) == 0:
-            AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !бубу [something]", ctx.author, "")
-        else:
-            for nick in self.names_exp:
-                for word in message.split(' '):
-                    if word.lower().find(nick.lower()) != -1:
-                        message = message.replace(word, nick)
-            AdditionalMethods.add_to_buffer("e", f"Ну {message[:90]} и {message[:90]} Чё бубнить-то? ThumbUp", ctx.author, "бубу")
 
     @commands.command(name='steal')
     async def steal(self, ctx):
@@ -1057,50 +1023,6 @@ class CommandsBot(commands.Bot, ABC):
                                                                   message, "!обнять", "hug")
             AdditionalMethods.add_to_buffer("e", result[:90], ctx.author, "обнять")
 
-    @commands.command(name='кнб')
-    async def cnb(self, ctx):
-        message = ctx.message.clean_content.replace('@', '')
-        nickname = ctx.author.display_name
-        listcnb = ['⛰', '✂️', '📜']
-        rndcnb1 = random.choice(listcnb)
-        if len(message) == 0:
-            AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !кнб [камень, ножницы, бумага]", ctx.author,
-                                            "кнб")
-        else:
-            if message == 'камень' and rndcnb1 == '⛰':
-                AdditionalMethods.add_to_buffer("e", f"{nickname} поставил(а) ⛰ , а Бот поставил ⛰ . Ничья! ThumbUp",
-                                                ctx.author, "кнб")
-            if message == 'ножницы' and rndcnb1 == '✂️':
-                AdditionalMethods.add_to_buffer("e", f"{nickname} поставил(а) ✂️ , а Бот поставил ✂️ . Ничья! ThumbUp",
-                                                ctx.author, "кнб")
-            if message == 'бумага' and rndcnb1 == '📜':
-                AdditionalMethods.add_to_buffer("e", f"{nickname} поставил(а) 📜 , а Бот поставил 📜 . Ничья! ThumbUp",
-                                                ctx.author, "кнб")
-            if message == 'бумага' and rndcnb1 == '⛰':
-                AdditionalMethods.add_to_buffer("e",
-                                                f"{nickname} поставил(а) 📜 , а Бот поставил ⛰ . Победа {nickname} EZ Clap",
-                                                ctx.author, "кнб")
-            if message == 'камень' and rndcnb1 == '📜':
-                AdditionalMethods.add_to_buffer("e",
-                                                f"{nickname} поставил(а) ⛰ , а Бот поставил 📜 . Победа Бота Lohich",
-                                                ctx.author, "кнб")
-            if message == 'камень' and rndcnb1 == '✂️':
-                AdditionalMethods.add_to_buffer("e",
-                                                f"{nickname} поставил(а) ⛰ , а Бот поставил ✂️ . Победа {nickname} EZ Clap",
-                                                ctx.author, "кнб")
-            if message == 'ножницы' and rndcnb1 == '⛰':
-                AdditionalMethods.add_to_buffer("e",
-                                                f"{nickname} поставил(а) ✂️ , а Бот поставил ⛰ . Победа Бота Lohich",
-                                                ctx.author, "")
-            if message == 'ножницы' and rndcnb1 == '📜':
-                AdditionalMethods.add_to_buffer("e",
-                                                f"{nickname} поставил(а) ✂️ , а Бот поставил 📜 . Победа {nickname} EZ Clap",
-                                                ctx.author, "кнб")
-            if message == 'бумага' and rndcnb1 == '✂️':
-                AdditionalMethods.add_to_buffer("e",
-                                                f"{nickname} поставил(а) 📜 , а Бот поставил ✂️ . Победа Бота Lohich",
-                                                ctx.author, "кнб")
-
     @commands.command(name='когда')
     async def kogda(self, ctx):
         message = ctx.message.clean_content.replace('@', '')
@@ -1141,102 +1063,6 @@ class CommandsBot(commands.Bot, ABC):
         message = ctx.message.content
         goroskop = AdditionalMethods.get_goroskop(message, nickname)
         AdditionalMethods.add_to_buffer("s", goroskop, ctx.author, "гороскоп")
-
-    @commands.command(name='japtest')
-    async def japtest(self, ctx):
-        nickname = ctx.author.display_name
-        if not self.japtest['active']:
-            self.japtest['active'] = True
-            message = ctx.message.clean_content.replace('@', '')
-            category = message.lower()
-            if category == "n1" or category == "n2" or category == "n3" or category == "n4" or category == "n5":
-                with open('data/kanji.txt', 'r', encoding='utf_8') as f:
-                    all = f.read()
-                if category == "n5":
-                    rd = random.randint(0, 103)
-                elif category == "n4":
-                    rd = random.randint(104, 284)
-                elif category == "n3":
-                    rd = random.randint(285, 650)
-                elif category == "n2":
-                    rd = random.randint(651, 1023)
-                elif category == "n1":
-                    rd = random.randint(1024, 1273)
-                else:
-                    rd = 0
-                result = all[rd: rd + 1]
-                i = 1
-                r = requests.get(f"https://jlptsensei.com/page/{i}/?s={result}")
-                soup = BeautifulSoup(r.content, 'lxml')
-                mass = soup.findAll('a', class_='btn btn-dark')
-                e = True
-                url = ""
-                if category != "n1":
-                    while e:
-                        for q in mass:
-                            if "learn-japanese-kanji" in q.get("href"):
-                                url = q.get("href")
-                                e = False
-                        i += 1
-                        await asyncio.sleep(0.2)
-                        r = requests.get(f"https://jlptsensei.com/page/{i}/?s={result}")
-                        soup = BeautifulSoup(r.content, 'lxml')
-                        mass = soup.findAll('a', class_='btn btn-dark')
-                        if soup.find('span', class_='jp'):
-                            e = False
-                if len(url) == 0:
-                    dataa = {"text": result}
-                    url = "https://translate.yandex.net/api/v1/tr.json/translate?id=9bade3aa.5f5e1930.ae218027" \
-                          ".74722d74657874-5-0&srv=tr-text&lang=ja-en&reason=auto&format=text "
-                    await asyncio.sleep(0.2)
-                    r = requests.get(url, data=dataa)
-                    resultat = str(r.text).partition('t":["')[-1].replace('"]}', "")
-                    self.japtest['kanji'] = result
-                    self.japtest['tr'] = resultat
-                    AdditionalMethods.add_to_buffer("e", f"{nickname}, {result}, чтобы увидеть перевод напишите !tr",
-                                                    ctx.author, "japtest")
-                else:
-                    r = requests.get(url)
-                    sp = BeautifulSoup(r.content, 'lxml')
-                    translation = sp.find('p', class_='eng-definition p-lg').string
-                    self.japtest['kanji'] = result
-                    self.japtest['tr'] = translation
-                    if sp.find('p', class_='m-0 jp'):
-                        ex = sp.find('p', class_='m-0 jp').text
-                        ex_translation = sp.find('div', class_='alert alert-primary').text
-                        self.japtest['example'] = ex
-                        self.japtest['tr_example'] = ex_translation
-                    else:
-                        self.japtest['example'] = ""
-                        self.japtest['tr_example'] = ""
-                    if len(self.japtest['example']) > 0:
-                        AdditionalMethods.add_to_buffer("e",
-                                                        f"{nickname}, {result}, example: {self.japtest['example']}, чтобы увидеть перевод напишите !tr",
-                                                        ctx.author, "japtest")
-                    else:
-                        AdditionalMethods.add_to_buffer("e",
-                                                        f"{nickname}, {result}, чтобы увидеть перевод напишите !tr",
-                                                        ctx.author, "japtest")
-                    self.japtest['active'] = False
-            else:
-                AdditionalMethods.add_to_buffer("e", f"{nickname}, введите категорию кандзи японского языка 'n1-n5'",
-                                                ctx.author, "japtest")
-        else:
-            AdditionalMethods.add_to_buffer("s", f"{nickname}, сейчас работает поиск другого кандзи PepoG",
-                                            ctx.author, "japtest")
-
-    @commands.command(name='tr')
-    async def tr(self, ctx):
-        nickname = ctx.author.display_name
-        if len(self.japtest['kanji']) > 0:
-            AdditionalMethods.add_to_buffer("e",
-                                            f"{nickname}, {self.japtest['kanji']} - {self.japtest['tr']}, example: {self.japtest['example']} - {self.japtest['tr_example']}",
-                                            ctx.author, "japtest")
-            self.japtest = {'kanji': '', 'tr': '', 'example': '', 'tr_example': '', 'active': False}
-        else:
-            AdditionalMethods.add_to_buffer("e",
-                                            f"{nickname}, сейчас никаких кандзи нет в очереди PepoG",
-                                            ctx.author, "japtest")
 
     @commands.command(name='wiki')
     async def wiki(self, ctx):
