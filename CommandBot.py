@@ -124,7 +124,8 @@ class CommandsBot(commands.Bot, ABC):
             self.ii += 1
         if nnn not in self.names_exp:
             self.names_exp.append(nnn)
-        if not AdditionalMethods.vip(message.author.is_mod, nickname) and not nickname == "slonb0t":
+        badges = message.author.tags['badges']
+        if not AdditionalMethods.vip(message.author.is_mod, nickname) and not nickname == "slonb0t" and not badges[:3] == 'vip':
             docheck = True
             mod = Settings.get_mod()
             if mod != "all" and (mod == "skip" or mod == "skip_with"):
