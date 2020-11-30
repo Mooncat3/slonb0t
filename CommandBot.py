@@ -239,13 +239,13 @@ class CommandsBot(commands.Bot, ABC):
                                                         
     @commands.command(name='кто')	
     async def kto(self, ctx):	
-        message = ctx.message.clean_content.replace('@', '')	
+        message = ctx.message.clean_content.replace('@', '')[:90]
         name = random.choice(self.namess)	
         for nick in self.names_exp:	
             for word in message.split():	
                 if word.lower().find(nick.lower()) != -1:	
                     message = message.replace(word, nick)	
-        AdditionalMethods.add_to_buffer("e", name + '⠀ ' + message[:90] + ' hehDed', ctx.author, "кто")
+        AdditionalMethods.add_to_buffer("e", name + '⠀ ' + message + ' hehDed', ctx.author, "кто")
 
     @commands.command(name='mute')
     async def mute(self, ctx):
@@ -922,7 +922,7 @@ class CommandsBot(commands.Bot, ABC):
 
     @commands.command(name='do')
     async def do(self, ctx):
-        message = ctx.message.clean_content.replace('@', '')
+        message = ctx.message.clean_content.replace('@', '')[:90]
         nickname = ctx.author.display_name
         if len(message) == 0:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !do [message]", ctx.author, "do")
@@ -934,11 +934,11 @@ class CommandsBot(commands.Bot, ABC):
                 for word in message.split():
                     if word.lower().find(nick.lower()) != -1:
                         message = message.replace(word, nick)
-            AdditionalMethods.add_to_buffer("e", randomdo.format(nickname, message[:90]), ctx.author, "do")
+            AdditionalMethods.add_to_buffer("e", randomdo.format(nickname, message), ctx.author, "do")
 
     @commands.command(name='steal')
     async def steal(self, ctx):
-        message = ctx.message.clean_content.replace('@', '')
+        message = ctx.message.clean_content.replace('@', '')[:90]
         nickname = ctx.author.display_name
         if len(message) == 0:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !steal [nickname]", ctx.author, "steal")
@@ -954,19 +954,19 @@ class CommandsBot(commands.Bot, ABC):
                     thingss = [x for x in f.read().split('\n') if len(x) > 1]
                 rand_steal = random.randint(0, 100)
                 if 0 < rand_steal <= 70:
-                    AdditionalMethods.add_to_buffer("e", f"{nickname} украл у {message[:90]} {random.choice(thingss)} BOP",
+                    AdditionalMethods.add_to_buffer("e", f"{nickname} украл у {message} {random.choice(thingss)} BOP",
                                                     ctx.author, "steal")
                 else:
                     symbols = ['$', '£', '€', '₽']
-                    AdditionalMethods.add_to_buffer("e", f"{nickname} украл у {message[:90]} {ruble} {random.choice(symbols)} BOP",
+                    AdditionalMethods.add_to_buffer("e", f"{nickname} украл у {message} {ruble} {random.choice(symbols)} BOP",
                                                     ctx.author, "steal")
             else:
-                AdditionalMethods.add_to_buffer("e", f"{nickname} ничего не украл у {message[:90]} KeK Lohich",
+                AdditionalMethods.add_to_buffer("e", f"{nickname} ничего не украл у {message} KeK Lohich",
                                                 ctx.author, "steal")
 
     @commands.command(name='try')
     async def ttry(self, ctx):
-        message = ctx.message.clean_content.replace('@', '')
+        message = ctx.message.clean_content.replace('@', '')[:90]
         nickname = ctx.author.display_name
         if len(message) == 0:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !try [action]",
@@ -979,7 +979,7 @@ class CommandsBot(commands.Bot, ABC):
             result = AdditionalMethods.parse_standartfile_message(nickname,
                                                                   "{nickname} попробовал {messagestr}... {filestr}",
                                                                   message, "!try", "try")
-            AdditionalMethods.add_to_buffer("e", result[:90], ctx.author, "try")
+            AdditionalMethods.add_to_buffer("e", result, ctx.author, "try")
 
     @commands.command(name='время')
     async def time(self, ctx):
@@ -1014,7 +1014,7 @@ class CommandsBot(commands.Bot, ABC):
 
     @commands.command(name='обнять')
     async def hug(self, ctx):
-        message = ctx.message.clean_content.replace('@', '')
+        message = ctx.message.clean_content.replace('@', '')[:90]
         nickname = ctx.author.display_name
         if len(message) == 0:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !обнять [nickname]", ctx.author, "steal")
@@ -1027,11 +1027,11 @@ class CommandsBot(commands.Bot, ABC):
                                                                   "{nickname} {filestr} обнимает {messagestr} "
                                                                   "VoHiYo",
                                                                   message, "!обнять", "hug")
-            AdditionalMethods.add_to_buffer("e", result[:90], ctx.author, "обнять")
+            AdditionalMethods.add_to_buffer("e", result, ctx.author, "обнять")
 
     @commands.command(name='когда')
     async def kogda(self, ctx):
-        message = ctx.message.clean_content.replace('@', '')
+        message = ctx.message.clean_content.replace('@', '')[:90]
         nickname = ctx.author.display_name
         if len(message) == 0:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !когда [action]", ctx.author, "steal")
@@ -1044,11 +1044,11 @@ class CommandsBot(commands.Bot, ABC):
                                                                   "{nickname}, когда {messagestr}? Thonk {filestr}",
                                                                   message,
                                                                   "!когда", "kogda")
-            AdditionalMethods.add_to_buffer("e", result[:90], ctx.author, "когда")
+            AdditionalMethods.add_to_buffer("e", result, ctx.author, "когда")
 
     @commands.command(name='привет')
     async def privet(self, ctx):
-        message = ctx.message.clean_content.replace('@', '')
+        message = ctx.message.clean_content.replace('@', '')[:90]
         nickname = ctx.author.display_name
         if len(message) == 0:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !привет [nickname]", ctx.author, "steal")
@@ -1061,7 +1061,7 @@ class CommandsBot(commands.Bot, ABC):
                                                                   "{nickname} {filestr} приветствует {messagestr} "
                                                                   "peepoHey peepoLove",
                                                                   message, "!привет", "privet")
-            AdditionalMethods.add_to_buffer("e", result[:90], ctx.author, "привет")
+            AdditionalMethods.add_to_buffer("e", result, ctx.author, "привет")
 
     @commands.command(name='гороскоп')
     async def goroskop(self, ctx):
