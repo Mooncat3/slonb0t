@@ -208,7 +208,7 @@ class CommandsBot(commands.Bot, ABC):
             if not AdditionalMethods.vip(message.author.is_mod, nickname):
                 return
         await self.handle_commands(message)
-                                                        
+    '''
     @commands.command(name="stat")
     async def stat(self, ctx):
         nickname = ctx.author.display_name
@@ -237,7 +237,7 @@ class CommandsBot(commands.Bot, ABC):
                                             f"{nickname}, Вас нет peepoJuiceSpin",
                                             ctx.author,
                                             "stat")
-                                                        
+    '''
     @commands.command(name='кто')	
     async def kto(self, ctx):	
         message = ctx.message.clean_content.replace('@', '')[:90]
