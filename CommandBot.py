@@ -244,7 +244,7 @@ class CommandsBot(commands.Bot, ABC):
         name = random.choice(self.namess)	
         for nick in self.names_exp:	
             for word in message.split():	
-                if word.lower().find(nick.lower()) != -1:	
+                if str(word).lower().find(str(nick).lower()) != -1:	
                     message = message.replace(word, nick)	
         AdditionalMethods.add_to_buffer("e", name + '⠀ ' + message + ' hehDed', ctx.author, "кто")
 
@@ -933,7 +933,7 @@ class CommandsBot(commands.Bot, ABC):
             randomdo = random.choice(listme)
             for nick in self.names_exp:
                 for word in message.split():
-                    if word.lower().find(nick.lower()) != -1:
+                    if str(word).lower().find(str(nick).lower()) != -1:
                         message = message.replace(word, nick)
             AdditionalMethods.add_to_buffer("e", randomdo.format(nickname, message), ctx.author, "do")
 
@@ -948,7 +948,7 @@ class CommandsBot(commands.Bot, ABC):
             ruble = random.randint(0, 1500)
             for nick in self.names_exp:
                 for word in message.split():
-                    if word.lower().find(nick.lower()) != -1:
+                    if str(word).lower().find(str(nick).lower()) != -1:
                         message = message.replace(word, nick)
             if procent >= 33:
                 with open('data/me/things.txt', encoding='utf-8') as f:
@@ -975,7 +975,7 @@ class CommandsBot(commands.Bot, ABC):
         else:
             for nick in self.names_exp:
                 for word in message.split():
-                    if word.lower().find(nick.lower()) != -1:
+                    if str(word).lower().find(str(nick).lower()) != -1:
                         message = message.replace(word, nick)
             result = AdditionalMethods.parse_standartfile_message(nickname,
                                                                   "{nickname} попробовал {messagestr}... {filestr}",
@@ -1022,7 +1022,7 @@ class CommandsBot(commands.Bot, ABC):
         else:
             for nick in self.names_exp:
                 for word in message.split():
-                    if word.lower().find(nick.lower()) != -1:
+                    if str(word).lower().find(str(nick).lower()) != -1:
                         message = message.replace(word, nick)
             result = AdditionalMethods.parse_standartfile_message(nickname,
                                                                   "{nickname} {filestr} обнимает {messagestr} "
@@ -1039,7 +1039,7 @@ class CommandsBot(commands.Bot, ABC):
         else:
             for nick in self.names_exp:
                 for word in message.split():
-                    if word.lower().find(nick.lower()) != -1:
+                    if str(word).lower().find(str(nick).lower()) != -1:
                         message = message.replace(word, nick)
             result = AdditionalMethods.parse_standartfile_message(nickname,
                                                                   "{nickname}, когда {messagestr}? Thonk {filestr}",
@@ -1056,7 +1056,7 @@ class CommandsBot(commands.Bot, ABC):
         else:
             for nick in self.names_exp:
                 for word in message.split():
-                    if word.lower().find(nick.lower()) != -1:
+                    if str(word).lower().find(str(nick).lower()) != -1:
                         message = message.replace(word, nick)
             result = AdditionalMethods.parse_standartfile_message(nickname,
                                                                   "{nickname} {filestr} приветствует {messagestr} "
