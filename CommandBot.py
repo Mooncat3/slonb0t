@@ -32,6 +32,8 @@ class CommandsBot(commands.Bot, ABC):
                          initial_channels=config.CHANNELS)
         self.roulette_is_running = False
         self.roulette_nicknames = []
+        self.omgroulette_kd = 10
+        self.omgroulette_last_use = 0
         self.duel_is_running = False
         self.duel_nicknames = []
         self.duel_user = ""
@@ -102,6 +104,7 @@ class CommandsBot(commands.Bot, ABC):
             await socket.send_privmsg(config.CHAN, f"/timeout {randname['str_id']} 60")
         self.roulette_nicknames.clear()
         self.roulette_is_running = False
+        self.omgroulette_last_use = time.time()
 
     async def event_ready(self):
         print(f'Ready {str(self.__class__.__name__)} | {self.nick} on {self.initial_channels[0]}')
@@ -349,7 +352,9 @@ class CommandsBot(commands.Bot, ABC):
                 await ctx.channel._ws.send_privmsg(config.CHAN,
                                                    f"{nickname}, напишите никнейм правильно PepoG")
         elif self.duel_is_running:
-            AdditionalMethods.add_to_buffer("s", f"{nickname}, сейчас идёт общая рулетка", ctx.author, "duel")
+            AdditionalMethods.add_to_buffer("s", f"{ctx.author.name}, сейчас уже идёт дуэль", ctx.author, "duel")
+        elif self.roulette_is_running:
+            AdditionalMethods.add_to_buffer("s", f"{ctx.author.name}, сейчас уже идёт общая рулетка", ctx.author, "duel")
 
     @commands.command(name='accept')
     async def accept(self, ctx):
@@ -360,16 +365,21 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='omgroulette')
     async def omgroulette(self, ctx):
         if not self.roulette_is_running and (
-                not AdditionalMethods.check_active() or AdditionalMethods.vip(ctx.author.is_mod,
-                                                                              ctx.author.name)) and not self.duel_is_running:
+                (not AdditionalMethods.check_active() and time.time() - self.omgroulette_last_use > self.omgroulette_kd) or AdditionalMethods.vip(
+                    ctx.author.is_mod, ctx.author.name)
+                        ) and not self.duel_is_running:
             self.roulette_is_running = True
             self.roulette_nicknames.append({"label": ctx.author.display_name, "str_id": ctx.author.name})
             await ctx.channel._ws.send_privmsg(config.CHAN,
                                                "Рулетка началась! У вас есть 20 секунд! Чтобы учавствовать напишите !accept")
             asyncio.get_event_loop().create_task(self.rand(self._ws))
         elif self.duel_is_running:
-            AdditionalMethods.add_to_buffer("s", f"{ctx.author.display_name}, сейчас идёт дуэль", ctx.author,
-                                            "omgroulette")
+            AdditionalMethods.add_to_buffer("s", f"{ctx.author.name}, сейчас идёт дуэль", ctx.author, "omgroulette")
+        elif self.roulette_is_running:
+            AdditionalMethods.add_to_buffer("s", f"{ctx.author.name}, сейчас уже идёт общая рулетка", ctx.author, "omgroulette")
+        elif time.time() - self.omgroulette_last_use < self.omgroulette_kd:
+            AdditionalMethods.add_to_buffer("s", f"{ctx.author.name}, эту команду можно использовать только раз в {self.omgroulette_kd} секунд!", ctx.author,
+                "omgroulette")
                                                        
     @commands.command(name='пирамида')
     async def piramide(self, ctx):
