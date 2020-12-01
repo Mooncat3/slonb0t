@@ -354,7 +354,7 @@ class CommandsBot(commands.Bot, ABC):
         elif self.duel_is_running:
             AdditionalMethods.add_to_buffer("s", f"{ctx.author.name}, сейчас уже идёт дуэль", ctx.author, "duel")
         elif self.roulette_is_running:
-            AdditionalMethods.add_to_buffer("s", f"{ctx.author.name}, сейчас уже идёт общая рулетка", ctx.author, "duel")
+            AdditionalMethods.add_to_buffer("s", f"{ctx.author.name}, сейчас идёт общая рулетка", ctx.author, "duel")
 
     @commands.command(name='accept')
     async def accept(self, ctx):
