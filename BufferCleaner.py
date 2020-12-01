@@ -22,7 +22,6 @@ class BufferCleaner(Client, ABC):
         self.loop.create_task(self.listen_to_buffer_undelaied())
         self.messes = []
         self.times = {}
-        self.creepkd = 120.0
 
     async def event_webhook(self, data):
         pass
@@ -115,15 +114,6 @@ class BufferCleaner(Client, ABC):
                     await sock.send_privmsg(config.CHAN, mess)
                 elif (rest['type'] == "s" or x - excluding >= Settings.get_bufer_max()) and rest['type'] != "cr":
                     await sock.send_privmsg(config.CHAN, f"/w {rest['nickname']} !{resert['cmd']} ▶ {mess}")
-                elif rest['type'] == "cr":
-                    self.times["cr"] = time.time()
-                    if len(mess) > 500:
-                        strrr1 = mess[0:mess.rfind(" ", 0, 500)]
-                        strrr2 = mess[mess.rfind(" ", 0, 500):len(mess)]
-                        await sock.send_privmsg(config.CHAN, strrr1)
-                        await sock.send_privmsg(config.CHAN, strrr2)
-                    else:
-                        await sock.send_privmsg(config.CHAN, mess)
                 else:
                     await sock.send_privmsg(config.CHAN, mess)
             await asyncio.sleep(0.2)
