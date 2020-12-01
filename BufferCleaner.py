@@ -186,36 +186,12 @@ class BufferCleaner(Client, ABC):
                         await asyncio.sleep(resert['timeout'])
                         dat.remove(rest)
                         await sock.send_privmsg(config.CHAN, mess)
+                    else:
+                        await sock.send_privmsg(config.CHAN, f"/w {rest['nickname']} !{resert['cmd']} ▶ На данный момент идёт стрим, либо развлекательные команды отключены!")
                 elif rest['type'] == "r":
                     await asyncio.sleep(resert['timeout'])
                     dat.remove(rest)
                     await sock.send_privmsg(config.CHAN, mess)
-                elif res['type'] == "cr":
-                    if not "cr" in self.times.keys():
-                        self.times["cr"] = time.time()
-                        if len(mess) > 500:
-                            strrr1 = mess[0:mess.rfind(" ", 0, 500)]
-                            strrr2 = mess[mess.rfind(" ", 0, 500):len(mess)]
-                            await sock.send_privmsg(config.CHAN, strrr1)
-                            await sock.send_privmsg(config.CHAN, strrr2)
-                        else:
-                            await sock.send_privmsg(config.CHAN, mess)
-                    elif time.time() - self.times["cr"] > self.creepkd:
-                        self.times["cr"] = time.time()
-                        if len(mess) > 500:
-                            strrr1 = mess[0:mess.rfind(" ", 0, 500)]
-                            strrr2 = mess[mess.rfind(" ", 0, 500):len(mess)]
-                            await sock.send_privmsg(config.CHAN, strrr1)
-                            await sock.send_privmsg(config.CHAN, strrr2)
-                        else:
-                            await sock.send_privmsg(config.CHAN, mess)
-                    else:
-                        if len(mess) > 450:
-                            strrr1 = mess[0:mess.rfind(" ", 0, 450)]
-                            await sock.send_privmsg(config.CHAN,
-                                                    f"/w {rest['nickname']} !{resert['cmd']} ▶ " + strrr1 + " monkaW")
-                        else:
-                            await sock.send_privmsg(config.CHAN, f"/w {rest['nickname']} !{resert['cmd']} ▶ " + mess + "monkaW")
                 else:
                     await asyncio.sleep(resert['timeout'])
                     dat.remove(rest)
