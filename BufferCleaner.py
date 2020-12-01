@@ -110,7 +110,7 @@ class BufferCleaner(Client, ABC):
                 mess = str(resert['mes'])
                 while sock._websocket is None:
                     await asyncio.sleep(0.1)
-                if rest['vip'] and rest['type'] != "s" and rest['type'] != "cr":
+                if rest['vip'] and rest['type'] != "s":
                     await sock.send_privmsg(config.CHAN, mess)
                 elif (rest['type'] == "s" or x - excluding >= Settings.get_bufer_max()) and rest['type'] != "cr":
                     await sock.send_privmsg(config.CHAN, f"/w {rest['nickname']} !{resert['cmd']} ▶ {mess}")
