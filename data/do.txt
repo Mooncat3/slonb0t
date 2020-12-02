@@ -11,7 +11,7 @@ catJAM {} и ZZoomer {} танцуют под моргенштерна WeirdCat
 {} пошёл гулять с {} в заброшенный особняк monkaW
 {} не понимает {} KEKWait
 {} арирует с {} KeK
-{} дарит подарок {} peepoLove
+{} дарит подарок {} pepeL peepoLove 
 {} поздравляет {} с Новым Годом! PeepoClap
 {} помогает украшать {} новогоднюю ёлку HolidayTree
 {} и {} будут вместе отмечать Новый Год Happy
@@ -81,6 +81,5 @@ polarExtreme {} ебёт {} polarExtreme
 {} поцеловал {} catKISS
 {} несет подарки для {} PepeSanta 
 {} вместе с {} построили снеговика PeepoSnowman 
-{} подарил подарок {} pepeL peepoLove 
 {} и {} ждут новый год pukEat 
 {} поднял настроение {} FeelsRainMan peepoLove 
