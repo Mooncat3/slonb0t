@@ -106,7 +106,7 @@ class CommandsBot(commands.Bot, ABC):
         self.roulette_is_running = False
         self.omgroulette_last_use = time.time()
     
-    asyns def check_mess(self, user, socket, nick):
+    async def check_mess(self, user, socket, nick):
         Client_ID = 'kimne78kx3ncx6brgo4mv6wki5h1ko'
         OAUTH = '2vvpjbv1oe6apgbyql9e7hsp9o0gnu'
         url = 'https://gql.twitch.tv/gql'
