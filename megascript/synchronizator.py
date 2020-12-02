@@ -53,32 +53,28 @@ for user in chatters:
         url_2 = 'https://api.twitch.tv/helix/users?login=' + user
         try:
             sender = requests.get(url_2, headers=head_2).json()['data'][0]['id']
-        except IndexError:
+        except:
             sender = 0
         start = datetime.datetime.today()
         data_loop = start.strftime('%Y-%m-%dT%H:%M:%S.0Z')
         mess_count = 0
         while True:
             try:
-                flag = False
                 res_prop = []
                 json_msg = [{"operationName":"ViewerCardModLogsMessagesBySender","variables":{"senderID":sender,"channelLogin":"jesusavgn","cursor":data_loop+"|12600c60-246e-4cc0-8b7b-0380aa0e5329","includeAutoModCaughtMessages":True},"extensions":{"persistedQuery":{"version":1,"sha256Hash":"2c484f8a5ff63f06732707c8ca989083e46b2aa81a03b02e7ac7b9aa9fcba9a2"}}}]
                 r = requests.post(url, headers=head, json=json_msg)
                 r_json = r.json()[0]['data']['channel']['modLogs']['messagesBySender']['edges']
+                if len(r_json) < 2:
+                    break
                 for b in r_json:
                     try:
-                        if len(r_json) < 2:
-                            flag = True
-                            break
                         a.append(b['node']['sentAt'])
                         res_prop.append(b['node']['sentAt'])
-                    except KeyError:
+                    except:
                         pass
-                if flag:
-                    break
                 data_loop = res_prop[-1]
-            except:
-                break
+            except Exception as e:
+                print(e)
         mess_count = len(set(a))
         print(f'Пользователь {user} написал {mess_count} сообщений')
         print(requests.post("https://sl0n.herokuapp.com/stats/jesusavgn",
