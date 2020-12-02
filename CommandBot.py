@@ -124,7 +124,6 @@ class CommandsBot(commands.Bot, ABC):
                 sender = 0
             start = datetime.today()
             data_loop = start.strftime('%Y-%m-%dT%H:%M:%S.0Z')
-            mess_count = 0
             while True:
                 try:
                     res_prop = []
