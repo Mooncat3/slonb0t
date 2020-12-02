@@ -118,7 +118,7 @@ class CommandsBot(commands.Bot, ABC):
             sender = requests.get(url_2, headers=head_2).json()['data'][0]['id']
         except IndexError:
             sender = 0
-        start = datetime.datetime.today()
+        start = datetime.today()
         data_loop = start.strftime('%Y-%m-%dT%H:%M:%S.0Z')
         mess_count = 0
         while True:
