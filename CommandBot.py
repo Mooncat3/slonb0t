@@ -105,6 +105,45 @@ class CommandsBot(commands.Bot, ABC):
         self.roulette_nicknames.clear()
         self.roulette_is_running = False
         self.omgroulette_last_use = time.time()
+    
+    asyns def check_mess(self, user, socket, nick):
+        Client_ID = 'kimne78kx3ncx6brgo4mv6wki5h1ko'
+        OAUTH = '2vvpjbv1oe6apgbyql9e7hsp9o0gnu'
+        url = 'https://gql.twitch.tv/gql'
+        head = {'Authorization': f'OAuth {OAUTH}', 'Client-ID': Client_ID}
+        head_2 = {'Authorization': f'Bearer {OAUTH}', 'Client-ID': Client_ID}
+        a = []
+        url_2 = 'https://api.twitch.tv/helix/users?login=' + user
+        try:
+            sender = requests.get(url_2, headers=head_2).json()['data'][0]['id']
+        except IndexError:
+            sender = 0
+        start = datetime.datetime.today()
+        data_loop = start.strftime('%Y-%m-%dT%H:%M:%S.0Z')
+        mess_count = 0
+        while True:
+            try:
+                flag = False
+                res_prop = []
+                json_msg = [{"operationName":"ViewerCardModLogsMessagesBySender","variables":{"senderID":sender,"channelLogin":"jesusavgn","cursor":data_loop+"|12600c60-246e-4cc0-8b7b-0380aa0e5329","includeAutoModCaughtMessages":True},"extensions":{"persistedQuery":{"version":1,"sha256Hash":"2c484f8a5ff63f06732707c8ca989083e46b2aa81a03b02e7ac7b9aa9fcba9a2"}}}]
+                r = requests.post(url, headers=head, json=json_msg)
+                r_json = r.json()[0]['data']['channel']['modLogs']['messagesBySender']['edges']
+                for b in r_json:
+                    try:
+                        if len(r_json) < 2:
+                            flag = True
+                            break
+                        a.append(b['node']['sentAt'])
+                        res_prop.append(b['node']['sentAt'])
+                    except KeyError:
+                        pass
+                if flag:
+                    break
+                data_loop = res_prop[-1]
+            except:
+                break
+        mess_count = len(set(a))
+        await socket.send_privmsg(config.CHAN, f'{nick}, пользователь {user} написал {mess_count} сообщений')
 
     async def event_ready(self):
         print(f'Ready {str(self.__class__.__name__)} | {self.nick} on {self.initial_channels[0]}')
@@ -240,9 +279,11 @@ class CommandsBot(commands.Bot, ABC):
                                                 "stat")
         else:
             AdditionalMethods.add_to_buffer("c",
-                                            f"{nickname}, {message} нет peepoJuiceSpin",
+                                            f"{nickname}, {message} не найден, поставлен на сканирование peepoJuiceSpin",
                                             ctx.author,
                                             "stat")
+            asyncio.get_event_loop().create_task(self.check_mess(message, self._ws, nickname))
+            
     
     @commands.command(name='кто')	
     async def kto(self, ctx):	
