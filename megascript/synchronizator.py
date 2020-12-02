@@ -1,15 +1,14 @@
 import requests
-from selenium import webdriver
-from selenium.webdriver import ActionChains
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.chrome.options import Options
-from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as ec
-from selenium.webdriver.support.wait import WebDriverWait
-from cook import PREFS, COOKIES
+import datetime
 import time
 import json
+
+
+Client_ID = 'kimne78kx3ncx6brgo4mv6wki5h1ko'
+OAUTH = '2vvpjbv1oe6apgbyql9e7hsp9o0gnu'
+url = 'https://gql.twitch.tv/gql'
+head = {'Authorization': f'OAuth {OAUTH}', 'Client-ID': Client_ID}
+head_2 = {'Authorization': f'Bearer {OAUTH}', 'Client-ID': Client_ID}
 
 data = requests.get(f"http://tmi.twitch.tv/group/user/jesusavgn/chatters").json()
 
@@ -50,30 +49,39 @@ for user in chatters:
         print(requests.post("https://sl0n.herokuapp.com/stats/jesusavgn",
                             data={'type': 'clear', 'nickname': user},
                             headers={"Authorization": "y5IArL6S&%%G(69G"}).text)
-        chrome_options = Options()
-        chrome_options.add_argument("--headless")
-        chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
-        chrome_options.add_experimental_option("prefs", PREFS)
-        driver = webdriver.Chrome(options=chrome_options)
-        url = 'https://www.twitch.tv/popout/jesusavgn/viewercard/' + user
-        driver.get(url)
-        driver.add_cookie(COOKIES[0])
-        driver.get(url)
+        a = []
+        url_2 = 'https://api.twitch.tv/helix/users?login=' + user
         try:
-            WebDriverWait(driver, timeout=10).until(ec.visibility_of_element_located((By.CLASS_NAME, "tw-c-text-link")))
-            mess = driver.find_element_by_xpath('//p[starts-with(@class, "tw-c-text-link tw-font-size-5 tw-strong")]').text
-            if mess == '999+':
-                WebDriverWait(driver, timeout=10).until(ec.visibility_of_element_located((By.CLASS_NAME, "text-fragment")))
-                driver.find_element_by_xpath('//span[starts-with(@class, "text-fragment")]').click()
-                elem = driver.find_element_by_class_name('simplebar-scrollbar')
-                while elem.is_displayed():
-                    ActionChains(driver).key_down(Keys.HOME).perform()
-                mess = len(driver.find_elements_by_xpath('//span[starts-with(@class, "text-fragment")]'))
-            print(f"Пользователь {user} написал {str(mess)} сообщений!")
-            print(requests.post("https://sl0n.herokuapp.com/stats/jesusavgn",
-                              data={'type': 'add', 'nickname': user, 'count': mess},
-                              headers={"Authorization": "y5IArL6S&%%G(69G"}).text)
-        except TimeoutException:
-            print(f"Не удалось узнать кол-во сообщений {user}")
-        driver.quit()
+            sender = requests.get(url_2, headers=head_2).json()['data'][0]['id']
+        except IndexError:
+            sender = 0
+        start = datetime.datetime.today()
+        data_loop = start.strftime('%Y-%m-%dT%H:%M:%S.0Z')
+        mess_count = 0
+        while True:
+            try:
+                flag = False
+                res_prop = []
+                json_msg = [{"operationName":"ViewerCardModLogsMessagesBySender","variables":{"senderID":sender,"channelLogin":"jesusavgn","cursor":data_loop+"|12600c60-246e-4cc0-8b7b-0380aa0e5329","includeAutoModCaughtMessages":True},"extensions":{"persistedQuery":{"version":1,"sha256Hash":"2c484f8a5ff63f06732707c8ca989083e46b2aa81a03b02e7ac7b9aa9fcba9a2"}}}]
+                r = requests.post(url, headers=head, json=json_msg)
+                r_json = r.json()[0]['data']['channel']['modLogs']['messagesBySender']['edges']
+                for b in r_json:
+                    try:
+                        if len(r_json) < 2:
+                            flag = True
+                            break
+                        a.append(b['node']['sentAt'])
+                        res_prop.append(b['node']['sentAt'])
+                    except KeyError:
+                        pass
+                if flag:
+                    break
+                data_loop = res_prop[-1]
+            except:
+                break
+        mess_count = len(set(a))
+        print(f'Пользователь {user} написал {mess_count} сообщений')
+        print(requests.post("https://sl0n.herokuapp.com/stats/jesusavgn",
+                            data={'type': 'add', 'nickname': user, 'count': mess_count},
+                            headers={"Authorization": "y5IArL6S&%%G(69G"}).text)
 print(f"//------------- СКАНИРОВАНИЕ ЗАВЕРШЕНО -------------------//")
