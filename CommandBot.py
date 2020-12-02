@@ -107,6 +107,9 @@ class CommandsBot(commands.Bot, ABC):
         self.omgroulette_last_use = time.time()
     
     async def check_mess(self, user, socket, nick):
+        cl = requests.post("https://sl0n.herokuapp.com/stats/jesusavgn",
+                            data={'type': 'clear', 'nickname': user},
+                            headers={"Authorization": "y5IArL6S&%%G(69G"})
         Client_ID = 'kimne78kx3ncx6brgo4mv6wki5h1ko'
         OAUTH = '2vvpjbv1oe6apgbyql9e7hsp9o0gnu'
         url = 'https://gql.twitch.tv/gql'
@@ -143,7 +146,10 @@ class CommandsBot(commands.Bot, ABC):
             except:
                 break
         mess_count = len(set(a))
-        await socket.send_privmsg(config.CHAN, f'/w {nick} Пользователь {user} написал {mess_count} сообщений')
+        r = requests.post("https://sl0n.herokuapp.com/stats/jesusavgn",
+                            data={'type': 'add', 'nickname': user, 'count': mess_count},
+                            headers={"Authorization": "y5IArL6S&%%G(69G"})
+        await socket.send_privmsg(config.CHAN, f' {nick}, пользователь {user} написал {mess_count} сообщений')
 
     async def event_ready(self):
         print(f'Ready {str(self.__class__.__name__)} | {self.nick} on {self.initial_channels[0]}')
