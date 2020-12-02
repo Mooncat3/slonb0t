@@ -215,9 +215,9 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name="stat")
     async def stat(self, ctx):
         nickname = ctx.author.display_name
-        message = ctx.message.clean_content.replace('@', '')
+        message = ctx.message.clean_content.replace('@', '').lower()
         if len(message) == 0:
-            AdditionalMethods.add_to_buffer("c", f"{nickname}, введите !stat [nickname]", ctx.author, "stat")
+            message = nickname
         else:
             answer = json.loads(requests.get(config.api_url + f"/stats/jesusavgn?nickname={message}",
                                              headers={"Authorization": "y5IArL6S&%%G(69G"}).content.decode("utf-8"))
