@@ -260,7 +260,7 @@ class CommandsBot(commands.Bot, ABC):
     
     @commands.command(name="stat")
     async def stat(self, ctx):
-        nickname = ctx.author.display_name
+        nickname = ctx.author.name
         message = ctx.message.clean_content.replace('@', '').lower()
         if len(message) == 0:
             message = nickname
