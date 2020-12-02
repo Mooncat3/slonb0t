@@ -143,7 +143,7 @@ class CommandsBot(commands.Bot, ABC):
             except:
                 break
         mess_count = len(set(a))
-        await socket.send_privmsg(config.CHAN, f'{nick}, пользователь {user} написал {mess_count} сообщений')
+        await socket.send_privmsg(config.CHAN, f'/w {nick} Пользователь {user} написал {mess_count} сообщений')
 
     async def event_ready(self):
         print(f'Ready {str(self.__class__.__name__)} | {self.nick} on {self.initial_channels[0]}')
@@ -278,7 +278,7 @@ class CommandsBot(commands.Bot, ABC):
                                                 ctx.author,
                                                 "stat")
         else:
-            AdditionalMethods.add_to_buffer("c",
+            AdditionalMethods.add_to_buffer("s",
                                             f"{nickname}, {message} не найден, поставлен на сканирование peepoJuiceSpin",
                                             ctx.author,
                                             "stat")
