@@ -127,32 +127,29 @@ class CommandsBot(commands.Bot, ABC):
             mess_count = 0
             while True:
                 try:
-                    flag = False
                     res_prop = []
                     json_msg = [{"operationName":"ViewerCardModLogsMessagesBySender","variables":{"senderID":sender,"channelLogin":"jesusavgn","cursor":data_loop+"|12600c60-246e-4cc0-8b7b-0380aa0e5329","includeAutoModCaughtMessages":True},"extensions":{"persistedQuery":{"version":1,"sha256Hash":"2c484f8a5ff63f06732707c8ca989083e46b2aa81a03b02e7ac7b9aa9fcba9a2"}}}]
                     r = requests.post(url, headers=head, json=json_msg)
                     r_json = r.json()[0]['data']['channel']['modLogs']['messagesBySender']['edges']
+                    if len(r_json) < 2:
+                        break
                     for b in r_json:
                         try:
-                            if len(r_json) < 2:
-                                flag = True
-                                break
                             a.append(b['node']['sentAt'])
                             res_prop.append(b['node']['sentAt'])
-                        except KeyError:
+                        except:
                             pass
-                    if flag:
-                        break
                     data_loop = res_prop[-1]
-                except:
-                    break
+                except Exception as e:
+                    print(e)
             mess_count = len(set(a))
             r = requests.post("https://sl0n.herokuapp.com/stats/jesusavgn",
                                 data={'type': 'add', 'nickname': user, 'count': mess_count},
                                 headers={"Authorization": "y5IArL6S&%%G(69G"})
-            await socket.send_privmsg(config.CHAN, f' {nick}, пользователь {user} написал {mess_count} сообщений')
+            await socket.send_privmsg(config.CHAN, f' {nick}, пользователь {user} написал {mess_count} сообщений в чат PepoG')
         except KeyError:
             await socket.send_privmsg(config.CHAN, f' {nick}, WeirdChamp')
+                                      
     async def event_ready(self):
         print(f'Ready {str(self.__class__.__name__)} | {self.nick} on {self.initial_channels[0]}')
         await self.synch()
