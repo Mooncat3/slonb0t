@@ -79,3 +79,8 @@ polarExtreme {} ебёт {} polarExtreme
 {} барабанит {} по голове ModerSmash
 {} на самом деле является {} PogU
 {} поцеловал {} catKISS
+{} несет подарки для {} PepeSanta 
+{} вместе с {} построили снеговика PeepoSnowman 
+{} подарил подарок {} pepeL peepoLove 
+{} и {} ждут новый год pukEat 
+{} поднял настроение {} FeelsRainMan peepoLove 
