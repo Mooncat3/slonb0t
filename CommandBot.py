@@ -108,7 +108,7 @@ class CommandsBot(commands.Bot, ABC):
     
     async def check_mess(self, user, socket, nick):
         try:
-            requests.post("https://sl0n.herokuapp.com/stats/jesusavgn",
+            cc = requests.post("https://sl0n.herokuapp.com/stats/jesusavgn",
                             data={'type': 'clear', 'nickname': user},
                             headers={"Authorization": "y5IArL6S&%%G(69G"})
             Client_ID = 'kimne78kx3ncx6brgo4mv6wki5h1ko'
@@ -140,7 +140,7 @@ class CommandsBot(commands.Bot, ABC):
                 except Exception as e:
                     print(e)
             mess_count = len(set(a))
-            requests.post("https://sl0n.herokuapp.com/stats/jesusavgn",
+            ee = requests.post("https://sl0n.herokuapp.com/stats/jesusavgn",
                             data={'type': 'add', 'nickname': user, 'count': mess_count},
                             headers={"Authorization": "y5IArL6S&%%G(69G"})
             await socket.send_privmsg(config.CHAN, f'{nick}, Сообщения пользователя {user}: {mess_count}')
