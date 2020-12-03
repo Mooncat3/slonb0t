@@ -4,7 +4,7 @@ CHAN = "JesusAVGN"
 
 
 BROADCASTER_ID = "34711476"
-OAUTH = "6qacb5h1k36mjz6bhcqv2588zecitn"
+OAUTH = "yj99k68vhsubshagx9ow431sazbnkw"
 CLIENT_ID = "gp762nuuoqcoxypju8c569th9wz7q5"
 BOT = "SLONB0T"
 CHANNELS = [f'{CHAN}']
