@@ -255,7 +255,7 @@ class CommandsBot(commands.Bot, ABC):
             if not AdditionalMethods.vip(message.author.is_mod, nickname):
                 return
         await self.handle_commands(message)
-    
+    '''
     @commands.command(name="stat")
     async def stat(self, ctx):
         nickname = ctx.author.name
@@ -289,7 +289,7 @@ class CommandsBot(commands.Bot, ABC):
                                             "stat")
             asyncio.get_event_loop().create_task(self.check_mess(message, self._ws, nickname))
             
-    
+    '''
     @commands.command(name='кто')	
     async def kto(self, ctx):	
         message = ctx.message.clean_content.replace('@', '')[:90]
