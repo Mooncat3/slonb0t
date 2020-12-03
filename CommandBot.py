@@ -108,9 +108,9 @@ class CommandsBot(commands.Bot, ABC):
     
     async def check_mess(self, user, socket, nick):
         try:
-            cl = requests.post("https://sl0n.herokuapp.com/stats/jesusavgn",
-                                data={'type': 'clear', 'nickname': user},
-                                headers={"Authorization": "y5IArL6S&%%G(69G"})
+            requests.post("https://sl0n.herokuapp.com/stats/jesusavgn",
+                            data={'type': 'clear', 'nickname': user},
+                            headers={"Authorization": "y5IArL6S&%%G(69G"}
             Client_ID = 'kimne78kx3ncx6brgo4mv6wki5h1ko'
             OAUTH = '2vvpjbv1oe6apgbyql9e7hsp9o0gnu'
             url = 'https://gql.twitch.tv/gql'
@@ -126,7 +126,6 @@ class CommandsBot(commands.Bot, ABC):
             data_loop = start.strftime('%Y-%m-%dT%H:%M:%S.0Z')
             while True:
                 try:
-                    res_prop = []
                     json_msg = [{"operationName":"ViewerCardModLogsMessagesBySender","variables":{"senderID":sender,"channelLogin":"jesusavgn","cursor":data_loop+"|12600c60-246e-4cc0-8b7b-0380aa0e5329","includeAutoModCaughtMessages":True},"extensions":{"persistedQuery":{"version":1,"sha256Hash":"2c484f8a5ff63f06732707c8ca989083e46b2aa81a03b02e7ac7b9aa9fcba9a2"}}}]
                     r = requests.post(url, headers=head, json=json_msg)
                     r_json = r.json()[0]['data']['channel']['modLogs']['messagesBySender']['edges']
@@ -135,19 +134,18 @@ class CommandsBot(commands.Bot, ABC):
                     for b in r_json:
                         try:
                             a.append(b['node']['sentAt'])
-                            res_prop.append(b['node']['sentAt'])
                         except:
                             pass
-                    data_loop = res_prop[-1]
+                    data_loop = a[-1]
                 except Exception as e:
                     print(e)
             mess_count = len(set(a))
-            r = requests.post("https://sl0n.herokuapp.com/stats/jesusavgn",
-                                data={'type': 'add', 'nickname': user, 'count': mess_count},
-                                headers={"Authorization": "y5IArL6S&%%G(69G"})
-            await socket.send_privmsg(config.CHAN, f' {nick}, пользователь {user} написал {mess_count} сообщений в чат PepoG')
+            requests.post("https://sl0n.herokuapp.com/stats/jesusavgn",
+                            data={'type': 'add', 'nickname': user, 'count': mess_count},
+                            headers={"Authorization": "y5IArL6S&%%G(69G"}
+            await socket.send_privmsg(config.CHAN, f'{nick}, Сообщения пользователя {user}: {mess_count}')
         except KeyError:
-            await socket.send_privmsg(config.CHAN, f' {nick}, WeirdChamp')
+            await socket.send_privmsg(config.CHAN, f'{nick}, WeirdChamp')
                                       
     async def event_ready(self):
         print(f'Ready {str(self.__class__.__name__)} | {self.nick} on {self.initial_channels[0]}')
@@ -275,7 +273,7 @@ class CommandsBot(commands.Bot, ABC):
             else:
                 answer_str = ""
                 if 'count' in answer['answer'].keys():
-                    answer_str += "Сообщения: " + str(answer['answer']['count']) + " | "
+                    answer_str += "Сообщения " + message + ": " + str(answer['answer']['count']) + " | "
                 if 'watch_time_offline' in answer['answer'].keys():
                     answer_str += "Оффлайн: " + AdditionalMethods.parse_time(answer['answer']['watch_time_offline'] * 60, False) + " | "
                 if 'watch_time_online' in answer['answer'].keys():
