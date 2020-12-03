@@ -112,7 +112,7 @@ class CommandsBot(commands.Bot, ABC):
                             data={'type': 'clear', 'nickname': user},
                             headers={"Authorization": "y5IArL6S&%%G(69G"})
             Client_ID = 'kimne78kx3ncx6brgo4mv6wki5h1ko'
-            OAUTH = '2vvpjbv1oe6apgbyql9e7hsp9o0gnu'
+            OAUTH = 'l4tt0z3a94edvjo3kbs0c3s4qimpsp'
             url = 'https://gql.twitch.tv/gql'
             head = {'Authorization': f'OAuth {OAUTH}', 'Client-ID': Client_ID}
             head_2 = {'Authorization': f'Bearer {OAUTH}', 'Client-ID': Client_ID}
