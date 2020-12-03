@@ -110,7 +110,7 @@ class CommandsBot(commands.Bot, ABC):
         try:
             requests.post("https://sl0n.herokuapp.com/stats/jesusavgn",
                             data={'type': 'clear', 'nickname': user},
-                            headers={"Authorization": "y5IArL6S&%%G(69G"}
+                            headers={"Authorization": "y5IArL6S&%%G(69G"})
             Client_ID = 'kimne78kx3ncx6brgo4mv6wki5h1ko'
             OAUTH = '2vvpjbv1oe6apgbyql9e7hsp9o0gnu'
             url = 'https://gql.twitch.tv/gql'
@@ -142,7 +142,7 @@ class CommandsBot(commands.Bot, ABC):
             mess_count = len(set(a))
             requests.post("https://sl0n.herokuapp.com/stats/jesusavgn",
                             data={'type': 'add', 'nickname': user, 'count': mess_count},
-                            headers={"Authorization": "y5IArL6S&%%G(69G"}
+                            headers={"Authorization": "y5IArL6S&%%G(69G"})
             await socket.send_privmsg(config.CHAN, f'{nick}, Сообщения пользователя {user}: {mess_count}')
         except KeyError:
             await socket.send_privmsg(config.CHAN, f'{nick}, WeirdChamp')
