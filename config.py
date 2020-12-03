@@ -4,8 +4,8 @@ CHAN = "JesusAVGN"
 
 
 BROADCASTER_ID = "34711476"
-OAUTH = "14y5qalllj1i65rg3m9dip1rpq5ugd"
-CLIENT_ID = "gp762nuuoqcoxypju8c569th9wz7q5"
+OAUTH = "6qacb5h1k36mjz6bhcqv2588zecitn"
+CLIENT_ID = "9qmki7jzmtz6qnjj4z35yucfn29xb9"
 BOT = "SLONB0T"
 CHANNELS = [f'{CHAN}']
 buferchanged = False
