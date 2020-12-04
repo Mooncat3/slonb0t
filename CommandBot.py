@@ -980,7 +980,7 @@ class CommandsBot(commands.Bot, ABC):
 
         if 96 < v <= 98:
             age = random.choice(ages)
-            answer = '{} скрывает свой возраст. Но я знаю, что {} уже {} hehDed'.format(nickname, nickname, age)
+            answer = '{} скрывает свой возраст. Но я знаю, что {} уже {} blushW'.format(nickname, nickname, age)
 
         if 98 < v <= 100:
             first_name = random.choice(first_names)
