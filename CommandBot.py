@@ -298,7 +298,7 @@ class CommandsBot(commands.Bot, ABC):
             for word in message.split():	
                 if str(word).lower().find(str(nick).lower()) != -1:	
                     message = message.replace(word, nick)	
-        AdditionalMethods.add_to_buffer("e", name + ' 󠀀' + message + ' PogO', ctx.author, "кто")
+        AdditionalMethods.add_to_buffer("e",f'{name} {message} PogO', ctx.author, "кто")
 
     @commands.command(name='mute')
     async def mute(self, ctx):
