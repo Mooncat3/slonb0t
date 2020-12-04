@@ -962,7 +962,7 @@ class CommandsBot(commands.Bot, ABC):
             answer = '{} хвастается {} за {} {} 💸 peepoCool'.format(nickname, random.choice(clothes), kol, curr)
         if 92 < v <= 93:
             kol = round(random.uniform(0, 5000), 2)
-            answer = '{} выиграл в лотерее {} {} PeepoClap Поздравляем! PeepoClap'.format(nickname, kol, curr)
+            answer = '{} выиграл в лотерее {} {} peepoClap Поздравляем! peepoClap'.format(nickname, kol, curr)
         if 93 < v <= 95:
             start_date = date(2021, 1, 1)
             end_date = date(2035, 1, 1)
