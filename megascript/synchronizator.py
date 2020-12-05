@@ -18,6 +18,7 @@ while True:
     cursor = data_2['pagination']['cursor']
     chatters = [user['from_name'] for user in data_2['data']]
     for user in chatters:
+        sender = data_2['data'][ii]['from_id']
         should_pass = False
         answer = requests.get(f"https://sl0n.herokuapp.com/stats/jesusavgn?nickname={user}", headers={"Authorization": "y5IArL6S&%%G(69G"}).json()
         if answer['type'] == 'success':
@@ -47,16 +48,12 @@ while True:
                 requests.post("https://sl0n.herokuapp.com/stats/jesusavgn",
                                 data={'type': 'clear', 'nickname': user},
                                 headers={"Authorization": "y5IArL6S&%%G(69G"})
-                a = []
-                url_2 = 'https://api.twitch.tv/helix/users?login=' + user
-                try:
-                    sender = requests.get(url_2, headers=head_2).json()['data'][0]['id']
-                except:
-                    sender = 0
+                mess_count = 0
                 start = datetime.datetime.today()
                 data_loop = start.strftime('%Y-%m-%dT%H:%M:%SZ|0')
                 while True:
                     try:
+                        a = []
                         json_msg = [{"operationName":"ViewerCardModLogsMessagesBySender","variables":{"senderID":sender,"channelLogin":"jesusavgn","cursor":data_loop,"includeAutoModCaughtMessages":True},"extensions":{"persistedQuery":{"version":1,"sha256Hash":hash_name}}}]
                         r = requests.post(url, headers=head, json=json_msg)
                         r_json = r.json()[0]['data']['channel']['modLogs']['messagesBySender']['edges']
@@ -69,15 +66,16 @@ while True:
                             except:
                                 pass
                         data_loop = a[-1]
+                        mess_count += len(a)
                     except Exception as e:
                         print(e)
                         break
-                mess_count = len(set(a))
+                date_mess = data_loop.split('T')[0].replace('-', '.')
                 requests.post("https://sl0n.herokuapp.com/stats/jesusavgn",
                                 data={'type': 'add', 'nickname': user, 'count': mess_count},
                                 headers={"Authorization": "y5IArL6S&%%G(69G"})
                 print(f'Пользователь {user} написал {mess_count} сообщений')
             except Exception as e:
                 print(e)
-    ii += 100
+        ii += 1
     print(f"//---------------- ПРОСКАНИРОВАНО: {ii} | {time.time()-time_start} сек. ----------------//")
