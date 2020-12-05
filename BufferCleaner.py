@@ -125,6 +125,7 @@ class BufferCleaner(Client, ABC):
                 else:
                     pass
             await asyncio.sleep(0.2)
+            config.buferchanged = True
             with open(file='data/buffer.txt', mode='r', encoding='utf-8') as e:
                 try:
                     dat = json.loads(e.read())
@@ -155,7 +156,6 @@ class BufferCleaner(Client, ABC):
             if len(ondeleting) > 0:
                 while config.buferchanged:
                     await asyncio.sleep(0.1)
-                config.buferchanged = True
                 with open(file='data/buffer.txt', mode='r', encoding='utf-8') as e:
                     dat = json.loads(e.read())
                     for delet in ondeleting:
@@ -166,7 +166,7 @@ class BufferCleaner(Client, ABC):
                         q.write("[]")
                     else:
                         q.write(json.dumps(dat))
-                config.buferchanged = False
+            config.buferchanged = False
 
     async def listen_to_buffer_delaied(self):
         tttime = time.time()
@@ -198,6 +198,7 @@ class BufferCleaner(Client, ABC):
             if time.time() - (tttime + timer) > Settings.get_bufer_timeout():
                 tttime = time.time()
                 timer = 0.0
+            config.buferchanged = True
             with open(file='data/buffer.txt', mode='r', encoding='utf-8') as e:
                 try:
                     dat = json.loads(e.read())
@@ -241,10 +242,11 @@ class BufferCleaner(Client, ABC):
             if len(ondeleting) > 0:
                 while config.buferchanged:
                     await asyncio.sleep(0.1)
-                config.buferchanged = True
                 with open(file='data/buffer.txt', mode='r', encoding='utf-8') as e:
                     dat = json.loads(e.read())
+                    print(dat)
                     for delet in ondeleting:
+                        print(delet)
                         dat.remove(delet)
                     ondeleting = []
                 with open(file='data/buffer.txt', mode='w', encoding='utf-8') as q:
@@ -252,7 +254,7 @@ class BufferCleaner(Client, ABC):
                         q.write("[]")
                     else:
                         q.write(json.dumps(dat))
-                config.buferchanged = False
+            config.buferchanged = False
 
 
 bot = BufferCleaner()
