@@ -229,19 +229,19 @@ class CommandsBot(commands.Bot, ABC):
                             stringer += f"отлетел на {Settings.get_timeout()} с настройками: |norm: {Settings.get_norm()}, maxmesses: {Settings.get_max_messes()}, emojimode: {Settings.get_mod()}|"
                             for f in self.seekers:
                                 await self._ws.send_privmsg(config.CHAN,
-    f"/w {f} {nickname} отлетел на {Settings.get_timeout()}")
+                                                            f"/w {f} {nickname} отлетел на {Settings.get_timeout()}")
                             await self._ws.send_privmsg(config.CHAN,
-f"/timeout {nickname} {Settings.get_timeout()} спам, automated by SLONB0T")
+                                                        f"/timeout {nickname} {Settings.get_timeout()} спам, automated by SLONB0T")
                             await self._ws.send_privmsg(config.CHAN,
-f"/w {nickname} Вы получили слишком много предупреждений и временно отстраняетесь от чата MrDestructoid")
+                                                        f"/w {nickname} Вы получили слишком много предупреждений и временно отстраняетесь от чата MrDestructoid")
                         else:
                             self.spammers[nickname]["worned"] += 1
                             stringer += f"был предупреждён {self.spammers[nickname]['worned']} из {Settings.get_attentions()} раз с настройками: |norm: {Settings.get_norm()}, maxmesses: {Settings.get_max_messes()}, emojimode: {Settings.get_mod()}|"
                             for f in self.seekers:
                                 await self._ws.send_privmsg(config.CHAN,
-    f"/w {f} {nickname} был предупреждён {self.spammers[nickname]['worned']} из {Settings.get_attentions()} раз")
+                                                            f"/w {f} {nickname} был предупреждён {self.spammers[nickname]['worned']} из {Settings.get_attentions()} раз")
                             await self._ws.send_privmsg(config.CHAN,
-f"/w {nickname} вы слишком часто отправляете сообщения на канале Jesusavgn, это {self.spammers[nickname]['worned']} из {Settings.get_attentions()} предупреждений MrDestructoid")
+                                                        f"/w {nickname} вы слишком часто отправляете сообщения на канале Jesusavgn, это {self.spammers[nickname]['worned']} из {Settings.get_attentions()} предупреждений MrDestructoid")
                         requests.post(config.api_url + "/logs/jesusavgn",
                                       data={"log": stringer.encode(
                                           "utf-8"), "nickname": nickname, "warns": {self.spammers[nickname]['worned']},
@@ -308,7 +308,7 @@ f"/w {nickname} вы слишком часто отправляете сообщ
                 text.write(messagee.lower()+'\n')
             self.blbl.append(messagee.lower())
             AdditionalMethods.add_to_buffer("s", f"Пользователь {messagee} теперь в чёрном списке бота!", ctx.author,"mute")
-
+                                                        
     @commands.command(name='unmute')
     async def unmute(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
@@ -322,7 +322,7 @@ f"/w {nickname} вы слишком часто отправляете сообщ
             with open('data/blacklist.txt', mode='w', encoding='utf-8') as textw:
                 textw.write(text_pre)
             AdditionalMethods.add_to_buffer("s", f"Пользователь {messagee} удалён из чёрного списка бота!", ctx.author,"unmute")
-
+                                                        
     @commands.command(name='seek')
     async def seek(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
@@ -380,7 +380,7 @@ f"/w {nickname} вы слишком часто отправляете сообщ
         nickname = ctx.author.display_name
         if not self.duel_is_running and (
                 not AdditionalMethods.check_active() or AdditionalMethods.vip(ctx.author.is_mod,
-                      ctx.author.name)) and not self.roulette_is_running:
+                                                                              ctx.author.name)) and not self.roulette_is_running:
             if ctx.author.is_mod:
                 self.duel_serious = False
             else:
@@ -546,8 +546,8 @@ f"/w {nickname} вы слишком часто отправляете сообщ
             else:
                 tag = ''
             AdditionalMethods.add_to_buffer("c", AdditionalMethods.get_archive_stream_stat(id, nickname, tag,
-                                   ctx.author).format(nickname,
-                                                      id),
+                                                                                           ctx.author).format(nickname,
+                                                                                                              id),
                                             ctx.author, "archive")
         except:
             AdditionalMethods.add_to_buffer("с", f'{nickname} !archive [0-9]', ctx.author, "archive")
@@ -640,7 +640,7 @@ f"/w {nickname} вы слишком часто отправляете сообщ
             except:
                 AdditionalMethods.add_to_buffer("с", f"{nickname}, введите число PepoG", ctx.author, "курс")
             url = "https://free.currconv.com/api/v7/convert?q=" + userkurs.replace("-",
-                           "_").upper() + "&compact=ultra&apiKey=ee315cc429cbc167d4b7"
+                                                                                   "_").upper() + "&compact=ultra&apiKey=ee315cc429cbc167d4b7"
             r = requests.get(url)
             if r.text == "{}":
                 AdditionalMethods.add_to_buffer("с",
@@ -939,11 +939,11 @@ f"/w {nickname} вы слишком часто отправляете сообщ
         if 17 < v <= 18:
             kol = round(random.uniform(90, 250), 2)
             answer = "Однажды {} приснилось, что {} теперь стоит {} ₽! Какой ужас Sadge".format(nickname, currency_rand,
-                                          kol)
+                                                                                                  kol)
         if 18 < v <= 19:
             kol = round(random.uniform(0, 80), 2)
             answer = "Однажды {} приснилось, что {} теперь стоит {} ₽! Какое счастье PogU".format(nickname,
-                                               currency_rand, kol)
+                                                                                                       currency_rand, kol)
         if 19 < v <= 35:
             answer = random.choice(stories).format(nickname, name, thing)
         if 35 < v <= 79:
@@ -972,8 +972,8 @@ f"/w {nickname} вы слишком часто отправляете сообщ
             random_date = start_date + timedelta(days=random_number_of_days)
             random_date = random_date.strftime('%d.%m.%Y')
             answer = '{} сегодня прошёл тест на дату смерти. monkaW Дата смерти {} - {} monkaX roflanPominy'.format(nickname,
-nickname,
-random_date)
+                                                                                                                nickname,
+                                                                                                                random_date)
         if 95 < v <= 96:
             name2 = random.choice(self.namess)
             answer = '{} решил украсть у {} {} , но в чате пробежал {} и засёк преступление monkaFLASH {} теперь за решёткой BOP'.format(nickname, name, thing, name2, nickname)
@@ -1045,8 +1045,8 @@ random_date)
                     if str(word).lower().find(str(nick).lower()) != -1:
                         message = message.replace(word, nick)
             result = AdditionalMethods.parse_standartfile_message(nickname,
-          "{nickname} попробовал {messagestr}... {filestr}",
-          message, "!try", "try")
+                                                                  "{nickname} попробовал {messagestr}... {filestr}",
+                                                                  message, "!try", "try")
             AdditionalMethods.add_to_buffer("e", result, ctx.author, "try")
 
     @commands.command(name='время')
@@ -1055,7 +1055,7 @@ random_date)
         loc = ctx.message.clean_content
         if len(loc) == 0:
             AdditionalMethods.add_to_buffer("c", datetime.strftime(datetime.now() + timedelta(hours=3),
-           f"{nickname}, Чичас %H:%M по МСК Waiting"),
+                                                                   f"{nickname}, Чичас %H:%M по МСК Waiting"),
                                             ctx.author, "время")
         else:
             url = "http://search.maps.sputnik.ru/search?q="
@@ -1092,9 +1092,9 @@ random_date)
                     if str(word).lower().find(str(nick).lower()) != -1:
                         message = message.replace(word, nick)
             result = AdditionalMethods.parse_standartfile_message(nickname,
-          "{nickname} {filestr} обнимает {messagestr} "
-          "VoHiYo",
-          message, "!обнять", "hug")
+                                                                  "{nickname} {filestr} обнимает {messagestr} "
+                                                                  "VoHiYo",
+                                                                  message, "!обнять", "hug")
             AdditionalMethods.add_to_buffer("e", result, ctx.author, "обнять")
 
     @commands.command(name='когда')
@@ -1109,9 +1109,9 @@ random_date)
                     if str(word).lower().find(str(nick).lower()) != -1:
                         message = message.replace(word, nick)
             result = AdditionalMethods.parse_standartfile_message(nickname,
-          "{nickname}, когда {messagestr}? Thonk {filestr}",
-          message,
-          "!когда", "kogda")
+                                                                  "{nickname}, когда {messagestr}? Thonk {filestr}",
+                                                                  message,
+                                                                  "!когда", "kogda")
             AdditionalMethods.add_to_buffer("e", result, ctx.author, "когда")
 
     @commands.command(name='привет')
@@ -1126,9 +1126,9 @@ random_date)
                     if str(word).lower().find(str(nick).lower()) != -1:
                         message = message.replace(word, nick)
             result = AdditionalMethods.parse_standartfile_message(nickname,
-          "{nickname} {filestr} приветствует {messagestr} "
-          "peepoHey peepoLove",
-          message, "!привет", "privet")
+                                                                  "{nickname} {filestr} приветствует {messagestr} "
+                                                                  "peepoHey peepoLove",
+                                                                  message, "!привет", "privet")
             AdditionalMethods.add_to_buffer("e", result, ctx.author, "привет")
 
     @commands.command(name='гороскоп')
