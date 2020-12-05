@@ -32,6 +32,7 @@ class BufferCleaner(Client, ABC):
         for r in self.kd.keys():
             if not r in self.times.keys():
                 self.times[str(self.kd[r])] = 0
+        self.times['0'] = 0
 
     async def event_webhook(self, data):
         pass
