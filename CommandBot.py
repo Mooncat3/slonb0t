@@ -1148,6 +1148,13 @@ class CommandsBot(commands.Bot, ABC):
         except wikipedia.exceptions.PageError:
             return
         info = re.sub(r"\([^()]*\)", "", info)
+        with open('data/osujdau2.txt', 'r', encoding='utf-8') as f:
+            osu = [x for x in f.read().split('\n') if len(x) > 1]
+        res_prov = re.sub(r'\W+', ' ', info)
+        for word in res_prov.split():
+            for asu in osu:
+                if word.lower().find(asu) != -1:
+                    info = info.replace(word, '*' * len(word))
         finaly = f"{ctx.author.display_name}, {info}"
         AdditionalMethods.add_to_buffer("c", finaly, ctx.author, "wiki")
 
