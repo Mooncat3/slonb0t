@@ -11,8 +11,8 @@ head = {'Authorization': f'OAuth {OAUTH}', 'Client-ID': Client_ID}
 head_2 = {'Authorization': f'Bearer {OAUTH}', 'Client-ID': Client_ID}
 hash_name = '2c484f8a5ff63f06732707c8ca989083e46b2aa81a03b02e7ac7b9aa9fcba9a2'
 cursor = ''
-ii = 0
 while True:
+    ii = 0
     time_start = time.time()
     data_2 = requests.get(f'https://api.twitch.tv/helix/users/follows?to_id=34711476&first=100&after={cursor}', headers=head_2).json()
     cursor = data_2['pagination']['cursor']
