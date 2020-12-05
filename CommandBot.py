@@ -65,8 +65,8 @@ class CommandsBot(commands.Bot, ABC):
         else:
             if self.duel_serious:
                 await socket.send_privmsg(config.CHAN,
-    "Дуэлянты смотрят друг на друга monkaW . В любой момент они готовы достать "
-    "револьвер из кобуры... PepeS ")
+                                          "Дуэлянты смотрят друг на друга monkaW . В любой момент они готовы достать "
+                                          "револьвер из кобуры... PepeS ")
                 randname = random.choice(self.duel_nicknames)
                 self.duel_nicknames.remove(randname)
                 await asyncio.sleep(8)
@@ -74,7 +74,7 @@ class CommandsBot(commands.Bot, ABC):
                     data = json.loads(e.read())
                 randseq = random.choice(data)
                 await socket.send_privmsg(config.CHAN,
-    f"Хлопок! {self.duel_nicknames[0]['label']} выстреливает в {randname['label']}{randseq['text']}")
+                                          f"Хлопок! {self.duel_nicknames[0]['label']} выстреливает в {randname['label']}{randseq['text']}")
                 if int(randseq['time']) > 1:
                     await asyncio.sleep(0.5)
                     await socket.send_privmsg(config.CHAN, f"/timeout {randname['str_id']} {randseq['time']}")
@@ -82,13 +82,13 @@ class CommandsBot(commands.Bot, ABC):
                     await socket.send_privmsg(config.CHAN, f"/timeout {self.duel_nicknames[0]['str_id']} 60")
             else:
                 await socket.send_privmsg(config.CHAN,
-    "Один из дуэлянтов бессмертен, поэтому они стреляют холостыми пулями monkaW "
-    ". В любой момент они готовы достать револьвер из кобуры... PepeS")
+                                          "Один из дуэлянтов бессмертен, поэтому они стреляют холостыми пулями monkaW "
+                                          ". В любой момент они готовы достать револьвер из кобуры... PepeS")
                 randname = random.choice(self.duel_nicknames)
                 self.duel_nicknames.remove(randname)
                 await asyncio.sleep(8)
                 await socket.send_privmsg(config.CHAN,
-    f"Хлопок! Точный выстрел заставляет {randname['label']} сдаться. Самая быстрая рука дикого запада – {self.duel_nicknames[0]['label']} EZ")
+                                          f"Хлопок! Точный выстрел заставляет {randname['label']} сдаться. Самая быстрая рука дикого запада – {self.duel_nicknames[0]['label']} EZ")
         self.duel_nicknames.clear()
         self.duel_is_running = False
 
@@ -146,7 +146,7 @@ class CommandsBot(commands.Bot, ABC):
             await socket.send_privmsg(config.CHAN, f'{nick}, Сообщения пользователя {user}: {mess_count}')
         except KeyError:
             await socket.send_privmsg(config.CHAN, f'{nick}, WeirdChamp')
-
+                                      
     async def event_ready(self):
         print(f'Ready {str(self.__class__.__name__)} | {self.nick} on {self.initial_channels[0]}')
         await self.synch()
@@ -229,23 +229,23 @@ class CommandsBot(commands.Bot, ABC):
                             stringer += f"отлетел на {Settings.get_timeout()} с настройками: |norm: {Settings.get_norm()}, maxmesses: {Settings.get_max_messes()}, emojimode: {Settings.get_mod()}|"
                             for f in self.seekers:
                                 await self._ws.send_privmsg(config.CHAN,
-                      f"/w {f} {nickname} отлетел на {Settings.get_timeout()}")
+    f"/w {f} {nickname} отлетел на {Settings.get_timeout()}")
                             await self._ws.send_privmsg(config.CHAN,
-                  f"/timeout {nickname} {Settings.get_timeout()} спам, automated by SLONB0T")
+f"/timeout {nickname} {Settings.get_timeout()} спам, automated by SLONB0T")
                             await self._ws.send_privmsg(config.CHAN,
-                  f"/w {nickname} Вы получили слишком много предупреждений и временно отстраняетесь от чата MrDestructoid")
+f"/w {nickname} Вы получили слишком много предупреждений и временно отстраняетесь от чата MrDestructoid")
                         else:
                             self.spammers[nickname]["worned"] += 1
                             stringer += f"был предупреждён {self.spammers[nickname]['worned']} из {Settings.get_attentions()} раз с настройками: |norm: {Settings.get_norm()}, maxmesses: {Settings.get_max_messes()}, emojimode: {Settings.get_mod()}|"
                             for f in self.seekers:
                                 await self._ws.send_privmsg(config.CHAN,
-                      f"/w {f} {nickname} был предупреждён {self.spammers[nickname]['worned']} из {Settings.get_attentions()} раз")
+    f"/w {f} {nickname} был предупреждён {self.spammers[nickname]['worned']} из {Settings.get_attentions()} раз")
                             await self._ws.send_privmsg(config.CHAN,
-                  f"/w {nickname} вы слишком часто отправляете сообщения на канале Jesusavgn, это {self.spammers[nickname]['worned']} из {Settings.get_attentions()} предупреждений MrDestructoid")
+f"/w {nickname} вы слишком часто отправляете сообщения на канале Jesusavgn, это {self.spammers[nickname]['worned']} из {Settings.get_attentions()} предупреждений MrDestructoid")
                         requests.post(config.api_url + "/logs/jesusavgn",
-data={"log": stringer.encode(
-    "utf-8"), "nickname": nickname, "warns": {self.spammers[nickname]['worned']},
-    "time": time.time()}, headers={"Authorization": "y5IArL6S&%%G(69G"})
+                                      data={"log": stringer.encode(
+                                          "utf-8"), "nickname": nickname, "warns": {self.spammers[nickname]['worned']},
+                                          "time": time.time()}, headers={"Authorization": "y5IArL6S&%%G(69G"})
                         self.spammers[nickname]["log"].clear()
                     elif time.time() - self.spammers[nickname]["time"] >= Settings.get_norm():
                         self.spammers[nickname]["time"] = time.time()
@@ -263,13 +263,13 @@ data={"log": stringer.encode(
         if len(message) == 0:
             message = nickname
         answer = json.loads(requests.get(config.api_url + f"/stats/jesusavgn?nickname={message}",
-   headers={"Authorization": "y5IArL6S&%%G(69G"}).content.decode("utf-8"))
+                                         headers={"Authorization": "y5IArL6S&%%G(69G"}).content.decode("utf-8"))
         if answer['type'] == 'success':
             if ctx.message.clean_content == "info":
                 AdditionalMethods.add_to_buffer("c",
-          ctx.author.display_name + f", Данные бота актуальны с {answer['start_date']}, сообщения актуальны с 2016 года",
-          ctx.author,
-          "stat")
+                                                ctx.author.display_name + f", Данные бота актуальны с {answer['start_date']}, сообщения актуальны с 2016 года",
+                                                ctx.author,
+                                                "stat")
             else:
                 answer_str = ""
                 if 'count' in answer['answer'].keys():
@@ -279,14 +279,14 @@ data={"log": stringer.encode(
                 if 'watch_time_online' in answer['answer'].keys():
                     answer_str += "Онлайн: " + AdditionalMethods.parse_time(answer['answer']['watch_time_online'] * 60, False) + " | "
                 AdditionalMethods.add_to_buffer("c",
-          ctx.author.display_name + f", {answer_str[:len(answer_str)-3]}",
-          ctx.author,
-          "stat")
+                                                ctx.author.display_name + f", {answer_str[:len(answer_str)-3]}",
+                                                ctx.author,
+                                                "stat")
         else:
             AdditionalMethods.add_to_buffer("s",
-      f"{nickname}, {message} не найден, поставлен на сканирование peepoJuiceSpin",
-      ctx.author,
-      "stat")
+                                            f"{nickname}, {message} не найден, поставлен на сканирование peepoJuiceSpin",
+                                            ctx.author,
+                                            "stat")
             asyncio.get_event_loop().create_task(self.check_mess(message, self._ws, nickname))
             
     '''
@@ -308,7 +308,7 @@ data={"log": stringer.encode(
                 text.write(messagee.lower()+'\n')
             self.blbl.append(messagee.lower())
             AdditionalMethods.add_to_buffer("s", f"Пользователь {messagee} теперь в чёрном списке бота!", ctx.author,"mute")
-                  
+
     @commands.command(name='unmute')
     async def unmute(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
@@ -322,7 +322,7 @@ data={"log": stringer.encode(
             with open('data/blacklist.txt', mode='w', encoding='utf-8') as textw:
                 textw.write(text_pre)
             AdditionalMethods.add_to_buffer("s", f"Пользователь {messagee} удалён из чёрного списка бота!", ctx.author,"unmute")
-                  
+
     @commands.command(name='seek')
     async def seek(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
@@ -332,9 +332,9 @@ data={"log": stringer.encode(
                 if requests.post(config.api_url + "/seekers/jesusavgn", data={'nick': nickname, 'enabled': 1},
                                  headers={"Authorization": "y5IArL6S&%%G(69G"}).json()['type'] == "error":
                     AdditionalMethods.add_to_buffer("s",
-              f"Вы подписаны на уведомления о спаме! (это изменение не было сохраненно в постоянную базу данных)",
-              ctx.author,
-              "seek")
+                                                    f"Вы подписаны на уведомления о спаме! (это изменение не было сохраненно в постоянную базу данных)",
+                                                    ctx.author,
+                                                    "seek")
                 else:
                     AdditionalMethods.add_to_buffer("s", f"Вы подписаны на уведомления о спаме!", ctx.author, "seek")
             else:
@@ -351,9 +351,9 @@ data={"log": stringer.encode(
                 if requests.post(config.api_url + "/seekers/jesusavgn", data={'nick': nickname, 'enabled': 0},
                                  headers={"Authorization": "y5IArL6S&%%G(69G"}).json()['type'] == "error":
                     AdditionalMethods.add_to_buffer("s",
-              f"Вы отписаны от уведомлений о спаме! (это изменение не было сохраненно в постоянную базу данных)",
-              ctx.author,
-              "unseek")
+                                                    f"Вы отписаны от уведомлений о спаме! (это изменение не было сохраненно в постоянную базу данных)",
+                                                    ctx.author,
+                                                    "unseek")
                 else:
                     AdditionalMethods.add_to_buffer("s", f"Вы отписаны от уведомлений о спаме!", ctx.author, "unseek")
 
@@ -361,8 +361,8 @@ data={"log": stringer.encode(
     async def helpm(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
             AdditionalMethods.add_to_buffer("s",
-      f"!bufferdelay [time], !buffermax [int], !entertain [0-1], !settings, !norm [time], !maxmesses [int], !attentions [int], !mode [all,skip,skip_with], !timeout [int], !forget [time]",
-      ctx.author, "helpm")
+                                            f"!bufferdelay [time], !buffermax [int], !entertain [0-1], !settings, !norm [time], !maxmesses [int], !attentions [int], !mode [all,skip,skip_with], !timeout [int], !forget [time]",
+                                            ctx.author, "helpm")
 
     @commands.command(name='acduel')
     async def acduel(self, ctx):
@@ -380,7 +380,7 @@ data={"log": stringer.encode(
         nickname = ctx.author.display_name
         if not self.duel_is_running and (
                 not AdditionalMethods.check_active() or AdditionalMethods.vip(ctx.author.is_mod,
-  ctx.author.name)) and not self.roulette_is_running:
+                      ctx.author.name)) and not self.roulette_is_running:
             if ctx.author.is_mod:
                 self.duel_serious = False
             else:
@@ -392,14 +392,14 @@ data={"log": stringer.encode(
                 self.duel_user = message.replace("@", "")
                 if nickname.lower() != self.duel_user.lower():
                     await ctx.channel._ws.send_privmsg(config.CHAN,
-                 f"{nickname} кидает перчатку в {message.replace('@', '')}, вызывая его на дуэль peepoCool . Чтобы принять вызов – напишите !acduel.")
+                                                       f"{nickname} кидает перчатку в {message.replace('@', '')}, вызывая его на дуэль peepoCool . Чтобы принять вызов – напишите !acduel.")
                 else:
                     await ctx.channel._ws.send_privmsg(config.CHAN,
-                 f"{nickname} направил ствол на ... самого себя blushW . Если вы уверены в своём выборе, напишите !acduel.")
+                                                       f"{nickname} направил ствол на ... самого себя blushW . Если вы уверены в своём выборе, напишите !acduel.")
                 asyncio.get_event_loop().create_task(self.duelent(self._ws))
             else:
                 await ctx.channel._ws.send_privmsg(config.CHAN,
-             f"{nickname}, напишите никнейм правильно PepoG")
+                                                   f"{nickname}, напишите никнейм правильно PepoG")
         elif self.duel_is_running:
             AdditionalMethods.add_to_buffer("s", f"{ctx.author.name}, сейчас уже идёт дуэль", ctx.author, "duel")
         elif self.roulette_is_running:
@@ -420,7 +420,7 @@ data={"log": stringer.encode(
             self.roulette_is_running = True
             self.roulette_nicknames.append({"label": ctx.author.display_name, "str_id": ctx.author.name})
             await ctx.channel._ws.send_privmsg(config.CHAN,
-         "Рулетка началась! У вас есть 20 секунд! Чтобы учавствовать напишите !accept")
+                                               "Рулетка началась! У вас есть 20 секунд! Чтобы учавствовать напишите !accept")
             asyncio.get_event_loop().create_task(self.rand(self._ws))
         elif self.duel_is_running:
             AdditionalMethods.add_to_buffer("s", f"{ctx.author.name}, сейчас идёт дуэль", ctx.author, "omgroulette")
@@ -429,7 +429,7 @@ data={"log": stringer.encode(
         elif time.time() - self.omgroulette_last_use < self.omgroulette_kd:
             AdditionalMethods.add_to_buffer("s", f"{ctx.author.name}, эту команду можно использовать только раз в {self.omgroulette_kd} секунд!", ctx.author,
                 "omgroulette")
-                 
+                                                       
     @commands.command(name='пирамида')
     async def piramide(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
@@ -467,13 +467,13 @@ data={"log": stringer.encode(
             AdditionalMethods.add_to_buffer("e", f"{nickname}, Впишите какое-либо предложение", ctx.author, "porf")
         elif len(words) > 300:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, Бот может принимать максимум 300 символов", ctx.author,
-      "porf")
+                                            "porf")
         else:
             response = requests.post(url, json={'prompt': words, 'length': '20', 'num_samples': '5'})
             if response.text == "Service Unavailable":
                 AdditionalMethods.add_to_buffer("e",
-          f"{nickname}, на данный момент Порфирьевич не работает. Попробуйте позже roflanPominy",
-          ctx.author, "porf")
+                                                f"{nickname}, на данный момент Порфирьевич не работает. Попробуйте позже roflanPominy",
+                                                ctx.author, "porf")
             else:
                 json_response = response.json()
                 result = json_response['replies'][4]
@@ -488,7 +488,7 @@ data={"log": stringer.encode(
                     AdditionalMethods.add_to_buffer("e", f"{nickname}, {result}", ctx.author, "porf")
                 else:
                     AdditionalMethods.add_to_buffer("e", f"{nickname}, {words}{result}", ctx.author, "porf")
-                 
+                                                       
     @commands.command(name='save')
     async def logs(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
@@ -497,7 +497,7 @@ data={"log": stringer.encode(
 
             with open(file='data/settings.txt', mode='r', encoding='utf-8') as mm:
                 settings = mm.read()
-                 
+                                                       
             with open(file='data/blacklist.txt', mode='r', encoding='utf-8') as bl:
                 black = bl.read()
 
@@ -511,7 +511,7 @@ data={"log": stringer.encode(
             contents1 = repo.get_contents("data/settings.txt")
             repo.delete_file(contents1.path, "", contents1.sha)
             repo.create_file("data/settings.txt", "", settings)
-                 
+                                                       
             contents1 = repo.get_contents("data/blacklist.txt")
             repo.delete_file(contents1.path, "", contents1.sha)
             repo.create_file("data/blacklist.txt", "", black)
@@ -529,7 +529,7 @@ data={"log": stringer.encode(
         while message[0:1] == "!" or message[0:1] == "/":
             message = message[1:len(message)]
         AdditionalMethods.add_to_buffer("c", AdditionalMethods.get_last_stream_stat(message, nickname, ctx.author),
-  ctx.author, "history")
+                                        ctx.author, "history")
 
     @commands.command(name='archive')
     async def streamh(self, ctx):
@@ -546,9 +546,9 @@ data={"log": stringer.encode(
             else:
                 tag = ''
             AdditionalMethods.add_to_buffer("c", AdditionalMethods.get_archive_stream_stat(id, nickname, tag,
-               ctx.author).format(nickname,
-                                  id),
-      ctx.author, "archive")
+                                   ctx.author).format(nickname,
+                                                      id),
+                                            ctx.author, "archive")
         except:
             AdditionalMethods.add_to_buffer("с", f'{nickname} !archive [0-9]', ctx.author, "archive")
 
@@ -571,7 +571,7 @@ data={"log": stringer.encode(
         t = datetime.today()
         res = new_year - timedelta(days=t.day, minutes=t.minute, hours=t.hour)
         AdditionalMethods.add_to_buffer("e", f'{nickname}, Новый Год через {res.day} дней {res.hour} часов и {res.minute} минут FeelsRainMan', ctx.author, "нг")
-                 
+                                                       
     @commands.command(name='анекдот')
     async def anekdot(self, ctx):
         r = requests.get('http://anecdotica.ru/')
@@ -586,8 +586,8 @@ data={"log": stringer.encode(
         message = ctx.message.content
         if len(message) == 0:
             AdditionalMethods.add_to_buffer("с",
-      f"{nickname}, cсылка со всеми языками: https://pastebin.com/raw/nk1n1KxD",
-      ctx.author, "перевод")
+                                            f"{nickname}, cсылка со всеми языками: https://pastebin.com/raw/nk1n1KxD",
+                                            ctx.author, "перевод")
         else:
             try:
                 userlang = message.split(" ")[1]
@@ -598,8 +598,8 @@ data={"log": stringer.encode(
                 r = requests.get(url, data=dataa)
                 if r.status_code == 400:
                     AdditionalMethods.add_to_buffer("с",
-              "Неправильно указаны языки. Ссылка со всеми языками: https://pastebin.com/raw/nk1n1KxD",
-              ctx.author, "перевод")
+                                                    "Неправильно указаны языки. Ссылка со всеми языками: https://pastebin.com/raw/nk1n1KxD",
+                                                    ctx.author, "перевод")
                 else:
                     resultat = str(r.text).partition('t":["')[-1].replace('"]}', "")
                     with open('data/osujdau2.txt', 'r', encoding='utf-8') as f:
@@ -612,8 +612,8 @@ data={"log": stringer.encode(
                     AdditionalMethods.add_to_buffer("с", f"{nickname}, {resultat}", ctx.author, "перевод")
             except:
                 AdditionalMethods.add_to_buffer("с",
-          f"{nickname}, неправильно указаны параметры. Ссылка со всеми языками: https://pastebin.com/raw/nk1n1KxD",
-          ctx.author, "перевод")
+                                                f"{nickname}, неправильно указаны параметры. Ссылка со всеми языками: https://pastebin.com/raw/nk1n1KxD",
+                                                ctx.author, "перевод")
 
     @commands.command(name='курс')
     async def kurs(self, ctx):
@@ -640,12 +640,12 @@ data={"log": stringer.encode(
             except:
                 AdditionalMethods.add_to_buffer("с", f"{nickname}, введите число PepoG", ctx.author, "курс")
             url = "https://free.currconv.com/api/v7/convert?q=" + userkurs.replace("-",
-       "_").upper() + "&compact=ultra&apiKey=ee315cc429cbc167d4b7"
+                           "_").upper() + "&compact=ultra&apiKey=ee315cc429cbc167d4b7"
             r = requests.get(url)
             if r.text == "{}":
                 AdditionalMethods.add_to_buffer("с",
-          f"{nickname}, неправильно введены валюты. Вводите в международном формате (USD-RUB, RUB-JPY)",
-          ctx.author, "курс")
+                                                f"{nickname}, неправильно введены валюты. Вводите в международном формате (USD-RUB, RUB-JPY)",
+                                                ctx.author, "курс")
             else:
                 try:
                     json_r = r.json()
@@ -656,50 +656,50 @@ data={"log": stringer.encode(
                     AdditionalMethods.add_to_buffer("с", result, ctx.author, "курс")
                 except KeyError:
                     AdditionalMethods.add_to_buffer("с",
-              f"{nickname}, произошла ошибка конвертации. Скорее всего вы неправильно написали валюты. PepoG",
-              ctx.author, "курс")
+                                                    f"{nickname}, произошла ошибка конвертации. Скорее всего вы неправильно написали валюты. PepoG",
+                                                    ctx.author, "курс")
 
     @commands.command(name='clipever')
     async def topclipever(self, ctx):
         nickname = ctx.author.display_name
         message = ctx.message.clean_content.replace('@', '')
         AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(0, message, nickname), ctx.author,
-  "clip")
+                                        "clip")
 
     @commands.command(name='clipyear')
     async def topclipyear(self, ctx):
         nickname = ctx.author.display_name
         message = ctx.message.clean_content.replace('@', '')
         AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(365, message, nickname), ctx.author,
-  "clip")
+                                        "clip")
 
     @commands.command(name='clipweek')
     async def topclipweek(self, ctx):
         nickname = ctx.author.display_name
         message = ctx.message.clean_content.replace('@', '')
         AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(7, message, nickname), ctx.author,
-  "clip")
+                                        "clip")
 
     @commands.command(name='clipmonth')
     async def topclipmonth(self, ctx):
         nickname = ctx.author.display_name
         message = ctx.message.clean_content.replace('@', '')
         AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(30, message, nickname), ctx.author,
-  "clip")
+                                        "clip")
 
     @commands.command(name='cliptoday')
     async def topclipday(self, ctx):
         nickname = ctx.author.display_name
         message = ctx.message.clean_content.replace('@', '')
         AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(1, message, nickname), ctx.author,
-  "clip")
+                                        "clip")
 
     @commands.command(name='abbreviations')
     async def abbreviations(self, ctx):
         nickname = ctx.author.display_name
         AdditionalMethods.add_to_buffer("c",
-  f"{nickname} Здесь вы можете посмотреть все доступные аббревиатуры для clip {config.abreviationsUrl}",
-  ctx.author, "abbreviations")
+                                        f"{nickname} Здесь вы можете посмотреть все доступные аббревиатуры для clip {config.abreviationsUrl}",
+                                        ctx.author, "abbreviations")
 
     @commands.command(name='iq')
     async def iq(self, ctx):
@@ -709,24 +709,24 @@ data={"log": stringer.encode(
             AdditionalMethods.add_to_buffer("e", f"{nickname}, ваш IQ = {str(iq)}! Вы Хесус?! PogU", ctx.author, "iq")
         if iq == 89:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, ваш IQ = {str(iq)}! Вы Братишкин?! PogU", ctx.author,
-      "iq")
+                                            "iq")
         else:
             if 110 > iq > 70:
                 AdditionalMethods.add_to_buffer("e",
-          f"{nickname}, ваш IQ = {str(iq)}! Надо же, у стримера больше IQ чем у вас KeK",
-          ctx.author, "iq")
+                                                f"{nickname}, ваш IQ = {str(iq)}! Надо же, у стримера больше IQ чем у вас KeK",
+                                                ctx.author, "iq")
             if 110 < iq < 135:
                 AdditionalMethods.add_to_buffer("e",
-          f"{nickname}, ваш IQ = {str(iq)}! Ого, а вы не глупый человек ThumbUp",
-          ctx.author, "iq")
+                                                f"{nickname}, ваш IQ = {str(iq)}! Ого, а вы не глупый человек ThumbUp",
+                                                ctx.author, "iq")
             if iq < 70:
                 AdditionalMethods.add_to_buffer("e",
-          f"{nickname}, ваш IQ = {str(iq)}! Чел... сходи книгу почитай WeirdChamp",
-          ctx.author, "iq")
+                                                f"{nickname}, ваш IQ = {str(iq)}! Чел... сходи книгу почитай WeirdChamp",
+                                                ctx.author, "iq")
             if iq >= 135:
                 AdditionalMethods.add_to_buffer("e",
-          f"{nickname}, ваш IQ = {str(iq)}! Внимание! В чате гений WAYTOOSMART Clap",
-          ctx.author, "iq")
+                                                f"{nickname}, ваш IQ = {str(iq)}! Внимание! В чате гений WAYTOOSMART Clap",
+                                                ctx.author, "iq")
 
     @commands.command(name='заебало')
     async def zaebalo(self, ctx):
@@ -756,8 +756,8 @@ data={"log": stringer.encode(
     async def help(self, ctx):
         nickname = ctx.author.display_name
         AdditionalMethods.add_to_buffer("c",
-  f"catJAM Ку, {nickname}, со списком команд можешь ознакомиться здесь {config.helpUrl} catJAM",
-  ctx.author, "help")
+                                        f"catJAM Ку, {nickname}, со списком команд можешь ознакомиться здесь {config.helpUrl} catJAM",
+                                        ctx.author, "help")
 
     @commands.command(name='settings')
     async def settings(self, ctx):
@@ -771,8 +771,8 @@ data={"log": stringer.encode(
                 AdditionalMethods.add_to_buffer("s", f"Настройки пустые", ctx.author, "settings")
             else:
                 AdditionalMethods.add_to_buffer("s",
-          f"max: {data['buffermax']}, delay: {data['bufferdelay']}, entertain: {data['entertain']}, norm: {data['norm']}, maxmesses: {data['maxmesses']}, attentions: {data['attentions']}, emojimode: {data['emojimode']}, timeout: {data['timeout']}",
-          ctx.author, "settings")
+                                                f"max: {data['buffermax']}, delay: {data['bufferdelay']}, entertain: {data['entertain']}, norm: {data['norm']}, maxmesses: {data['maxmesses']}, attentions: {data['attentions']}, emojimode: {data['emojimode']}, timeout: {data['timeout']}",
+                                                ctx.author, "settings")
 
     @commands.command(name='bufferdelay')
     async def bufedelay(self, ctx):
@@ -781,10 +781,10 @@ data={"log": stringer.encode(
             try:
                 chislo = float(ctx.message.clean_content)
                 AdditionalMethods.add_to_buffer("s", f"{nickname}, {Settings.change_set(Settings.BUFFERDELAY, chislo)}",
-          ctx.author, "bufferdelay")
+                                                ctx.author, "bufferdelay")
             except:
                 AdditionalMethods.add_to_buffer("s", f"{nickname}, не удалось прочесть число PepoG ", ctx.author,
-          "bufferdelay")
+                                                "bufferdelay")
 
     @commands.command(name='attentions')
     async def attentions(self, ctx):
@@ -793,20 +793,20 @@ data={"log": stringer.encode(
             try:
                 chislo = int(ctx.message.clean_content)
                 AdditionalMethods.add_to_buffer("s", f"{nickname}, {Settings.change_set(Settings.ATTENTIONS, chislo)}",
-          ctx.author,
-          "attentions")
+                                                ctx.author,
+                                                "attentions")
             except:
                 AdditionalMethods.add_to_buffer("s", f"{nickname}, не удалось прочесть число PepoG ", ctx.author,
-          "attentions")
+                                                "attentions")
 
     @commands.command(name='mode')
     async def mode(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
             nickname = ctx.author.display_name
             AdditionalMethods.add_to_buffer("s",
-      f"{nickname}, {Settings.change_set(Settings.MODE, ctx.message.clean_content)}",
-      ctx.author,
-      "mode")
+                                            f"{nickname}, {Settings.change_set(Settings.MODE, ctx.message.clean_content)}",
+                                            ctx.author,
+                                            "mode")
 
     @commands.command(name='timeout')
     async def timeout(self, ctx):
@@ -815,11 +815,11 @@ data={"log": stringer.encode(
             try:
                 chislo = int(ctx.message.clean_content)
                 AdditionalMethods.add_to_buffer("s", f"{nickname}, {Settings.change_set(Settings.TIMEOUT, chislo)}",
-          ctx.author,
-          "timeout")
+                                                ctx.author,
+                                                "timeout")
             except:
                 AdditionalMethods.add_to_buffer("s", f"{nickname}, не удалось прочесть число PepoG ", ctx.author,
-          "timeout")
+                                                "timeout")
 
     @commands.command(name='buffermax')
     async def bufermax(self, ctx):
@@ -828,20 +828,20 @@ data={"log": stringer.encode(
             try:
                 chislo = int(ctx.message.clean_content)
                 AdditionalMethods.add_to_buffer("s", f"{nickname}, {Settings.change_set(Settings.BUFFERMAX, chislo)}",
-          ctx.author,
-          "buffermax")
+                                                ctx.author,
+                                                "buffermax")
             except:
                 AdditionalMethods.add_to_buffer("s", f"{nickname}, не удалось прочесть число PepoG ", ctx.author,
-          "buffermax")
+                                                "buffermax")
 
     @commands.command(name='entertain')
     async def entertain(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
             nickname = ctx.author.display_name
             AdditionalMethods.add_to_buffer("s",
-      f"{nickname}, {Settings.change_set(Settings.ENTERTAIN, int(ctx.message.clean_content))}",
-      ctx.author,
-      "entertain")
+                                            f"{nickname}, {Settings.change_set(Settings.ENTERTAIN, int(ctx.message.clean_content))}",
+                                            ctx.author,
+                                            "entertain")
 
     @commands.command(name='maxmesses')
     async def maxmesses(self, ctx):
@@ -850,11 +850,11 @@ data={"log": stringer.encode(
             try:
                 chislo = int(ctx.message.clean_content)
                 AdditionalMethods.add_to_buffer("s", f"{nickname}, {Settings.change_set(Settings.MAXMESSES, chislo)}",
-          ctx.author,
-          "maxmesses")
+                                                ctx.author,
+                                                "maxmesses")
             except:
                 AdditionalMethods.add_to_buffer("s", f"{nickname}, не удалось прочесть число PepoG ", ctx.author,
-          "maxmesses")
+                                                "maxmesses")
 
     @commands.command(name='norm')
     async def norm(self, ctx):
@@ -863,11 +863,11 @@ data={"log": stringer.encode(
             try:
                 chislo = float(ctx.message.clean_content)
                 AdditionalMethods.add_to_buffer("s", f"{nickname}, {Settings.change_set(Settings.NORM, chislo)}",
-          ctx.author,
-          "norm")
+                                                ctx.author,
+                                                "norm")
             except:
                 AdditionalMethods.add_to_buffer("s", f"{nickname}, не удалось прочесть число PepoG ", ctx.author,
-          "norm")
+                                                "norm")
 
     @commands.command(name='forget')
     async def forget(self, ctx):
@@ -876,11 +876,11 @@ data={"log": stringer.encode(
             try:
                 chislo = float(ctx.message.clean_content)
                 AdditionalMethods.add_to_buffer("s", f"{nickname}, {Settings.change_set(Settings.FORGET, chislo)}",
-          ctx.author,
-          "forget")
+                                                ctx.author,
+                                                "forget")
             except:
                 AdditionalMethods.add_to_buffer("s", f"{nickname}, не удалось прочесть число PepoG ", ctx.author,
-          "forget")
+                                                "forget")
 
     @commands.command(name='temp')
     async def temp(self, ctx):
@@ -888,15 +888,15 @@ data={"log": stringer.encode(
         temp = round(random.uniform(25, 45), 1)
         if 35.7 <= temp <= 37:
             AdditionalMethods.add_to_buffer("e",
-      f"{nickname}, ваша температура {str(temp)} °C! У вас температура в норме "
-      f"ThumbUp",
-      ctx.author, "temp")
+                                            f"{nickname}, ваша температура {str(temp)} °C! У вас температура в норме "
+                                            f"ThumbUp",
+                                            ctx.author, "temp")
         elif 37 < temp < 40 or 35.7 > temp >= 32:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, ваша температура {str(temp)} °C! У вас вирус? PepeS",
-      ctx.author, "temp")
+                                            ctx.author, "temp")
         elif temp > 40 or temp < 32:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, ваша температура {str(temp)} °C! Вызывайте дурку! Durka",
-      ctx.author, "temp")
+                                            ctx.author, "temp")
 
     @commands.command(name='me', aliases=['я', 'йа'])
     async def me(self, ctx):
@@ -918,7 +918,7 @@ data={"log": stringer.encode(
 
         with open('data/me/first_names.txt', encoding='utf-8') as f:
             first_names = [x for x in f.read().split('\n') if len(x) > 1]
-                 
+                                                       
         with open('data/me/age.txt', encoding='utf-8') as f:
             ages = [x for x in f.read().split('\n') if len(x) > 1]
 
@@ -939,11 +939,11 @@ data={"log": stringer.encode(
         if 17 < v <= 18:
             kol = round(random.uniform(90, 250), 2)
             answer = "Однажды {} приснилось, что {} теперь стоит {} ₽! Какой ужас Sadge".format(nickname, currency_rand,
-                      kol)
+                                          kol)
         if 18 < v <= 19:
             kol = round(random.uniform(0, 80), 2)
             answer = "Однажды {} приснилось, что {} теперь стоит {} ₽! Какое счастье PogU".format(nickname,
-                           currency_rand, kol)
+                                               currency_rand, kol)
         if 19 < v <= 35:
             answer = random.choice(stories).format(nickname, name, thing)
         if 35 < v <= 79:
@@ -972,8 +972,8 @@ data={"log": stringer.encode(
             random_date = start_date + timedelta(days=random_number_of_days)
             random_date = random_date.strftime('%d.%m.%Y')
             answer = '{} сегодня прошёл тест на дату смерти. monkaW Дата смерти {} - {} monkaX roflanPominy'.format(nickname,
-                                    nickname,
-                                    random_date)
+nickname,
+random_date)
         if 95 < v <= 96:
             name2 = random.choice(self.namess)
             answer = '{} решил украсть у {} {} , но в чате пробежал {} и засёк преступление monkaFLASH {} теперь за решёткой BOP'.format(nickname, name, thing, name2, nickname)
@@ -1023,14 +1023,14 @@ data={"log": stringer.encode(
                 rand_steal = random.randint(0, 100)
                 if 0 < rand_steal <= 70:
                     AdditionalMethods.add_to_buffer("e", f"{nickname} украл у {message} {random.choice(thingss)} BOP",
-              ctx.author, "steal")
+                                                    ctx.author, "steal")
                 else:
                     symbols = ['$', '£', '€', '₽']
                     AdditionalMethods.add_to_buffer("e", f"{nickname} украл у {message} {ruble} {random.choice(symbols)} BOP",
-              ctx.author, "steal")
+                                                    ctx.author, "steal")
             else:
                 AdditionalMethods.add_to_buffer("e", f"{nickname} ничего не украл у {message} KeK Lohich",
-          ctx.author, "steal")
+                                                ctx.author, "steal")
 
     @commands.command(name='try')
     async def ttry(self, ctx):
@@ -1038,15 +1038,15 @@ data={"log": stringer.encode(
         nickname = ctx.author.display_name
         if len(message) == 0:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !try [action]",
-      ctx.author, "try")
+                                            ctx.author, "try")
         else:
             for nick in self.names_exp:
                 for word in message.split():
                     if str(word).lower().find(str(nick).lower()) != -1:
                         message = message.replace(word, nick)
             result = AdditionalMethods.parse_standartfile_message(nickname,
-                            "{nickname} попробовал {messagestr}... {filestr}",
-                            message, "!try", "try")
+          "{nickname} попробовал {messagestr}... {filestr}",
+          message, "!try", "try")
             AdditionalMethods.add_to_buffer("e", result, ctx.author, "try")
 
     @commands.command(name='время')
@@ -1055,15 +1055,15 @@ data={"log": stringer.encode(
         loc = ctx.message.clean_content
         if len(loc) == 0:
             AdditionalMethods.add_to_buffer("c", datetime.strftime(datetime.now() + timedelta(hours=3),
-                             f"{nickname}, Чичас %H:%M по МСК Waiting"),
-      ctx.author, "время")
+           f"{nickname}, Чичас %H:%M по МСК Waiting"),
+                                            ctx.author, "время")
         else:
             url = "http://search.maps.sputnik.ru/search?q="
             response = requests.get(url + quote(loc))
             if response.text.find('"found":0') != -1:
                 AdditionalMethods.add_to_buffer("c",
-          f"{nickname}, не найден населённый пункт. Попробуйте другое название.",
-          ctx.author, "время")
+                                                f"{nickname}, не найден населённый пункт. Попробуйте другое название.",
+                                                ctx.author, "время")
             else:
                 try:
                     position = response.json()['result'][0]['position']
@@ -1074,11 +1074,11 @@ data={"log": stringer.encode(
                     date = dt_object.strftime("%H:%M")
                     location = response.json()['result'][0]['title']
                     AdditionalMethods.add_to_buffer("c", f"{nickname}, чичас {date} в «{location}» Waiting", ctx.author,
-              "время")
+                                                    "время")
                 except:
                     AdditionalMethods.add_to_buffer("c",
-              f"{nickname}, не удалось найти время для этого населённого пункта",
-              ctx.author, "время")
+                                                    f"{nickname}, не удалось найти время для этого населённого пункта",
+                                                    ctx.author, "время")
 
     @commands.command(name='обнять')
     async def hug(self, ctx):
@@ -1092,9 +1092,9 @@ data={"log": stringer.encode(
                     if str(word).lower().find(str(nick).lower()) != -1:
                         message = message.replace(word, nick)
             result = AdditionalMethods.parse_standartfile_message(nickname,
-                            "{nickname} {filestr} обнимает {messagestr} "
-                            "VoHiYo",
-                            message, "!обнять", "hug")
+          "{nickname} {filestr} обнимает {messagestr} "
+          "VoHiYo",
+          message, "!обнять", "hug")
             AdditionalMethods.add_to_buffer("e", result, ctx.author, "обнять")
 
     @commands.command(name='когда')
@@ -1109,9 +1109,9 @@ data={"log": stringer.encode(
                     if str(word).lower().find(str(nick).lower()) != -1:
                         message = message.replace(word, nick)
             result = AdditionalMethods.parse_standartfile_message(nickname,
-                            "{nickname}, когда {messagestr}? Thonk {filestr}",
-                            message,
-                            "!когда", "kogda")
+          "{nickname}, когда {messagestr}? Thonk {filestr}",
+          message,
+          "!когда", "kogda")
             AdditionalMethods.add_to_buffer("e", result, ctx.author, "когда")
 
     @commands.command(name='привет')
@@ -1126,9 +1126,9 @@ data={"log": stringer.encode(
                     if str(word).lower().find(str(nick).lower()) != -1:
                         message = message.replace(word, nick)
             result = AdditionalMethods.parse_standartfile_message(nickname,
-                            "{nickname} {filestr} приветствует {messagestr} "
-                            "peepoHey peepoLove",
-                            message, "!привет", "privet")
+          "{nickname} {filestr} приветствует {messagestr} "
+          "peepoHey peepoLove",
+          message, "!привет", "privet")
             AdditionalMethods.add_to_buffer("e", result, ctx.author, "привет")
 
     @commands.command(name='гороскоп')
