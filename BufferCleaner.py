@@ -11,6 +11,12 @@ import time
 from twitchioc.websocket import WebsocketConnection
 
 
+def parse_kd_comand(kd: dict, cmd: str):
+    if cmd in kd.keys():
+        return kd[cmd]
+    else:
+        return 0
+
 class BufferCleaner(Client, ABC):
 
     def __init__(self):
@@ -22,6 +28,10 @@ class BufferCleaner(Client, ABC):
         self.loop.create_task(self.listen_to_buffer_undelaied())
         self.messes = []
         self.times = {}
+        self.kd = {"porf": 15, "когда": 15, "анекдот": 15, "iq": 15, "me": 15, "do": 15, "кто": 15, "steal": 15, "try": 15, "обнять": 5, "kogda": 15, "привет": 15}
+        for r in self.kd.keys():
+            if not r in self.times.keys():
+                self.times[str(self.kd[r])] = 0
 
     async def event_webhook(self, data):
         pass
@@ -62,11 +72,6 @@ class BufferCleaner(Client, ABC):
         pass
 
     async def event_message(self, message):
-        """
-        self.messes.append(message.author.name+": "+message.content)
-        with open("data/messes", "w") as q:
-            q.write(json.dumps(self.messes))
-        """
         pass
 
     async def event_error(self, error: Exception, data=None):
@@ -112,7 +117,7 @@ class BufferCleaner(Client, ABC):
                     await asyncio.sleep(0.1)
                 if rest['vip'] and rest['type'] != "s":
                     await sock.send_privmsg(config.CHAN, mess)
-                elif rest['type'] == "s" or x - excluding >= Settings.get_bufer_max():
+                elif rest['type'] == "s" or x - excluding >= Settings.get_bufer_max() or time.time() - self.times[str(parse_kd_comand(self.kd, res['command']))] < parse_kd_comand(self.kd, res['command']):
                     await sock.send_privmsg(config.CHAN, f"/w {rest['nickname']} !{resert['cmd']} ▶ {mess}")
                 else:
                     await sock.send_privmsg(config.CHAN, mess)
@@ -128,7 +133,7 @@ class BufferCleaner(Client, ABC):
                         res = dat[x]
                         if res['vip'] or res['type'] == "s":
                             excluding += 1
-                        if res['vip'] or res['type'] == "s" or x - excluding >= Settings.get_bufer_max():
+                        if res['vip'] or res['type'] == "s" or x - excluding >= Settings.get_bufer_max() or (time.time() - self.times[str(parse_kd_comand(self.kd, res['command']))] < parse_kd_comand(self.kd, res['command']) and time.time() - self.times[str(parse_kd_comand(self.kd, res['command']))] > 0.5):
                             ondeleting.append(res)
                             if res['type'] != "r":
                                 reser = {"mes": res['message'], "cmd": res['command'], "timeout": 0.0}
@@ -205,7 +210,8 @@ class BufferCleaner(Client, ABC):
                                 dat = []
                     if len(dat) > 0:
                         res = dat[0]
-                        if not res['vip'] and res['type'] != "s":
+                        if not res['vip'] and res['type'] != "s" and time.time() - self.times[str(parse_kd_comand(self.kd, res['command']))] > parse_kd_comand(self.kd, res['command']):
+                            self.times[str(parse_kd_comand(self.kd, res['command']))] = time.time()
                             ondeleting.append(res)
                             if res['type'] != "r":
                                 reser = {"timeout": timer, "mes": res['message'], "cmd": res['command']}
