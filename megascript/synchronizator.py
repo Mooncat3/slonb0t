@@ -1,16 +1,16 @@
 import requests
 import datetime
-import json
 import time
 
 
 Client_ID = 'kimne78kx3ncx6brgo4mv6wki5h1ko'
 OAUTH = 'l4tt0z3a94edvjo3kbs0c3s4qimpsp'
-url = 'https://gql.twitch.tv/gql'
+url = 'https://api.twitch.tv/gql'
 head = {'Authorization': f'OAuth {OAUTH}', 'Client-ID': Client_ID}
 head_2 = {'Authorization': f'Bearer {OAUTH}', 'Client-ID': Client_ID}
 hash_name = '2c484f8a5ff63f06732707c8ca989083e46b2aa81a03b02e7ac7b9aa9fcba9a2'
 cursor = ''
+iii = 0
 while True:
     ii = 0
     time_start = time.time()
@@ -70,12 +70,13 @@ while True:
                     except Exception as e:
                         print(e)
                         break
-                date_mess = data_loop.split('T')[0].replace('-', '.')
-                requests.post("https://sl0n.herokuapp.com/stats/jesusavgn",
-                                data={'type': 'add', 'nickname': user, 'count': mess_count},
-                                headers={"Authorization": "y5IArL6S&%%G(69G"})
                 print(f'Пользователь {user} написал {mess_count} сообщений')
+                if mess_count != 0:
+                    requests.post("https://sl0n.herokuapp.com/stats/jesusavgn",
+                                    data={'type': 'add', 'nickname': user, 'count': mess_count},
+                                    headers={"Authorization": "y5IArL6S&%%G(69G"})
             except Exception as e:
                 print(e)
         ii += 1
-    print(f"//---------------- ПРОСКАНИРОВАНО: {ii} | {time.time()-time_start} сек. ----------------//")
+    iii += 100
+    print(f"//---------------- ПРОСКАНИРОВАНО: {iii} | {time.time()-time_start} сек. ----------------//")
