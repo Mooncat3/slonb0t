@@ -68,8 +68,6 @@ while True:
                                 a.append(b['cursor'])
                             except:
                                 pass
-                        if a[-1] == a[-2]:
-                            break
                         data_loop = a[-1]
                     except Exception as e:
                         print(e)
