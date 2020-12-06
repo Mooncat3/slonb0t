@@ -1,7 +1,7 @@
 import requests
 import datetime
 
-nickname = 'mooncat3'
+nickname = ''
 
 Client_ID = 'kimne78kx3ncx6brgo4mv6wki5h1ko'
 OAUTH = 'l4tt0z3a94edvjo3kbs0c3s4qimpsp'
