@@ -13,7 +13,7 @@ mess_count = 0
 url_2 = 'https://api.twitch.tv/helix/users?login=' + nickname
 try:
     sender = requests.get(url_2, headers=head_2).json()['data'][0]['id']
-except KeyError:
+except IndexError:
     sender = 0
 start = datetime.datetime.today()
 data_loop = start.strftime('%Y-%m-%dT%H:%M:%SZ|0')
