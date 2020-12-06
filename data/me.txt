@@ -186,3 +186,4 @@ lickR {} lickL
 {} по рофлу потратил 5000$ PepegaCredit 
 {} в очередной раз увернулся от сабки ricardoFlick 
 pepePoint {} ЗАПЕРЛИ В КЛЕТКЕ | ppOverHeat |
+{} пишет письмо деду морозу peepoChat
