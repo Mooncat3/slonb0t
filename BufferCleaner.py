@@ -216,8 +216,6 @@ class BufferCleaner(Client, ABC):
                                 dat = []
                     if len(dat) > 0:
                         res = dat[0]
-                        print(str(parse_kd_comand(self.kd, res['command'])))
-                        print(self.times)
                         if not res['vip'] and res['type'] != "s" and time.time() - self.times[str(parse_kd_comand(self.kd, res['command']))] > parse_kd_comand(self.kd, res['command']):
                             self.times[str(parse_kd_comand(self.kd, res['command']))] = time.time()
                             ondeleting.append(res)
@@ -244,9 +242,7 @@ class BufferCleaner(Client, ABC):
             if len(ondeleting) > 0:
                 with open(file='data/buffer.txt', mode='r', encoding='utf-8') as e:
                     dat = json.loads(e.read())
-                    print(dat)
                     for delet in ondeleting:
-                        print(delet)
                         dat.remove(delet)
                     ondeleting = []
                 with open(file='data/buffer.txt', mode='w', encoding='utf-8') as q:
