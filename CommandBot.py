@@ -293,7 +293,8 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='кто')	
     async def kto(self, ctx):	
         message = ctx.message.clean_content.replace('@', '')[:90]
-        name = random.choice(self.namess)	
+        random.seed(message)
+        name = random.choice(self.namess)
         for nick in self.names_exp:	
             for word in message.split():	
                 if str(word).lower().find(str(nick).lower()) != -1:	
