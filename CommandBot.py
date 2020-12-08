@@ -295,6 +295,7 @@ class CommandsBot(commands.Bot, ABC):
         message = ctx.message.clean_content.replace('@', '')[:90]
         random.seed(message)
         name = random.choice(self.namess)
+        random.seed()
         for nick in self.names_exp:	
             for word in message.split():	
                 if str(word).lower().find(str(nick).lower()) != -1:	
