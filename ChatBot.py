@@ -40,7 +40,8 @@ class ChatBot(commands.Bot, ABC):
             content = response.content.decode('utf8').replace("'", '"')
             data = json.loads(content)
             AdditionalMethods.add_to_buffer("e", ctx.author.display_name + ", " + AdditionalMethods.parse_response_query(data), ctx.author, "SLONB0T")
-        except:
+        except Exception as e:
+            print(e)
             AdditionalMethods.add_to_buffer("e", ctx.author.display_name + ", На данный момент чатбот не доступен roflanPominy", ctx.author, "SLONB0T")
 
 bot = ChatBot()
