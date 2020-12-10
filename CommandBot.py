@@ -1154,9 +1154,11 @@ class CommandsBot(commands.Bot, ABC):
                                 res = res.replace(word, '*' * len(word))
                     AdditionalMethods.add_to_buffer("e", f'{emote} {res[:200]} {emote}', ctx.author, 'music')
         except AttributeError:
-            AdditionalMethods.add_to_buffer("e", nick + ', песня не найдена Sadge', ctx.author, 'music')
+            pass
+            #AdditionalMethods.add_to_buffer("e", nick + ', песня не найдена Sadge', ctx.author, 'music')
         except TypeError:
-            AdditionalMethods.add_to_buffer("e", nick + ', не удалось выполнить поиск. Попробуйте ещё раз PepoG', ctx.author, 'music')
+            pass
+            #AdditionalMethods.add_to_buffer("e", nick + ', не удалось выполнить поиск. Попробуйте ещё раз PepoG', ctx.author, 'music')
 
 subprocess.Popen([sys.executable, 'ChatBot.py'])
 subprocess.Popen([sys.executable, 'BufferCleaner.py'])
