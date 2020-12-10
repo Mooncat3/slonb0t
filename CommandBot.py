@@ -42,7 +42,7 @@ class CommandsBot(commands.Bot, ABC):
         self.seekers = []
         self.logs = []
         self.namess = []
-        self.names_exp = []
+        self.names_exp = self.initial_channels
         self.blbl = []
         self.ii = 0
         with open('data/blacklist.txt', encoding='utf-8') as f:
