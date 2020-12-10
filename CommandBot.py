@@ -108,53 +108,43 @@ class CommandsBot(commands.Bot, ABC):
     
     async def check_mess(self, user, socket, nick):
         try:
-            cc = requests.post("https://sl0n.herokuapp.com/stats/jesusavgn",
-                            data={'type': 'clear', 'nickname': user},
-                            headers={"Authorization": "y5IArL6S&%%G(69G"})
+            requests.post("https://sl0n.herokuapp.com/stats/jesusavgn", data={'type': 'clear', 'nickname': user}, headers=config.head)
             Client_ID = 'kimne78kx3ncx6brgo4mv6wki5h1ko'
             OAUTH = 'l4tt0z3a94edvjo3kbs0c3s4qimpsp'
-            url = 'https://gql.twitch.tv/gql'
+            url = 'https://api.twitch.tv/gql'
             head = {'Authorization': f'OAuth {OAUTH}', 'Client-ID': Client_ID}
             head_2 = {'Authorization': f'Bearer {OAUTH}', 'Client-ID': Client_ID}
-            a = []
-            url_2 = 'https://api.twitch.tv/helix/users?login=' + user
+            hash_name = '2c484f8a5ff63f06732707c8ca989083e46b2aa81a03b02e7ac7b9aa9fcba9a2'
+            url_2 = f'https://api.twitch.tv/helix/users?login={nickname}'
+            mess_count = 0
             try:
                 sender = requests.get(url_2, headers=head_2).json()['data'][0]['id']
             except IndexError:
                 sender = 0
-            start = datetime.today()
-            data_loop = start.strftime('%Y-%m-%dT%H:%M:%S.0Z')
+            data_loop = datetime.datetime.today().strftime('%Y-%m-%dT%H:%M:%SZ|0')
             while True:
                 try:
-                    json_msg = [{"operationName":"ViewerCardModLogsMessagesBySender","variables":{"senderID":sender,"channelLogin":"jesusavgn","cursor":data_loop+"|12600c60-246e-4cc0-8b7b-0380aa0e5329","includeAutoModCaughtMessages":True},"extensions":{"persistedQuery":{"version":1,"sha256Hash":"2c484f8a5ff63f06732707c8ca989083e46b2aa81a03b02e7ac7b9aa9fcba9a2"}}}]
-                    r = requests.post(url, headers=head, json=json_msg)
-                    r_json = r.json()[0]['data']['channel']['modLogs']['messagesBySender']['edges']
-                    if len(r_json) < 2:
+                    json_msg = [{"operationName":"ViewerCardModLogsMessagesBySender","variables":{"senderID":sender,"channelLogin":"jesusavgn","cursor":data_loop,"includeAutoModCaughtMessages":True},"extensions":{"persistedQuery":{"version":1,"sha256Hash":hash_name}}}]
+                    r = requests.post(url, headers=head, json=json_msg).json()[0]['data']['channel']['modLogs']['messagesBySender']['edges']
+                    if len(r) == 0:
                         break
-                    for b in r_json:
-                        try:
-                            a.append(b['node']['sentAt'])
-                        except:
-                            pass
+                    a = [b['cursor'] for b in r if 'sentAt' in b['node']]
                     data_loop = a[-1]
-                except Exception as e:
-                    print(e)
-            mess_count = len(set(a))
-            ee = requests.post("https://sl0n.herokuapp.com/stats/jesusavgn",
-                            data={'type': 'add', 'nickname': user, 'count': mess_count},
-                            headers={"Authorization": "y5IArL6S&%%G(69G"})
-            await socket.send_privmsg(config.CHAN, f'{nick}, Сообщения пользователя {user}: {mess_count}')
+                    mess_count += len(a)
+                    print(mess_count)
+                except:
+                    break
+            requests.post("https://sl0n.herokuapp.com/stats/jesusavgn", data={'type': 'add', 'nickname': user, 'count': mess_count}, headers=config.head)
+            await socket.send_privmsg(config.CHAN, f'{nick}, Пользователь {user} написал {mess_count} сообщений в чате!')
         except KeyError:
-            await socket.send_privmsg(config.CHAN, f'{nick}, WeirdChamp')
+            await socket.send_privmsg(config.CHAN, f'{nick}, попробуйте другой ник WeirdChamp')
                                       
     async def event_ready(self):
         print(f'Ready {str(self.__class__.__name__)} | {self.nick} on {self.initial_channels[0]}')
         await self.synch()
 
     async def synch(self):
-        self.seekers = \
-        requests.get(config.api_url + "/seekers/jesusavgn", headers={"Authorization": "y5IArL6S&%%G(69G"}).json()[
-            'answer']
+        self.seekers = requests.get(config.api_url + "/seekers/jesusavgn", headers=config.head).json()['answer']
 
     async def event_message(self, message):
         nickname = message.author.name
@@ -231,9 +221,9 @@ class CommandsBot(commands.Bot, ABC):
                                 await self._ws.send_privmsg(config.CHAN,
                                                             f"/w {f} {nickname} отлетел на {Settings.get_timeout()}")
                             await self._ws.send_privmsg(config.CHAN,
-                                                        f"/timeout {nickname} {Settings.get_timeout()} спам, automated by SLONB0T")
+                                                        f"/timeout {nickname} {Settings.get_timeout()} Spam, automated by SLONB0T")
                             await self._ws.send_privmsg(config.CHAN,
-                                                        f"/w {nickname} Вы получили слишком много предупреждений и временно отстраняетесь от чата MrDestructoid")
+                                                        f"/w {nickname} Вы получили слишком много предупреждений и временно отстраняетесь от чата")
                         else:
                             self.spammers[nickname]["worned"] += 1
                             stringer += f"был предупреждён {self.spammers[nickname]['worned']} из {Settings.get_attentions()} раз с настройками: |norm: {Settings.get_norm()}, maxmesses: {Settings.get_max_messes()}, emojimode: {Settings.get_mod()}|"
@@ -241,11 +231,11 @@ class CommandsBot(commands.Bot, ABC):
                                 await self._ws.send_privmsg(config.CHAN,
                                                             f"/w {f} {nickname} был предупреждён {self.spammers[nickname]['worned']} из {Settings.get_attentions()} раз")
                             await self._ws.send_privmsg(config.CHAN,
-                                                        f"/w {nickname} вы слишком часто отправляете сообщения на канале Jesusavgn, это {self.spammers[nickname]['worned']} из {Settings.get_attentions()} предупреждений MrDestructoid")
+                                                        f"/w {nickname} Вы слишком часто отправляете сообщения на канале {self.initial_channels[0]}, это {self.spammers[nickname]['worned']} из {Settings.get_attentions()} предупреждений!")
                         requests.post(config.api_url + "/logs/jesusavgn",
                                       data={"log": stringer.encode(
                                           "utf-8"), "nickname": nickname, "warns": {self.spammers[nickname]['worned']},
-                                          "time": time.time()}, headers={"Authorization": "y5IArL6S&%%G(69G"})
+                                          "time": time.time()}, headers=config.head)
                         self.spammers[nickname]["log"].clear()
                     elif time.time() - self.spammers[nickname]["time"] >= Settings.get_norm():
                         self.spammers[nickname]["time"] = time.time()
@@ -255,6 +245,7 @@ class CommandsBot(commands.Bot, ABC):
             if not AdditionalMethods.vip(message.author.is_mod, nickname):
                 return
         await self.handle_commands(message)
+
     '''
     @commands.command(name="stat")
     async def stat(self, ctx):
@@ -263,33 +254,24 @@ class CommandsBot(commands.Bot, ABC):
         if len(message) == 0:
             message = nickname
         answer = json.loads(requests.get(config.api_url + f"/stats/jesusavgn?nickname={message}",
-                                         headers={"Authorization": "y5IArL6S&%%G(69G"}).content.decode("utf-8"))
+                                         headers=config.head).content.decode("utf-8"))
         if answer['type'] == 'success':
             if ctx.message.clean_content == "info":
-                AdditionalMethods.add_to_buffer("c",
-                                                ctx.author.display_name + f", Данные бота актуальны с {answer['start_date']}, сообщения актуальны с 2016 года",
-                                                ctx.author,
-                                                "stat")
+                AdditionalMethods.add_to_buffer("c", ctx.author.display_name + f", Данные бота актуальны с {answer['start_date']}, сообщения актуальны с 2016 года", ctx.author, "stat")
             else:
                 answer_str = ""
                 if 'count' in answer['answer'].keys():
-                    answer_str += "Сообщения " + message + ": " + str(answer['answer']['count']) + " | "
+                    answer_str += "Пользователь " + message + " написал " + str(answer['answer']['count']) + " сообщений в чат | "
                 if 'watch_time_offline' in answer['answer'].keys():
                     answer_str += "Оффлайн: " + AdditionalMethods.parse_time(answer['answer']['watch_time_offline'] * 60, False) + " | "
                 if 'watch_time_online' in answer['answer'].keys():
                     answer_str += "Онлайн: " + AdditionalMethods.parse_time(answer['answer']['watch_time_online'] * 60, False) + " | "
-                AdditionalMethods.add_to_buffer("c",
-                                                ctx.author.display_name + f", {answer_str[:len(answer_str)-3]}",
-                                                ctx.author,
-                                                "stat")
+                AdditionalMethods.add_to_buffer("c", ctx.author.display_name + f", {answer_str[:-3]}", ctx.author, "stat")
         else:
-            AdditionalMethods.add_to_buffer("s",
-                                            f"{nickname}, {message} не найден, поставлен на сканирование peepoJuiceSpin",
-                                            ctx.author,
-                                            "stat")
+            AdditionalMethods.add_to_buffer("s",f"{nickname}, {message} не найден, поставлен на сканирование peepoJuiceSpin", ctx.author, "stat")
             asyncio.get_event_loop().create_task(self.check_mess(message, self._ws, nickname))
-            
     '''
+
     @commands.command(name='кто')	
     async def kto(self, ctx):	
         message = ctx.message.clean_content.replace('@', '')[:90]
@@ -300,7 +282,7 @@ class CommandsBot(commands.Bot, ABC):
             for word in message.split():	
                 if str(word).lower().find(str(nick).lower()) != -1:	
                     message = message.replace(word, nick)	
-        AdditionalMethods.add_to_buffer("e",f'{name} {message} PogO', ctx.author, "кто")
+        AdditionalMethods.add_to_buffer("e",f'{name} {message} OpieOP', ctx.author, "кто")
 
     @commands.command(name='mute')
     async def mute(self, ctx):
@@ -319,7 +301,7 @@ class CommandsBot(commands.Bot, ABC):
                 del self.blbl[self.blbl.index(messagee.lower())]
             with open('data/blacklist.txt', mode='r', encoding='utf-8') as textr:
                 text_pre = textr.read()
-            if text_pre.find(messagee.lower()+'\n') != -1:
+            if text_pre.find(messagee.lower()) != -1:
                 text_pre = text_pre.replace(messagee.lower()+'\n', '')
             with open('data/blacklist.txt', mode='w', encoding='utf-8') as textw:
                 textw.write(text_pre)
@@ -331,8 +313,7 @@ class CommandsBot(commands.Bot, ABC):
             nickname = ctx.author.name
             if not nickname in self.seekers:
                 self.seekers.append(nickname)
-                if requests.post(config.api_url + "/seekers/jesusavgn", data={'nick': nickname, 'enabled': 1},
-                                 headers={"Authorization": "y5IArL6S&%%G(69G"}).json()['type'] == "error":
+                if requests.post(config.api_url + "/seekers/jesusavgn", data={'nick': nickname, 'enabled': 1}, headers=config.head).json()['type'] == "error":
                     AdditionalMethods.add_to_buffer("s",
                                                     f"Вы подписаны на уведомления о спаме! (это изменение не было сохраненно в постоянную базу данных)",
                                                     ctx.author,
@@ -351,7 +332,7 @@ class CommandsBot(commands.Bot, ABC):
             else:
                 self.seekers.remove(nickname)
                 if requests.post(config.api_url + "/seekers/jesusavgn", data={'nick': nickname, 'enabled': 0},
-                                 headers={"Authorization": "y5IArL6S&%%G(69G"}).json()['type'] == "error":
+                                 headers=config.head).json()['type'] == "error":
                     AdditionalMethods.add_to_buffer("s",
                                                     f"Вы отписаны от уведомлений о спаме! (это изменение не было сохраненно в постоянную базу данных)",
                                                     ctx.author,
