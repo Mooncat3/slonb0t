@@ -108,7 +108,7 @@ class CommandsBot(commands.Bot, ABC):
     
     async def check_mess(self, user, socket, nick):
         try:
-            requests.post("https://sl0n.herokuapp.com/stats/jesusavgn", data={'type': 'clear', 'nickname': user}, headers=config.head)
+            requests.post(f"https://sl0n.herokuapp.com/stats/{self.initial_channels[0]}", data={'type': 'clear', 'nickname': user}, headers=config.head)
             Client_ID = 'kimne78kx3ncx6brgo4mv6wki5h1ko'
             OAUTH = 'l4tt0z3a94edvjo3kbs0c3s4qimpsp'
             url = 'https://api.twitch.tv/gql'
@@ -124,7 +124,7 @@ class CommandsBot(commands.Bot, ABC):
             data_loop = datetime.datetime.today().strftime('%Y-%m-%dT%H:%M:%SZ|0')
             while True:
                 try:
-                    json_msg = [{"operationName":"ViewerCardModLogsMessagesBySender","variables":{"senderID":sender,"channelLogin":"jesusavgn","cursor":data_loop,"includeAutoModCaughtMessages":True},"extensions":{"persistedQuery":{"version":1,"sha256Hash":hash_name}}}]
+                    json_msg = [{"operationName":"ViewerCardModLogsMessagesBySender","variables":{"senderID":sender,"channelLogin":self.initial_channels[0],"cursor":data_loop,"includeAutoModCaughtMessages":True},"extensions":{"persistedQuery":{"version":1,"sha256Hash":hash_name}}}]
                     r = requests.post(url, headers=head, json=json_msg).json()[0]['data']['channel']['modLogs']['messagesBySender']['edges']
                     if len(r) == 0:
                         break
@@ -134,7 +134,7 @@ class CommandsBot(commands.Bot, ABC):
                     print(mess_count)
                 except:
                     break
-            requests.post("https://sl0n.herokuapp.com/stats/jesusavgn", data={'type': 'add', 'nickname': user, 'count': mess_count}, headers=config.head)
+            requests.post(f"https://sl0n.herokuapp.com/stats/{self.initial_channels[0]}", data={'type': 'add', 'nickname': user, 'count': mess_count}, headers=config.head)
             await socket.send_privmsg(config.CHAN, f'{nick}, Пользователь {user} написал {mess_count} сообщений в чате!')
         except KeyError:
             await socket.send_privmsg(config.CHAN, f'{nick}, попробуйте другой ник WeirdChamp')
@@ -144,25 +144,23 @@ class CommandsBot(commands.Bot, ABC):
         await self.synch()
 
     async def synch(self):
-        self.seekers = requests.get(config.api_url + "/seekers/jesusavgn", headers=config.head).json()['answer']
+        self.seekers = requests.get(config.api_url + f"/seekers/{self.initial_channels[0]}", headers=config.head).json()['answer']
 
     async def event_message(self, message):
         nickname = message.author.name
         nnn = message.author.display_name
-        if nickname == 'moobot' or nickname == 'slonb0t' or nickname == 'kryabot':
-            pass
-        elif nnn not in self.namess:
-            if self.ii > 10:
+        if nnn not in self.namess and nickname != 'moobot' and nickname != 'slonb0t' and nickname != 'kryabot':
+            if self.ii > 8:
                 del self.namess[0]
             self.namess.append(nnn)
             self.ii += 1
         if nnn not in self.names_exp:
             self.names_exp.append(nnn)
         try:
-            badges = message.author.tags['badges']
+            badge = message.author.tags['badges'][:3]
         except KeyError:
-            badges = ''
-        if not AdditionalMethods.vip(message.author.is_mod, nickname) and not nickname == "slonb0t" and not badges[:3] == 'vip':
+            badge = ''
+        if not AdditionalMethods.vip(message.author.is_mod, nickname) and not nickname == "slonb0t" and not badge == 'vip':
             docheck = True
             mod = Settings.get_mod()
             if mod != "all" and (mod == "skip" or mod == "skip_with"):
@@ -232,7 +230,7 @@ class CommandsBot(commands.Bot, ABC):
                                                             f"/w {f} {nickname} был предупреждён {self.spammers[nickname]['worned']} из {Settings.get_attentions()} раз")
                             await self._ws.send_privmsg(config.CHAN,
                                                         f"/w {nickname} Вы слишком часто отправляете сообщения на канале {self.initial_channels[0]}, это {self.spammers[nickname]['worned']} из {Settings.get_attentions()} предупреждений!")
-                        requests.post(config.api_url + "/logs/jesusavgn",
+                        requests.post(config.api_url + f"/logs/{self.initial_channels[0]}",
                                       data={"log": stringer.encode(
                                           "utf-8"), "nickname": nickname, "warns": {self.spammers[nickname]['worned']},
                                           "time": time.time()}, headers=config.head)
@@ -245,7 +243,6 @@ class CommandsBot(commands.Bot, ABC):
             if not AdditionalMethods.vip(message.author.is_mod, nickname):
                 return
         await self.handle_commands(message)
-
     '''
     @commands.command(name="stat")
     async def stat(self, ctx):
@@ -253,7 +250,7 @@ class CommandsBot(commands.Bot, ABC):
         message = ctx.message.clean_content.replace('@', '').lower()
         if len(message) == 0:
             message = nickname
-        answer = json.loads(requests.get(config.api_url + f"/stats/jesusavgn?nickname={message}",
+        answer = json.loads(requests.get(config.api_url + f"/stats/{self.initial_channels[0]}?nickname={message}",
                                          headers=config.head).content.decode("utf-8"))
         if answer['type'] == 'success':
             if ctx.message.clean_content == "info":
@@ -271,7 +268,6 @@ class CommandsBot(commands.Bot, ABC):
             AdditionalMethods.add_to_buffer("s",f"{nickname}, {message} не найден, поставлен на сканирование peepoJuiceSpin", ctx.author, "stat")
             asyncio.get_event_loop().create_task(self.check_mess(message, self._ws, nickname))
     '''
-
     @commands.command(name='кто')	
     async def kto(self, ctx):	
         message = ctx.message.clean_content.replace('@', '')[:90]
@@ -313,7 +309,7 @@ class CommandsBot(commands.Bot, ABC):
             nickname = ctx.author.name
             if not nickname in self.seekers:
                 self.seekers.append(nickname)
-                if requests.post(config.api_url + "/seekers/jesusavgn", data={'nick': nickname, 'enabled': 1}, headers=config.head).json()['type'] == "error":
+                if requests.post(config.api_url + f"/seekers/{self.initial_channels[0]}", data={'nick': nickname, 'enabled': 1}, headers=config.head).json()['type'] == "error":
                     AdditionalMethods.add_to_buffer("s",
                                                     f"Вы подписаны на уведомления о спаме! (это изменение не было сохраненно в постоянную базу данных)",
                                                     ctx.author,
@@ -331,7 +327,7 @@ class CommandsBot(commands.Bot, ABC):
                 AdditionalMethods.add_to_buffer("s", f"Вы не подписаны на уведомления о спаме ResidentSleeper", ctx.author, "unseek")
             else:
                 self.seekers.remove(nickname)
-                if requests.post(config.api_url + "/seekers/jesusavgn", data={'nick': nickname, 'enabled': 0},
+                if requests.post(config.api_url + f"/seekers/{self.initial_channels[0]}", data={'nick': nickname, 'enabled': 0},
                                  headers=config.head).json()['type'] == "error":
                     AdditionalMethods.add_to_buffer("s",
                                                     f"Вы отписаны от уведомлений о спаме! (это изменение не было сохраненно в постоянную базу данных)",
