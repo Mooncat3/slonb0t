@@ -1,7 +1,5 @@
 from twitchioc.ext import commands
 import json
-from requests.adapters import HTTPAdapter
-from requests.packages.urllib3.util.retry import Retry
 from abc import ABC
 import AdditionalMethods
 import re
@@ -17,8 +15,8 @@ class ChatBot(commands.Bot, ABC):
     async def event_ready(self):
         print(f'Ready ChatBot | {config.BOT} on {config.CHANNELS[0]}')
     
-    # async def event_command_error(self, ctx, error):
-        # pass
+    async def event_command_error(self, ctx, error):
+        pass
     
     async def event_message(self, message):
         nickname = message.author.name
@@ -27,7 +25,7 @@ class ChatBot(commands.Bot, ABC):
         if nickname in blacklist and not AdditionalMethods.vip(message.author.is_mod, nickname):
             return
         await self.handle_commands(message)
-        
+    '''
     @commands.command(name='SLONB0T', aliases=["slonb0t,", "slonb0t"])
     async def chat(self, ctx):
         message = ctx.message.clean_content
@@ -36,13 +34,8 @@ class ChatBot(commands.Bot, ABC):
         url = "https://aiproject.ru/api/"
         query = {"ask": message, "userid": nickname, "key": ""}
         jsonquery = json.encoder.JSONEncoder.encode(self=json.encoder.JSONEncoder(), o=query)
-        session = requests.Session()
-        retry = Retry(connect=3, backoff_factor=0.5)
-        adapter = HTTPAdapter(max_retries=retry)
-        session.mount('http://', adapter)
-        session.mount('https://', adapter)
-        r = json.loads(session.post(url, data={"query": jsonquery}).content.decode('utf8'))
+        r = json.loads(requests.post(url, data={"query": jsonquery}).content.decode('utf8'))
         AdditionalMethods.add_to_buffer("e", ctx.author.display_name + ", " + AdditionalMethods.parse_response_query(r), ctx.author, "SLONB0T")
-
+    '''
 bot = ChatBot()
 bot.run()
