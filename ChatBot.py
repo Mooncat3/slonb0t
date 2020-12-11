@@ -34,7 +34,7 @@ class ChatBot(commands.Bot, ABC):
         url = "https://aiproject.ru/api/"
         query = {"ask": message, "userid": nickname, "key": ""}
         jsonquery = json.encoder.JSONEncoder.encode(self=json.encoder.JSONEncoder(), o=query)
-        r = json.loads(requests.post(url, data={"query": query}).content.decode('utf8'))
+        r = json.loads(requests.post(url, data={"query": jsonquery}).content.decode('utf8'))
         AdditionalMethods.add_to_buffer("e", ctx.author.display_name + ", " + AdditionalMethods.parse_response_query(r), ctx.author, "SLONB0T")
 
 bot = ChatBot()
