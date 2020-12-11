@@ -34,16 +34,8 @@ class ChatBot(commands.Bot, ABC):
         url = "https://aiproject.ru/api/"
         query = {"ask": message, "userid": nickname, "key": ""}
         jsonquery = json.encoder.JSONEncoder.encode(self=json.encoder.JSONEncoder(), o=query)
-        try:
-            with requests.sessions.Session() as session:
-                response = session.request(method="post", url=url, data={"query": jsonquery}, timeout=3)
-            content = response.content.decode('utf8').replace("'", '"')
-            data = json.loads(content)
-            AdditionalMethods.add_to_buffer("e", ctx.author.display_name + ", " + AdditionalMethods.parse_response_query(data), ctx.author, "SLONB0T")
-        except:
-            pass
-            #print(e)
-            #AdditionalMethods.add_to_buffer("e", ctx.author.display_name + ", На данный момент чатбот не доступен roflanPominy", ctx.author, "SLONB0T")
+        r = json.loads(requests.post(url, data={"query": query}).content.decode('utf8'))
+        AdditionalMethods.add_to_buffer("e", ctx.author.display_name + ", " + AdditionalMethods.parse_response_query(r), ctx.author, "SLONB0T")
 
 bot = ChatBot()
 bot.run()
