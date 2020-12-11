@@ -15,8 +15,8 @@ class ChatBot(commands.Bot, ABC):
     async def event_ready(self):
         print(f'Ready ChatBot | {config.BOT} on {config.CHANNELS[0]}')
     
-    async def event_command_error(self, ctx, error):
-        pass
+    # async def event_command_error(self, ctx, error):
+        # pass
     
     async def event_message(self, message):
         nickname = message.author.name
