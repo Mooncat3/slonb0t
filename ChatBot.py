@@ -1,5 +1,7 @@
 from twitchioc.ext import commands
 import json
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
 from abc import ABC
 import AdditionalMethods
 import re
@@ -34,7 +36,12 @@ class ChatBot(commands.Bot, ABC):
         url = "https://aiproject.ru/api/"
         query = {"ask": message, "userid": nickname, "key": ""}
         jsonquery = json.encoder.JSONEncoder.encode(self=json.encoder.JSONEncoder(), o=query)
-        r = json.loads(requests.post(url, data={"query": jsonquery}).content.decode('utf8'))
+        session = requests.Session()
+        retry = Retry(connect=3, backoff_factor=0.5)
+        adapter = HTTPAdapter(max_retries=retry)
+        session.mount('http://', adapter)
+        session.mount('https://', adapter)
+        r = json.loads(session.post(url, data={"query": jsonquery}).content.decode('utf8'))
         AdditionalMethods.add_to_buffer("e", ctx.author.display_name + ", " + AdditionalMethods.parse_response_query(r), ctx.author, "SLONB0T")
 
 bot = ChatBot()
