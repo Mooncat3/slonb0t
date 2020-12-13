@@ -1,0 +1,5 @@
+{
+    "embarrass": "peepoShy",
+    "smile": "YEP",
+    "kiss": "peepoLove"
+}
