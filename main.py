@@ -15,63 +15,17 @@ class CommandsBot(commands.Bot, ABC):
         super().__init__(irc_token=f'oauth:{config.OAUTH}',
                          client_id=config.CLIENT_ID, nick=config.BOT, prefix='!',
                          initial_channels=config.CHANNELS)
+        self.smiles_is_running = False
         self.json_bal = {}
-        self.roulette_is_running = False
-        self.roulette_nicknames = []
+        self.smiles_nicknames = []
         self.name_cur = 'поинтов'
-        self.black = []
-        self.red = []
-        self.yellow = []
-        self.green = []
+        self.smiles_list = json.loads(open('SMILES.txt').read())
 
     # async def event_command_error(self, ctx, error):
     # pass
 
     async def event_ready(self):
         print(f'Ready {str(self.__class__.__name__)} | {self.nick} on {self.initial_channels[0]}')
-
-    async def rand(self, socket):
-        await asyncio.sleep(30)
-        if len(self.roulette_nicknames) < 2:
-            if len(self.roulette_nicknames) == 1:
-                self.add_points(self.roulette_nicknames[0][0], self.roulette_nicknames[0][1])
-            await socket.send_privmsg(config.CHAN, "Никто не участвует, ну и ладно Happy")
-        else:
-            koef = 0
-            res_list = []
-            result = ''
-            v = random.randint(0, 100)
-            if 0 < v <= 50:
-                result = 'чёрное'
-                koef = 2
-                res_list = self.black
-            if 50 < v <= 80:
-                result = 'жёлтое'
-                koef = 3
-                res_list = self.yellow
-            if 80 < v <= 95:
-                result = 'красное'
-                koef = 5
-                res_list = self.red
-            if 95 < v <= 100:
-                result = 'зелёное'
-                koef = 50
-                res_list = self.green
-            for names in res_list:
-                self.add_points(names['nick'], names['count'] * koef)
-            winners = [user['nick'] for user in res_list]
-            if len(winners) != 0:
-                winners = (', '.join(winners)) + ' peepoClap'
-            else:
-                winners = 'нет победителей Sadge'
-            await socket.send_privmsg(config.CHAN,
-                                      f"Выпадает {result} (x{koef}) | Победители: {winners}")
-        self.roulette_nicknames.clear()
-        self.roulette_is_running = False
-        self.black.clear()
-        self.red.clear()
-        self.yellow.clear()
-        self.green.clear()
 
     async def event_message(self, ctx):
         self.json_bal = json.loads(open('money.json').read())
@@ -153,9 +107,7 @@ class CommandsBot(commands.Bot, ABC):
         if len(mess) != 0:
             nickname = mess
         check = self.check_balance(nickname)
-        AdditionalMethods.add_to_buffer("s",
-                                        f'Баланс {nickname}: {check} {self.name_cur}',
-                                        ctx.author, "баланс")
+        AdditionalMethods.add_to_buffer("s", f'Баланс {nickname}: {check} {self.name_cur}', ctx.author, "баланс")
 
     @commands.command(name='казино')
     async def casino(self, ctx):
@@ -169,50 +121,62 @@ class CommandsBot(commands.Bot, ABC):
             if casino_result_2[0] == casino_result[0]:
                 koef = casino_result_2[1]
                 AdditionalMethods.add_to_buffer("e",
-                                                f'{nick} поставил на {casino_result[0]}, выпало {casino_result_2[0]}, '
-                                                f'выигрыш: {round(mess * koef) - mess} PogU',
-                                                ctx.author, "казино")
+                                                f'{nick} поставил {mess} на {casino_result[0]} (x{koef}), '
+                                                f'выпало {casino_result_2[0]}, '
+                                                f'выигрыш: {round(mess * koef) - mess} PogU', ctx.author, "казино")
                 self.add_points(nick, mess * koef)
-            else:
-                '''
-                AdditionalMethods.add_to_buffer("s",
-                                                f'{nick} поставил на {casino_result[0]}, выпало {casino_result_2[0]} '
-                                                f'Lohich',
-                                                ctx.author, "казино")
-                '''
-                pass
         else:
             AdditionalMethods.add_to_buffer("e",
                                             f'{nick}, недостаточно {self.name_cur} Sadge',
                                             ctx.author, "казино")
 
-    @commands.command(name='roulettepoints')
-    async def roulette(self, ctx):
-        self.roulette_is_running = True
-        AdditionalMethods.add_to_buffer("e",
-                                        "Рулетка началась! У вас есть 20 секунд! Чтобы сделать ставку, введите "
-                                        "!bet на (чёрное, жёлтое, красное, зелёное) (сумма)",
-                                        ctx.author, "roulettepoints")
-        asyncio.get_event_loop().create_task(self.rand(self._ws))
-
     @commands.command(name='bet')
     async def bet(self, ctx):
-        mess = ctx.message.clean_content.replace('ё', 'е')
         nick = ctx.author.display_name
-        stavka_num = int(mess.split()[-1])
-        stavka_word = mess.replace(f' {stavka_num}', '')
-        b = self.check_balance(nick)
-        if 0 < stavka_num <= b and self.roulette_is_running and (nick, stavka_num) not in self.roulette_nicknames:
-            if stavka_word == 'на черное':
-                self.black.append({'nick': nick, 'count': stavka_num})
-            if stavka_word == 'на желтое':
-                self.yellow.append({'nick': nick, 'count': stavka_num})
-            if stavka_word == 'на красное':
-                self.red.append({'nick': nick, 'count': stavka_num})
-            if stavka_word == 'на зеленое':
-                self.green.append({'nick': nick, 'count': stavka_num})
-            self.delete_points(nick, stavka_num)
-            self.roulette_nicknames.append((nick, stavka_num))
+        if self.smiles_is_running:
+            mess = ctx.message.clean_content
+            mess_split = mess.split()
+            count = mess_split[-1]
+            smiles_user = mess.replace(f' {count}', '').split()
+            if len(smiles_user) < 4:
+                coefficient = len(smiles_user) / (len(smiles_user) - 0.2)
+                print(coefficient)
+                self.delete_points(nick, int(count))
+                self.smiles_nicknames.append({'nick': nick, 'smiles'
+                                                            '': smiles_user, 'count': int(count), 'coeff': coefficient})
+
+    async def rand(self, socket):
+        await asyncio.sleep(40)
+        s = socket.send_privmsg
+        if len(self.smiles_nicknames) < 2:
+            if len(self.smiles_nicknames) == 1:
+                self.add_points(self.smiles_nicknames[0]['nick'], self.smiles_nicknames[0]['count'])
+            await s(config.CHAN, "Никто не участвует, ну и ладно Happy")
+        else:
+            smiles_result = random.sample(self.smiles_list, 3)
+            for user in self.smiles_nicknames:
+                i = 0
+                for smile in user['smiles']:
+                    for smile_2 in smiles_result:
+                        if smile == smile_2:
+                            i += 1
+                koef = (i ** i + i) * user['coeff']
+                self.add_points(user['nick'], round(user['count'] * koef))
+                win_sum = round((user['count'] * koef) - user['count'])
+                if win_sum != 0:
+                    await s(config.CHAN, f"/w {user['nick']} Вы выиграли {win_sum} {self.name_cur}!"
+                                         f" | Ваш баланс: {self.check_balance(user['nick'])}")
+            await socket.send_privmsg(config.CHAN, ' '.join(smiles_result))
+            self.smiles_nicknames.clear()
+            self.smiles_is_running = False
+
+    @commands.command(name='casinosmiles')
+    async def casinosmiles(self, ctx):
+        if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
+            self.smiles_is_running = True
+            AdditionalMethods.add_to_buffer("e", "Рулетка смаилов началась! Чтобы сделать ставку, введите "
+                                            "!bet (1-3 BTTV или FFZ смаила) (сумма)", ctx.author, "casinosmiles")
+            asyncio.get_event_loop().create_task(self.rand(self._ws))
 
 
 subprocess.Popen([sys.executable, 'BufferCleaner.py'])
