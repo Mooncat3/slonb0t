@@ -545,7 +545,7 @@ class CommandsBot(commands.Bot, ABC):
         new_year = datetime(2020, 12, 31, 23, 59, 59)
         t = datetime.today()
         res = (new_year - timedelta(days=t.day, minutes=t.minute, hours=t.hour)) - timedelta(hours=3)
-        AdditionalMethods.add_to_buffer("e", f'{nickname}, Новый Год через {res.day} дня {res.hour} часа и {res.minute} минуты FeelsRainMan', ctx.author, "нг")
+        AdditionalMethods.add_to_buffer("e", f'{nickname}, Новый Год через {res.day} дней {res.hour} часов и {res.minute} минут FeelsRainMan', ctx.author, "нг")
                                                        
     @commands.command(name='анекдот')
     async def anekdot(self, ctx):
