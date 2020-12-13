@@ -56,7 +56,6 @@ class CommandsBot(commands.Bot, ABC):
         if (nick in self.json_bal and nick_2 in self.json_bal) or nick_2 not in self.json_bal:
             self.delete_points(nick, count)
             self.add_points(nick_2, count)
-        return self.json_bal[nick]
 
     def delete_points(self, nick, count):
         if nick in self.json_bal:
@@ -90,16 +89,16 @@ class CommandsBot(commands.Bot, ABC):
     async def perevod(self, ctx):
         nickname = ctx.author.display_name
         mess = ctx.message.clean_content.replace('@', '').split()
-        t = self.tran(nickname, mess[0], int(mess[-1]))
-        if not t:
-            AdditionalMethods.add_to_buffer("s",
-                                            f'{ctx.author.display_name}, недостаточно {self.name_cur} для перевода или '
-                                            f'введено число меньше нуля',
+        if len(mess) == 0:
+            AdditionalMethods.add_to_buffer("s", f'{ctx.author.display_name}, введите !transit [nickname] [points]',
                                             ctx.author, "transit")
+        elif not self.tran(nickname, mess[0], int(mess[-1])):
+            AdditionalMethods.add_to_buffer("s", f'{ctx.author.display_name}, недостаточно {self.name_cur} для '
+                                            f'перевода или введено число меньше нуля', ctx.author, "transit")
         else:
-            AdditionalMethods.add_to_buffer("s",
-                                            f'{ctx.author.display_name} перевёл {mess[0]} {mess[-1]} {self.name_cur}',
-                                            ctx.author, "перевести")
+            AdditionalMethods.add_to_buffer("s", f'{ctx.author.display_name} перевёл {mess[0]} {mess[-1]} '
+                                            f'{self.name_cur}', ctx.author, "transit")
+
     '''
     @commands.command(name='points')
     async def balance(self, ctx):
