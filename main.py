@@ -139,16 +139,16 @@ class CommandsBot(commands.Bot, ABC):
             count = mess_split[-1]
             smiles_user = mess.replace(f' {count}', '').split()
             if len(smiles_user) < 4:
-                coefficient = len(smiles_user) / (len(smiles_user) - 0.2)
+                coefficient = 5 / len(smiles_user)
                 print(coefficient)
                 self.delete_points(nick, int(count))
                 self.smiles_nicknames.append({'nick': nick, 'smiles'
                                                             '': smiles_user, 'count': int(count), 'coeff': coefficient})
 
     async def rand(self, socket):
-        await asyncio.sleep(40)
+        await asyncio.sleep(4)
         s = socket.send_privmsg
-        if len(self.smiles_nicknames) < 2:
+        if len(self.smiles_nicknames) > 2:
             if len(self.smiles_nicknames) == 1:
                 self.add_points(self.smiles_nicknames[0]['nick'], self.smiles_nicknames[0]['count'])
             await s(config.CHAN, "Никто не участвует, ну и ладно Happy")
@@ -159,12 +159,11 @@ class CommandsBot(commands.Bot, ABC):
                 for smile in user['smiles']:
                     for smile_2 in smiles_result:
                         if smile == smile_2:
-                            i += 1
-                koef = (i ** i + i) * user['coeff']
-                self.add_points(user['nick'], round(user['count'] * koef))
-                win_sum = round((user['count'] * koef) - user['count'])
-                if win_sum != 0:
-                    await s(config.CHAN, f"/w {user['nick']} Вы выиграли {win_sum} {self.name_cur}!"
+                            i += user['coeff']
+                res = user['count'] * i
+                self.add_points(user['nick'], res)
+                if res != 0:
+                    await s(config.CHAN, f"/w {user['nick']} Вы выиграли {res} {self.name_cur}!"
                                          f" | Ваш баланс: {self.check_balance(user['nick'])}")
             await socket.send_privmsg(config.CHAN, ' '.join(smiles_result))
             self.smiles_nicknames.clear()
