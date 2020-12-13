@@ -146,9 +146,9 @@ class CommandsBot(commands.Bot, ABC):
                                                             '': smiles_user, 'count': int(count), 'coeff': coefficient})
 
     async def rand(self, socket):
-        await asyncio.sleep(4)
+        await asyncio.sleep(30)
         s = socket.send_privmsg
-        if len(self.smiles_nicknames) > 2:
+        if len(self.smiles_nicknames) < 2:
             if len(self.smiles_nicknames) == 1:
                 self.add_points(self.smiles_nicknames[0]['nick'], self.smiles_nicknames[0]['count'])
             await s(config.CHAN, "Никто не участвует, ну и ладно Happy")
