@@ -2,6 +2,7 @@ import urllib.request
 import urllib.response
 from urllib.parse import quote
 import time
+from time import gmtime, strftime
 import json
 import rfc3339
 from datetime import datetime, timedelta
@@ -82,25 +83,19 @@ def check_active(shouldchecksettings=True) -> bool:
         dat = json.loads(str(q.read()))
         return dat['active']
     
-def parse_time(timetet: time, secs: bool) -> str:
-    rounded = ""
-    timestart = timetet
-    if timestart / 3600 >= 1:
-        rounded += f"{int(timestart / 3600)}h"
-        timestart = timestart % 3600
-    if timestart / 60 >= 1:
-        if rounded.find("h") != -1 and not secs:
-            rounded += " "
-        rounded += f"{int(timestart / 60)}m"
-        timestart = timestart % 60
-    if timestart >= 1 and (rounded.find("h") == -1 or secs):
-        if rounded.find("m") != -1 and not secs:
-            rounded += " "
-        rounded += f"{int(timestart)}s"
-    if rounded == "" and not secs:
-        return "0m"
+def parse_time(seconds: float):
+    if seconds / 32140800 >= 1:
+        return f"{int(seconds/32140800)}yr {int(strftime('%m', gmtime(seconds%32140800)))-1}mo"
+    elif int(strftime('%m', gmtime(seconds))) >= 2:
+        return f"{int(strftime('%m', gmtime(seconds)))-1}mo {int(strftime('%W', gmtime(seconds%2678400)))}wk"
+    elif int(strftime('%W', gmtime(seconds))) >= 1:
+        return f"{int(strftime('%W', gmtime(seconds)))}wk {int(strftime('%j', gmtime(seconds%604800)))-1}d"
+    elif int(strftime('%j', gmtime(seconds))) >= 2:
+        return f"{int(strftime('%j', gmtime(seconds)))-1}d {int(strftime('%H', gmtime(seconds)))}h"
+    elif int(strftime('%H', gmtime(seconds))) >= 1:
+        return f"{int(strftime('%H', gmtime(seconds)))}h {int(strftime('%M', gmtime(seconds)))}m"
     else:
-        return rounded
+        return f"{int(strftime('%M', gmtime(seconds)))}m {int(strftime('%S', gmtime(seconds)))}s"
 
 def parse_stream_stat(nickname: str, tag: str, TRASHMASSIVE: dict, author: User, date="", id=0, active=False):
     def summ_times() -> time:
@@ -112,7 +107,7 @@ def parse_stream_stat(nickname: str, tag: str, TRASHMASSIVE: dict, author: User,
 
     id = len(TRASHMASSIVE['TRASHMASS']) - 1 - id
     strim_name = TRASHMASSIVE['TRASHMASS'][id]['name']
-    strim_duration = parse_time(TRASHMASSIVE['TRASHMASS'][id]['duration'], True)
+    strim_duration = parse_time(TRASHMASSIVE['TRASHMASS'][id]['duration'])
     viewsummcount = 0
     id_game = "0"
     game_mass = []
@@ -160,7 +155,7 @@ def parse_stream_stat(nickname: str, tag: str, TRASHMASSIVE: dict, author: User,
     crash = False
     already = False
     for r in streamstat['Games']:
-        rounded = parse_time(r['time'], False)
+        rounded = parse_time(r['time'])
         if len(rounded) > 0:
             categorystr += f"{r['name']} [{rounded}]"
             if r != streamstat['Games'][len(streamstat['Games']) - 1]:
@@ -426,7 +421,6 @@ def parse_response_query(data: json) -> str:
         if data['newrubname'] in emotions:
             return data['aiml'] + " " + newrubname[data['newrubname']]
     return data['aiml'] + " catFax"
-
 
 def get_goroskop(message: str, nickname) -> str:
     # ----------------------method for getting goroskop-----------------
