@@ -260,9 +260,9 @@ class CommandsBot(commands.Bot, ABC):
                 if 'count' in answer['answer'].keys():
                     answer_str += "Пользователь " + message + " написал " + str(answer['answer']['count']) + " сообщений в чат | "
                 if 'watch_time_offline' in answer['answer'].keys():
-                    answer_str += "Оффлайн: " + AdditionalMethods.parse_time(answer['answer']['watch_time_offline'] * 60, False) + " | "
+                    answer_str += "Оффлайн: " + AdditionalMethods.parse_time(answer['answer']['watch_time_offline'] * 60) + " | "
                 if 'watch_time_online' in answer['answer'].keys():
-                    answer_str += "Онлайн: " + AdditionalMethods.parse_time(answer['answer']['watch_time_online'] * 60, False) + " | "
+                    answer_str += "Онлайн: " + AdditionalMethods.parse_time(answer['answer']['watch_time_online'] * 60) + " | "
                 AdditionalMethods.add_to_buffer("c", ctx.author.display_name + f", {answer_str[:-3]}", ctx.author, "stat")
         else:
             AdditionalMethods.add_to_buffer("s",f"{nickname}, {message} не найден, поставлен на сканирование peepoJuiceSpin", ctx.author, "stat")
