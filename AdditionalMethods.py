@@ -83,7 +83,7 @@ def check_active(shouldchecksettings=True) -> bool:
         dat = json.loads(str(q.read()))
         return dat['active']
     
-def parse_time(seconds: float):
+def parse_time(seconds: float, secs: bool = True):
     if seconds / 32140800 >= 1:
         return f"{int(seconds/32140800)}yr {int(strftime('%m', gmtime(seconds%32140800)))-1}mo"
     elif int(strftime('%m', gmtime(seconds))) >= 2:
@@ -95,7 +95,10 @@ def parse_time(seconds: float):
     elif int(strftime('%H', gmtime(seconds))) >= 1:
         return f"{int(strftime('%H', gmtime(seconds)))}h {int(strftime('%M', gmtime(seconds)))}m"
     else:
-        return f"{int(strftime('%M', gmtime(seconds)))}m {int(strftime('%S', gmtime(seconds)))}s"
+        if secs:
+            return f"{int(strftime('%M', gmtime(seconds)))}m {int(strftime('%S', gmtime(seconds)))}s"
+        else:
+            return f"{int(strftime('%M', gmtime(seconds)))}m"
 
 def parse_stream_stat(nickname: str, tag: str, TRASHMASSIVE: dict, author: User, date="", id=0, active=False):
     def summ_times() -> time:
