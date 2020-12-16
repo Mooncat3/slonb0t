@@ -131,7 +131,6 @@ class CommandsBot(commands.Bot, ABC):
                     a = [b['cursor'] for b in r if 'sentAt' in b['node']]
                     data_loop = a[-1]
                     mess_count += len(a)
-                    print(mess_count)
                 except:
                     break
             requests.post(f"https://sl0n.herokuapp.com/stats/{self.initial_channels[0]}", data={'type': 'add', 'nickname': user, 'count': mess_count}, headers=config.head)
@@ -150,7 +149,7 @@ class CommandsBot(commands.Bot, ABC):
         nickname = message.author.name
         nnn = message.author.display_name
         if nnn not in self.namess and nickname != 'moobot' and nickname != 'slonb0t' and nickname != 'kryabot':
-            if self.ii > 8:
+            if self.ii > 5:
                 del self.namess[0]
             self.namess.append(nnn)
             self.ii += 1
@@ -250,8 +249,7 @@ class CommandsBot(commands.Bot, ABC):
         message = ctx.message.clean_content.replace('@', '').lower()
         if len(message) == 0:
             message = nickname
-        answer = json.loads(requests.get(config.api_url + f"/stats/{self.initial_channels[0]}?nickname={message}",
-                                         headers=config.head).content.decode("utf-8"))
+        answer = json.loads(requests.get(config.api_url + f"/stats/{self.initial_channels[0]}?nickname={message}", headers=config.head).content.decode("utf-8"))
         if answer['type'] == 'success':
             if ctx.message.clean_content == "info":
                 AdditionalMethods.add_to_buffer("c", ctx.author.display_name + f", Данные бота актуальны с {answer['start_date']}, сообщения актуальны с 2016 года", ctx.author, "stat")
@@ -270,7 +268,7 @@ class CommandsBot(commands.Bot, ABC):
     '''
     @commands.command(name='кто')	
     async def kto(self, ctx):	
-        message = ctx.message.clean_content.replace('@', '')[:90]
+        message = ctx.message.clean_content.replace('@', '')[:80]
         random.seed(message)
         name = random.choice(self.namess)
         random.seed()
@@ -958,10 +956,10 @@ class CommandsBot(commands.Bot, ABC):
 
     @commands.command(name='do')
     async def do(self, ctx):
-        message = ctx.message.clean_content.replace('@', '')[:90]
+        message = ctx.message.clean_content.replace('@', '')[:80]
         nickname = ctx.author.display_name
         if len(message) == 0:
-            AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !do [message]", ctx.author, "do")
+            pass
         else:
             with open('data/do.txt', 'r', encoding='utf-8') as c:
                 listme = list(c)
@@ -974,10 +972,10 @@ class CommandsBot(commands.Bot, ABC):
 
     @commands.command(name='steal')
     async def steal(self, ctx):
-        message = ctx.message.clean_content.replace('@', '')[:90]
+        message = ctx.message.clean_content.replace('@', '')[:80]
         nickname = ctx.author.display_name
         if len(message) == 0:
-            AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !steal [nickname]", ctx.author, "steal")
+            pass
         else:
             procent = random.randint(0, 100)
             ruble = random.randint(0, 1500)
@@ -1002,11 +1000,10 @@ class CommandsBot(commands.Bot, ABC):
 
     @commands.command(name='try')
     async def ttry(self, ctx):
-        message = ctx.message.clean_content.replace('@', '')[:90]
+        message = ctx.message.clean_content.replace('@', '')[:80]
         nickname = ctx.author.display_name
         if len(message) == 0:
-            AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !try [action]",
-                                            ctx.author, "try")
+            pass
         else:
             for nick in self.names_exp:
                 for word in message.split():
@@ -1043,10 +1040,10 @@ class CommandsBot(commands.Bot, ABC):
     
     @commands.command(name='обнять')
     async def hug(self, ctx):
-        message = ctx.message.clean_content.replace('@', '')[:90]
+        message = ctx.message.clean_content.replace('@', '')[:80]
         nickname = ctx.author.display_name
         if len(message) == 0:
-            AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !обнять [nickname]", ctx.author, "steal")
+            pass
         else:
             for nick in self.names_exp:
                 for word in message.split():
@@ -1057,10 +1054,10 @@ class CommandsBot(commands.Bot, ABC):
 
     @commands.command(name='когда')
     async def kogda(self, ctx):
-        message = ctx.message.clean_content.replace('@', '')[:90]
+        message = ctx.message.clean_content.replace('@', '')[:80]
         nickname = ctx.author.display_name
         if len(message) == 0:
-            AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !когда [action]", ctx.author, "steal")
+            pass
         else:
             for nick in self.names_exp:
                 for word in message.split():
@@ -1071,10 +1068,10 @@ class CommandsBot(commands.Bot, ABC):
 
     @commands.command(name='привет')
     async def privet(self, ctx):
-        message = ctx.message.clean_content.replace('@', '')[:90]
+        message = ctx.message.clean_content.replace('@', '')[:80]
         nickname = ctx.author.display_name
         if len(message) == 0:
-            AdditionalMethods.add_to_buffer("e", f"{nickname}, введите !привет [nickname]", ctx.author, "steal")
+            pass
         else:
             for nick in self.names_exp:
                 for word in message.split():
@@ -1092,11 +1089,11 @@ class CommandsBot(commands.Bot, ABC):
         content = ctx.message.clean_content
         wikipedia.set_lang("ru")
         try:
-            info = wikipedia.summary(content, chars=200)
+            info = wikipedia.summary(content, chars=150)
         except wikipedia.DisambiguationError as e:
             p = e.options
             s = random.choice(e.options)
-            info = wikipedia.summary(content, chars=200)
+            info = wikipedia.summary(content, chars=150)
         except wikipedia.exceptions.PageError:
             return
         info = re.sub(r"\([^()]*\)", "", info)
@@ -1116,7 +1113,7 @@ class CommandsBot(commands.Bot, ABC):
             nick = ctx.author.display_name
             message = ctx.message.clean_content.replace('@', '')
             if len(message) == 0:
-                AdditionalMethods.add_to_buffer("e", nick + ', введите - !music [строка из песни] [смайл]', ctx.author, 'music')
+                pass
             else:
                 mess = message.split()
                 emote = mess[len(mess) - 1]
@@ -1124,7 +1121,6 @@ class CommandsBot(commands.Bot, ABC):
                     list_emotes = json.loads(g.read())
                 if emote not in list_emotes and len([c for c in message if c in emoji.UNICODE_EMOJI]) == 0:
                     pass
-                    # AdditionalMethods.add_to_buffer("e", nick + ', введите - !music [строка из песни] [смайл]', ctx.author, 'music')
                 else:
                     song_lyric = message.replace(f' {emote}', '')
                     emote = f' {emote} '
@@ -1153,13 +1149,11 @@ class CommandsBot(commands.Bot, ABC):
                         for asu in osu:
                             if word.lower().find(asu) != -1:
                                 res = res.replace(word, '*' * len(word))
-                    AdditionalMethods.add_to_buffer("e", f'{emote} {res[:200]} {emote}', ctx.author, 'music')
+                    AdditionalMethods.add_to_buffer("e", f'{emote} {res[:180]} {emote}', ctx.author, 'music')
         except AttributeError:
             pass
-            #AdditionalMethods.add_to_buffer("e", nick + ', песня не найдена Sadge', ctx.author, 'music')
         except TypeError:
             pass
-            #AdditionalMethods.add_to_buffer("e", nick + ', не удалось выполнить поиск. Попробуйте ещё раз PepoG', ctx.author, 'music')
 
 subprocess.Popen([sys.executable, 'ChatBot.py'])
 subprocess.Popen([sys.executable, 'BufferCleaner.py'])
