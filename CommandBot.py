@@ -704,22 +704,23 @@ class CommandsBot(commands.Bot, ABC):
 
     @commands.command(name='заебало')
     async def zaebalo(self, ctx):
-        nickname = ctx.author.display_name
-        url = "https://zaebalo.ru/?page=" + str(random.randrange(1, 1710, 1))
-        r = requests.get(url)
-        soup = BeautifulSoup(r.content, 'lxml')
-        d = soup.find_all('div', align='left')
-        res = random.choice(d).get_text()
-        res = re.sub(r'\n', '', res)
-        with open('data/osujdau2.txt') as f:
-            osu = [x for x in f.read().split('\n') if len(x) > 1]
-        res_prov = re.sub(r'[^\w ]', '', res)
-        for word in res_prov.split():
-            for asu in osu:
-                if word.lower().find(asu) != -1:
-                    res = res.replace(word, '*' * len(word))
-        res = (res[:200] + '...') if len(res) > 200 else res
-        AdditionalMethods.add_to_buffer("e", f"{nickname}, {res}", ctx.author, "zaebalo")
+        if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
+            nickname = ctx.author.display_name
+            url = "https://zaebalo.ru/?page=" + str(random.randrange(1, 1710, 1))
+            r = requests.get(url)
+            soup = BeautifulSoup(r.content, 'lxml')
+            d = soup.find_all('div', align='left')
+            res = random.choice(d).get_text()
+            res = re.sub(r'\n', '', res)
+            with open('data/osujdau2.txt') as f:
+                osu = [x for x in f.read().split('\n') if len(x) > 1]
+            res_prov = re.sub(r'[^\w ]', '', res)
+            for word in res_prov.split():
+                for asu in osu:
+                    if word.lower().find(asu) != -1:
+                        res = res.replace(word, '*' * len(word))
+            res = (res[:200] + '...') if len(res) > 200 else res
+            AdditionalMethods.add_to_buffer("e", f"{nickname}, {res}", ctx.author, "zaebalo")
 
     @commands.command(name='pastа')
     async def pasta(self, ctx):
