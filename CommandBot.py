@@ -437,7 +437,7 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='porf')
     async def porf(self, ctx):
         nickname = ctx.author.display_name
-        words = ctx.message.clean_content
+        words = ctx.message.clean_content.replace('@', '')
         url = "https://pelevin.gpt.dobro.ai/generate/"
         if len(words) == 0:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, Впишите какое-либо предложение", ctx.author, "porf")
@@ -717,8 +717,7 @@ class CommandsBot(commands.Bot, ABC):
                 for asu in osu:
                     if word.lower().find(asu) != -1:
                         res = res.replace(word, '*' * len(word))
-            res = (res[:200] + '...') if len(res) > 200 else res
-            AdditionalMethods.add_to_buffer("e", f"{nickname}, {res}", ctx.author, "zaebalo")
+            AdditionalMethods.add_to_buffer("e", f"{nickname}, {res[:150]}", ctx.author, "zaebalo")
 
     @commands.command(name='pastа')
     async def pasta(self, ctx):
@@ -958,9 +957,7 @@ class CommandsBot(commands.Bot, ABC):
     async def do(self, ctx):
         message = ctx.message.clean_content.replace('@', '')[:80]
         nickname = ctx.author.display_name
-        if len(message) == 0:
-            pass
-        else:
+        if len(message) != 0:
             with open('data/do.txt', 'r', encoding='utf-8') as c:
                 listme = list(c)
             randomdo = random.choice(listme)
@@ -974,9 +971,7 @@ class CommandsBot(commands.Bot, ABC):
     async def steal(self, ctx):
         message = ctx.message.clean_content.replace('@', '')[:80]
         nickname = ctx.author.display_name
-        if len(message) == 0:
-            pass
-        else:
+        if len(message) != 0:
             procent = random.randint(0, 100)
             ruble = random.randint(0, 1500)
             for nick in self.names_exp:
@@ -1002,9 +997,7 @@ class CommandsBot(commands.Bot, ABC):
     async def ttry(self, ctx):
         message = ctx.message.clean_content.replace('@', '')[:80]
         nickname = ctx.author.display_name
-        if len(message) == 0:
-            pass
-        else:
+        if len(message) != 0:
             for nick in self.names_exp:
                 for word in message.split():
                     if str(word).lower().find(str(nick).lower()) != -1:
@@ -1042,9 +1035,7 @@ class CommandsBot(commands.Bot, ABC):
     async def hug(self, ctx):
         message = ctx.message.clean_content.replace('@', '')[:80]
         nickname = ctx.author.display_name
-        if len(message) == 0:
-            pass
-        else:
+        if len(message) != 0:
             for nick in self.names_exp:
                 for word in message.split():
                     if str(word).lower().find(str(nick).lower()) != -1:
@@ -1056,9 +1047,7 @@ class CommandsBot(commands.Bot, ABC):
     async def kogda(self, ctx):
         message = ctx.message.clean_content.replace('@', '')[:80]
         nickname = ctx.author.display_name
-        if len(message) == 0:
-            pass
-        else:
+        if len(message) != 0:
             for nick in self.names_exp:
                 for word in message.split():
                     if str(word).lower().find(str(nick).lower()) != -1:
@@ -1070,9 +1059,7 @@ class CommandsBot(commands.Bot, ABC):
     async def privet(self, ctx):
         message = ctx.message.clean_content.replace('@', '')[:80]
         nickname = ctx.author.display_name
-        if len(message) == 0:
-            pass
-        else:
+        if len(message) != 0:
             for nick in self.names_exp:
                 for word in message.split():
                     if str(word).lower().find(str(nick).lower()) != -1:
@@ -1112,9 +1099,7 @@ class CommandsBot(commands.Bot, ABC):
         try:
             nick = ctx.author.display_name
             message = ctx.message.clean_content.replace('@', '')
-            if len(message) == 0:
-                pass
-            else:
+            if len(message) != 0:
                 mess = message.split()
                 emote = mess[len(mess) - 1]
                 with open('data/SMILES.txt', encoding='utf-8') as g:
