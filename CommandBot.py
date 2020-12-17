@@ -591,86 +591,68 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='курс')
     async def kurs(self, ctx):
         nickname = ctx.author.display_name
-        message = ctx.message.content
-        if message == '!курс':
-            url = "https://free.currconv.com/api/v7/convert?q=USD_RUB,EUR_RUB&compact=ultra&apiKey=ee315cc429cbc167d4b7"
-            url2 = "https://free.currconv.com/api/v7/convert?q=JPY_RUB,UAH_RUB&compact=ultra&apiKey=ee315cc429cbc167d4b7"
-            r = requests.get(url)
-            r2 = requests.get(url2)
-            json_r = r.json()
-            json_r2 = r2.json()
-            now = datetime.now() + timedelta(hours=3)
-            today = now.strftime("%d.%m")
+        message = ctx.message.clean_content
+        if len(message) == 0:
+            r = requests.get("https://free.currconv.com/api/v7/convert?q=USD_RUB,EUR_RUB&compact=ultra&apiKey=ee315cc429cbc167d4b7").json()
+            r2 = requests.get("https://free.currconv.com/api/v7/convert?q=BTC_RUB,UAH_RUB&compact=ultra&apiKey=ee315cc429cbc167d4b7").json()
+            today = (datetime.now() + timedelta(hours=3)).strftime("%d.%m")
             try:
-                resik = f'Курс валют на {today}: USD = {round(json_r["USD_RUB"], 2)} RUB | EUR = {round(json_r["EUR_RUB"], 2)} RUB | JPY = {round(json_r2["JPY_RUB"], 4)} RUB | UAH = {round(json_r2["UAH_RUB"], 2)} RUB'
-                AdditionalMethods.add_to_buffer("с", resik, ctx.author, "курс")
+                kurs = f'Курс валют на {today}: USD = {round(r["USD_RUB"], 2)} RUB | EUR = {round(r["EUR_RUB"], 2)} RUB | BTC = {round(r2["BTC_RUB"])} RUB | UAH = {round(r2["UAH_RUB"], 2)} RUB'
+                AdditionalMethods.add_to_buffer("с", kurs, ctx.author, "курс")
             except KeyError:
-                AdditionalMethods.add_to_buffer("с", nickname+', не удаётся получить курс валют, попробуйте позже PepoG', ctx.author, "курс")
+                AdditionalMethods.add_to_buffer("с", f"{nickname}, не удаётся получить курс валют, попробуйте позже Waiting', ctx.author, "курс")
         else:
-            userkurs = message.split(" ")[1]
             try:
-                count = message.split(" ")[2]
+                userkurs = message.split()[0]
+                count = message.split()[1]
             except:
                 AdditionalMethods.add_to_buffer("с", f"{nickname}, введите число PepoG", ctx.author, "курс")
-            url = "https://free.currconv.com/api/v7/convert?q=" + userkurs.replace("-", "_").upper() + "&compact=ultra&apiKey=ee315cc429cbc167d4b7"
-            r = requests.get(url)
-            if r.text == "{}":
-                AdditionalMethods.add_to_buffer("с",
-                                                f"{nickname}, неправильно введены валюты. Вводите в международном формате (USD-RUB, RUB-JPY)",
-                                                ctx.author, "курс")
+            json_r = requests.get(f"https://free.currconv.com/api/v7/convert?q={userkurs.replace('-', '_')}&compact=ultra&apiKey=ee315cc429cbc167d4b7").json()
+            if len(json_r) == 0:
+                AdditionalMethods.add_to_buffer("с", f"{nickname}, неправильно введены валюты. Вводите в международном формате (USD-RUB, RUB-JPY)", ctx.author, "курс")
             else:
                 try:
-                    json_r = r.json()
                     res = userkurs.replace("-", "_").upper()
                     one = userkurs.split("-")[0]
                     two = userkurs.split("-")[1]
-                    result = f"{nickname}, {count} {one.upper()} = {str(round(json_r[res] * float(count), 2))} {two.upper()}"
-                    AdditionalMethods.add_to_buffer("с", result, ctx.author, "курс")
+                    AdditionalMethods.add_to_buffer("с", f"{nickname}, {count} {one.upper()} = {round(json_r[res] * float(count), 2)} {two.upper()}", ctx.author, "курс")
                 except KeyError:
-                    AdditionalMethods.add_to_buffer("с",
-                                                    f"{nickname}, произошла ошибка конвертации. Скорее всего вы неправильно написали валюты. PepoG",
-                                                    ctx.author, "курс")
+                    AdditionalMethods.add_to_buffer("с",f"{nickname}, произошла ошибка конвертации. Скорее всего вы неправильно написали валюты. PepoG", ctx.author, "курс")
 
     @commands.command(name='clipever')
     async def topclipever(self, ctx):
         nickname = ctx.author.display_name
         message = ctx.message.clean_content.replace('@', '')
-        AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(0, message, nickname), ctx.author,
-                                        "clip")
+        AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(0, message, nickname), ctx.author, "clip")
 
     @commands.command(name='clipyear')
     async def topclipyear(self, ctx):
         nickname = ctx.author.display_name
         message = ctx.message.clean_content.replace('@', '')
-        AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(365, message, nickname), ctx.author,
-                                        "clip")
+        AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(365, message, nickname), ctx.author, "clip")
 
     @commands.command(name='clipweek')
     async def topclipweek(self, ctx):
         nickname = ctx.author.display_name
         message = ctx.message.clean_content.replace('@', '')
-        AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(7, message, nickname), ctx.author,
-                                        "clip")
+        AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(7, message, nickname), ctx.author, "clip")
 
     @commands.command(name='clipmonth')
     async def topclipmonth(self, ctx):
         nickname = ctx.author.display_name
         message = ctx.message.clean_content.replace('@', '')
-        AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(30, message, nickname), ctx.author,
-                                        "clip")
+        AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(30, message, nickname), ctx.author, "clip")
 
     @commands.command(name='cliptoday')
     async def topclipday(self, ctx):
         nickname = ctx.author.display_name
         message = ctx.message.clean_content.replace('@', '')
-        AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(1, message, nickname), ctx.author,
-                                        "clip")
+        AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(1, message, nickname), ctx.author, "clip")
 
     @commands.command(name='abbreviations')
     async def abbreviations(self, ctx):
         nickname = ctx.author.display_name
-        AdditionalMethods.add_to_buffer("c",
-                                        f"{nickname} Здесь вы можете посмотреть все доступные аббревиатуры для clip {config.abreviationsUrl}",
+        AdditionalMethods.add_to_buffer("c", f"{nickname} Здесь вы можете посмотреть все доступные аббревиатуры для clip {config.abreviationsUrl}",
                                         ctx.author, "abbreviations")
 
     @commands.command(name='iq')
