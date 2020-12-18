@@ -600,7 +600,7 @@ class CommandsBot(commands.Bot, ABC):
                 kurs = f'Курс валют на {today}: USD = {round(r["USD_RUB"], 2)} RUB | EUR = {round(r["EUR_RUB"], 2)} RUB | BTC = {round(r2["BTC_RUB"])} RUB | UAH = {round(r2["UAH_RUB"], 2)} RUB'
                 AdditionalMethods.add_to_buffer("с", kurs, ctx.author, "курс")
             except KeyError:
-                AdditionalMethods.add_to_buffer("с", f"{nickname}, не удаётся получить курс валют, попробуйте позже Waiting', ctx.author, "курс")
+                AdditionalMethods.add_to_buffer("с", f"{nickname}, не удаётся получить курс валют, попробуйте позже Waiting", ctx.author, "курс")
         else:
             try:
                 userkurs = message.split()[0]
