@@ -1000,7 +1000,7 @@ class CommandsBot(commands.Bot, ABC):
             url = "http://search.maps.sputnik.ru/search?q="
             response = requests.get(url + quote(loc))
             if response.text.find('"found":0') != -1:
-                AdditionalMethods.add_to_buffer("c", f"{nickname}, не найден населённый пункт. Попробуйте другое название.", ctx.author, "время")
+                AdditionalMethods.add_to_buffer("e", f"{nickname}, не найден населённый пункт. Попробуйте другое название.", ctx.author, "время")
             else:
                 try:
                     position = response.json()['result'][0]['position']
@@ -1010,9 +1010,9 @@ class CommandsBot(commands.Bot, ABC):
                     dt_object = datetime.fromtimestamp(timestamp)
                     date = dt_object.strftime("%H:%M")
                     location = response.json()['result'][0]['title']
-                    AdditionalMethods.add_to_buffer("c", f"{nickname}, чичас {date} в «{location}» Waiting", ctx.author, "время")
+                    AdditionalMethods.add_to_buffer("e", f"{nickname}, чичас {date} в «{location}» Waiting", ctx.author, "время")
                 except:
-                    AdditionalMethods.add_to_buffer("c", f"{nickname}, не удалось найти время для этого населённого пункта", ctx.author, "время")
+                    AdditionalMethods.add_to_buffer("e", f"{nickname}, не удалось найти время для этого населённого пункта", ctx.author, "время")
     
     @commands.command(name='обнять')
     async def hug(self, ctx):
@@ -1075,7 +1075,7 @@ class CommandsBot(commands.Bot, ABC):
                 if word.lower().find(asu) != -1:
                     info = info.replace(word, '*' * len(word))
         finaly = f"{ctx.author.display_name}, {info}"
-        AdditionalMethods.add_to_buffer("c", finaly, ctx.author, "wiki")
+        AdditionalMethods.add_to_buffer("e", finaly, ctx.author, "wiki")
 
     @commands.command(name='music')
     async def music(self, ctx):
