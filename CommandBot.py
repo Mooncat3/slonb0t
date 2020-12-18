@@ -595,6 +595,7 @@ class CommandsBot(commands.Bot, ABC):
         if len(message) == 0:
             r = requests.get("https://free.currconv.com/api/v7/convert?q=USD_RUB,EUR_RUB&compact=ultra&apiKey=ee315cc429cbc167d4b7").json()
             r2 = requests.get("https://free.currconv.com/api/v7/convert?q=BTC_RUB,UAH_RUB&compact=ultra&apiKey=ee315cc429cbc167d4b7").json()
+            print(r, r2)
             today = (datetime.now() + timedelta(hours=3)).strftime("%d.%m")
             try:
                 kurs = f'Курс валют на {today}: USD = {round(r["USD_RUB"], 2)} RUB | EUR = {round(r["EUR_RUB"], 2)} RUB | BTC = {round(r2["BTC_RUB"])} RUB | UAH = {round(r2["UAH_RUB"], 2)} RUB'
