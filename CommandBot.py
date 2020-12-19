@@ -961,7 +961,7 @@ class CommandsBot(commands.Bot, ABC):
                 for word in message.split():
                     if str(word).lower().find(str(nick).lower()) != -1:
                         message = message.replace(word, nick)
-            if procent >= 33:
+            if procent <= 33:
                 with open('data/me/things.txt', encoding='utf-8') as f:
                     thingss = [x for x in f.read().split('\n') if len(x) > 1]
                 rand_steal = random.randint(0, 100)
@@ -969,7 +969,7 @@ class CommandsBot(commands.Bot, ABC):
                     AdditionalMethods.add_to_buffer("e", f"{nickname} украл у {message} {random.choice(thingss)} BOP",
                                                     ctx.author, "steal")
                 else:
-                    symbols = ['$', '£', '€', '₽']
+                    symbols = ['$', '₽']
                     AdditionalMethods.add_to_buffer("e", f"{nickname} украл у {message} {ruble} {random.choice(symbols)} BOP",
                                                     ctx.author, "steal")
             else:
