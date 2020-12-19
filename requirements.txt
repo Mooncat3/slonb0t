@@ -6,6 +6,5 @@ bs4
 PyGithub
 lxml
 pytz
-wikipedia
 lyricsgenius
 emoji
