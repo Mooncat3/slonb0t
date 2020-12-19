@@ -17,7 +17,7 @@ from urllib.parse import quote
 import asyncio
 import time
 import lyricsgenius as lg
-import wikipedia
+# import wikipedia
 
 
 # вместо ctx.message.content ctx.message.clean_content, он выводит только текст после комманды
@@ -1053,7 +1053,7 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='гороскоп')
     async def goroskop(self, ctx):
         AdditionalMethods.add_to_buffer("s", AdditionalMethods.get_goroskop(ctx.message.content, ctx.author.display_name), ctx.author, "гороскоп")
-
+    '''
     @commands.command(name='wiki')
     async def wiki(self, ctx):
         content = ctx.message.clean_content
@@ -1076,7 +1076,7 @@ class CommandsBot(commands.Bot, ABC):
                     info = info.replace(word, '*' * len(word))
         finaly = f"{ctx.author.display_name}, {info}"
         AdditionalMethods.add_to_buffer("e", finaly, ctx.author, "wiki")
-
+    '''
     @commands.command(name='music')
     async def music(self, ctx):
         try:
