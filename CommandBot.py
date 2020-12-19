@@ -61,7 +61,7 @@ class CommandsBot(commands.Bot, ABC):
             i += 1
             await asyncio.sleep(0.1)
         if len(self.duel_nicknames) == 1:
-            await socket.send_privmsg(config.CHAN, "Оппонент не принял дуэль MonkaHmm")
+            await socket.send_privmsg(config.CHAN, "Оппонент не принял дуэль monkaHmm")
         else:
             if self.duel_serious:
                 await socket.send_privmsg(config.CHAN,
