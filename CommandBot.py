@@ -1108,7 +1108,7 @@ class CommandsBot(commands.Bot, ABC):
                                 break
                         if flag:
                             break
-                    res = [x for x in [re.sub(r'[\[].*?[\]]', '', i) for i in res] if len(x) > 1]
+                    res = [x[:25] for x in [re.sub(r'[\[].*?[\]]', '', i) for i in res] if len(x) > 1]
                     res = emote.join(res[:4])
                     with open('data/osujdau2.txt', 'r', encoding='utf-8') as f:
                         osu = [x for x in f.read().split('\n') if len(x) > 1]
