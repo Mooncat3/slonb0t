@@ -580,7 +580,7 @@ class CommandsBot(commands.Bot, ABC):
                         for asu in osu:
                             if word.lower().find(asu) != -1:
                                 resultat = resultat.replace(word, '*' * len(word))
-                    AdditionalMethods.add_to_buffer("с", f"{nickname}, {resultat}", ctx.author, "перевод")
+                    AdditionalMethods.add_to_buffer("с", f"{nickname}, {resultat[:100]}", ctx.author, "перевод")
             except:
                 AdditionalMethods.add_to_buffer("с",
                                                 f"{nickname}, неправильно указаны параметры. Ссылка со всеми языками: https://pastebin.com/raw/nk1n1KxD",
