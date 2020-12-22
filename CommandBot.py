@@ -428,9 +428,11 @@ class CommandsBot(commands.Bot, ABC):
     async def auf(self, ctx):
         nickname = ctx.author.display_name
         r = requests.get('https://socratify.net/quotes/random')
-        soup = BeautifulSoup(r.content, 'lxml')
-        d = soup.find('h1', class_='b-quote__text').get_text()
-        AdditionalMethods.add_to_buffer("e", f"{nickname}, {d[:100]} AUFFF", ctx.author, "ауф")
+        d = BeautifulSoup(r.content, 'lxml').find('h1', class_='b-quote__text').get_text()
+        while len(d) > 80:
+            r = requests.get('https://socratify.net/quotes/random')
+            d = BeautifulSoup(r.content, 'lxml').find('h1', class_='b-quote__text').get_text()
+        AdditionalMethods.add_to_buffer("e", f"{nickname}, {d} AUFFF", ctx.author, "ауф")
 
     @commands.command(name='porf')
     async def porf(self, ctx):
@@ -549,7 +551,9 @@ class CommandsBot(commands.Bot, ABC):
         r = requests.get('http://anecdotica.ru/')
         soup = BeautifulSoup(r.content, 'lxml')
         anekdot = soup.find('div', class_='item_text').get_text()
-        anekdott = (anekdot[:250] + '...') if len(anekdot) > 250 else anekdot
+        while len(anekdot) > 100:
+            r = requests.get('http://anecdotica.ru/')
+            anekdot = BeautifulSoup(r.content, 'lxml').find('div', class_='item_text').get_text()
         AdditionalMethods.add_to_buffer("e", f'{anekdott} KEKL', ctx.author, "анекдот")
 
     @commands.command(name='перевод')
