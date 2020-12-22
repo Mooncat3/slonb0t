@@ -439,10 +439,11 @@ class CommandsBot(commands.Bot, ABC):
         url = "https://pelevin.gpt.dobro.ai/generate/"
         if len(words) == 0:
             AdditionalMethods.add_to_buffer("e", f"{nickname}, Впишите какое-либо предложение", ctx.author, "porf")
-        elif len(words) > 300:
-            AdditionalMethods.add_to_buffer("e", f"{nickname}, Бот может принимать максимум 300 символов", ctx.author,
+        elif len(words) > 200:
+            AdditionalMethods.add_to_buffer("e", f"{nickname}, Бот может принимать максимум 200 символов", ctx.author,
                                             "porf")
         else:
+            words += ' '
             response = requests.post(url, json={'prompt': words, 'length': '20', 'num_samples': '5'})
             if response.text == "Service Unavailable":
                 AdditionalMethods.add_to_buffer("e",
@@ -458,7 +459,7 @@ class CommandsBot(commands.Bot, ABC):
                     for asu in osu:
                         if word.lower().find(asu) != -1:
                             result = result.replace(word, '*' * len(word))
-                if len(result) > 50 and len(words) > 40:
+                if len(result) > 40 and len(words) > 30:
                     AdditionalMethods.add_to_buffer("e", f"{nickname}, {result}", ctx.author, "porf")
                 else:
                     AdditionalMethods.add_to_buffer("e", f"{nickname}, {words}{result}", ctx.author, "porf")
