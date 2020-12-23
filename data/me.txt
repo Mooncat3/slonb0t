@@ -128,7 +128,7 @@ polarExtreme рейдеры ебут {} polarExtreme
 {} устал от будней NotLikeThis
 {} биомусор pepePoint
 {} радуется жизни peepoAww
-{} любит реакции peepoAww PooTime
+{} любит реакции peepoAww 7Head 
 {} - барни Barni
 {} человек лёгкого поведения YEP
 {} мечтает о гелике Happy
@@ -187,3 +187,4 @@ lickR {} lickL
 {} в очередной раз увернулся от сабки ricardoFlick 
 pepePoint {} ЗАПЕРЛИ В КЛЕТКЕ | ppOverHeat |
 {} пишет письмо деду морозу HACKERMANS 
+{} задумался о будущем и представил 1 копейку PogU Clap
