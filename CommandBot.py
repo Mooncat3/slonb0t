@@ -138,7 +138,7 @@ class CommandsBot(commands.Bot, ABC):
                                       
     async def event_ready(self):
         print(f'Ready {str(self.__class__.__name__)} | {self.nick} on {self.initial_channels[0]}')
-        await self.synch()
+        #await self.synch()
 
     async def synch(self):
         self.seekers = requests.get(config.api_url + f"/seekers/{self.initial_channels[0]}", headers=config.head).json()['answer']
