@@ -1,6 +1,6 @@
 import random
 
-d = 'entertain_files'
+d = 'data/entertain_files'
 
 search = [x for x in open(f'{d}/search.txt', encoding='utf-8').read().split('\n') if len(x) > 1]
 things = [x for x in open(f'{d}/things.txt', encoding='utf-8').read().split('\n') if len(x) > 1]
