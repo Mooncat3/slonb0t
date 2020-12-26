@@ -17,7 +17,7 @@ from urllib.parse import quote
 import asyncio
 import time
 import lyricsgenius as lg
-# import wikipedia
+import entertain_functions
 
 
 # вместо ctx.message.content ctx.message.clean_content, он выводит только текст после комманды
@@ -856,87 +856,10 @@ class CommandsBot(commands.Bot, ABC):
             AdditionalMethods.add_to_buffer("e", f"{nickname}, ваша температура {str(temp)} °C! Вызывайте дурку! Durka",
                                             ctx.author, "temp")
 
-    @commands.command(name='me', aliases=['я', 'йа'])
+    @commands.command(name='me', aliases=['я', 'йа', 'ya'])
     async def me(self, ctx):
         nickname = ctx.author.display_name
-        with open('data/me/search.txt', encoding='utf-8') as f:
-            search = [x for x in f.read().split('\n') if len(x) > 1]
-
-        with open('data/me/things.txt', encoding='utf-8') as f:
-            things = [x for x in f.read().split('\n') if len(x) > 1]
-
-        with open('data/me/stories.txt', encoding='utf-8') as f:
-            stories = [x for x in f.read().split('\n') if len(x) > 1]
-
-        with open('data/me.txt', encoding='utf-8') as f:
-            me_classic = [x for x in f.read().split('\n') if len(x) > 1]
-
-        with open('data/me/clothes.txt', encoding='utf-8') as f:
-            clothes = [x for x in f.read().split('\n') if len(x) > 1]
-
-        with open('data/me/first_names.txt', encoding='utf-8') as f:
-            first_names = [x for x in f.read().split('\n') if len(x) > 1]
-                                                       
-        with open('data/me/age.txt', encoding='utf-8') as f:
-            ages = [x for x in f.read().split('\n') if len(x) > 1]
-
-        currency = ['доллар', 'фунт', 'евро', 'франк']
-        symbols = ['$', '£', '€', '₽']
-        curr = random.choice(symbols)
-        currency_rand = random.choice(currency)
-        thing = random.choice(things)
-        answer = random.choice(me_classic).format(nickname)
-        name = random.choice(self.namess)
-        v = random.randint(0, 100)
-        if 0 < v <= 17:
-            rand_num = random.randint(0, 100)
-            if 0 < rand_num <= 95:
-                answer = random.choice(search).format(nickname, random.choice(things))
-            else:
-                answer = random.choice(search).format(nickname, name)
-        if 17 < v <= 18:
-            kol = round(random.uniform(90, 250), 2)
-            answer = "Однажды {} приснилось, что {} теперь стоит {} ₽! Какой ужас Sadge".format(nickname, currency_rand, kol)
-        if 18 < v <= 19:
-            kol = round(random.uniform(0, 80), 2)
-            answer = "Однажды {} приснилось, что {} теперь стоит {} ₽! Какое счастье PogU".format(nickname, currency_rand, kol)
-        if 19 < v <= 35:
-            answer = random.choice(stories).format(nickname, name, thing)
-        if 35 < v <= 79:
-            answer = random.choice(me_classic).format(nickname)
-        if 79 < v <= 80:
-            answer = '{} умрёт через {} дней roflanPominy'.format(nickname, random.randint(1, 30))
-        if 80 < v <= 82:
-            answer = 'У {} - {} IQ WAYTOOSMART Clap'.format(nickname, random.randint(80, 200))
-        if 82 < v <= 88:
-            answer = '{} украл у {} {} BOP'.format(nickname, name, thing)
-        if 88 < v <= 89:
-            kol = round(random.uniform(0, 5000), 2)
-            answer = '{} украл у {} {} {} BOP'.format(nickname, name, kol, curr)
-        if 89 < v <= 92:
-            kol = round(random.uniform(0, 100000), 2)
-            answer = '{} хвастается {} за {} {} 💸 peepoCool'.format(nickname, random.choice(clothes), kol, curr)
-        if 92 < v <= 93:
-            kol = round(random.uniform(0, 5000), 2)
-            answer = '{} выиграл в лотерее {} {} peepoClap Поздравляем! peepoClap'.format(nickname, kol, curr)
-        if 93 < v <= 95:
-            start_date = date(2021, 1, 1)
-            end_date = date(2035, 1, 1)
-            time_between_dates = end_date - start_date
-            days_between_dates = time_between_dates.days
-            random_number_of_days = random.randrange(days_between_dates)
-            random_date = start_date + timedelta(days=random_number_of_days)
-            random_date = random_date.strftime('%d.%m.%Y')
-            answer = '{} сегодня прошёл тест на дату смерти. monkaW Дата смерти {} - {} roflanPominy'.format(nickname, nickname, random_date)
-        if 95 < v <= 96:
-            name2 = random.choice(self.namess)
-            answer = '{} решил украсть у {} {} , но в чате пробежал {} и засёк преступление monkaFLASH {} теперь за решёткой BOP'.format(nickname, name, thing, name2, nickname)
-        if 96 < v <= 98:
-            age = random.choice(ages)
-            answer = '{} скрывает свой возраст. Но я знаю, что {} уже {} blushW'.format(nickname, nickname, age)
-        if 98 < v <= 100:
-            first_name = random.choice(first_names)
-            answer = '{} скрывает своё имя. Но я знаю, что {} на самом деле зовут {} monkaX'.format(nickname, nickname, first_name)
+        answer = entertain_functions.me(nickname, self.namess)
         AdditionalMethods.add_to_buffer("e", answer, ctx.author, "me")
 
     @commands.command(name='do')
@@ -944,40 +867,24 @@ class CommandsBot(commands.Bot, ABC):
         message = ctx.message.clean_content.replace('@', '')[:80]
         nickname = ctx.author.display_name
         if len(message) != 0:
-            with open('data/do.txt', 'r', encoding='utf-8') as c:
-                listme = list(c)
-            randomdo = random.choice(listme)
             for nick in self.names_exp:
                 for word in message.split():
                     if str(word).lower().find(str(nick).lower()) != -1:
                         message = message.replace(word, nick)
-            AdditionalMethods.add_to_buffer("e", randomdo.format(nickname, message), ctx.author, "do")
+            answer = entertain_functions.do(nickname, message, self.namess)
+            AdditionalMethods.add_to_buffer("e", answer, ctx.author, "do")
 
     @commands.command(name='steal')
     async def steal(self, ctx):
         message = ctx.message.clean_content.replace('@', '')[:80]
         nickname = ctx.author.display_name
         if len(message) != 0:
-            procent = random.randint(0, 100)
-            ruble = random.randint(0, 1500)
             for nick in self.names_exp:
                 for word in message.split():
                     if str(word).lower().find(str(nick).lower()) != -1:
                         message = message.replace(word, nick)
-            if procent <= 33:
-                with open('data/me/things.txt', encoding='utf-8') as f:
-                    thingss = [x for x in f.read().split('\n') if len(x) > 1]
-                rand_steal = random.randint(0, 100)
-                if 0 < rand_steal <= 70:
-                    AdditionalMethods.add_to_buffer("e", f"{nickname} украл у {message} {random.choice(thingss)} BOP",
-                                                    ctx.author, "steal")
-                else:
-                    symbols = ['$', '₽']
-                    AdditionalMethods.add_to_buffer("e", f"{nickname} украл у {message} {ruble} {random.choice(symbols)} BOP",
-                                                    ctx.author, "steal")
-            else:
-                AdditionalMethods.add_to_buffer("e", f"{nickname} ничего не украл у {message} KeK Lohich",
-                                                ctx.author, "steal")
+            answer = entertain_functions.steal(nickname, message)
+            AdditionalMethods.add_to_buffer("e", answer, ctx.author, "steal")
 
     @commands.command(name='try')
     async def ttry(self, ctx):
@@ -1056,30 +963,7 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='гороскоп')
     async def goroskop(self, ctx):
         AdditionalMethods.add_to_buffer("s", AdditionalMethods.get_goroskop(ctx.message.content, ctx.author.display_name), ctx.author, "гороскоп")
-    '''
-    @commands.command(name='wiki')
-    async def wiki(self, ctx):
-        content = ctx.message.clean_content
-        wikipedia.set_lang("ru")
-        try:
-            info = wikipedia.summary(content, chars=150)
-        except wikipedia.DisambiguationError as e:
-            p = e.options
-            s = random.choice(e.options)
-            info = wikipedia.summary(content, chars=150)
-        except wikipedia.exceptions.PageError:
-            return
-        info = re.sub(r"\([^()]*\)", "", info)
-        with open('data/osujdau2.txt', 'r', encoding='utf-8') as f:
-            osu = [x for x in f.read().split('\n') if len(x) > 1]
-        res_prov = re.sub(r'\W+', ' ', info)
-        for word in res_prov.split():
-            for asu in osu:
-                if word.lower().find(asu) != -1:
-                    info = info.replace(word, '*' * len(word))
-        finaly = f"{ctx.author.display_name}, {info}"
-        AdditionalMethods.add_to_buffer("e", finaly, ctx.author, "wiki")
-    '''
+
     @commands.command(name='music')
     async def music(self, ctx):
         try:
