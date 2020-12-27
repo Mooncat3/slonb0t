@@ -1,1 +1,0 @@
-{"entertain": true, "bufferdelay": 5.0, "buffermax": 2, "norm": 10.5, "maxmesses": 6, "attentions": 1, "emojimode": "all", "timeout": 600, "forget": 1800.0}
