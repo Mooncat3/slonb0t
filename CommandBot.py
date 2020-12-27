@@ -59,10 +59,10 @@ class CommandsBot(commands.Bot, ABC):
             i += 1
             await asyncio.sleep(0.1)
         if len(self.duel_nicknames) == 1:
-            await socket.send_privmsg(config.CHAN, "Оппонент не принял дуэль monkaHmm")
+            await socket.send_privmsg(config.CHAN, "Оппонент не принял дуэль")
         else:
             if self.duel_serious:
-                await socket.send_privmsg(config.CHAN, "Дуэлянты смотрят друг на друга monkaW")
+                await socket.send_privmsg(config.CHAN, "Дуэлянты смотрят друг на друга...")
                 randname = random.choice(self.duel_nicknames)
                 self.duel_nicknames.remove(randname)
                 await asyncio.sleep(8)
@@ -78,12 +78,12 @@ class CommandsBot(commands.Bot, ABC):
                     await socket.send_privmsg(config.CHAN, f"/timeout {self.duel_nicknames[0]['str_id']} 60")
             else:
                 await socket.send_privmsg(config.CHAN,
-                                          "Один из дуэлянтов бессмертен, поэтому они стреляют холостыми пулями monkaW")
+                                          "Один из дуэлянтов бессмертен, поэтому они стреляют холостыми пулями")
                 randname = random.choice(self.duel_nicknames)
                 self.duel_nicknames.remove(randname)
                 await asyncio.sleep(8)
                 await socket.send_privmsg(config.CHAN,
-                                          f"Выстрел выстрел заставляет {randname['label']} сдаться. Самая быстрая рука дикого запада – {self.duel_nicknames[0]['label']} EZ")
+                                          f"Выстрел выстрел заставляет {randname['label']} сдаться. Самая быстрая рука дикого запада – {self.duel_nicknames[0]['label']}")
         self.duel_nicknames.clear()
         self.duel_is_running = False
 
