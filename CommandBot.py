@@ -360,17 +360,17 @@ class CommandsBot(commands.Bot, ABC):
             if len(message) > 1 and len(message) <= 26 and message.find(" ") == -1:
                 self.duel_is_running = True
                 self.duel_nicknames.append({"label": ctx.author.display_name, "str_id": ctx.author.name})
-                self.duel_user = message.replace("@", "")
+                self.duel_user = message
                 if nickname.lower() != self.duel_user.lower():
                     await ctx.channel._ws.send_privmsg(config.CHAN,
-                                                       f"{nickname} кидает перчатку в {message.replace('@', '')}, вызывая его на дуэль peepoCool . Чтобы принять вызов – напишите !acduel.")
+                                                       f"{nickname} вызывает на дуэль {message}. Чтобы принять вызов – напишите !acduel")
                 else:
                     await ctx.channel._ws.send_privmsg(config.CHAN,
-                                                       f"{nickname} направил ствол на ... самого себя blushW . Если вы уверены в своём выборе, напишите !acduel.")
+                                                       f"{nickname} направил ствол на... самого себя. Если вы уверены, напишите !acduel")
                 asyncio.get_event_loop().create_task(self.duelent(self._ws))
             else:
                 await ctx.channel._ws.send_privmsg(config.CHAN,
-                                                   f"{nickname}, напишите никнейм правильно PepoG")
+                                                   f"{nickname}, напишите никнейм правильно")
         elif self.duel_is_running:
             AdditionalMethods.add_to_buffer("s", f"{ctx.author.name}, сейчас уже идёт дуэль", ctx.author, "duel")
         elif self.roulette_is_running:
