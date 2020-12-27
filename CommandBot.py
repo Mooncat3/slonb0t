@@ -62,9 +62,7 @@ class CommandsBot(commands.Bot, ABC):
             await socket.send_privmsg(config.CHAN, "Оппонент не принял дуэль monkaHmm")
         else:
             if self.duel_serious:
-                await socket.send_privmsg(config.CHAN,
-                                          "Дуэлянты смотрят друг на друга monkaW . В любой момент они готовы достать "
-                                          "револьвер из кобуры... PepeS ")
+                await socket.send_privmsg(config.CHAN, "Дуэлянты смотрят друг на друга monkaW")
                 randname = random.choice(self.duel_nicknames)
                 self.duel_nicknames.remove(randname)
                 await asyncio.sleep(8)
@@ -72,7 +70,7 @@ class CommandsBot(commands.Bot, ABC):
                     data = json.loads(e.read())
                 randseq = random.choice(data)
                 await socket.send_privmsg(config.CHAN,
-                                          f"Хлопок! {self.duel_nicknames[0]['label']} выстреливает в {randname['label']}{randseq['text']}")
+                                          f"{self.duel_nicknames[0]['label']} выстреливает в {randname['label']}{randseq['text']}")
                 if int(randseq['time']) > 1:
                     await asyncio.sleep(0.5)
                     await socket.send_privmsg(config.CHAN, f"/timeout {randname['str_id']} {randseq['time']}")
@@ -80,13 +78,12 @@ class CommandsBot(commands.Bot, ABC):
                     await socket.send_privmsg(config.CHAN, f"/timeout {self.duel_nicknames[0]['str_id']} 60")
             else:
                 await socket.send_privmsg(config.CHAN,
-                                          "Один из дуэлянтов бессмертен, поэтому они стреляют холостыми пулями monkaW "
-                                          ". В любой момент они готовы достать револьвер из кобуры... PepeS")
+                                          "Один из дуэлянтов бессмертен, поэтому они стреляют холостыми пулями monkaW")
                 randname = random.choice(self.duel_nicknames)
                 self.duel_nicknames.remove(randname)
                 await asyncio.sleep(8)
                 await socket.send_privmsg(config.CHAN,
-                                          f"Хлопок! Точный выстрел заставляет {randname['label']} сдаться. Самая быстрая рука дикого запада – {self.duel_nicknames[0]['label']} EZ")
+                                          f"Выстрел выстрел заставляет {randname['label']} сдаться. Самая быстрая рука дикого запада – {self.duel_nicknames[0]['label']} EZ")
         self.duel_nicknames.clear()
         self.duel_is_running = False
 
