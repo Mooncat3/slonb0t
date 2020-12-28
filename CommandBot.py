@@ -51,8 +51,8 @@ class CommandsBot(commands.Bot, ABC):
         self.genius = lg.Genius("5Pj7QcUoV5Khbd-Hq5jSve8OzCQILJkY8nWojIIxqH30ItpsmXC7UmCRcgjmTVPY")
         print('Blacklist:', self.blacklist)
     
-    # async def event_command_error(self, ctx, error):
-        # pass
+    async def event_command_error(self, ctx, error):
+        pass
     
     async def duelent(self, socket):
         i: int = 0
@@ -134,7 +134,7 @@ class CommandsBot(commands.Bot, ABC):
         except KeyError:
             await socket.send_privmsg(config.CHAN, f'{nick}, попробуйте другой ник WeirdChamp')
                                       
-    def replace_osu(mess):
+    def replace_osu(self, mess):
         with open('data/osujdau2.txt', 'r', encoding='utf-8') as f:
             osu = [x for x in f.read().split('\n') if len(x) > 1]
         res_prov = re.sub(r'\W+', ' ', mess)
@@ -462,7 +462,7 @@ class CommandsBot(commands.Bot, ABC):
             else:
                 json_response = response.json()
                 result = json_response['replies'][4]
-                result = replace_osu(result)
+                result = self.replace_osu(result)
                 if len(result) > 40 and len(words) > 30:
                     AdditionalMethods.add_to_buffer("e", f"{nickname}, {result}", ctx.author, "porf")
                 else:
@@ -567,20 +567,19 @@ class CommandsBot(commands.Bot, ABC):
         else:
             try:
                 lang = message.split()[0]
-                word = message.replace(lang, '')
+                word = message.replace(f'{lang} ', '')
                 lang_2 = detect(word).split('-')[0]
                 dataa = {"text": word}
                 key = 'cdbb30fe.5fe9e02a.e4b2adc6.74722d74657874-16-0'
                 url = f"https://translate.yandex.net/api/v1/tr.json/translate?id={key}&srv=tr-text&lang={lang_2}-{lang}&reason=auto&format=text"
-                print(url)
                 r = requests.get(url, data=dataa)
                 if r.status_code == 400:
                     AdditionalMethods.add_to_buffer("с", "Неправильно указан язык. Ссылка со всеми языками: https://pastebin.com/raw/nk1n1KxD", ctx.author, "перевод")
                 else:
                     resultat = str(r.text).partition('t":["')[-1].replace('"]}', "")
-                    resultat = replace_osu(resultat)
+                    resultat = self.replace_osu(resultat)
                     AdditionalMethods.add_to_buffer("с", f"{nickname}, {resultat[:90]}", ctx.author, "перевод")
-            except:
+            except FutureWarning:
                 AdditionalMethods.add_to_buffer("с", f"{nickname}, неправильно указаны параметры. Ссылка со всеми языками: https://pastebin.com/raw/nk1n1KxD",
                                                 ctx.author, "перевод")
 
@@ -990,7 +989,7 @@ class CommandsBot(commands.Bot, ABC):
                             break
                     res = [x for x in [re.sub(r'[\[].*?[\]]', '', i) for i in res] if len(x) > 1]
                     res = emote.join(res[:3])
-                    res = replace_osu(res)
+                    res = self.replace_osu(res)
                     AdditionalMethods.add_to_buffer("e", f'{emote} {res[:180]} {emote}', ctx.author, 'music')
         except AttributeError:
             pass
