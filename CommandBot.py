@@ -17,7 +17,7 @@ from urllib.parse import quote
 import asyncio
 import time
 import lyricsgenius as lg
-from langdetect import detect
+import langid
 import entertain_functions
 
 
@@ -568,7 +568,7 @@ class CommandsBot(commands.Bot, ABC):
             try:
                 lang = message.split()[0]
                 word = message.replace(f'{lang} ', '')
-                lang_2 = detect(word).split('-')[0]
+                lang_2 = langid.classify(word)[0]
                 dataa = {"text": word}
                 key = 'cdbb30fe.5fe9e02a.e4b2adc6.74722d74657874-16-0'
                 url = f"https://translate.yandex.net/api/v1/tr.json/translate?id={key}&srv=tr-text&lang={lang_2}-{lang}&reason=auto&format=text"
