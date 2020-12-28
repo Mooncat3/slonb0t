@@ -134,6 +134,16 @@ class CommandsBot(commands.Bot, ABC):
         except KeyError:
             await socket.send_privmsg(config.CHAN, f'{nick}, попробуйте другой ник WeirdChamp')
                                       
+    def replace_osu(mess):
+        with open('data/osujdau2.txt', 'r', encoding='utf-8') as f:
+            osu = [x for x in f.read().split('\n') if len(x) > 1]
+        res_prov = re.sub(r'\W+', ' ', mess)
+        for word in res_prov.split():
+            for asu in osu:
+                if word.lower().find(asu) != -1:
+                    mess = mess.replace(word, '*' * len(word))
+        return mess
+                                      
     async def event_ready(self):
         print(f'Ready {str(self.__class__.__name__)} | {self.nick} on {self.initial_channels[0]}')
         #await self.synch()
@@ -452,13 +462,7 @@ class CommandsBot(commands.Bot, ABC):
             else:
                 json_response = response.json()
                 result = json_response['replies'][4]
-                with open('data/osujdau2.txt') as f:
-                    osu = [x for x in f.read().split('\n') if len(x) > 1]
-                res_prov = re.sub(r'[^\w ]', '', result)
-                for word in res_prov.split():
-                    for asu in osu:
-                        if word.lower().find(asu) != -1:
-                            result = result.replace(word, '*' * len(word))
+                result = replace_osu(result)
                 if len(result) > 40 and len(words) > 30:
                     AdditionalMethods.add_to_buffer("e", f"{nickname}, {result}", ctx.author, "porf")
                 else:
@@ -559,14 +563,11 @@ class CommandsBot(commands.Bot, ABC):
         nickname = ctx.author.display_name
         message = ctx.message.clean_content
         if len(message) == 0:
-            AdditionalMethods.add_to_buffer("с",
-                                            f"{nickname}, cсылка со всеми ключами языков: https://pastebin.com/raw/nk1n1KxD",
-                                            ctx.author, "перевод")
+            AdditionalMethods.add_to_buffer("с", f"{nickname}, cсылка со всеми ключами языков: https://pastebin.com/raw/nk1n1KxD", ctx.author, "перевод")
         else:
             try:
                 lang = message.split()[0]
-                print(lang)
-                word = message.replace(f'{userlang}', '')
+                word = message.replace(lang, '')
                 lang_2 = detect(word).split('-')[0]
                 dataa = {"text": word}
                 key = 'cdbb30fe.5fe9e02a.e4b2adc6.74722d74657874-16-0'
@@ -574,22 +575,13 @@ class CommandsBot(commands.Bot, ABC):
                 print(url)
                 r = requests.get(url, data=dataa)
                 if r.status_code == 400:
-                    AdditionalMethods.add_to_buffer("с",
-                                                    "Неправильно указан язык. Ссылка со всеми языками: https://pastebin.com/raw/nk1n1KxD",
-                                                    ctx.author, "перевод")
+                    AdditionalMethods.add_to_buffer("с", "Неправильно указан язык. Ссылка со всеми языками: https://pastebin.com/raw/nk1n1KxD", ctx.author, "перевод")
                 else:
                     resultat = str(r.text).partition('t":["')[-1].replace('"]}', "")
-                    with open('data/osujdau2.txt', 'r', encoding='utf-8') as f:
-                        osu = [x for x in f.read().split('\n') if len(x) > 1]
-                    res_prov = re.sub(r'\W+', ' ', resultat)
-                    for word in res_prov.split():
-                        for asu in osu:
-                            if word.lower().find(asu) != -1:
-                                resultat = resultat.replace(word, '*' * len(word))
+                    resultat = replace_osu(resultat)
                     AdditionalMethods.add_to_buffer("с", f"{nickname}, {resultat[:90]}", ctx.author, "перевод")
             except:
-                AdditionalMethods.add_to_buffer("с",
-                                                f"{nickname}, неправильно указаны параметры. Ссылка со всеми языками: https://pastebin.com/raw/nk1n1KxD",
+                AdditionalMethods.add_to_buffer("с", f"{nickname}, неправильно указаны параметры. Ссылка со всеми языками: https://pastebin.com/raw/nk1n1KxD",
                                                 ctx.author, "перевод")
 
     @commands.command(name='курс')
@@ -998,13 +990,7 @@ class CommandsBot(commands.Bot, ABC):
                             break
                     res = [x for x in [re.sub(r'[\[].*?[\]]', '', i) for i in res] if len(x) > 1]
                     res = emote.join(res[:3])
-                    with open('data/osujdau2.txt', 'r', encoding='utf-8') as f:
-                        osu = [x for x in f.read().split('\n') if len(x) > 1]
-                    res_prov = re.sub(r'\W+', ' ', res)
-                    for word in res_prov.split():
-                        for asu in osu:
-                            if word.lower().find(asu) != -1:
-                                res = res.replace(word, '*' * len(word))
+                    res = replace_osu(res)
                     AdditionalMethods.add_to_buffer("e", f'{emote} {res[:180]} {emote}', ctx.author, 'music')
         except AttributeError:
             pass
