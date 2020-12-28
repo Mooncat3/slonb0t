@@ -565,11 +565,13 @@ class CommandsBot(commands.Bot, ABC):
         else:
             try:
                 lang = message.split()[0]
-                word = message.replace(f'{userlang} ', '')
+                print(lang)
+                word = message.replace(f'{userlang}', '')
                 lang_2 = detect(word).split('-')[0]
                 dataa = {"text": word}
                 key = 'cdbb30fe.5fe9e02a.e4b2adc6.74722d74657874-16-0'
                 url = f"https://translate.yandex.net/api/v1/tr.json/translate?id={key}&srv=tr-text&lang={lang_2}-{lang}&reason=auto&format=text"
+                print(url)
                 r = requests.get(url, data=dataa)
                 if r.status_code == 400:
                     AdditionalMethods.add_to_buffer("с",
@@ -584,7 +586,7 @@ class CommandsBot(commands.Bot, ABC):
                         for asu in osu:
                             if word.lower().find(asu) != -1:
                                 resultat = resultat.replace(word, '*' * len(word))
-                    AdditionalMethods.add_to_buffer("с", f"{nickname}, {resultat[:100]}", ctx.author, "перевод")
+                    AdditionalMethods.add_to_buffer("с", f"{nickname}, {resultat[:90]}", ctx.author, "перевод")
             except:
                 AdditionalMethods.add_to_buffer("с",
                                                 f"{nickname}, неправильно указаны параметры. Ссылка со всеми языками: https://pastebin.com/raw/nk1n1KxD",
