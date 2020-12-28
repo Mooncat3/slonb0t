@@ -578,7 +578,10 @@ class CommandsBot(commands.Bot, ABC):
                 else:
                     resultat = str(r.text).partition('t":["')[-1].replace('"]}', "")
                     resultat = self.replace_osu(resultat)
-                    AdditionalMethods.add_to_buffer("с", f"{nickname}, {resultat[:90]}", ctx.author, "перевод")
+                    if not AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
+                        AdditionalMethods.add_to_buffer("с", f"{nickname}, {resultat[:90]}", ctx.author, "перевод")
+                    else:
+                        AdditionalMethods.add_to_buffer("с", f"{nickname}, {resultat}", ctx.author, "перевод")
             except:
                 AdditionalMethods.add_to_buffer("с", f"{nickname}, неправильно указаны параметры. Ссылка со всеми языками: https://pastebin.com/raw/nk1n1KxD",
                                                 ctx.author, "перевод")
