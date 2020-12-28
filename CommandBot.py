@@ -17,6 +17,7 @@ from urllib.parse import quote
 import asyncio
 import time
 import lyricsgenius as lg
+from langdetect import detect
 import entertain_functions
 
 
@@ -556,22 +557,23 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='перевод')
     async def perevod(self, ctx):
         nickname = ctx.author.display_name
-        message = ctx.message.content
+        message = ctx.message.clean_content
         if len(message) == 0:
             AdditionalMethods.add_to_buffer("с",
-                                            f"{nickname}, cсылка со всеми языками: https://pastebin.com/raw/nk1n1KxD",
+                                            f"{nickname}, cсылка со всеми ключами языков: https://pastebin.com/raw/nk1n1KxD",
                                             ctx.author, "перевод")
         else:
             try:
-                userlang = message.split(" ")[1]
-                word = message.replace("!перевод " + userlang, "")
+                lang = message.split()[0]
+                word = message.replace(f'{userlang} ', '')
+                lang_2 = detect(word).split('-')[0]
                 dataa = {"text": word}
-                key = '3a68ec8e.5fdcccb2.31b3d49b.74722d74657874-0-0'
-                url = "https://translate.yandex.net/api/v1/tr.json/translate?id="+key+"&srv=tr-text&lang=" + userlang.lower() + "&reason=auto&format=text"
+                key = 'cdbb30fe.5fe9e02a.e4b2adc6.74722d74657874-16-0'
+                url = f"https://translate.yandex.net/api/v1/tr.json/translate?id={key}&srv=tr-text&lang={lang_2}-{lang}&reason=auto&format=text"
                 r = requests.get(url, data=dataa)
                 if r.status_code == 400:
                     AdditionalMethods.add_to_buffer("с",
-                                                    "Неправильно указаны языки. Ссылка со всеми языками: https://pastebin.com/raw/nk1n1KxD",
+                                                    "Неправильно указан язык. Ссылка со всеми языками: https://pastebin.com/raw/nk1n1KxD",
                                                     ctx.author, "перевод")
                 else:
                     resultat = str(r.text).partition('t":["')[-1].replace('"]}', "")
