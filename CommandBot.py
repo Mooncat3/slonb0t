@@ -579,7 +579,7 @@ class CommandsBot(commands.Bot, ABC):
                     resultat = str(r.text).partition('t":["')[-1].replace('"]}', "")
                     resultat = self.replace_osu(resultat)
                     AdditionalMethods.add_to_buffer("с", f"{nickname}, {resultat[:90]}", ctx.author, "перевод")
-            except FutureWarning:
+            except:
                 AdditionalMethods.add_to_buffer("с", f"{nickname}, неправильно указаны параметры. Ссылка со всеми языками: https://pastebin.com/raw/nk1n1KxD",
                                                 ctx.author, "перевод")
 
