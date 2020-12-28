@@ -51,8 +51,8 @@ class CommandsBot(commands.Bot, ABC):
         self.genius = lg.Genius("5Pj7QcUoV5Khbd-Hq5jSve8OzCQILJkY8nWojIIxqH30ItpsmXC7UmCRcgjmTVPY")
         print('Blacklist:', self.blacklist)
     
-    async def event_command_error(self, ctx, error):
-        pass
+    # async def event_command_error(self, ctx, error):
+        # pass
     
     async def duelent(self, socket):
         i: int = 0
