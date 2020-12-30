@@ -144,6 +144,13 @@ class CommandsBot(commands.Bot, ABC):
                     mess = mess.replace(word, '*' * len(word))
         return mess
                                       
+    def normalize_nick(self, message):
+        for nick in self.names_exp:	
+            for word in message.split():	
+                if str(word).lower().find(str(nick).lower()) != -1:	
+                    message = message.replace(word, nick)
+        return message
+
     async def event_ready(self):
         print(f'Ready {str(self.__class__.__name__)} | {self.nick} on {self.initial_channels[0]}')
         #await self.synch()
@@ -275,14 +282,10 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='кто')	
     async def kto(self, ctx):	
         message = ctx.message.clean_content.replace('@', '')[:80]
-        random.seed(message)
+        random.seed(message.lower())
         name = random.choice(self.namess)
         random.seed()
-        for nick in self.names_exp:	
-            for word in message.split():	
-                if str(word).lower().find(str(nick).lower()) != -1:	
-                    message = message.replace(word, nick)	
-        AdditionalMethods.add_to_buffer("e",f'{name} {message} OpieOP', ctx.author, "кто")
+        AdditionalMethods.add_to_buffer("e",f'{name} {self.normalize_nick(message)} OpieOP', ctx.author, "кто")
 
     @commands.command(name='mute')
     async def mute(self, ctx):
@@ -862,11 +865,7 @@ class CommandsBot(commands.Bot, ABC):
         message = ctx.message.clean_content.replace('@', '')[:80]
         nickname = ctx.author.display_name
         if len(message) != 0:
-            for nick in self.names_exp:
-                for word in message.split():
-                    if str(word).lower().find(str(nick).lower()) != -1:
-                        message = message.replace(word, nick)
-            answer = entertain_functions.do(nickname, message, self.namess)
+            answer = entertain_functions.do(nickname, self.normalize_nick(message), self.namess)
             AdditionalMethods.add_to_buffer("e", answer, ctx.author, "do")
 
     @commands.command(name='steal')
@@ -874,11 +873,7 @@ class CommandsBot(commands.Bot, ABC):
         message = ctx.message.clean_content.replace('@', '')[:80]
         nickname = ctx.author.display_name
         if len(message) != 0:
-            for nick in self.names_exp:
-                for word in message.split():
-                    if str(word).lower().find(str(nick).lower()) != -1:
-                        message = message.replace(word, nick)
-            answer = entertain_functions.steal(nickname, message)
+            answer = entertain_functions.steal(nickname, self.normalize_nick(message))
             AdditionalMethods.add_to_buffer("e", answer, ctx.author, "steal")
 
     @commands.command(name='try')
@@ -886,11 +881,7 @@ class CommandsBot(commands.Bot, ABC):
         message = ctx.message.clean_content.replace('@', '')[:80]
         nickname = ctx.author.display_name
         if len(message) != 0:
-            for nick in self.names_exp:
-                for word in message.split():
-                    if str(word).lower().find(str(nick).lower()) != -1:
-                        message = message.replace(word, nick)
-            result = AdditionalMethods.parse_standartfile_message(nickname, "{nickname} попробовал {messagestr}... {filestr}", message, "!try", "try")
+            result = AdditionalMethods.parse_standartfile_message(nickname, "{nickname} попробовал {messagestr}... {filestr}", self.normalize_nick(message), "!try", "try")
             AdditionalMethods.add_to_buffer("e", result, ctx.author, "try")
 
     @commands.command(name='время')
@@ -924,11 +915,7 @@ class CommandsBot(commands.Bot, ABC):
         message = ctx.message.clean_content.replace('@', '')[:80]
         nickname = ctx.author.display_name
         if len(message) != 0:
-            for nick in self.names_exp:
-                for word in message.split():
-                    if str(word).lower().find(str(nick).lower()) != -1:
-                        message = message.replace(word, nick)
-            result = AdditionalMethods.parse_standartfile_message(nickname, "{nickname} {filestr} обнимает {messagestr} VoHiYo", message, "!обнять", "hug")
+            result = AdditionalMethods.parse_standartfile_message(nickname, "{nickname} {filestr} обнимает {messagestr} VoHiYo", self.normalize_nick(message), "!обнять", "hug")
             AdditionalMethods.add_to_buffer("e", result, ctx.author, "обнять")
 
     @commands.command(name='когда')
@@ -936,11 +923,7 @@ class CommandsBot(commands.Bot, ABC):
         message = ctx.message.clean_content.replace('@', '')[:80]
         nickname = ctx.author.display_name
         if len(message) != 0:
-            for nick in self.names_exp:
-                for word in message.split():
-                    if str(word).lower().find(str(nick).lower()) != -1:
-                        message = message.replace(word, nick)
-            result = AdditionalMethods.parse_standartfile_message(nickname, "{nickname}, когда {messagestr}? Thonk {filestr}", message, "!когда", "kogda")
+            result = AdditionalMethods.parse_standartfile_message(nickname, "{nickname}, когда {messagestr}? Thonk {filestr}", self.normalize_nick(message), "!когда", "kogda")
             AdditionalMethods.add_to_buffer("e", result, ctx.author, "когда")
 
     @commands.command(name='привет')
@@ -948,11 +931,7 @@ class CommandsBot(commands.Bot, ABC):
         message = ctx.message.clean_content.replace('@', '')[:80]
         nickname = ctx.author.display_name
         if len(message) != 0:
-            for nick in self.names_exp:
-                for word in message.split():
-                    if str(word).lower().find(str(nick).lower()) != -1:
-                        message = message.replace(word, nick)
-            result = AdditionalMethods.parse_standartfile_message(nickname, "{nickname} {filestr} приветствует {messagestr} peepoHey peepoLove", message, "!привет", "privet")
+            result = AdditionalMethods.parse_standartfile_message(nickname, "{nickname} {filestr} приветствует {messagestr} peepoHey peepoLove", self.normalize_nick(message), "!привет", "privet")
             AdditionalMethods.add_to_buffer("e", result, ctx.author, "привет")
 
     @commands.command(name='гороскоп')
