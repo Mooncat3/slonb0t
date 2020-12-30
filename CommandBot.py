@@ -556,7 +556,7 @@ class CommandsBot(commands.Bot, ABC):
         while len(anekdot) > 100:
             r = requests.get('http://anecdotica.ru/')
             anekdot = BeautifulSoup(r.content, 'lxml').find('div', class_='item_text').get_text()
-        AdditionalMethods.add_to_buffer("e", f'{anekdott} KEKL', ctx.author, "анекдот")
+        AdditionalMethods.add_to_buffer("e", f'{anekdot} KEKL', ctx.author, "анекдот")
 
     @commands.command(name='перевод')
     async def perevod(self, ctx):
