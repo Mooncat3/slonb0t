@@ -546,10 +546,12 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='нг')
     async def ng(self, ctx):
         nickname = ctx.author.display_name
-        new_year = datetime(2020, 12, 31, 23, 59, 59)
-        t = datetime.today()
-        res = (new_year - timedelta(days=t.day, minutes=t.minute, hours=t.hour)) - timedelta(hours=3)
-        AdditionalMethods.add_to_buffer("e", f'{nickname}, Новый Год через {res.day} дней {res.hour} часов и {res.minute} минут FeelsRainMan', ctx.author, "нг")
+        now = datetime.today()
+        NY = datetime(2020, 1, 1, 0, 0, 0)
+        d = NY-now
+        mm, ss = divmod(d.seconds, 60)
+        hh, mm = divmod(mm, 60)
+        AdditionalMethods.add_to_buffer("e", f'{nickname}, До нового года: {d.days} дней {hh} ч. {mm} мин. FeelsRainMan', ctx.author, "нг")
                                                        
     @commands.command(name='анекдот')
     async def anekdot(self, ctx):
