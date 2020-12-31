@@ -546,8 +546,8 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='нг')
     async def ng(self, ctx):
         nickname = ctx.author.display_name
-        now = datetime.today()
-        NY = datetime(2020, 1, 1, 0, 0, 0)
+        now = datetime.today() - timedelta(hours=3)
+        NY = datetime(2020, 12, 31, 23, 59, 59)
         d = NY-now
         mm, ss = divmod(d.seconds, 60)
         hh, mm = divmod(mm, 60)
