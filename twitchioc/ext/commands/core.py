@@ -146,7 +146,7 @@ class Command:
 
         Raises
         --------
-        twitchioc.TwitchIOBException
+        twitchio.TwitchIOBException
             The func is not a coroutine function.
         """
         if not inspect.iscoroutinefunction(func):
@@ -168,7 +168,7 @@ class Command:
 
         Raises
         --------
-        twitchioc.TwitchIOBException
+        twitchio.TwitchIOBException
             The func is not a coroutine function.
         """
         if not inspect.iscoroutinefunction(func):
@@ -190,7 +190,7 @@ class Command:
 
         Raises
         --------
-        twitchioc.TwitchIOBException
+        twitchio.TwitchIOBException
             The func is not a coroutine function.
         """
         if not inspect.iscoroutinefunction(func):
