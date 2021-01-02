@@ -37,11 +37,11 @@ from typing import Union, List, Tuple
 from .core import Command, AutoCog
 from .errors import *
 from .stringparser import StringParser
-from twitchioc.client import Client
-from twitchioc.dataclasses import Context
-from twitchioc.errors import ClientError
-from twitchioc.webhook import TwitchWebhookServer
-from twitchioc.websocket import WebsocketConnection
+from twitchio.client import Client
+from twitchio.dataclasses import Context
+from twitchio.errors import ClientError
+from twitchio.webhook import TwitchWebhookServer
+from twitchio.websocket import WebsocketConnection
 
 
 class Bot(Client):
@@ -475,12 +475,12 @@ class Bot(Client):
         content = content[len(ctx.prefix)::].lstrip(' ')
         parsed = StringParser().process_string(content)
 
+        message.clean_content = ' '.join(parsed.values())
+
         try:
-            command = str(parsed.pop(0)).lower()
+            command = parsed.pop(0)
         except KeyError:
             return
-        
-        message.clean_content = ' '.join(parsed.values())
 
         try:
             command = self._aliases[command]
