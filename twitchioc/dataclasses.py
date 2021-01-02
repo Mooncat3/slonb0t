@@ -310,7 +310,7 @@ class User:
         """A boolean indicating whether the User is a moderator of the current channel."""
         if self._mod == 1:
             return True
-        if self.channel.name == self.name.lower():
+        if self.channel.name == str(self.name).lower():
             return True
         else:
             return False
