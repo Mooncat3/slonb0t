@@ -24,11 +24,11 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
 
-__title__ = 'twitchioc'
+__title__ = 'twitchio'
 __author__ = 'TwitchIO'
 __license__ = 'MIT'
 __copyright__ = 'Copyright 2017-2020 TwitchIO'
-__version__ = '1.1.0'
+__version__ = '1.2.0'
 
 import logging
 
