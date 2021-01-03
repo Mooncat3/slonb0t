@@ -184,8 +184,11 @@ class WebsocketConnection:
 
     async def send_cap(self, cap: str):
         """|coro|
+
         Send a CAP REQ to Twitch.
+
         Valid caps are: commands, tags, membership
+
         Parameters
         ------------
         cap: str
@@ -196,10 +199,14 @@ class WebsocketConnection:
 
     async def auth_seq(self, channels: Union[list, tuple]=None):
         """|coro|
+
         Automated Authentication process.
+
         Attempts to authenticate on the Twitch servers with the provided
         nickname and IRC Token (pass).
+
         On successful authentication, an attempt to join the provided channels is made.
+
         Parameters
         ------------
         channels: Union[list, tuple]
@@ -222,16 +229,22 @@ class WebsocketConnection:
 
     async def send_nick(self):
         """|coro|
+
         Sends a NICK request to the Twitch IRC Endpoint.
+
         This should only be used if :func:`auth_seq` was not used.
         """
         await self._websocket.send(f"NICK {self.nick}\r\n")
 
     async def send_privmsg(self, channel: str, content: str):
         """|coro|
+
         Sends a PRIVMSG to the Twitch IRC Endpoint.
+
         This should only be used directly in rare circumstances where a :class:`twitchioc.abcs.Messageable` is not available.
+
         .. warning::
+
             This method is not directly handled by built-in rate-limits. You risk getting rate limited by twitch,
             which has a 30 minute cooldown.
         """
@@ -246,7 +259,9 @@ class WebsocketConnection:
 
     async def join_channels(self, *channels: str):
         """|coro|
+
         Attempt to join the provided channels.
+
         Parameters
         ------------
         *channels : str
@@ -271,7 +286,9 @@ class WebsocketConnection:
 
     async def part_channels(self, *channels: str):
         """|coro|
+
         Attempt to part the provided channels.
+
         Parameters
         ------------
         *channels : str

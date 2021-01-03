@@ -42,7 +42,7 @@ import uuid
 
 from aiohttp import web
 
-from twitchio.errors import HTTPException
+from twitchioc.errors import HTTPException
 
 
 class TwitchWebhookServer:

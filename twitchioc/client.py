@@ -28,12 +28,12 @@ import asyncio
 from collections import namedtuple
 from typing import Union
 
-from twitchio.errors import HTTPException
-from twitchio.http import HTTPSession
+from twitchioc.errors import HTTPException
+from twitchioc.http import HTTPSession
 
 
 User = namedtuple('User', ('id', 'login', 'display_name', 'type', 'broadcaster_type', 'description',
-                           'profile_image', 'offline_image', 'view_count', 'created_at'))
+                           'profile_image', 'offline_image', 'view_count'))
 Chatters = namedtuple('Chatters', ('count', 'all', 'broadcaster', 'vips', 'moderators', 'staff',
                                    'admins', 'global_mods', 'viewers'))
 
@@ -41,7 +41,7 @@ Chatters = namedtuple('Chatters', ('count', 'all', 'broadcaster', 'vips', 'moder
 class Client:
 
     def __init__(self, *, loop=None, client_id=None, client_secret=None, api_token=None, scopes: list=None, **kwargs):
-        loop = loop or asyncio.get_event_loop()
+        self.loop = loop or asyncio.get_event_loop()
         self.http = HTTPSession(loop=loop, client_id=client_id, client_secret=client_secret, api_token=api_token, scopes=scopes)
 
     async def get_users(self, *users: Union[str, int]) -> list:

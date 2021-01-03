@@ -27,7 +27,7 @@ DEALINGS IN THE SOFTWARE.
 __all__ = ('CommandError', 'CommandNotFound', 'MissingRequiredArgument', 'BadArgument', 'CheckFailure',)
 
 
-from twitchio.errors import TwitchIOBException
+from twitchioc.errors import TwitchIOBException
 
 
 class CommandError(TwitchIOBException):
