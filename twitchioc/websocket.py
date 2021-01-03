@@ -184,11 +184,8 @@ class WebsocketConnection:
 
     async def send_cap(self, cap: str):
         """|coro|
-
         Send a CAP REQ to Twitch.
-
         Valid caps are: commands, tags, membership
-
         Parameters
         ------------
         cap: str
@@ -199,14 +196,10 @@ class WebsocketConnection:
 
     async def auth_seq(self, channels: Union[list, tuple]=None):
         """|coro|
-
         Automated Authentication process.
-
         Attempts to authenticate on the Twitch servers with the provided
         nickname and IRC Token (pass).
-
         On successful authentication, an attempt to join the provided channels is made.
-
         Parameters
         ------------
         channels: Union[list, tuple]
@@ -229,22 +222,16 @@ class WebsocketConnection:
 
     async def send_nick(self):
         """|coro|
-
         Sends a NICK request to the Twitch IRC Endpoint.
-
         This should only be used if :func:`auth_seq` was not used.
         """
         await self._websocket.send(f"NICK {self.nick}\r\n")
 
     async def send_privmsg(self, channel: str, content: str):
         """|coro|
-
         Sends a PRIVMSG to the Twitch IRC Endpoint.
-
-        This should only be used directly in rare circumstances where a :class:`twitchio.abcs.Messageable` is not available.
-
+        This should only be used directly in rare circumstances where a :class:`twitchioc.abcs.Messageable` is not available.
         .. warning::
-
             This method is not directly handled by built-in rate-limits. You risk getting rate limited by twitch,
             which has a 30 minute cooldown.
         """
@@ -259,9 +246,7 @@ class WebsocketConnection:
 
     async def join_channels(self, *channels: str):
         """|coro|
-
         Attempt to join the provided channels.
-
         Parameters
         ------------
         *channels : str
@@ -286,9 +271,7 @@ class WebsocketConnection:
 
     async def part_channels(self, *channels: str):
         """|coro|
-
         Attempt to part the provided channels.
-
         Parameters
         ------------
         *channels : str
@@ -405,7 +388,7 @@ class WebsocketConnection:
             tagdict = {}
             for tag in str(tags).split(";"):
                 t = tag.split("=")
-                if t[1].isdecimal():
+                if t[1].isnumeric():
                     t[1] = int(t[1])
                 tagdict[t[0]] = t[1]
             tags = tagdict
@@ -540,14 +523,6 @@ class WebsocketConnection:
 
             await self._dispatch('mode', channel, user, mstatus)
 
-        elif action == 'CLEARCHAT': #新增 被ban事件
-            log.debug('ACTION:: CLEARCHAT')
-
-            user = User(author=content, channel=channel, tags=tags, ws=self._websocket)
-            notice = ClearChat(channel=channel, user=user, tags=tags)
-
-            await self._dispatch('clearchat', notice)
-
     async def join_action(self, channel: str, author: str, tags):
         log.debug('ACTION:: JOIN: %s', channel)
 
@@ -557,16 +532,13 @@ class WebsocketConnection:
 
             self._channel_cache[channel] = {'channel': chan_, 'bot': user}
 
-            if channel in self._pending_joins:
+            if self._pending_joins:
                 self._pending_joins[channel].set_result(None)
                 self._pending_joins.pop(channel)
 
             self._channel_token += 1
 
-        try:
-            cache = self._channel_cache[channel]['channel']._users
-        except KeyError as e:
-            raise ClientError("The \"nick\" value passed to the constructor does not match the user we are logged in as") from e
+        cache = self._channel_cache[channel]['channel']._users
 
         try:
             user = cache[author.lower()]
@@ -623,8 +595,10 @@ class WebsocketConnection:
         traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
 
     def teardown(self):
+        """
         if self._bot._webhook_server:
             self._bot._webhook_server.stop()
+        """
 
         self._websocket.close()
 
