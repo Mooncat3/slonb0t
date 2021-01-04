@@ -792,7 +792,7 @@ class CommandsBot(commands.Bot, ABC):
                 AdditionalMethods.add_to_buffer("s", f"{nickname}, не удалось прочесть число PepoG ", ctx.author,
                                                 "buffermax")
 
-    @commands.command(name='entertain')
+    @commands.command(name='entertain', aliases=['e'])
     async def entertain(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
             nickname = ctx.author.display_name
