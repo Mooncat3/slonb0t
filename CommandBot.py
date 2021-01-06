@@ -512,7 +512,7 @@ class CommandsBot(commands.Bot, ABC):
             message = message[1:len(message)]
         AdditionalMethods.add_to_buffer("c", AdditionalMethods.get_last_stream_stat(message, nickname, ctx.author),
                                         ctx.author, "history")
-
+    """
     @commands.command(name='archive')
     async def streamh(self, ctx):
         nickname = ctx.author.display_name
@@ -530,7 +530,7 @@ class CommandsBot(commands.Bot, ABC):
             AdditionalMethods.add_to_buffer("c", AdditionalMethods.get_archive_stream_stat(id, nickname, tag, ctx.author).format(nickname, id), ctx.author, "archive")
         except:
             AdditionalMethods.add_to_buffer("с", f'{nickname} !archive [0-9]', ctx.author, "archive")
-
+    """
     @commands.command(name='рецепт')
     async def recept(self, ctx):
         r = requests.get('http://culinar.ivest.kz/randomMenu')
