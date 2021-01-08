@@ -28,7 +28,8 @@ class BufferCleaner(Client, ABC):
         self.loop.create_task(self.listen_to_buffer_undelaied())
         self.messes = []
         self.times = {}
-        self.kd = {"porf": 15, "когда": 15, "анекдот": 15, "iq": 15, "me": 15, "do": 15, "кто": 15, "steal": 15, "try": 15, "обнять": 5, "kogda": 15, "привет": 15}
+        kd_e = 30
+        self.kd = {"porf": kd_e, "когда": kd_e, "анекдот": kd_e, "iq": kd_e, "me": kd_e, "do": kd_e, "кто": kd_e, "steal": kd_e, "try": kd_e, "обнять": 5, "kogda": kd_e, "привет": kd_e}
         for r in self.kd.keys():
             if not r in self.times.keys():
                 self.times[str(self.kd[r])] = 0
