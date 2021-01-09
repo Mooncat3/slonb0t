@@ -242,7 +242,7 @@ class CommandsBot(commands.Bot, ABC):
                                                             f"/w {f} {nickname} был предупреждён {self.spammers[nickname]['worned']} из {Settings.get_attentions()} раз")
                             await self._ws.send_privmsg(config.CHAN,
                                                         f"/w {nickname} Вы слишком часто отправляете сообщения на канале {self.initial_channels[0]}, это {self.spammers[nickname]['worned']} из {Settings.get_attentions()} предупреждений!")
-                        requests.post(config.api_url + f"/logs/{self.initial_channels[0]}",
+                        requests.post(config.api_url + f"/logs",
                                       data={"log": stringer.encode(
                                           "utf-8"), "nickname": nickname, "warns": {self.spammers[nickname]['worned']},
                                           "time": time.time()}, headers=config.head)
