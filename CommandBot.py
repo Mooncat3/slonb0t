@@ -312,19 +312,25 @@ class CommandsBot(commands.Bot, ABC):
     
     @commands.command(name='seek')
     async def seek(self, ctx):
-        if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
-            nickname = ctx.author.name
-            if not nickname in self.seekers:
-                self.seekers.append(nickname)
-                if requests.post(config.api_url + f"/seekers/{self.initial_channels[0]}", data={'nick': nickname, 'enabled': 1}, headers=config.head).json()['type'] == "error":
-                    AdditionalMethods.add_to_buffer("s",
-                                                    f"Вы подписаны на уведомления о спаме! (это изменение не было сохраненно в постоянную базу данных)",
-                                                    ctx.author,
-                                                    "seek")
+        try:
+            if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
+                nickname = ctx.author.name
+                if not nickname in self.seekers:
+                    self.seekers.append(nickname)
+                    answer = requests.post(config.api_url + f"/seekers/{self.initial_channels[0]}", data={'nick': nickname, 'enabled': 1}, headers=config.head)
+                    print(answer.content)
+                    print(answer.json())
+                    if requests.post(config.api_url + f"/seekers/{self.initial_channels[0]}", data={'nick': nickname, 'enabled': 1}, headers=config.head).json()['type'] == "error":
+                        AdditionalMethods.add_to_buffer("s",
+                                                        f"Вы подписаны на уведомления о спаме! (это изменение не было сохраненно в постоянную базу данных)",
+                                                        ctx.author,
+                                                        "seek")
+                    else:
+                        AdditionalMethods.add_to_buffer("s", f"Вы подписаны на уведомления о спаме!", ctx.author, "seek")
                 else:
-                    AdditionalMethods.add_to_buffer("s", f"Вы подписаны на уведомления о спаме!", ctx.author, "seek")
-            else:
-                AdditionalMethods.add_to_buffer("s", f"Вы уже подписаны на уведомления о спаме ResidentSleeper", ctx.author, "seek")
+                    AdditionalMethods.add_to_buffer("s", f"Вы уже подписаны на уведомления о спаме ResidentSleeper", ctx.author, "seek")
+        except Exception as e:
+            print(e)
 
     @commands.command(name='unseek')
     async def unseek(self, ctx):
