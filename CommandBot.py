@@ -84,7 +84,7 @@ class CommandsBot(commands.Bot, ABC):
                 self.duel_nicknames.remove(randname)
                 await asyncio.sleep(8)
                 await socket.send_privmsg(config.CHAN,
-                                          f"Выстрел выстрел заставляет {randname['label']} сдаться. Самая быстрая рука дикого запада – {self.duel_nicknames[0]['label']}")
+                                          f"Выстрел заставляет {randname['label']} сдаться. Самая быстрая рука дикого запада – {self.duel_nicknames[0]['label']}")
         self.duel_nicknames.clear()
         self.duel_is_running = False
 
