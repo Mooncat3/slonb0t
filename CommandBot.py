@@ -156,7 +156,7 @@ class CommandsBot(commands.Bot, ABC):
         await self.synch()
 
     async def synch(self):
-        self.seekers = requests.get(config.api_url + f"/seekers/{self.initial_channels[0]}", headers=config.head).json()['answer']
+        self.seekers = requests.get(config.api_url + f"/seekers", headers=config.head).json()['answer']
 
     async def event_message(self, message):
         nickname = message.author.name
