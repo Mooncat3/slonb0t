@@ -13,4 +13,4 @@ buferchanged = False
 istopcliprunning = False
 helpUrl = "https://pastebin.com/raw/wbiVyxpC"
 abreviationsUrl = "https://pastebin.com/raw/h546CMvM"
-api_url = "https://main-project1.herokuapp.com"
+api_url = "https://slon-api.herokuapp.com"
