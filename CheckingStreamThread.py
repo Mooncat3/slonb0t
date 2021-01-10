@@ -117,10 +117,19 @@ def checkingthread():
                         q.write(json.dumps(dat))
         if active:
             time.sleep(10)
+            if additint == 120:
+                additint = 0
+                smiles = requests.get('https://slon-api.herokuapp.com' + '/smiles').json()['answer']
+                with open(file='SMILES.txt', mode='w', encoding='utf-8') as f:
+                    f.write(json.dumps(smiles))
+            else:
+                additint += 1
         if not active:
             if additint == 20:
                 additint = 0
-                requests.get(config.api_url)
+                smiles = requests.get('https://slon-api.herokuapp.com' + '/smiles').json()['answer']
+                with open(file='SMILES.txt', mode='w', encoding='utf-8') as f:
+                    f.write(json.dumps(smiles))
             else:
                 additint += 1
             time.sleep(60)
