@@ -295,17 +295,21 @@ class CommandsBot(commands.Bot, ABC):
                 timeout = 0
             local_mban_messes = list(self.mban_messes)
             baned = []
-            AdditionalMethods.add_to_buffer('c', f'{ctx.author.display_name}, mass ban started!', ctx.author, 'bban')
-            print(f'banning mess: {mess_mass[-1]}')
+            mess_mass = ' '.join(mess_mass[1:])
+            if timeout == 0:
+                AdditionalMethods.add_to_buffer('c', f'{ctx.author.display_name}, mass ban started!', ctx.author, 'bban')
+            else:
+                AdditionalMethods.add_to_buffer('c', f'{ctx.author.display_name}, mass timeout started!', ctx.author, 'bban')
+            print(f'banning mess: {mess_mass}')
             for item in local_mban_messes:
                 r_item = item.split("  ")
-                if r_item[1].find(mess_mass[-1]) != -1 and not r_item[0] in baned:
+                if r_item[1].find(mess_mass) != -1 and not r_item[0] in baned:
                     print(r_item)
                     baned.append(r_item[0])
                     if timeout == 0:
-                        AdditionalMethods.add_to_buffer('c', f'/ban {r_item[0]} mass_ban by SLONB0T', ctx.author, 'cmd')
+                        AdditionalMethods.add_to_buffer('c', f'/ban {r_item[0]} mass ban by SLONB0T', ctx.author, 'cmd')
                     else:
-                        AdditionalMethods.add_to_buffer('c', f'/timeout {r_item[0]} {timeout} mass_timeout by SLONB0T', ctx.author, 'cmd')
+                        AdditionalMethods.add_to_buffer('c', f'/timeout {r_item[0]} {timeout} mass timeout by SLONB0T', ctx.author, 'cmd')
             count = len(baned)
             if timeout == 0:
                 AdditionalMethods.add_to_buffer('c', f'{ctx.author.display_name}, mass ban finished, banned {count} users.', ctx.author, 'bban')
