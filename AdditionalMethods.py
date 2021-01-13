@@ -63,6 +63,13 @@ def add_to_buffer(type: str, message: str, author: User, command: str):
             dat = json.loads(e.read())
     except:
         dat = []
+    while len(dat) > 100:
+        time.sleep(0.1)
+        try:
+            with open(file='data/buffer.txt', mode='r', encoding='utf-8') as e:
+                dat = json.loads(e.read())
+        except:
+            dat = []
     while config.buferchanged:
         time.sleep(0.1)
     config.buferchanged = True
