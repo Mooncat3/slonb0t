@@ -24,16 +24,18 @@ class BufferCleaner(Client, ABC):
                          client_id=config.CLIENT_ID, api_token=config.OAUTH)
         self._ws = WebsocketConnection(bot=self, loop=self.loop, http=self.http, irc_token=f'oauth:{config.OAUTH}',
                                        nick=config.BOT, initial_channels=config.CHANNELS)
-        self.loop.create_task(self.listen_to_buffer_delaied())
-        self.loop.create_task(self.listen_to_buffer_undelaied())
         self.messes = []
         self.times = {}
+        self.time_delay = 0
+        self.count_delay = 0
         kd_e = 30
         self.kd = {"porf": kd_e, "когда": kd_e, "анекдот": kd_e, "iq": kd_e, "me": kd_e, "do": kd_e, "кто": kd_e, "steal": kd_e, "try": kd_e, "обнять": 5, "kogda": kd_e, "привет": kd_e}
         for r in self.kd.keys():
             if not r in self.times.keys():
                 self.times[str(self.kd[r])] = 0
         self.times['0'] = 0
+        self.loop.create_task(self.listen_to_buffer_delaied())
+        self.loop.create_task(self.listen_to_buffer_undelaied())
 
     async def event_webhook(self, data):
         pass
@@ -112,13 +114,19 @@ class BufferCleaner(Client, ABC):
         recepttime = 0.0
         ondeleting = []
         dopbol = True
+        print('ldsa')
         while True:
             async def send_mess(sock, resert, rest):
                 mess = str(resert['mes'])
+                while time.time() - self.time_delay <= 30 and self.count_delay >= 100:
+                    await asyncio.sleep(0.1)
+                if time.time() - self.time_delay > 30:
+                    self.time_delay = time.time()
+                    self.count_delay = 0
+                else:
+                    self.count_delay += 1
                 while sock._websocket is None:
                     await asyncio.sleep(0.1)
-                # print(str(parse_kd_comand(self.kd, res['command'])))
-                # print(self.times)
                 if rest['vip'] and rest['type'] != "s":
                     await sock.send_privmsg(config.CHAN, mess)
                 elif rest['type'] == "s" or x - excluding >= Settings.get_bufer_max() or time.time() - self.times[str(parse_kd_comand(self.kd, res['command']))] < parse_kd_comand(self.kd, res['command']):
@@ -127,17 +135,22 @@ class BufferCleaner(Client, ABC):
                     pass
             await asyncio.sleep(0.2)
             while config.buferchanged:
-                    await asyncio.sleep(0.1)
+                await asyncio.sleep(0.1)
             config.buferchanged = True
             with open(file='data/buffer.txt', mode='r', encoding='utf-8') as e:
                 try:
-                    dat = json.loads(e.read())
+                    raw_data = json.loads(e.read())
+                    if len(raw_data) > 100:
+                        dat = [raw_data[r] for r in range(0, 100)]
+                    else:
+                        dat = raw_data
                 except:
                     dat = []
                 if len(dat) > 0:
                     excluding = 0
                     for x in range(0, len(dat)):
                         res = dat[x]
+                        print(res)
                         if res['vip'] or res['type'] == "s":
                             excluding += 1
                         if res['vip'] or res['type'] == "s" or x - excluding >= Settings.get_bufer_max() or (time.time() - self.times[str(parse_kd_comand(self.kd, res['command']))] < parse_kd_comand(self.kd, res['command']) and time.time() - self.times[str(parse_kd_comand(self.kd, res['command']))] > 0.5):
@@ -158,7 +171,10 @@ class BufferCleaner(Client, ABC):
                                         await send_mess(self._ws, reser, res)
             if len(ondeleting) > 0:
                 with open(file='data/buffer.txt', mode='r', encoding='utf-8') as e:
-                    dat = json.loads(e.read())
+                    try:
+                        dat = json.loads(e.read())
+                    except json.decoder.JSONDecodeError:
+                        print(e.read())
                     for delet in ondeleting:
                         dat.remove(delet)
                     ondeleting = []
@@ -170,6 +186,12 @@ class BufferCleaner(Client, ABC):
             config.buferchanged = False
 
     async def listen_to_buffer_delaied(self):
+        def no_vip(listing):
+            new_list = []
+            for item in listing:
+                if item['vip']:
+                    new_list.append(item)
+            return new_list
         tttime = time.time()
         timer = 0.0
         recepttime = 0.0
@@ -178,6 +200,13 @@ class BufferCleaner(Client, ABC):
         while True:
             async def send_mess(sock, resert, rest):
                 mess = resert['mes']
+                while time.time() - self.time_delay <= 30 and self.count_delay >= 99:
+                    await asyncio.sleep(0.1)
+                if time.time() - self.time_delay > 30:
+                    self.time_delay = time.time()
+                    self.count_delay = 0
+                else:
+                    self.count_delay += 1
                 while sock._websocket is None:
                     await asyncio.sleep(0.1)
                 if rest['type'] == "e" or rest['type'] == "r":
@@ -195,24 +224,27 @@ class BufferCleaner(Client, ABC):
                     await asyncio.sleep(resert['timeout'])
                     dat.remove(rest)
                     await sock.send_privmsg(config.CHAN, mess)
-            await asyncio.sleep(0.2)
+            await asyncio.sleep(0.1)
             if time.time() - (tttime + timer) > Settings.get_bufer_timeout():
                 tttime = time.time()
                 timer = 0.0
             while config.buferchanged:
                 await asyncio.sleep(0.1)
-            config.buferchanged = True
             with open(file='data/buffer.txt', mode='r', encoding='utf-8') as e:
                 try:
-                    dat = json.loads(e.read())
+                    raw_data = json.loads(e.read())
+                    if len(raw_data) > 100:
+                        dat = [raw_data[r] for r in range(0, 100)]
+                    else:
+                        dat = raw_data
                 except:
                     dat = []
                 if len(dat) > 0:
-                    while len(dat) > Settings.get_bufer_max():
+                    while len(no_vip(dat)) > Settings.get_bufer_max():
                         await asyncio.sleep(0.2)
-                        with open(file='data/buffer.txt', mode='r', encoding='utf-8') as e:
+                        with open(file='data/buffer.txt', mode='r', encoding='utf-8') as r:
                             try:
-                                dat = json.loads(e.read())
+                                dat = json.loads(r.read())
                             except:
                                 dat = []
                     if len(dat) > 0:
