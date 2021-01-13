@@ -172,11 +172,9 @@ class CommandsBot(commands.Bot, ABC):
         except KeyError:
             badge = ''
         if not AdditionalMethods.vip(message.author.is_mod, nickname) and not nickname == "slonb0t" and not badge == 'vip':
-            if len(self.mban_messes) < 20000:
-                self.mban_messes.append(nickname + "  " + message.content)
-            else:
+            if len(self.mban_messes) > 20000:
                 del self.mban_messes[0]
-                self.mban_messes.append(nickname + "  " + message.content)
+            self.mban_messes.append(nickname + "  " + message.content)
             docheck = True
             mod = Settings.get_mod()
             if mod != "all" and (mod == "skip" or mod == "skip_with"):
@@ -291,15 +289,15 @@ class CommandsBot(commands.Bot, ABC):
             mess_mass = str(message).split()
             if mess_mass[0].isdecimal():
                 timeout = int(mess_mass[0])
+                del mess_mass[0]
             else:
                 timeout = 0
             local_mban_messes = list(self.mban_messes)
             baned = []
+            mess_mass = ' '.join(mess_mass)
             if timeout == 0:
-                mess_mass = ' '.join(mess_mass)
                 AdditionalMethods.add_to_buffer('c', f'{ctx.author.display_name}, mass ban started!', ctx.author, 'bban')
             else:
-                mess_mass = ' '.join(mess_mass[1:])
                 AdditionalMethods.add_to_buffer('c', f'{ctx.author.display_name}, mass timeout started!', ctx.author, 'bban')
             print(f'banning mess: {mess_mass}')
             for item in local_mban_messes:
