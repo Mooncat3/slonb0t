@@ -150,7 +150,6 @@ class BufferCleaner(Client, ABC):
                     excluding = 0
                     for x in range(0, len(dat)):
                         res = dat[x]
-                        print(res)
                         if res['vip'] or res['type'] == "s":
                             excluding += 1
                         if res['vip'] or res['type'] == "s" or x - excluding >= Settings.get_bufer_max() or (time.time() - self.times[str(parse_kd_comand(self.kd, res['command']))] < parse_kd_comand(self.kd, res['command']) and time.time() - self.times[str(parse_kd_comand(self.kd, res['command']))] > 0.5):
@@ -174,6 +173,7 @@ class BufferCleaner(Client, ABC):
                     try:
                         dat = json.loads(e.read())
                     except json.decoder.JSONDecodeError:
+                        print(f'ОШИБКА ЧТЕНИЯ В БУФЕРЕ')
                         print(e.read())
                     for delet in ondeleting:
                         dat.remove(delet)
