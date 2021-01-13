@@ -296,7 +296,7 @@ class CommandsBot(commands.Bot, ABC):
                 mess_mass.pop(0)
             else:
                 timeout = 0
-            message = ''.join(e + '' for e in mess_mass)
+            message = ''.join(e for e in mess_mass)
             look = message
             count = 0
             local_mban_messes = list(self.mban_messes)
