@@ -31,6 +31,7 @@ class CommandsBot(commands.Bot, ABC):
         super().__init__(irc_token=f'oauth:{config.OAUTH}',
                          client_id=config.CLIENT_ID, nick=config.BOT, prefix='!',
                          initial_channels=config.CHANNELS)
+        self.mban_messes = []
         self.roulette_is_running = False
         self.roulette_nicknames = []
         self.omgroulette_kd = 10
@@ -173,6 +174,11 @@ class CommandsBot(commands.Bot, ABC):
         except KeyError:
             badge = ''
         if not AdditionalMethods.vip(message.author.is_mod, nickname) and not nickname == "slonb0t" and not badge == 'vip':
+            if len(self.mban_messes) < 50000:
+                self.mban_messes.append(nickname + "  " + message.content)
+            else:
+                self.mban_messes.pop(0)
+                self.mban_messes.append(nickname + "  " + message.content)
             docheck = True
             mod = Settings.get_mod()
             if mod != "all" and (mod == "skip" or mod == "skip_with"):
@@ -279,6 +285,42 @@ class CommandsBot(commands.Bot, ABC):
             AdditionalMethods.add_to_buffer("s",f"{nickname}, {message} не найден, поставлен на сканирование peepoJuiceSpin", ctx.author, "stat")
             asyncio.get_event_loop().create_task(self.check_mess(message, self._ws, nickname))
     '''
+    
+    @commands.command(name='bban')
+    async def bban(self, ctx):
+        if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
+            message: str = ctx.message.clean_content
+            mess_mass = message.split(' ')
+            if mess_mass[0].isdecimal():
+                timeout = int(mess_mass[0])
+                mess_mass.pop(0)
+            else:
+                timeout = 0
+            message = ''.join(e + '' for e in mess_mass)
+            look = message
+            count = 0
+            local_mban_messes = list(self.mban_messes)
+            self.mban_messes.clear()
+            baned = []
+            print(f'banning mess: {message}')
+            for item in local_mban_messes:
+                r_item = item.split("  ")
+                if r_item[1].find(look) != -1 and not r_item[0] in baned:
+                    count += 1
+                    baned.append(r_item[0])
+                    if timeout == 0:
+                        print(r_item)
+                        AdditionalMethods.add_to_buffer('c', f'/ban {r_item[0]}', ctx.author, 'cmd')
+                    else:
+                        AdditionalMethods.add_to_buffer('c', f'/timeout {r_item[0]} {timeout}', ctx.author, 'cmd')
+            print(f'end ban')
+            if timeout == 0:
+                AdditionalMethods.add_to_buffer('c', f'{ctx.author.display_name}, выполнение команды начато. будет '
+                                                     f'забанено {count} пользователей!', ctx.author, 'bban')
+            else:
+                AdditionalMethods.add_to_buffer('c', f'{ctx.author.display_name}, выполнение команды начато. в мут '
+                                                     f'будет отправлено {count} пользователей!', ctx.author, 'bban')                                                    
+                                                        
     @commands.command(name='кто')	
     async def kto(self, ctx):	
         message = ctx.message.clean_content.replace('@', '')[:80]
