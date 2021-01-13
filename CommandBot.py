@@ -306,6 +306,7 @@ class CommandsBot(commands.Bot, ABC):
             for item in local_mban_messes:
                 r_item = item.split("  ")
                 if r_item[1].find(look) != -1 and not r_item[0] in baned:
+                    print(r_item)
                     count += 1
                     baned.append(r_item[0])
                     if timeout == 0:
