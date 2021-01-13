@@ -312,9 +312,9 @@ class CommandsBot(commands.Bot, ABC):
                     baned.append(r_item[0])
                     if timeout == 0:
                         print(r_item)
-                        AdditionalMethods.add_to_buffer('c', f'/ban {r_item[0]}', ctx.author, 'cmd')
+                        AdditionalMethods.add_to_buffer('c', f'/ban {r_item[0]} bban by slonb0t', ctx.author, 'cmd')
                     else:
-                        AdditionalMethods.add_to_buffer('c', f'/timeout {r_item[0]} {timeout}', ctx.author, 'cmd')
+                        AdditionalMethods.add_to_buffer('c', f'/timeout {r_item[0]} {timeout} bban by slonb0t', ctx.author, 'cmd')
             print(f'end ban')
             if timeout == 0:
                 AdditionalMethods.add_to_buffer('c', f'{ctx.author.display_name}, выполнение команды закончено. было '
