@@ -46,7 +46,6 @@ class CommandsBot(commands.Bot, ABC):
         self.namess = []
         self.names_exp = self.initial_channels
         self.blbl = []
-        self.ii = 0
         with open('data/blacklist.txt', encoding='utf-8') as f:
             self.blacklist = [x for x in f.read().split('\n') if len(x) > 1]
         self.genius = lg.Genius("5Pj7QcUoV5Khbd-Hq5jSve8OzCQILJkY8nWojIIxqH30ItpsmXC7UmCRcgjmTVPY")
@@ -163,10 +162,9 @@ class CommandsBot(commands.Bot, ABC):
         nickname = message.author.name
         nnn = message.author.display_name
         if nnn not in self.namess and nickname != 'moobot' and nickname != 'slonb0t' and nickname != 'kryabot':
-            if self.ii > 5:
+            if len(self.namess) > 5:
                 del self.namess[0]
             self.namess.append(nnn)
-            self.ii += 1
         if nnn not in self.names_exp:
             self.names_exp.append(nnn)
         try:
@@ -177,7 +175,7 @@ class CommandsBot(commands.Bot, ABC):
             if len(self.mban_messes) < 20000:
                 self.mban_messes.append(nickname + "  " + message.content)
             else:
-                self.mban_messes.pop(0)
+                del self.mban_messes[0]
                 self.mban_messes.append(nickname + "  " + message.content)
             docheck = True
             mod = Settings.get_mod()
@@ -289,38 +287,30 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='bban')
     async def bban(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
-            message: str = ctx.message.clean_content
-            mess_mass = message.split(' ')
+            message = ctx.message.clean_content
+            mess_mass = str(message).split()
             if mess_mass[0].isdecimal():
                 timeout = int(mess_mass[0])
-                mess_mass.pop(0)
             else:
                 timeout = 0
-            message = ''.join(e + ' ' for e in mess_mass)
-            message = message[:len(message)-1]
-            look = message
-            count = 0
             local_mban_messes = list(self.mban_messes)
             baned = []
-            print(f'banning mess: {message}')
+            AdditionalMethods.add_to_buffer('c', f'{ctx.author.display_name}, mass ban started!', ctx.author, 'bban')
+            print(f'banning mess: {mess_mass[-1]}')
             for item in local_mban_messes:
                 r_item = item.split("  ")
-                if r_item[1].find(look) != -1 and not r_item[0] in baned:
+                if r_item[1].find(mess_mass[-1]) != -1 and not r_item[0] in baned:
                     print(r_item)
-                    count += 1
                     baned.append(r_item[0])
                     if timeout == 0:
-                        print(r_item)
-                        AdditionalMethods.add_to_buffer('c', f'/ban {r_item[0]} bban by slonb0t', ctx.author, 'cmd')
+                        AdditionalMethods.add_to_buffer('c', f'/ban {r_item[0]} mass_ban by SLONB0T', ctx.author, 'cmd')
                     else:
-                        AdditionalMethods.add_to_buffer('c', f'/timeout {r_item[0]} {timeout} bban by slonb0t', ctx.author, 'cmd')
-            print(f'end ban')
+                        AdditionalMethods.add_to_buffer('c', f'/timeout {r_item[0]} {timeout} mass_timeout by SLONB0T', ctx.author, 'cmd')
+            count = len(baned)
             if timeout == 0:
-                AdditionalMethods.add_to_buffer('c', f'{ctx.author.display_name}, выполнение команды закончено. было '
-                                                     f'забанено {count} пользователей!', ctx.author, 'bban')
+                AdditionalMethods.add_to_buffer('c', f'{ctx.author.display_name}, mass ban finished, banned {count} users.', ctx.author, 'bban')
             else:
-                AdditionalMethods.add_to_buffer('c', f'{ctx.author.display_name}, выполнение команды закончено. в мут '
-                                                     f'было отправлено {count} пользователей!', ctx.author, 'bban')                                                    
+                AdditionalMethods.add_to_buffer('c', f'{ctx.author.display_name}, mass timeout finished, banned {count} users.', ctx.author, 'bban')
                                                         
     @commands.command(name='кто')	
     async def kto(self, ctx):	
