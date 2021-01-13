@@ -317,11 +317,11 @@ class CommandsBot(commands.Bot, ABC):
                         AdditionalMethods.add_to_buffer('c', f'/timeout {r_item[0]} {timeout}', ctx.author, 'cmd')
             print(f'end ban')
             if timeout == 0:
-                AdditionalMethods.add_to_buffer('c', f'{ctx.author.display_name}, выполнение команды начато. будет '
+                AdditionalMethods.add_to_buffer('c', f'{ctx.author.display_name}, выполнение команды закончено. было '
                                                      f'забанено {count} пользователей!', ctx.author, 'bban')
             else:
-                AdditionalMethods.add_to_buffer('c', f'{ctx.author.display_name}, выполнение команды начато. в мут '
-                                                     f'будет отправлено {count} пользователей!', ctx.author, 'bban')                                                    
+                AdditionalMethods.add_to_buffer('c', f'{ctx.author.display_name}, выполнение команды закончено. в мут '
+                                                     f'было отправлено {count} пользователей!', ctx.author, 'bban')                                                    
                                                         
     @commands.command(name='кто')	
     async def kto(self, ctx):	
