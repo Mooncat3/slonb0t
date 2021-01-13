@@ -174,7 +174,7 @@ class CommandsBot(commands.Bot, ABC):
         except KeyError:
             badge = ''
         if not AdditionalMethods.vip(message.author.is_mod, nickname) and not nickname == "slonb0t" and not badge == 'vip':
-            if len(self.mban_messes) < 50000:
+            if len(self.mban_messes) < 20000:
                 self.mban_messes.append(nickname + "  " + message.content)
             else:
                 self.mban_messes.pop(0)
@@ -301,7 +301,6 @@ class CommandsBot(commands.Bot, ABC):
             look = message
             count = 0
             local_mban_messes = list(self.mban_messes)
-            self.mban_messes.clear()
             baned = []
             print(f'banning mess: {message}')
             for item in local_mban_messes:
