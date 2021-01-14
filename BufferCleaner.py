@@ -168,20 +168,20 @@ class BufferCleaner(Client, ABC):
                                         recepttime = time.time()
                                         await send_mess(self._ws, reser, res)
             if len(ondeleting) > 0:
-                with open(file='data/buffer.txt', mode='r', encoding='utf-8') as e:
-                    try:
+                try:
+                    with open(file='data/buffer.txt', mode='r', encoding='utf-8') as e:
                         dat = json.loads(e.read())
-                    except json.decoder.JSONDecodeError:
-                        print(f'ОШИБКА ЧТЕНИЯ В БУФЕРЕ')
-                        print(e.read())
-                    for delet in ondeleting:
-                        dat.remove(delet)
-                    ondeleting = []
-                with open(file='data/buffer.txt', mode='w', encoding='utf-8') as q:
-                    if len(dat) == 0:
-                        q.write("[]")
-                    else:
-                        q.write(json.dumps(dat))
+                        for delet in ondeleting:
+                            dat.remove(delet)
+                        ondeleting = []
+                    with open(file='data/buffer.txt', mode='w', encoding='utf-8') as q:
+                        if len(dat) == 0:
+                            q.write("[]")
+                        else:
+                            q.write(json.dumps(dat))
+                except Exception as e:
+                    print(f'ОШИБКА УДАЛЕНИЯ В БУФЕРЕ')
+                    print(e.read())
             config.buferchanged = False
 
     async def listen_to_buffer_delaied(self):
@@ -272,16 +272,20 @@ class BufferCleaner(Client, ABC):
                                         recepttime = time.time()
                                         await send_mess(self._ws, reser, res)
             if len(ondeleting) > 0:
-                with open(file='data/buffer.txt', mode='r', encoding='utf-8') as e:
-                    dat = json.loads(e.read())
-                    for delet in ondeleting:
-                        dat.remove(delet)
-                    ondeleting = []
-                with open(file='data/buffer.txt', mode='w', encoding='utf-8') as q:
-                    if len(dat) == 0:
-                        q.write("[]")
-                    else:
-                        q.write(json.dumps(dat))
+                try:
+                    with open(file='data/buffer.txt', mode='r', encoding='utf-8') as e:
+                        dat = json.loads(e.read())
+                        for delet in ondeleting:
+                            dat.remove(delet)
+                        ondeleting = []
+                    with open(file='data/buffer.txt', mode='w', encoding='utf-8') as q:
+                        if len(dat) == 0:
+                            q.write("[]")
+                        else:
+                            q.write(json.dumps(dat))
+                except Exception as e:
+                    print(f'ОШИБКА УДАЛЕНИЯ В БУФЕРЕ')
+                    print(e.read())
             config.buferchanged = False
 
 
