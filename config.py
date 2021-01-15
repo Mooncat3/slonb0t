@@ -11,6 +11,6 @@ CHANNELS = [f'{CHAN}']
 head = {"Authorization": "04UPxz9f"}
 buferchanged = False
 istopcliprunning = False
-helpUrl = "https://pastebin.com/raw/wbiVyxpC"
+helpUrl = "https://pastebin.com/raw/837UKBqp"
 abreviationsUrl = "https://pastebin.com/raw/h546CMvM"
 api_url = "https://slon-api.herokuapp.com"
