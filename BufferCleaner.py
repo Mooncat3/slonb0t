@@ -129,7 +129,8 @@ class BufferCleaner(Client, ABC):
                 if rest['vip'] and rest['type'] != "s":
                     await sock.send_privmsg(config.CHAN, mess)
                 elif rest['type'] == "s" or x - excluding >= Settings.get_bufer_max() or time.time() - self.times[str(parse_kd_comand(self.kd, res['command']))] < parse_kd_comand(self.kd, res['command']):
-                    await sock.send_privmsg(config.CHAN, f"/w {rest['nickname']} !{resert['cmd']} ▶ {mess}")
+                    #await sock.send_privmsg(config.CHAN, f"/w {rest['nickname']} !{resert['cmd']} ▶ {mess}")
+                    pass
                 else:
                     pass
             await asyncio.sleep(0.2)
