@@ -28,7 +28,7 @@ class BufferCleaner(Client, ABC):
         self.times = {}
         self.time_delay = 0
         self.count_delay = 0
-        kd_e = 30
+        kd_e = 20
         self.kd = {"porf": kd_e, "когда": kd_e, "анекдот": kd_e, "iq": kd_e, "me": kd_e, "do": kd_e, "кто": kd_e, "steal": kd_e, "try": kd_e, "обнять": 5, "kogda": kd_e, "привет": kd_e}
         for r in self.kd.keys():
             if not r in self.times.keys():
