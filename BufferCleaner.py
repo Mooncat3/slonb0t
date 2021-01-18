@@ -286,7 +286,7 @@ class BufferCleaner(Client, ABC):
                             q.write(json.dumps(dat))
                 except Exception as e:
                     print(f'ОШИБКА УДАЛЕНИЯ В БУФЕРЕ')
-                    print(e.read())
+                    print(e)
             config.buferchanged = False
 
 
