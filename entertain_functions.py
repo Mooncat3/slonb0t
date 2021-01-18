@@ -28,7 +28,10 @@ def me(nickname, names):
     answer = random.choice(me_classic).format(nickname)
     name = random.choice(names)
     v = random.uniform(0, 100)
-    kol = round(random.uniform(1, 5000), 1)
+    if curr == symbols[0]:
+        kol = round(random.uniform(100, 10000))
+    if curr == symbols[1]:
+        kol = round(random.uniform(10000, 1000000))
     if 0 < v <= 17:
         rand_num = random.randint(0, 100)
         if 0 < rand_num <= 95:
@@ -36,17 +39,17 @@ def me(nickname, names):
         else:
             answer = random.choice(search).format(nickname, name)
     if 17 < v <= 17.5:
-        kol = round(random.uniform(90, 250), 1)
+        kol = round(random.uniform(90, 250))
         answer = f"Однажды {nickname} приснился сон, что {currency_rand} теперь стоит {kol} ₽! Ужасный сон WutFace"
     if 17.5 < v <= 18:
-        kol = round(random.uniform(0, 40), 1)
+        kol = round(random.uniform(0, 40))
         answer = f"Однажды {nickname} приснился сон, что {currency_rand} теперь стоит {kol} ₽! Вот это сон Kreygasm"
     if 18 < v <= 35:
         answer = random.choice(stories).format(nickname, name, thing)
     if 35 < v <= 79:
         answer = random.choice(me_classic).format(nickname)
     if 79 < v <= 80:
-        answer = f'{nickname} умрёт через {random.randint(1, 30)} дней roflanPominy'
+        answer = f'{nickname} умрёт через {random.randint(1, 30)} дн. roflanPominy'
     if 80 < v <= 81:
         answer = f'У {nickname} - {random.randint(80, 200)} IQ WAYTOOSMART Clap'
     if 81 < v <= 88:
@@ -54,7 +57,7 @@ def me(nickname, names):
     if 88 < v <= 89:
         answer = f'{nickname} {random.choice(stst)} у {name} {kol} {curr} BOP'
     if 89 < v <= 92:
-        answer = f'{nickname} хвастается {random.choice(clothes)} за {kol} {curr} 💸 peepoCool'
+        answer = f'{nickname} хвастается {random.choice(clothes)} за {kol} {curr} EZZZ'
     if 92 < v <= 93:
         answer = f'{nickname} выиграл в лотерее {kol} {curr} Поздравляем!'
     if 93 < v <= 93.5:
@@ -67,16 +70,16 @@ def me(nickname, names):
                  f'преступление monkaFLASH {nickname} теперь за решёткой BOP'
     if 96 < v <= 98:
         age = random.randint(1, 100)
-        answer = f'{nickname} скрывает свой возраст. Но я знаю, что {nickname} уже {age} blushW'
+        answer = f'{nickname} скрывает свой возраст. Но я знаю, что {nickname} уже {age} Pokrasnel'
     if 98 < v <= 100:
         first_name = random.choice(first_names)
-        answer = f'{nickname} скрывает своё имя. Но я знаю, что {nickname} на самом деле зовут {first_name} monkaX'
+        answer = f'{nickname} скрывает своё имя. Но я знаю, что {nickname} на самом деле зовут {first_name} Pokrasnel'
     return answer
 
 
 def do(nickname, mess, names):
     symbols = ['$', '₽']
-    games = ['карты', 'города', 'кости', 'крестики-нолики', 'нарды']
+    games = ['карты', 'города', 'кости', 'крестики-нолики', 'нарды', 'монополию']
     steal_list = ['украл', 'решил украсть', 'спёр', 'отобрал', 'решил забрать себе', 'мечтает украсть', 'хочет украсть',
                   'похищает', 'крадёт']
     ride = ['помчались', 'поехали', "пошли пешком", "поехали на велосипеде", "побежали"]
@@ -148,7 +151,7 @@ def steal(nickname, mess):
     v = random.uniform(0, 100)
     kol = round(random.uniform(0, 4500), 1)
     symbols = ['$', '₽']
-    st = ["ничего не украл у {}", "ничего не смог украсть у {}", 'пытался украсть что-либо у {}, но не вышло']
+    st = ["ничего не украл у {}", "ничего не смог украсть у {}", 'пытался украсть что-либо у {}, но не вышло', 'пытался украсть у {}, но его поймали с поличным']
     st_2 = ['украл', 'решил украсть', 'спёр', 'отобрал', 'решил забрать себе', 'мечтает украсть', 'хочет украсть',
             'похищает']
     thing = random.choice(things)
@@ -157,12 +160,12 @@ def steal(nickname, mess):
         if 0 < v_2 <= 85:
             v_3 = random.uniform(0, 100)
             if 0 < v_3 <= 90:
-                answer = f'{nickname} {random.choice(st_2)} у {mess} {thing} BOP'
+                answer = f'{nickname} {random.choice(st_2)} у {mess} {thing} D:'
             else:
                 answer = f'{nickname} пытался своровать у {mess} {thing} , но, внезапно {mess}' \
-                         f' сам украл у {nickname} {random.choice(things)} blushW'
+                         f' сам украл у {nickname} {random.choice(things)} KEKWait'
         else:
-            answer = f'{nickname} украл у {mess} {kol} {random.choice(symbols)} BOP'
+            answer = f'{nickname} украл у {mess} {kol} {random.choice(symbols)} D:'
     else:
-        answer = f'{nickname} {random.choice(st).format(mess)} KEKW 👉 Lohich'
+        answer = f'{nickname} {random.choice(st).format(mess)} Lohich'
     return answer
