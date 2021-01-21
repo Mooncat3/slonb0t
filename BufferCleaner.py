@@ -194,7 +194,7 @@ class BufferCleaner(Client, ABC):
             return new_list
         tttime = time.time()
         timer = 0.0
-        recepttime = 0.0
+        recepttime = 1.0
         ondeleting = []
         dopbol = True
         while True:
@@ -277,7 +277,10 @@ class BufferCleaner(Client, ABC):
                     with open(file='data/buffer.txt', mode='r', encoding='utf-8') as e:
                         dat = json.loads(e.read())
                         for delet in ondeleting:
-                            dat.remove(delet)
+                            try:
+                                dat.remove(delet)
+                            except ValueError:
+                                pass
                         ondeleting = []
                     with open(file='data/buffer.txt', mode='w', encoding='utf-8') as q:
                         if len(dat) == 0:
