@@ -204,7 +204,7 @@ class BufferCleaner(Client, ABC):
                 mess = resert['mes']
                 while time.time() - self.time_delay <= self.time_delay_max and self.count_delay >= self.count_delay_max:
                     await asyncio.sleep(0.1)
-                if time.time() - self.time_delay > self.count_delay_max:
+                if time.time() - self.time_delay > self.time_delay_max:
                     self.time_delay = time.time()
                     self.count_delay = 0
                 else:
