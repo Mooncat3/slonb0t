@@ -66,7 +66,7 @@ class CommandsBot(commands.Bot, ABC):
                 await socket.send_privmsg(config.CHAN, "Дуэлянты смотрят друг на друга...")
                 randname = random.choice(self.duel_nicknames)
                 self.duel_nicknames.remove(randname)
-                await asyncio.sleep(8)
+                await asyncio.sleep(random.randint(1, 8))
                 with open(file='data/duel_rand.txt', mode='r', encoding='utf-8') as e:
                     data = json.loads(e.read())
                 randseq = random.choice(data)
