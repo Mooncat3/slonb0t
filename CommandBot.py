@@ -74,7 +74,7 @@ class CommandsBot(commands.Bot, ABC):
                                           f"{self.duel_nicknames[0]['label']} выстреливает в {randname['label']}{randseq['text']}")
                 if int(randseq['time']) > 1:
                     await asyncio.sleep(0.5)
-                    await socket.send_privmsg(config.CHAN, f"/timeout {randname['str_id']} {randseq['time']}")
+                    await socket.send_privmsg(config.CHAN, f"/timeout {randname['str_id']} {int(randseq['time']) * 2}")
                 elif int(randseq['time']) > 0:
                     await socket.send_privmsg(config.CHAN, f"/timeout {self.duel_nicknames[0]['str_id']} 60")
             else:
