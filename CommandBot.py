@@ -417,7 +417,7 @@ class CommandsBot(commands.Bot, ABC):
                 self.duel_user = message
                 if nickname.lower() != self.duel_user.lower():
                     await ctx.channel._ws.send_privmsg(config.CHAN,
-                                                       f"{nickname} вызывает на дуэль {message}. Чтобы принять вызов – напишите !acduel")
+                                                       f"{nickname} вызывает на дуэль {message}. Принять вызов –> !acduel")
                 else:
                     await ctx.channel._ws.send_privmsg(config.CHAN,
                                                        f"{nickname} направил ствол на... самого себя. Если вы уверены, напишите !acduel")
