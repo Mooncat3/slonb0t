@@ -307,6 +307,7 @@ class CommandsBot(commands.Bot, ABC):
                         AdditionalMethods.add_to_buffer('c', f'/ban {r_item[0]} mass ban by SLONB0T', ctx.author, 'cmd')
                     else:
                         AdditionalMethods.add_to_buffer('c', f'/timeout {r_item[0]} {timeout} mass timeout by SLONB0T', ctx.author, 'cmd')
+                await asyncio.sleep(0.5)
             count = len(baned)
             if timeout == 0:
                 AdditionalMethods.add_to_buffer('c', f'{ctx.author.display_name}, mass ban finished, banned {count} users. SirMad', ctx.author, 'bban')
