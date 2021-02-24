@@ -9,3 +9,4 @@ pytz
 lyricsgenius
 emoji
 langid
+googletrans==3.1.0a0
