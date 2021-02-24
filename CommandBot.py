@@ -617,12 +617,12 @@ class CommandsBot(commands.Bot, ABC):
         else:
             try:
                 lang = message.split()[0]
-                word = message.replace(f'{lang} ', '')
                 lang_2 = langid.classify(word)[0]
                 if lang in googletrans.LANGUAGES.keys():
+                    word = message.replace(f'{lang} ', '')
                     resultat = googletrans.Translator().translate(word, src=lang_2, dest=lang).text
                 else:
-                    resultat = googletrans.Translator().translate(word, src=lang_2, dest="ru").text
+                    resultat = googletrans.Translator().translate(message, src=lang_2, dest="ru").text
                 resultat = self.replace_osu(resultat)
                 if not AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
                     AdditionalMethods.add_to_buffer("с", f"{nickname}, {resultat[:90]}", ctx.author, "перевод")
