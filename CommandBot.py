@@ -19,6 +19,7 @@ import time
 import lyricsgenius as lg
 import langid
 import entertain_functions
+import googletrans
 
 
 # вместо ctx.message.content ctx.message.clean_content, он выводит только текст после комманды
@@ -605,32 +606,31 @@ class CommandsBot(commands.Bot, ABC):
         anekdot = self.replace_osu(anekdot)
         AdditionalMethods.add_to_buffer("e", f'{anekdot} KEKL', ctx.author, "анекдот")
 
-    @commands.command(name='перевод')
-    async def perevod(self, ctx):
+    @commands.command(name="перевод")
+    async def stat(self, ctx):
         nickname = ctx.author.display_name
         message = ctx.message.clean_content
         if len(message) == 0:
-            AdditionalMethods.add_to_buffer("с", f"{nickname}, cсылка со всеми ключами языков: https://pastebin.com/raw/nk1n1KxD", ctx.author, "перевод")
+            AdditionalMethods.add_to_buffer("с",
+                                            f"{nickname}, cсылка со всеми ключами языков: https://pastebin.com/raw/nk1n1KxD",
+                                            ctx.author, "перевод")
         else:
             try:
                 lang = message.split()[0]
                 word = message.replace(f'{lang} ', '')
                 lang_2 = langid.classify(word)[0]
-                dataa = {"text": word}
-                key = 'b263bd81.6009adcf.31775ee0.74722d74657874-0-0'
-                url = f"https://translate.yandex.net/api/v1/tr.json/translate?id={key}&srv=tr-text&lang={lang_2}-{lang}&reason=auto&format=text"
-                r = requests.get(url, data=dataa)
-                if r.status_code == 400:
-                    AdditionalMethods.add_to_buffer("с", "Неправильно указан язык. Ссылка со всеми языками: https://pastebin.com/raw/nk1n1KxD", ctx.author, "перевод")
+                if lang in googletrans.LANGUAGES.keys():
+                    resultat = googletrans.Translator().translate(word, src=lang_2, dest=lang).text
                 else:
-                    resultat = str(r.text).partition('t":["')[-1].replace('"]}', "")
-                    resultat = self.replace_osu(resultat)
-                    if not AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
-                        AdditionalMethods.add_to_buffer("с", f"{nickname}, {resultat[:90]}", ctx.author, "перевод")
-                    else:
-                        AdditionalMethods.add_to_buffer("с", f"{nickname}, {resultat}", ctx.author, "перевод")
+                    resultat = googletrans.Translator().translate(word, src=lang_2, dest="ru").text
+                resultat = self.replace_osu(resultat)
+                if not AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
+                    AdditionalMethods.add_to_buffer("с", f"{nickname}, {resultat[:90]}", ctx.author, "перевод")
+                else:
+                    AdditionalMethods.add_to_buffer("с", f"{nickname}, {resultat}", ctx.author, "перевод")
             except:
-                AdditionalMethods.add_to_buffer("с", f"{nickname}, неправильно указаны параметры. Ссылка со всеми языками: https://pastebin.com/raw/nk1n1KxD",
+                AdditionalMethods.add_to_buffer("с",
+                                                f"{nickname}, неправильно указаны параметры. Ссылка со всеми языками: https://pastebin.com/raw/nk1n1KxD",
                                                 ctx.author, "перевод")
 
     @commands.command(name='курс')
