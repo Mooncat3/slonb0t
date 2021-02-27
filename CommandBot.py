@@ -203,7 +203,7 @@ class CommandsBot(commands.Bot, ABC):
                     docheck = False
                     arraymess = str.split(message.content, " ")
                     for r in arraymess:
-                        if not r in smiles:
+                        if r not in smiles:
                             docheck = True
                 elif mod == "skip_with":
                     docheck = True
@@ -262,10 +262,15 @@ class CommandsBot(commands.Bot, ABC):
                                                         f"временно отстраняетесь от чата")
                         else:
                             self.spammers[nickname]["worned"] += 1
-                            stringer += f"был предупреждён {self.spammers[nickname]['worned']} из {Settings.get_attentions()} раз с настройками: |norm: {Settings.get_norm()}, maxmesses: {Settings.get_max_messes()}, emojimode: {Settings.get_mod()}|"
+                            stringer += f"был предупреждён {self.spammers[nickname]['worned']} из " \
+                                        f"{Settings.get_attentions()} раз с настройками: |norm: " \
+                                        f"{Settings.get_norm()}, maxmesses: {Settings.get_max_messes()}, " \
+                                        f"emojimode: {Settings.get_mod()}|"
                             for f in self.seekers:
                                 await self._ws.send_privmsg(config.CHAN,
-                                                            f"/w {f} {nickname} был предупреждён {self.spammers[nickname]['worned']} из {Settings.get_attentions()} раз")
+                                                            f"/w {f} {nickname} был предупреждён "
+                                                            f"{self.spammers[nickname]['worned']} из "
+                                                            f"{Settings.get_attentions()} раз")
                             await self._ws.send_privmsg(config.CHAN,
                                                         f"/w {nickname} Вы слишком часто отправляете сообщения на "
                                                         f"канале {self.initial_channels[0]}, это "
@@ -304,11 +309,13 @@ class CommandsBot(commands.Bot, ABC):
                     answer_str += "Пользователь " + message + " написал " + str(answer['answer']['count']) + " 
                     сообщений в чат | "
                 if 'watch_time_offline' in answer['answer'].keys():
-                    answer_str += "Оффлайн: " + AdditionalMethods.parse_time(answer['answer']['watch_time_offline'] * 60) + " | "
+                    answer_str += "Оффлайн: " + AdditionalMethods.parse_time(answer['answer']['watch_time_offline'] 
+                    * 60) + " | "
                 if 'watch_time_online' in answer['answer'].keys():
                     answer_str += "Онлайн: " + AdditionalMethods.parse_time(answer['answer']['watch_time_online'] * 60)
                      + " | "
-                AdditionalMethods.add_to_buffer("c", ctx.author.display_name + f", {answer_str[:-3]}", ctx.author, "stat")
+                AdditionalMethods.add_to_buffer("c", ctx.author.display_name + f", {answer_str[:-3]}", ctx.author, 
+                "stat")
         else:
             AdditionalMethods.add_to_buffer("s",f"{nickname}, {message} не найден, поставлен на сканирование 
             peepoJuiceSpin", ctx.author, "stat")
@@ -394,15 +401,15 @@ class CommandsBot(commands.Bot, ABC):
         try:
             if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
                 nickname = ctx.author.name
-                if not nickname in self.seekers:
+                if nickname not in self.seekers:
                     self.seekers.append(nickname)
                     answer = requests.post(config.api_url + f"/seekers/{self.initial_channels[0]}",
                                            data={'nick': nickname, 'enabled': 1}, headers=config.head)
                     print(answer.content)
                     print(answer.json())
                     if requests.post(config.api_url + f"/seekers/{self.initial_channels[0]}",
-                                     data={'nick': nickname, 'enabled': 1}, headers=config.head).json()[
-                        'type'] == "error":
+                                     data={'nick': nickname, 'enabled': 1}, headers=config.head).json()['type'] == \
+                            "error":
                         AdditionalMethods.add_to_buffer("s",
                                                         f"Вы подписаны на уведомления о спаме! "
                                                         f"(это изменение не было сохраненно в постоянную базу данных)",
@@ -421,7 +428,7 @@ class CommandsBot(commands.Bot, ABC):
     async def unseek(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
             nickname = ctx.author.name
-            if not nickname in self.seekers:
+            if nickname not in self.seekers:
                 AdditionalMethods.add_to_buffer("s", f"Вы не подписаны на уведомления о спаме ResidentSleeper",
                                                 ctx.author, "unseek")
             else:
@@ -449,7 +456,8 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='acduel')
     async def acduel(self, ctx):
         if self.duel_is_running:
-            if ctx.author.display_name.lower() == self.duel_user.lower() or ctx.author.name.lower() == self.duel_user.lower():
+            if ctx.author.display_name.lower() == self.duel_user.lower() or ctx.author.name.lower() == \
+                    self.duel_user.lower():
                 if self.duel_serious:
                     if ctx.author.is_mod:
                         self.duel_serious = False
@@ -699,23 +707,23 @@ class CommandsBot(commands.Bot, ABC):
                     AdditionalMethods.add_to_buffer("с", f"{nickname}, {resultat[:90]}", ctx.author, "перевод")
                 else:
                     AdditionalMethods.add_to_buffer("с", f"{nickname}, {resultat}", ctx.author, "перевод")
-            except:
+            except IndexError:
                 AdditionalMethods.add_to_buffer("с",
-                                                f"{nickname}, неправильно указаны параметры. Ссылка со всеми языками: https://pastebin.com/raw/nk1n1KxD",
+                                                f"{nickname}, неправильно указаны параметры. Ссылка со всеми языками: "
+                                                f"https://pastebin.com/raw/nk1n1KxD",
                                                 ctx.author, "перевод")
 
     @commands.command(name='курс')
-    async def kurs(self, ctx):
-        global userkurs, count
+    async def curs(self, ctx):
+        user_cur = ''
+        count = 0
         nickname = ctx.author.display_name
         message = ctx.message.clean_content
         if len(message) == 0:
-            r = requests.get(
-                "https://free.currconv.com/api/v7/convert?q=USD_RUB,EUR_RUB&compact=ultra&apiKey=ee315cc429cbc167d4b7") \
-                .json()
-            r2 = requests.get(
-                "https://free.currconv.com/api/v7/convert?q=BTC_RUB,UAH_RUB&compact=ultra&apiKey=ee315cc429cbc167d4b7") \
-                .json()
+            r = requests.get("https://free.currconv.com/api/v7/convert?q=USD_RUB,EUR_RUB&compact=ultra&"
+                             "apiKey=ee315cc429cbc167d4b7").json()
+            r2 = requests.get("https://free.currconv.com/api/v7/convert?q=BTC_RUB,UAH_RUB&compact=ultra&"
+                              "apiKey=ee315cc429cbc167d4b7").json()
             print(r, r2)
             today = (datetime.now() + timedelta(hours=3)).strftime("%d.%m")
             try:
@@ -728,12 +736,12 @@ class CommandsBot(commands.Bot, ABC):
                                                 ctx.author, "курс")
         else:
             try:
-                userkurs = message.split()[0]
+                user_cur = message.split()[0]
                 count = message.split()[1]
-            except:
+            except IndexError:
                 AdditionalMethods.add_to_buffer("с", f"{nickname}, введите число PepoG", ctx.author, "курс")
             json_r = requests.get(
-                f"https://free.currconv.com/api/v7/convert?q={userkurs.replace('-', '_')}&compact=ultra&apiKey"
+                f"https://free.currconv.com/api/v7/convert?q={user_cur.replace('-', '_')}&compact=ultra&apiKey"
                 f"=ee315cc429cbc167d4b7").json()
             if len(json_r) == 0:
                 AdditionalMethods.add_to_buffer("с",
@@ -742,11 +750,12 @@ class CommandsBot(commands.Bot, ABC):
                                                 ctx.author, "курс")
             else:
                 try:
-                    res = userkurs.replace("-", "_").upper()
-                    one = userkurs.split("-")[0]
-                    two = userkurs.split("-")[1]
+                    res = user_cur.replace("-", "_").upper()
+                    one = user_cur.split("-")[0]
+                    two = user_cur.split("-")[1]
                     AdditionalMethods.add_to_buffer("с",
-                                                    f"{nickname}, {count} {one.upper()} = {round(json_r[res] * float(count), 2)} {two.upper()}",
+                                                    f"{nickname}, {count} {one.upper()} = "
+                                                    f"{round(json_r[res] * float(count), 2)} {two.upper()}",
                                                     ctx.author, "курс")
                 except KeyError:
                     AdditionalMethods.add_to_buffer("с",
@@ -755,35 +764,35 @@ class CommandsBot(commands.Bot, ABC):
                                                     ctx.author, "курс")
 
     @commands.command(name='clipever')
-    async def topclipever(self, ctx):
+    async def top_clip_ever(self, ctx):
         nickname = ctx.author.display_name
         message = ctx.message.clean_content.replace('@', '')
         AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(0, message, nickname), ctx.author,
                                         "clip")
 
     @commands.command(name='clipyear')
-    async def topclipyear(self, ctx):
+    async def top_clip_year(self, ctx):
         nickname = ctx.author.display_name
         message = ctx.message.clean_content.replace('@', '')
         AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(365, message, nickname), ctx.author,
                                         "clip")
 
     @commands.command(name='clipweek')
-    async def topclipweek(self, ctx):
+    async def top_clip_week(self, ctx):
         nickname = ctx.author.display_name
         message = ctx.message.clean_content.replace('@', '')
         AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(7, message, nickname), ctx.author,
                                         "clip")
 
     @commands.command(name='clipmonth')
-    async def topclipmonth(self, ctx):
+    async def top_clip_month(self, ctx):
         nickname = ctx.author.display_name
         message = ctx.message.clean_content.replace('@', '')
         AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(30, message, nickname), ctx.author,
                                         "clip")
 
     @commands.command(name='cliptoday')
-    async def topclipday(self, ctx):
+    async def top_clip_day(self, ctx):
         nickname = ctx.author.display_name
         message = ctx.message.clean_content.replace('@', '')
         AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(1, message, nickname), ctx.author,
@@ -866,7 +875,7 @@ class CommandsBot(commands.Bot, ABC):
             try:
                 with open('data/settings.txt', 'r', encoding='utf-8') as b:
                     data = json.loads(b.read())
-            except:
+            except FileNotFoundError:
                 data = {}
             if len(data) == 0:
                 AdditionalMethods.add_to_buffer("s", f"Настройки пустые", ctx.author, "settings")
@@ -886,7 +895,7 @@ class CommandsBot(commands.Bot, ABC):
                 chislo = float(ctx.message.clean_content)
                 AdditionalMethods.add_to_buffer("s", f"{nickname}, {Settings.change_set(Settings.BUFFERDELAY, chislo)}",
                                                 ctx.author, "bufferdelay")
-            except:
+            except ValueError:
                 AdditionalMethods.add_to_buffer("s", f"{nickname}, не удалось прочесть число PepoG ", ctx.author,
                                                 "bufferdelay")
 
@@ -899,7 +908,7 @@ class CommandsBot(commands.Bot, ABC):
                 AdditionalMethods.add_to_buffer("s", f"{nickname}, {Settings.change_set(Settings.ATTENTIONS, chislo)}",
                                                 ctx.author,
                                                 "attentions")
-            except:
+            except ValueError:
                 AdditionalMethods.add_to_buffer("s", f"{nickname}, не удалось прочесть число PepoG ", ctx.author,
                                                 "attentions")
 
@@ -907,10 +916,9 @@ class CommandsBot(commands.Bot, ABC):
     async def mode(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
             nickname = ctx.author.display_name
-            AdditionalMethods.add_to_buffer("s",
-                                            f"{nickname}, {Settings.change_set(Settings.MODE, ctx.message.clean_content)}",
-                                            ctx.author,
-                                            "mode")
+            AdditionalMethods.add_to_buffer("s", f"{nickname}, "
+                                                 f"{Settings.change_set(Settings.MODE, ctx.message.clean_content)}",
+                                            ctx.author, "mode")
 
     @commands.command(name='timeout')
     async def timeout(self, ctx):
@@ -921,7 +929,7 @@ class CommandsBot(commands.Bot, ABC):
                 AdditionalMethods.add_to_buffer("s", f"{nickname}, {Settings.change_set(Settings.TIMEOUT, chislo)}",
                                                 ctx.author,
                                                 "timeout")
-            except:
+            except ValueError:
                 AdditionalMethods.add_to_buffer("s", f"{nickname}, не удалось прочесть число PepoG ", ctx.author,
                                                 "timeout")
 
@@ -934,7 +942,7 @@ class CommandsBot(commands.Bot, ABC):
                 AdditionalMethods.add_to_buffer("s", f"{nickname}, {Settings.change_set(Settings.BUFFERMAX, chislo)}",
                                                 ctx.author,
                                                 "buffermax")
-            except:
+            except ValueError:
                 AdditionalMethods.add_to_buffer("s", f"{nickname}, не удалось прочесть число PepoG ", ctx.author,
                                                 "buffermax")
 
@@ -942,10 +950,9 @@ class CommandsBot(commands.Bot, ABC):
     async def entertain(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
             nickname = ctx.author.display_name
-            AdditionalMethods.add_to_buffer("s",
-                                            f"{nickname}, {Settings.change_set(Settings.ENTERTAIN, int(ctx.message.clean_content))}",
-                                            ctx.author,
-                                            "entertain")
+            num = int(ctx.message.clean_content)
+            AdditionalMethods.add_to_buffer("s", f"{nickname}, {Settings.change_set(Settings.ENTERTAIN, num)}",
+                                            ctx.author, "entertain")
 
     @commands.command(name='maxmesses')
     async def maxmesses(self, ctx):
@@ -956,7 +963,7 @@ class CommandsBot(commands.Bot, ABC):
                 AdditionalMethods.add_to_buffer("s", f"{nickname}, {Settings.change_set(Settings.MAXMESSES, chislo)}",
                                                 ctx.author,
                                                 "maxmesses")
-            except:
+            except ValueError:
                 AdditionalMethods.add_to_buffer("s", f"{nickname}, не удалось прочесть число PepoG ", ctx.author,
                                                 "maxmesses")
 
@@ -969,7 +976,7 @@ class CommandsBot(commands.Bot, ABC):
                 AdditionalMethods.add_to_buffer("s", f"{nickname}, {Settings.change_set(Settings.NORM, chislo)}",
                                                 ctx.author,
                                                 "norm")
-            except:
+            except ValueError:
                 AdditionalMethods.add_to_buffer("s", f"{nickname}, не удалось прочесть число PepoG ", ctx.author,
                                                 "norm")
 
@@ -982,7 +989,7 @@ class CommandsBot(commands.Bot, ABC):
                 AdditionalMethods.add_to_buffer("s", f"{nickname}, {Settings.change_set(Settings.FORGET, chislo)}",
                                                 ctx.author,
                                                 "forget")
-            except:
+            except ValueError:
                 AdditionalMethods.add_to_buffer("s", f"{nickname}, не удалось прочесть число PepoG ", ctx.author,
                                                 "forget")
 
@@ -1060,7 +1067,7 @@ class CommandsBot(commands.Bot, ABC):
                     location = response.json()['result'][0]['title']
                     AdditionalMethods.add_to_buffer("e", f"{nickname}, чичас {date} в «{location}» Waiting", ctx.author,
                                                     "время")
-                except:
+                except KeyError:
                     AdditionalMethods.add_to_buffer("e",
                                                     f"{nickname}, не удалось найти время для этого населённого пункта",
                                                     ctx.author, "время")
