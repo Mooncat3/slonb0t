@@ -2,7 +2,7 @@ import sys
 from abc import ABC
 from github import Github
 from twitchioc.ext import commands
-from datetime import timedelta, datetime, date
+from datetime import timedelta, datetime
 from bs4 import BeautifulSoup
 import requests
 import AdditionalMethods
@@ -24,6 +24,21 @@ import googletrans
 
 # вместо ctx.message.content ctx.message.clean_content, он выводит только текст после комманды
 # использовать ctx.author.display_name, но только там, где ники выводятся
+
+
+def replace_osu(mess):
+    with open('data/osujdau2.txt', 'r', encoding='utf-8') as f:
+        osu = [x for x in f.read().split('\n') if len(x) > 1]
+    res_prov = re.sub(r'\W+', ' ', mess)
+    for word in res_prov.split():
+        for asu in osu:
+            if word.lower().find(asu) != -1:
+                mess = mess.replace(word, '*' * len(word))
+    return mess
+
+
+async def send_whisper(socket, nickname, message):
+    await socket.send_privmsg(config.CHAN, f'/w {nickname} {message}')
 
 
 class CommandsBot(commands.Bot, ABC):
@@ -51,10 +66,10 @@ class CommandsBot(commands.Bot, ABC):
             self.blacklist = [x for x in f.read().split('\n') if len(x) > 1]
         self.genius = lg.Genius("5Pj7QcUoV5Khbd-Hq5jSve8OzCQILJkY8nWojIIxqH30ItpsmXC7UmCRcgjmTVPY")
         print('Blacklist:', self.blacklist)
-    
+
     async def event_command_error(self, ctx, error):
         pass
-    
+
     async def duelent(self, socket):
         i: int = 0
         while len(self.duel_nicknames) == 1 and i < 200:
@@ -72,7 +87,8 @@ class CommandsBot(commands.Bot, ABC):
                     data = json.loads(e.read())
                 randseq = random.choice(data)
                 await socket.send_privmsg(config.CHAN,
-                                          f"{self.duel_nicknames[0]['label']} выстреливает в {randname['label']}{randseq['text']}")
+                                          f"{self.duel_nicknames[0]['label']} выстреливает в {randname['label']}"
+                                          f"{randseq['text']}")
                 if int(randseq['time']) > 1:
                     await asyncio.sleep(0.5)
                     await socket.send_privmsg(config.CHAN, f"/timeout {randname['str_id']} {int(randseq['time']) * 2}")
@@ -85,7 +101,8 @@ class CommandsBot(commands.Bot, ABC):
                 self.duel_nicknames.remove(randname)
                 await asyncio.sleep(8)
                 await socket.send_privmsg(config.CHAN,
-                                          f"Выстрел заставляет {randname['label']} сдаться. Самая быстрая рука дикого запада – {self.duel_nicknames[0]['label']}")
+                                          f"Выстрел заставляет {randname['label']} сдаться. Самая быстрая рука дикого "
+                                          f"запада – {self.duel_nicknames[0]['label']}")
         self.duel_nicknames.clear()
         self.duel_is_running = False
 
@@ -102,27 +119,32 @@ class CommandsBot(commands.Bot, ABC):
         self.roulette_nicknames.clear()
         self.roulette_is_running = False
         self.omgroulette_last_use = time.time()
-    
+
     async def check_mess(self, user, socket, nick):
         try:
-            requests.post(f"https://sl0n.herokuapp.com/stats/{self.initial_channels[0]}", data={'type': 'clear', 'nickname': user}, headers=config.head)
+            requests.post(f"https://sl0n.herokuapp.com/stats/{self.initial_channels[0]}",
+                          data={'type': 'clear', 'nickname': user}, headers=config.head)
             Client_ID = 'kimne78kx3ncx6brgo4mv6wki5h1ko'
             OAUTH = 'l4tt0z3a94edvjo3kbs0c3s4qimpsp'
             url = 'https://api.twitch.tv/gql'
             head = {'Authorization': f'OAuth {OAUTH}', 'Client-ID': Client_ID}
             head_2 = {'Authorization': f'Bearer {OAUTH}', 'Client-ID': Client_ID}
             hash_name = '2c484f8a5ff63f06732707c8ca989083e46b2aa81a03b02e7ac7b9aa9fcba9a2'
-            url_2 = f'https://api.twitch.tv/helix/users?login={nickname}'
+            url_2 = f'https://api.twitch.tv/helix/users?login={user}'
             mess_count = 0
             try:
                 sender = requests.get(url_2, headers=head_2).json()['data'][0]['id']
             except IndexError:
                 sender = 0
-            data_loop = datetime.datetime.today().strftime('%Y-%m-%dT%H:%M:%SZ|0')
+            data_loop = datetime.today().strftime('%Y-%m-%dT%H:%M:%SZ|0')
             while True:
                 try:
-                    json_msg = [{"operationName":"ViewerCardModLogsMessagesBySender","variables":{"senderID":sender,"channelLogin":self.initial_channels[0],"cursor":data_loop,"includeAutoModCaughtMessages":True},"extensions":{"persistedQuery":{"version":1,"sha256Hash":hash_name}}}]
-                    r = requests.post(url, headers=head, json=json_msg).json()[0]['data']['channel']['modLogs']['messagesBySender']['edges']
+                    json_msg = [{"operationName": "ViewerCardModLogsMessagesBySender",
+                                 "variables": {"senderID": sender, "channelLogin": self.initial_channels[0],
+                                               "cursor": data_loop, "includeAutoModCaughtMessages": True},
+                                 "extensions": {"persistedQuery": {"version": 1, "sha256Hash": hash_name}}}]
+                    r = requests.post(url, headers=head, json=json_msg).json()[0]['data']['channel']['modLogs'][
+                        'messagesBySender']['edges']
                     if len(r) == 0:
                         break
                     a = [b['cursor'] for b in r if 'sentAt' in b['node']]
@@ -130,40 +152,29 @@ class CommandsBot(commands.Bot, ABC):
                     mess_count += len(a)
                 except:
                     break
-            requests.post(f"https://sl0n.herokuapp.com/stats/{self.initial_channels[0]}", data={'type': 'add', 'nickname': user, 'count': mess_count}, headers=config.head)
-            await socket.send_privmsg(config.CHAN, f'{nick}, Пользователь {user} написал {mess_count} сообщений в чате!')
+            requests.post(f"https://sl0n.herokuapp.com/stats/{self.initial_channels[0]}",
+                          data={'type': 'add', 'nickname': user, 'count': mess_count}, headers=config.head)
+            await socket.send_privmsg(config.CHAN,
+                                      f'{nick}, Пользователь {user} написал {mess_count} сообщений в чате!')
         except KeyError:
             await socket.send_privmsg(config.CHAN, f'{nick}, попробуйте другой ник WeirdChamp')
-                                      
-    def replace_osu(self, mess):
-        with open('data/osujdau2.txt', 'r', encoding='utf-8') as f:
-            osu = [x for x in f.read().split('\n') if len(x) > 1]
-        res_prov = re.sub(r'\W+', ' ', mess)
-        for word in res_prov.split():
-            for asu in osu:
-                if word.lower().find(asu) != -1:
-                    mess = mess.replace(word, '*' * len(word))
-        return mess
-                                      
+
     def normalize_nick(self, message):
-        for nick in self.names_exp:	
-            for word in message.split():	
-                if str(word).lower().find(str(nick).lower()) != -1:	
+        for nick in self.names_exp:
+            for word in message.split():
+                if str(word).lower().find(str(nick).lower()) != -1:
                     message = message.replace(word, nick)
         return message
 
     async def event_ready(self):
         print(f'Ready {str(self.__class__.__name__)} | {self.nick} on {self.initial_channels[0]}')
         self.seekers = requests.get(config.api_url + f"/seekers", headers=config.head).json()['answer']
-                                      
+
     async def event_raw_data(self, data):
         if data.find('WHISPER') != -1:
             message = data.split('WHISPER')[1].split(':')[1].replace('\r\n', '')
             nick = data.partition(':')[2].partition('!')[0]
-            asyncio.get_event_loop().create_task(self.send_whisper(self._ws, nick, message))
-                                      
-    async def send_whisper(socket, nickname, message):
-        await socket.send_privmsg(config.CHAN, f'/w {nickname} {message}')
+            asyncio.get_event_loop().create_task(send_whisper(self._ws, nick, message))
 
     async def event_message(self, message):
         nickname = message.author.name
@@ -178,7 +189,8 @@ class CommandsBot(commands.Bot, ABC):
             badge = message.author.tags['badges'][:3]
         except KeyError:
             badge = ''
-        if not AdditionalMethods.vip(message.author.is_mod, nickname) and not nickname == "slonb0t" and not badge == 'vip':
+        if not AdditionalMethods.vip(message.author.is_mod,
+                                     nickname) and not nickname == "slonb0t" and not badge == 'vip':
             if len(self.mban_messes) > 20000:
                 del self.mban_messes[0]
             self.mban_messes.append(nickname + "  " + message.content)
@@ -219,8 +231,8 @@ class CommandsBot(commands.Bot, ABC):
                          "messes": self.spammers[nickname]['messes'], "content": message.content}]
 
                 if self.spammers[nickname]["messes"] > 1:
-                    if time.time() - self.spammers[nickname]["time"] < Settings.get_norm() and self.spammers[nickname][
-                        "messes"] == Settings.get_max_messes():
+                    if time.time() - self.spammers[nickname]["time"] < Settings.get_norm() and \
+                            self.spammers[nickname]["messes"] == Settings.get_max_messes():
                         if "warntime" in self.spammers[nickname].keys():
                             if time.time() - self.spammers[nickname]["warntime"] > Settings.get_forget_kd():
                                 self.spammers[nickname]["worned"] = 0
@@ -232,17 +244,22 @@ class CommandsBot(commands.Bot, ABC):
                         stringer = "|--------------------------------------------------|<br>"
                         stringer += nickname + ":<br>"
                         for r in self.spammers[nickname]["log"]:
-                            stringer += f"{r['timenow']}: {r['content']} || time: {r['messtime']} || messes: {r['messes']}<br>"
+                            stringer += f"{r['timenow']}: {r['content']} || time: {r['messtime']} || messes: " \
+                                        f"{r['messes']}<br>"
                         if self.spammers[nickname]["worned"] == Settings.get_attentions():
                             self.spammers[nickname]["worned"] = 0
-                            stringer += f"отлетел на {Settings.get_timeout()} с настройками: |norm: {Settings.get_norm()}, maxmesses: {Settings.get_max_messes()}, emojimode: {Settings.get_mod()}|"
+                            stringer += f"отлетел на {Settings.get_timeout()} с настройками: |norm: " \
+                                        f"{Settings.get_norm()}, maxmesses: {Settings.get_max_messes()}, " \
+                                        f"emojimode: {Settings.get_mod()}|"
                             for f in self.seekers:
                                 await self._ws.send_privmsg(config.CHAN,
                                                             f"/w {f} {nickname} отлетел на {Settings.get_timeout()}")
                             await self._ws.send_privmsg(config.CHAN,
-                                                        f"/timeout {nickname} {Settings.get_timeout()} Spam, automated by SLONB0T")
+                                                        f"/timeout {nickname} {Settings.get_timeout()} Spam, "
+                                                        f"automated by SLONB0T")
                             await self._ws.send_privmsg(config.CHAN,
-                                                        f"/w {nickname} Вы получили слишком много предупреждений и временно отстраняетесь от чата")
+                                                        f"/w {nickname} Вы получили слишком много предупреждений и "
+                                                        f"временно отстраняетесь от чата")
                         else:
                             self.spammers[nickname]["worned"] += 1
                             stringer += f"был предупреждён {self.spammers[nickname]['worned']} из {Settings.get_attentions()} раз с настройками: |norm: {Settings.get_norm()}, maxmesses: {Settings.get_max_messes()}, emojimode: {Settings.get_mod()}|"
@@ -250,7 +267,10 @@ class CommandsBot(commands.Bot, ABC):
                                 await self._ws.send_privmsg(config.CHAN,
                                                             f"/w {f} {nickname} был предупреждён {self.spammers[nickname]['worned']} из {Settings.get_attentions()} раз")
                             await self._ws.send_privmsg(config.CHAN,
-                                                        f"/w {nickname} Вы слишком часто отправляете сообщения на канале {self.initial_channels[0]}, это {self.spammers[nickname]['worned']} из {Settings.get_attentions()} предупреждений!")
+                                                        f"/w {nickname} Вы слишком часто отправляете сообщения на "
+                                                        f"канале {self.initial_channels[0]}, это "
+                                                        f"{self.spammers[nickname]['worned']} из "
+                                                        f"{Settings.get_attentions()} предупреждений!")
                         requests.post(config.api_url + f"/logs",
                                       data={"log": stringer.encode(
                                           "utf-8"), "nickname": nickname, "warns": {self.spammers[nickname]['worned']},
@@ -264,6 +284,7 @@ class CommandsBot(commands.Bot, ABC):
             if not AdditionalMethods.vip(message.author.is_mod, nickname):
                 return
         await self.handle_commands(message)
+
     '''
     @commands.command(name="stat")
     async def stat(self, ctx):
@@ -271,24 +292,29 @@ class CommandsBot(commands.Bot, ABC):
         message = ctx.message.clean_content.replace('@', '').lower()
         if len(message) == 0:
             message = nickname
-        answer = json.loads(requests.get(config.api_url + f"/stats/{self.initial_channels[0]}?nickname={message}", headers=config.head).content.decode("utf-8"))
+        answer = json.loads(requests.get(config.api_url + f"/stats/{self.initial_channels[0]}?nickname={message}", 
+        headers=config.head).content.decode("utf-8"))
         if answer['type'] == 'success':
             if ctx.message.clean_content == "info":
-                AdditionalMethods.add_to_buffer("c", ctx.author.display_name + f", Данные бота актуальны с {answer['start_date']}, сообщения актуальны с 2016 года", ctx.author, "stat")
+                AdditionalMethods.add_to_buffer("c", ctx.author.display_name + f", Данные бота актуальны с 
+                {answer['start_date']}, сообщения актуальны с 2016 года", ctx.author, "stat")
             else:
                 answer_str = ""
                 if 'count' in answer['answer'].keys():
-                    answer_str += "Пользователь " + message + " написал " + str(answer['answer']['count']) + " сообщений в чат | "
+                    answer_str += "Пользователь " + message + " написал " + str(answer['answer']['count']) + " 
+                    сообщений в чат | "
                 if 'watch_time_offline' in answer['answer'].keys():
                     answer_str += "Оффлайн: " + AdditionalMethods.parse_time(answer['answer']['watch_time_offline'] * 60) + " | "
                 if 'watch_time_online' in answer['answer'].keys():
-                    answer_str += "Онлайн: " + AdditionalMethods.parse_time(answer['answer']['watch_time_online'] * 60) + " | "
+                    answer_str += "Онлайн: " + AdditionalMethods.parse_time(answer['answer']['watch_time_online'] * 60)
+                     + " | "
                 AdditionalMethods.add_to_buffer("c", ctx.author.display_name + f", {answer_str[:-3]}", ctx.author, "stat")
         else:
-            AdditionalMethods.add_to_buffer("s",f"{nickname}, {message} не найден, поставлен на сканирование peepoJuiceSpin", ctx.author, "stat")
+            AdditionalMethods.add_to_buffer("s",f"{nickname}, {message} не найден, поставлен на сканирование 
+            peepoJuiceSpin", ctx.author, "stat")
             asyncio.get_event_loop().create_task(self.check_mess(message, self._ws, nickname))
     '''
-    
+
     @commands.command(name='bban')
     async def bban(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
@@ -303,9 +329,11 @@ class CommandsBot(commands.Bot, ABC):
             baned = []
             mess_mass = ' '.join(mess_mass)
             if timeout == 0:
-                AdditionalMethods.add_to_buffer('c', f'{ctx.author.display_name}, mass ban started!', ctx.author, 'bban')
+                AdditionalMethods.add_to_buffer('c', f'{ctx.author.display_name}, mass ban started!', ctx.author,
+                                                'bban')
             else:
-                AdditionalMethods.add_to_buffer('c', f'{ctx.author.display_name}, mass timeout started!', ctx.author, 'bban')
+                AdditionalMethods.add_to_buffer('c', f'{ctx.author.display_name}, mass timeout started!', ctx.author,
+                                                'bban')
             for item in local_mban_messes:
                 r_item = item.split("  ")
                 if r_item[1].find(mess_mass) != -1 and not r_item[0] in baned:
@@ -313,45 +341,54 @@ class CommandsBot(commands.Bot, ABC):
                     if timeout == 0:
                         AdditionalMethods.add_to_buffer('c', f'/ban {r_item[0]} mass ban by SLONB0T', ctx.author, 'cmd')
                     else:
-                        AdditionalMethods.add_to_buffer('c', f'/timeout {r_item[0]} {timeout} mass timeout by SLONB0T', ctx.author, 'cmd')
+                        AdditionalMethods.add_to_buffer('c', f'/timeout {r_item[0]} {timeout} mass timeout by SLONB0T',
+                                                        ctx.author, 'cmd')
                 await asyncio.sleep(0.5)
             count = len(baned)
             if timeout == 0:
-                AdditionalMethods.add_to_buffer('c', f'{ctx.author.display_name}, mass ban finished, banned {count} users. SirMad', ctx.author, 'bban')
+                AdditionalMethods.add_to_buffer('c',
+                                                f'{ctx.author.display_name}, mass ban finished, banned {count} '
+                                                f'users. SirMad',
+                                                ctx.author, 'bban')
             else:
-                AdditionalMethods.add_to_buffer('c', f'{ctx.author.display_name}, mass timeout finished, banned {count} users. SirMad', ctx.author, 'bban')
-                                                        
-    @commands.command(name='кто')	
-    async def kto(self, ctx):	
+                AdditionalMethods.add_to_buffer('c',
+                                                f'{ctx.author.display_name}, mass timeout finished, banned {count} '
+                                                f'users. SirMad',
+                                                ctx.author, 'bban')
+
+    @commands.command(name='кто')
+    async def kto(self, ctx):
         message = ctx.message.clean_content.replace('@', '')[:80]
         random.seed(message.lower())
         name = random.choice(self.namess)
         random.seed()
-        AdditionalMethods.add_to_buffer("e",f'{name} {self.normalize_nick(message)} OpieOP', ctx.author, "кто")
+        AdditionalMethods.add_to_buffer("e", f'{name} {self.normalize_nick(message)} OpieOP', ctx.author, "кто")
 
     @commands.command(name='mute')
     async def mute(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
-            messagee = ctx.message.clean_content.replace('@','')
+            messagee = ctx.message.clean_content.replace('@', '')
             with open('data/blacklist.txt', mode='a', encoding='utf-8') as text:
-                text.write(messagee.lower()+'\n')
+                text.write(messagee.lower() + '\n')
             self.blbl.append(messagee.lower())
-            AdditionalMethods.add_to_buffer("s", f"Пользователь {messagee} теперь в чёрном списке бота!", ctx.author,"mute")
-    
+            AdditionalMethods.add_to_buffer("s", f"Пользователь {messagee} теперь в чёрном списке бота!", ctx.author,
+                                            "mute")
+
     @commands.command(name='unmute')
     async def unmute(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
-            messagee = ctx.message.clean_content.replace('@','')
+            messagee = ctx.message.clean_content.replace('@', '')
             if messagee.lower() in self.blbl:
                 del self.blbl[self.blbl.index(messagee.lower())]
             with open('data/blacklist.txt', mode='r', encoding='utf-8') as textr:
                 text_pre = textr.read()
             if text_pre.find(messagee.lower()) != -1:
-                text_pre = text_pre.replace(messagee.lower()+'\n', '')
+                text_pre = text_pre.replace(messagee.lower() + '\n', '')
             with open('data/blacklist.txt', mode='w', encoding='utf-8') as textw:
                 textw.write(text_pre)
-            AdditionalMethods.add_to_buffer("s", f"Пользователь {messagee} удалён из чёрного списка бота!", ctx.author,"unmute")
-    
+            AdditionalMethods.add_to_buffer("s", f"Пользователь {messagee} удалён из чёрного списка бота!", ctx.author,
+                                            "unmute")
+
     @commands.command(name='seek')
     async def seek(self, ctx):
         try:
@@ -359,18 +396,24 @@ class CommandsBot(commands.Bot, ABC):
                 nickname = ctx.author.name
                 if not nickname in self.seekers:
                     self.seekers.append(nickname)
-                    answer = requests.post(config.api_url + f"/seekers/{self.initial_channels[0]}", data={'nick': nickname, 'enabled': 1}, headers=config.head)
+                    answer = requests.post(config.api_url + f"/seekers/{self.initial_channels[0]}",
+                                           data={'nick': nickname, 'enabled': 1}, headers=config.head)
                     print(answer.content)
                     print(answer.json())
-                    if requests.post(config.api_url + f"/seekers/{self.initial_channels[0]}", data={'nick': nickname, 'enabled': 1}, headers=config.head).json()['type'] == "error":
+                    if requests.post(config.api_url + f"/seekers/{self.initial_channels[0]}",
+                                     data={'nick': nickname, 'enabled': 1}, headers=config.head).json()[
+                        'type'] == "error":
                         AdditionalMethods.add_to_buffer("s",
-                                                        f"Вы подписаны на уведомления о спаме! (это изменение не было сохраненно в постоянную базу данных)",
+                                                        f"Вы подписаны на уведомления о спаме! "
+                                                        f"(это изменение не было сохраненно в постоянную базу данных)",
                                                         ctx.author,
                                                         "seek")
                     else:
-                        AdditionalMethods.add_to_buffer("s", f"Вы подписаны на уведомления о спаме!", ctx.author, "seek")
+                        AdditionalMethods.add_to_buffer("s", f"Вы подписаны на уведомления о спаме!", ctx.author,
+                                                        "seek")
                 else:
-                    AdditionalMethods.add_to_buffer("s", f"Вы уже подписаны на уведомления о спаме ResidentSleeper", ctx.author, "seek")
+                    AdditionalMethods.add_to_buffer("s", f"Вы уже подписаны на уведомления о спаме ResidentSleeper",
+                                                    ctx.author, "seek")
         except Exception as e:
             print(e)
 
@@ -379,13 +422,16 @@ class CommandsBot(commands.Bot, ABC):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
             nickname = ctx.author.name
             if not nickname in self.seekers:
-                AdditionalMethods.add_to_buffer("s", f"Вы не подписаны на уведомления о спаме ResidentSleeper", ctx.author, "unseek")
+                AdditionalMethods.add_to_buffer("s", f"Вы не подписаны на уведомления о спаме ResidentSleeper",
+                                                ctx.author, "unseek")
             else:
                 self.seekers.remove(nickname)
-                if requests.post(config.api_url + f"/seekers/{self.initial_channels[0]}", data={'nick': nickname, 'enabled': 0},
+                if requests.post(config.api_url + f"/seekers/{self.initial_channels[0]}",
+                                 data={'nick': nickname, 'enabled': 0},
                                  headers=config.head).json()['type'] == "error":
                     AdditionalMethods.add_to_buffer("s",
-                                                    f"Вы отписаны от уведомлений о спаме! (это изменение не было сохраненно в постоянную базу данных)",
+                                                    f"Вы отписаны от уведомлений о спаме! (это изменение не было "
+                                                    f"сохраненно в постоянную базу данных)",
                                                     ctx.author,
                                                     "unseek")
                 else:
@@ -395,7 +441,9 @@ class CommandsBot(commands.Bot, ABC):
     async def helpm(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
             AdditionalMethods.add_to_buffer("s",
-                                            f"!bufferdelay [time], !buffermax [int], !entertain [0-1], !settings, !norm [time], !maxmesses [int], !attentions [int], !mode [all,skip,skip_with], !timeout [int], !forget [time]",
+                                            f"!bufferdelay [time], !buffermax [int], !entertain [0-1], !settings, "
+                                            f"!norm [time], !maxmesses [int], !attentions [int], !mode "
+                                            f"[all,skip,skip_with], !timeout [int], !forget [time]",
                                             ctx.author, "helpm")
 
     @commands.command(name='acduel')
@@ -413,22 +461,26 @@ class CommandsBot(commands.Bot, ABC):
     async def duel(self, ctx):
         nickname = ctx.author.display_name
         if not self.duel_is_running and (
-                not AdditionalMethods.check_active() or AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name)) and not self.roulette_is_running:
+                not AdditionalMethods.check_active() or AdditionalMethods.vip(ctx.author.is_mod,
+                                                                              ctx.author.name)) and not \
+                self.roulette_is_running:
             if ctx.author.is_mod:
                 self.duel_serious = False
             else:
                 self.duel_serious = True
             message = ctx.message.clean_content.replace('@', '')
-            if len(message) > 1 and len(message) <= 26 and message.find(" ") == -1:
+            if 1 < len(message) <= 26 and message.find(" ") == -1:
                 self.duel_is_running = True
                 self.duel_nicknames.append({"label": ctx.author.display_name, "str_id": ctx.author.name})
                 self.duel_user = message
                 if nickname.lower() != self.duel_user.lower():
                     await ctx.channel._ws.send_privmsg(config.CHAN,
-                                                       f"{nickname} вызывает на дуэль {message}. Принять вызов –> !acduel")
+                                                       f"{nickname} вызывает на дуэль {message}. Принять вызов "
+                                                       f"–> !acduel")
                 else:
                     await ctx.channel._ws.send_privmsg(config.CHAN,
-                                                       f"{nickname} направил ствол на... самого себя. Если вы уверены, напишите !acduel")
+                                                       f"{nickname} направил ствол на... самого себя. "
+                                                       f"Если вы уверены, напишите !acduel")
                 asyncio.get_event_loop().create_task(self.duelent(self._ws))
             else:
                 await ctx.channel._ws.send_privmsg(config.CHAN,
@@ -447,24 +499,30 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='omgroulette')
     async def omgroulette(self, ctx):
         if not self.roulette_is_running and (
-                (not AdditionalMethods.check_active() and time.time() - self.omgroulette_last_use > self.omgroulette_kd) or AdditionalMethods.vip(
-                    ctx.author.is_mod, ctx.author.name)
-                        ) and not self.duel_is_running:
+                (
+                        not AdditionalMethods.check_active() and time.time() - self.omgroulette_last_use >
+                        self.omgroulette_kd) or AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name)
+        ) and not self.duel_is_running:
             self.roulette_is_running = True
             self.roulette_nicknames.append({"label": ctx.author.display_name, "str_id": ctx.author.name})
             await ctx.channel._ws.send_privmsg(config.CHAN,
-                                               "Рулетка началась! У вас есть 20 секунд! Чтобы учавствовать напишите !accept")
+                                               "Рулетка началась! У вас есть 20 секунд! Чтобы учавствовать "
+                                               "напишите !accept")
             asyncio.get_event_loop().create_task(self.rand(self._ws))
         elif self.duel_is_running:
             AdditionalMethods.add_to_buffer("s", f"{ctx.author.name}, сейчас идёт дуэль", ctx.author, "omgroulette")
         elif self.roulette_is_running:
-            AdditionalMethods.add_to_buffer("s", f"{ctx.author.name}, сейчас уже идёт общая рулетка", ctx.author, "omgroulette")
+            AdditionalMethods.add_to_buffer("s", f"{ctx.author.name}, сейчас уже идёт общая рулетка", ctx.author,
+                                            "omgroulette")
         elif time.time() - self.omgroulette_last_use < self.omgroulette_kd:
-            AdditionalMethods.add_to_buffer("s", f"{ctx.author.name}, эту команду можно использовать только раз в {self.omgroulette_kd} секунд!", ctx.author,
-                "omgroulette")
-                                                       
+            AdditionalMethods.add_to_buffer("s",
+                                            f"{ctx.author.name}, эту команду можно использовать только раз в "
+                                            f"{self.omgroulette_kd} секунд!",
+                                            ctx.author,
+                                            "omgroulette")
+
     @commands.command(name='пирамида')
-    async def piramide(self, ctx):
+    async def pyramid(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
             word = ctx.message.clean_content
             await self._ws.send_privmsg(config.CHAN, "/color Red")
@@ -508,17 +566,18 @@ class CommandsBot(commands.Bot, ABC):
             response = requests.post(url, json={'prompt': words, 'length': '20', 'num_samples': '5'})
             if response.text == "Service Unavailable":
                 AdditionalMethods.add_to_buffer("e",
-                                                f"{nickname}, на данный момент Порфирьевич не работает. Попробуйте позже roflanPominy",
+                                                f"{nickname}, на данный момент Порфирьевич не работает. Попробуйте "
+                                                f"позже roflanPominy",
                                                 ctx.author, "porf")
             else:
                 json_response = response.json()
                 result = json_response['replies'][4]
-                result = self.replace_osu(result)
+                result = replace_osu(result)
                 if len(result) > 40 and len(words) > 30:
                     AdditionalMethods.add_to_buffer("e", f"{nickname}, {result}", ctx.author, "porf")
                 else:
                     AdditionalMethods.add_to_buffer("e", f"{nickname}, {words}{result}", ctx.author, "porf")
-                                                       
+
     @commands.command(name='save')
     async def logs(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
@@ -527,7 +586,7 @@ class CommandsBot(commands.Bot, ABC):
 
             with open(file='data/settings.txt', mode='r', encoding='utf-8') as mm:
                 settings = mm.read()
-                                                       
+
             with open(file='data/blacklist.txt', mode='r', encoding='utf-8') as bl:
                 black = bl.read()
 
@@ -541,7 +600,7 @@ class CommandsBot(commands.Bot, ABC):
             contents1 = repo.get_contents("data/settings.txt")
             repo.delete_file(contents1.path, "", contents1.sha)
             repo.create_file("data/settings.txt", "", settings)
-                                                       
+
             contents1 = repo.get_contents("data/blacklist.txt")
             repo.delete_file(contents1.path, "", contents1.sha)
             repo.create_file("data/blacklist.txt", "", black)
@@ -560,6 +619,7 @@ class CommandsBot(commands.Bot, ABC):
             message = message[1:len(message)]
         AdditionalMethods.add_to_buffer("c", AdditionalMethods.get_last_stream_stat(message, nickname, ctx.author),
                                         ctx.author, "history")
+
     """
     @commands.command(name='archive')
     async def streamh(self, ctx):
@@ -575,10 +635,12 @@ class CommandsBot(commands.Bot, ABC):
                     tag = tag[1:len(tag)]
             else:
                 tag = ''
-            AdditionalMethods.add_to_buffer("c", AdditionalMethods.get_archive_stream_stat(id, nickname, tag, ctx.author).format(nickname, id), ctx.author, "archive")
+            AdditionalMethods.add_to_buffer("c", AdditionalMethods.get_archive_stream_stat(id, nickname, tag, 
+            ctx.author).format(nickname, id), ctx.author, "archive")
         except:
             AdditionalMethods.add_to_buffer("с", f'{nickname} !archive [0-9]', ctx.author, "archive")
     """
+
     @commands.command(name='рецепт')
     async def recept(self, ctx):
         r = requests.get('http://culinar.ivest.kz/randomMenu')
@@ -596,11 +658,13 @@ class CommandsBot(commands.Bot, ABC):
         nickname = ctx.author.display_name
         now = datetime.today() + timedelta(hours=3)
         NY = datetime(2021, 12, 31, 23, 59, 59)
-        d = NY-now
+        d = NY - now
         mm, ss = divmod(d.seconds, 60)
         hh, mm = divmod(mm, 60)
-        AdditionalMethods.add_to_buffer("e", f'{nickname}, До нового года: {d.days} дней {hh} ч. {mm} мин. FeelsRainMan', ctx.author, "нг")
-                                                       
+        AdditionalMethods.add_to_buffer("e",
+                                        f'{nickname}, До нового года: {d.days} дней {hh} ч. {mm} мин. FeelsRainMan',
+                                        ctx.author, "нг")
+
     @commands.command(name='анекдот')
     async def anekdot(self, ctx):
         r = requests.get('http://anecdotica.ru/')
@@ -609,7 +673,7 @@ class CommandsBot(commands.Bot, ABC):
         while len(anekdot) > 100:
             r = requests.get('http://anecdotica.ru/')
             anekdot = BeautifulSoup(r.content, 'lxml').find('div', class_='item_text').get_text()
-        anekdot = self.replace_osu(anekdot)
+        anekdot = replace_osu(anekdot)
         AdditionalMethods.add_to_buffer("e", f'{anekdot} KEKL', ctx.author, "анекдот")
 
     @commands.command(name="перевод")
@@ -618,7 +682,8 @@ class CommandsBot(commands.Bot, ABC):
         message = ctx.message.clean_content
         if len(message) == 0:
             AdditionalMethods.add_to_buffer("с",
-                                            f"{nickname}, cсылка со всеми ключами языков: https://pastebin.com/raw/nk1n1KxD",
+                                            f"{nickname}, cсылка со всеми ключами языков: "
+                                            f"https://pastebin.com/raw/nk1n1KxD",
                                             ctx.author, "перевод")
         else:
             try:
@@ -629,7 +694,7 @@ class CommandsBot(commands.Bot, ABC):
                     resultat = googletrans.Translator().translate(word, src=lang_2, dest=lang).text
                 else:
                     resultat = googletrans.Translator().translate(message, src=lang_2, dest="ru").text
-                resultat = self.replace_osu(resultat)
+                resultat = replace_osu(resultat)
                 if not AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
                     AdditionalMethods.add_to_buffer("с", f"{nickname}, {resultat[:90]}", ctx.author, "перевод")
                 else:
@@ -641,70 +706,95 @@ class CommandsBot(commands.Bot, ABC):
 
     @commands.command(name='курс')
     async def kurs(self, ctx):
+        global userkurs, count
         nickname = ctx.author.display_name
         message = ctx.message.clean_content
         if len(message) == 0:
-            r = requests.get("https://free.currconv.com/api/v7/convert?q=USD_RUB,EUR_RUB&compact=ultra&apiKey=ee315cc429cbc167d4b7").json()
-            r2 = requests.get("https://free.currconv.com/api/v7/convert?q=BTC_RUB,UAH_RUB&compact=ultra&apiKey=ee315cc429cbc167d4b7").json()
+            r = requests.get(
+                "https://free.currconv.com/api/v7/convert?q=USD_RUB,EUR_RUB&compact=ultra&apiKey=ee315cc429cbc167d4b7") \
+                .json()
+            r2 = requests.get(
+                "https://free.currconv.com/api/v7/convert?q=BTC_RUB,UAH_RUB&compact=ultra&apiKey=ee315cc429cbc167d4b7") \
+                .json()
             print(r, r2)
             today = (datetime.now() + timedelta(hours=3)).strftime("%d.%m")
             try:
-                kurs = f'Курс валют на {today}: USD = {round(r["USD_RUB"], 2)} RUB | EUR = {round(r["EUR_RUB"], 2)} RUB | BTC = {round(r2["BTC_RUB"])} RUB | UAH = {round(r2["UAH_RUB"], 2)} RUB'
+                kurs = f'Курс валют на {today}: USD = {round(r["USD_RUB"], 2)} RUB | EUR = {round(r["EUR_RUB"], 2)} ' \
+                       f'RUB | BTC = {round(r2["BTC_RUB"])} RUB | UAH = {round(r2["UAH_RUB"], 2)} RUB'
                 AdditionalMethods.add_to_buffer("с", kurs, ctx.author, "курс")
             except KeyError:
-                AdditionalMethods.add_to_buffer("с", f"{nickname}, не удаётся получить курс валют, попробуйте позже Waiting", ctx.author, "курс")
+                AdditionalMethods.add_to_buffer("с",
+                                                f"{nickname}, не удаётся получить курс валют, попробуйте позже Waiting",
+                                                ctx.author, "курс")
         else:
             try:
                 userkurs = message.split()[0]
                 count = message.split()[1]
             except:
                 AdditionalMethods.add_to_buffer("с", f"{nickname}, введите число PepoG", ctx.author, "курс")
-            json_r = requests.get(f"https://free.currconv.com/api/v7/convert?q={userkurs.replace('-', '_')}&compact=ultra&apiKey=ee315cc429cbc167d4b7").json()
+            json_r = requests.get(
+                f"https://free.currconv.com/api/v7/convert?q={userkurs.replace('-', '_')}&compact=ultra&apiKey"
+                f"=ee315cc429cbc167d4b7").json()
             if len(json_r) == 0:
-                AdditionalMethods.add_to_buffer("с", f"{nickname}, неправильно введены валюты. Вводите в международном формате (USD-RUB, RUB-JPY)", ctx.author, "курс")
+                AdditionalMethods.add_to_buffer("с",
+                                                f"{nickname}, неправильно введены валюты. Вводите в международном "
+                                                f"формате (USD-RUB, RUB-JPY)",
+                                                ctx.author, "курс")
             else:
                 try:
                     res = userkurs.replace("-", "_").upper()
                     one = userkurs.split("-")[0]
                     two = userkurs.split("-")[1]
-                    AdditionalMethods.add_to_buffer("с", f"{nickname}, {count} {one.upper()} = {round(json_r[res] * float(count), 2)} {two.upper()}", ctx.author, "курс")
+                    AdditionalMethods.add_to_buffer("с",
+                                                    f"{nickname}, {count} {one.upper()} = {round(json_r[res] * float(count), 2)} {two.upper()}",
+                                                    ctx.author, "курс")
                 except KeyError:
-                    AdditionalMethods.add_to_buffer("с",f"{nickname}, произошла ошибка конвертации. Скорее всего вы неправильно написали валюты. PepoG", ctx.author, "курс")
+                    AdditionalMethods.add_to_buffer("с",
+                                                    f"{nickname}, произошла ошибка конвертации. Скорее всего вы "
+                                                    f"неправильно написали валюты. PepoG",
+                                                    ctx.author, "курс")
 
     @commands.command(name='clipever')
     async def topclipever(self, ctx):
         nickname = ctx.author.display_name
         message = ctx.message.clean_content.replace('@', '')
-        AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(0, message, nickname), ctx.author, "clip")
+        AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(0, message, nickname), ctx.author,
+                                        "clip")
 
     @commands.command(name='clipyear')
     async def topclipyear(self, ctx):
         nickname = ctx.author.display_name
         message = ctx.message.clean_content.replace('@', '')
-        AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(365, message, nickname), ctx.author, "clip")
+        AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(365, message, nickname), ctx.author,
+                                        "clip")
 
     @commands.command(name='clipweek')
     async def topclipweek(self, ctx):
         nickname = ctx.author.display_name
         message = ctx.message.clean_content.replace('@', '')
-        AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(7, message, nickname), ctx.author, "clip")
+        AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(7, message, nickname), ctx.author,
+                                        "clip")
 
     @commands.command(name='clipmonth')
     async def topclipmonth(self, ctx):
         nickname = ctx.author.display_name
         message = ctx.message.clean_content.replace('@', '')
-        AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(30, message, nickname), ctx.author, "clip")
+        AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(30, message, nickname), ctx.author,
+                                        "clip")
 
     @commands.command(name='cliptoday')
     async def topclipday(self, ctx):
         nickname = ctx.author.display_name
         message = ctx.message.clean_content.replace('@', '')
-        AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(1, message, nickname), ctx.author, "clip")
+        AdditionalMethods.add_to_buffer("c", await AdditionalMethods.gettopclip(1, message, nickname), ctx.author,
+                                        "clip")
 
     @commands.command(name='abbreviations')
     async def abbreviations(self, ctx):
         nickname = ctx.author.display_name
-        AdditionalMethods.add_to_buffer("c", f"{nickname} Здесь вы можете посмотреть все доступные аббревиатуры для clip {config.abreviationsUrl}",
+        AdditionalMethods.add_to_buffer("c",
+                                        f"{nickname} Здесь вы можете посмотреть все доступные аббревиатуры для clip "
+                                        f"{config.abreviationsUrl}",
                                         ctx.author, "abbreviations")
 
     @commands.command(name='iq')
@@ -719,7 +809,8 @@ class CommandsBot(commands.Bot, ABC):
         else:
             if 110 > iq > 70:
                 AdditionalMethods.add_to_buffer("e",
-                                                f"{nickname}, ваш IQ = {str(iq)}! Надо же, у стримера больше IQ чем у вас KeK",
+                                                f"{nickname}, ваш IQ = {str(iq)}! Надо же, у стримера больше "
+                                                f"IQ чем у вас KeK",
                                                 ctx.author, "iq")
             if 110 < iq < 135:
                 AdditionalMethods.add_to_buffer("e",
@@ -727,11 +818,13 @@ class CommandsBot(commands.Bot, ABC):
                                                 ctx.author, "iq")
             if iq < 70:
                 AdditionalMethods.add_to_buffer("e",
-                                                f"{nickname}, ваш IQ = {str(iq)}! Чел... сходи книгу почитай WeirdChamp",
+                                                f"{nickname}, ваш IQ = {str(iq)}! Чел... сходи книгу почитай "
+                                                f"WeirdChamp",
                                                 ctx.author, "iq")
             if iq >= 135:
                 AdditionalMethods.add_to_buffer("e",
-                                                f"{nickname}, ваш IQ = {str(iq)}! Внимание! В чате гений WAYTOOSMART Clap",
+                                                f"{nickname}, ваш IQ = {str(iq)}! Внимание! В чате гений "
+                                                f"WAYTOOSMART Clap",
                                                 ctx.author, "iq")
 
     @commands.command(name='заебало')
@@ -756,13 +849,15 @@ class CommandsBot(commands.Bot, ABC):
     @commands.command(name='pastа')
     async def pasta(self, ctx):
         if AdditionalMethods.vip(ctx.author.is_mod, ctx.author.name):
-            AdditionalMethods.add_to_buffer("e", AdditionalMethods.parse_simplefile_message("{}", "nadya")[:499], ctx.author, "pastа")
+            AdditionalMethods.add_to_buffer("e", AdditionalMethods.parse_simplefile_message("{}", "nadya")[:499],
+                                            ctx.author, "pastа")
 
     @commands.command(name='help')
     async def help(self, ctx):
         nickname = ctx.author.display_name
         AdditionalMethods.add_to_buffer("c",
-                                        f"catJAM Ку, {nickname}, со списком команд можешь ознакомиться здесь {config.helpUrl} catJAM",
+                                        f"catJAM Ку, {nickname}, со списком команд можешь ознакомиться здесь "
+                                        f"{config.helpUrl} catJAM",
                                         ctx.author, "help")
 
     @commands.command(name='settings')
@@ -777,7 +872,10 @@ class CommandsBot(commands.Bot, ABC):
                 AdditionalMethods.add_to_buffer("s", f"Настройки пустые", ctx.author, "settings")
             else:
                 AdditionalMethods.add_to_buffer("s",
-                                                f"max: {data['buffermax']}, delay: {data['bufferdelay']}, entertain: {data['entertain']}, norm: {data['norm']}, maxmesses: {data['maxmesses']}, attentions: {data['attentions']}, emojimode: {data['emojimode']}, timeout: {data['timeout']}",
+                                                f"max: {data['buffermax']}, delay: {data['bufferdelay']}, entertain: "
+                                                f"{data['entertain']}, norm: {data['norm']}, maxmesses: "
+                                                f"{data['maxmesses']}, attentions: {data['attentions']}, "
+                                                f"emojimode: {data['emojimode']}, timeout: {data['timeout']}",
                                                 ctx.author, "settings")
 
     @commands.command(name='bufferdelay')
@@ -931,7 +1029,9 @@ class CommandsBot(commands.Bot, ABC):
         message = ctx.message.clean_content.replace('@', '')[:80]
         nickname = ctx.author.display_name
         if len(message) != 0:
-            result = AdditionalMethods.parse_standartfile_message(nickname, "{nickname} попробовал {messagestr}... {filestr}", self.normalize_nick(message), "!try", "try")
+            result = AdditionalMethods.parse_standartfile_message(nickname,
+                                                                  "{nickname} попробовал {messagestr}... {filestr}",
+                                                                  self.normalize_nick(message), "!try", "try")
             AdditionalMethods.add_to_buffer("e", result, ctx.author, "try")
 
     @commands.command(name='время')
@@ -946,7 +1046,9 @@ class CommandsBot(commands.Bot, ABC):
             url = "http://search.maps.sputnik.ru/search?q="
             response = requests.get(url + quote(loc))
             if response.text.find('"found":0') != -1:
-                AdditionalMethods.add_to_buffer("e", f"{nickname}, не найден населённый пункт. Попробуйте другое название.", ctx.author, "время")
+                AdditionalMethods.add_to_buffer("e",
+                                                f"{nickname}, не найден населённый пункт. Попробуйте другое название.",
+                                                ctx.author, "время")
             else:
                 try:
                     position = response.json()['result'][0]['position']
@@ -956,24 +1058,31 @@ class CommandsBot(commands.Bot, ABC):
                     dt_object = datetime.fromtimestamp(timestamp)
                     date = dt_object.strftime("%H:%M")
                     location = response.json()['result'][0]['title']
-                    AdditionalMethods.add_to_buffer("e", f"{nickname}, чичас {date} в «{location}» Waiting", ctx.author, "время")
+                    AdditionalMethods.add_to_buffer("e", f"{nickname}, чичас {date} в «{location}» Waiting", ctx.author,
+                                                    "время")
                 except:
-                    AdditionalMethods.add_to_buffer("e", f"{nickname}, не удалось найти время для этого населённого пункта", ctx.author, "время")
-    
+                    AdditionalMethods.add_to_buffer("e",
+                                                    f"{nickname}, не удалось найти время для этого населённого пункта",
+                                                    ctx.author, "время")
+
     @commands.command(name='обнять')
     async def hug(self, ctx):
         message = ctx.message.clean_content.replace('@', '')[:80]
         nickname = ctx.author.display_name
         if len(message) != 0:
-            result = AdditionalMethods.parse_standartfile_message(nickname, "{nickname} {filestr} обнимает {messagestr} VoHiYo", self.normalize_nick(message), "!обнять", "hug")
+            result = AdditionalMethods.parse_standartfile_message(nickname,
+                                                                  "{nickname} {filestr} обнимает {messagestr} VoHiYo",
+                                                                  self.normalize_nick(message), "!обнять", "hug")
             AdditionalMethods.add_to_buffer("e", result, ctx.author, "обнять")
 
     @commands.command(name='когда')
-    async def kogda(self, ctx):
+    async def when(self, ctx):
         message = ctx.message.clean_content.replace('@', '')[:80]
         nickname = ctx.author.display_name
         if len(message) != 0:
-            result = AdditionalMethods.parse_standartfile_message(nickname, "{nickname}, когда {messagestr}? Thonk {filestr}", self.normalize_nick(message), "!когда", "kogda")
+            result = AdditionalMethods.parse_standartfile_message(nickname,
+                                                                  "{nickname}, когда {messagestr}? Thonk {filestr}",
+                                                                  self.normalize_nick(message), "!когда", "kogda")
             AdditionalMethods.add_to_buffer("e", result, ctx.author, "когда")
 
     @commands.command(name='привет')
@@ -981,17 +1090,21 @@ class CommandsBot(commands.Bot, ABC):
         message = ctx.message.clean_content.replace('@', '')[:80]
         nickname = ctx.author.display_name
         if len(message) != 0:
-            result = AdditionalMethods.parse_standartfile_message(nickname, "{nickname} {filestr} приветствует {messagestr} peepoHey peepoLove", self.normalize_nick(message), "!привет", "privet")
+            result = AdditionalMethods.parse_standartfile_message(nickname,
+                                                                  "{nickname} {filestr} приветствует {messagestr} "
+                                                                  "peepoHey peepoLove",
+                                                                  self.normalize_nick(message), "!привет", "privet")
             AdditionalMethods.add_to_buffer("e", result, ctx.author, "привет")
 
     @commands.command(name='гороскоп')
     async def goroskop(self, ctx):
-        AdditionalMethods.add_to_buffer("s", AdditionalMethods.get_goroskop(ctx.message.content, ctx.author.display_name), ctx.author, "гороскоп")
+        AdditionalMethods.add_to_buffer("s",
+                                        AdditionalMethods.get_goroskop(ctx.message.content, ctx.author.display_name),
+                                        ctx.author, "гороскоп")
 
     @commands.command(name='music')
     async def music(self, ctx):
         try:
-            nick = ctx.author.display_name
             message = ctx.message.clean_content.replace('@', '')
             if len(message) != 0:
                 mess = message.split()
@@ -1012,7 +1125,7 @@ class CommandsBot(commands.Bot, ABC):
                         for strr in stroka.split():
                             for prip in pripev:
                                 if stroka.find(f'[{prip}') != -1:
-                                    res = res[res.index(stroka)+1:]
+                                    res = res[res.index(stroka) + 1:]
                                     flag = True
                                     break
                             if flag:
@@ -1021,12 +1134,13 @@ class CommandsBot(commands.Bot, ABC):
                             break
                     res = [x for x in [re.sub(r'[\[].*?[\]]', '', i) for i in res] if len(x) > 1]
                     res = emote.join(res[:3])
-                    res = self.replace_osu(res)
+                    res = replace_osu(res)
                     AdditionalMethods.add_to_buffer("e", f'{emote} {res[:180]} {emote}', ctx.author, 'music')
         except AttributeError:
             pass
         except TypeError:
             pass
+
 
 # subprocess.Popen([sys.executable, 'ChatBot.py'])
 subprocess.Popen([sys.executable, 'BufferCleaner.py'])
