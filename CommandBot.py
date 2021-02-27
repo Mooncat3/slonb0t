@@ -154,10 +154,16 @@ class CommandsBot(commands.Bot, ABC):
 
     async def event_ready(self):
         print(f'Ready {str(self.__class__.__name__)} | {self.nick} on {self.initial_channels[0]}')
-        await self.synch()
-
-    async def synch(self):
         self.seekers = requests.get(config.api_url + f"/seekers", headers=config.head).json()['answer']
+                                      
+    async def event_raw_data(self, data):
+        if data.find('WHISPER') != -1:
+            message = data.split('WHISPER')[1].split(':')[1].replace('\r\n', '')
+            nick = data.partition(':')[2].partition('!')[0]
+            asyncio.get_event_loop().create_task(self.send_whisper(self._ws, nick, message))
+                                      
+    async def send_whisper(socket, nickname, message):
+        await socket.send_privmsg(config.CHAN, f'/w {nickname} {message}')
 
     async def event_message(self, message):
         nickname = message.author.name
@@ -1022,7 +1028,7 @@ class CommandsBot(commands.Bot, ABC):
         except TypeError:
             pass
 
-subprocess.Popen([sys.executable, 'ChatBot.py'])
+# subprocess.Popen([sys.executable, 'ChatBot.py'])
 subprocess.Popen([sys.executable, 'BufferCleaner.py'])
 subprocess.Popen([sys.executable, 'CheckingStreamThread.py'])
 bot = CommandsBot()
