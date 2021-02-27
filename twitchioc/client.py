@@ -3,7 +3,7 @@
 """
 The MIT License (MIT)
 
-Copyright (c) 2017-2019 TwitchIO
+Copyright (c) 2017-2021 TwitchIO
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the "Software"),
@@ -28,12 +28,12 @@ import asyncio
 from collections import namedtuple
 from typing import Union
 
-from twitchioc.errors import HTTPException
-from twitchioc.http import HTTPSession
+from twitchio.errors import HTTPException
+from twitchio.http import HTTPSession
 
 
 User = namedtuple('User', ('id', 'login', 'display_name', 'type', 'broadcaster_type', 'description',
-                           'profile_image', 'offline_image', 'view_count'))
+                           'profile_image', 'offline_image', 'view_count', 'created_at'))
 Chatters = namedtuple('Chatters', ('count', 'all', 'broadcaster', 'vips', 'moderators', 'staff',
                                    'admins', 'global_mods', 'viewers'))
 

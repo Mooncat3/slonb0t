@@ -3,7 +3,7 @@
 """
 The MIT License (MIT)
 
-Copyright (c) 2017-2019 TwitchIO
+Copyright (c) 2017-2021 TwitchIO
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the "Software"),
@@ -27,7 +27,7 @@ DEALINGS IN THE SOFTWARE.
 __all__ = ('CommandError', 'CommandNotFound', 'MissingRequiredArgument', 'BadArgument', 'CheckFailure',)
 
 
-from twitchioc.errors import TwitchIOBException
+from twitchio.errors import TwitchIOBException
 
 
 class CommandError(TwitchIOBException):

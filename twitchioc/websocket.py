@@ -3,7 +3,7 @@
 """
 The MIT License (MIT)
 
-Copyright (c) 2017-2019 TwitchIO
+Copyright (c) 2017-2021 TwitchIO
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the "Software"),
@@ -241,7 +241,7 @@ class WebsocketConnection:
 
         Sends a PRIVMSG to the Twitch IRC Endpoint.
 
-        This should only be used directly in rare circumstances where a :class:`twitchioc.abcs.Messageable` is not available.
+        This should only be used directly in rare circumstances where a :class:`twitchio.abcs.Messageable` is not available.
 
         .. warning::
 
@@ -405,7 +405,7 @@ class WebsocketConnection:
             tagdict = {}
             for tag in str(tags).split(";"):
                 t = tag.split("=")
-                if t[1].isnumeric():
+                if t[1].isdecimal():
                     t[1] = int(t[1])
                 tagdict[t[0]] = t[1]
             tags = tagdict
@@ -540,6 +540,14 @@ class WebsocketConnection:
 
             await self._dispatch('mode', channel, user, mstatus)
 
+        elif action == 'CLEARCHAT': #新增 被ban事件
+            log.debug('ACTION:: CLEARCHAT')
+
+            user = User(author=content, channel=channel, tags=tags, ws=self._websocket)
+            notice = ClearChat(channel=channel, user=user, tags=tags)
+
+            await self._dispatch('clearchat', notice)
+
     async def join_action(self, channel: str, author: str, tags):
         log.debug('ACTION:: JOIN: %s', channel)
 
@@ -549,13 +557,16 @@ class WebsocketConnection:
 
             self._channel_cache[channel] = {'channel': chan_, 'bot': user}
 
-            if self._pending_joins:
+            if channel in self._pending_joins:
                 self._pending_joins[channel].set_result(None)
                 self._pending_joins.pop(channel)
 
             self._channel_token += 1
 
-        cache = self._channel_cache[channel]['channel']._users
+        try:
+            cache = self._channel_cache[channel]['channel']._users
+        except KeyError as e:
+            raise ClientError("The \"nick\" value passed to the constructor does not match the user we are logged in as") from e
 
         try:
             user = cache[author.lower()]
@@ -612,10 +623,8 @@ class WebsocketConnection:
         traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
 
     def teardown(self):
-        """
         if self._bot._webhook_server:
             self._bot._webhook_server.stop()
-        """
 
         self._websocket.close()
 

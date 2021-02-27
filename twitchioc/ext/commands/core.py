@@ -3,7 +3,7 @@
 """
 The MIT License (MIT)
 
-Copyright (c) 2017-2019 TwitchIO
+Copyright (c) 2017-2021 TwitchIO
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the "Software"),
@@ -146,7 +146,7 @@ class Command:
 
         Raises
         --------
-        twitchioc.TwitchIOBException
+        twitchio.TwitchIOBException
             The func is not a coroutine function.
         """
         if not inspect.iscoroutinefunction(func):
@@ -168,7 +168,7 @@ class Command:
 
         Raises
         --------
-        twitchioc.TwitchIOBException
+        twitchio.TwitchIOBException
             The func is not a coroutine function.
         """
         if not inspect.iscoroutinefunction(func):
@@ -190,7 +190,7 @@ class Command:
 
         Raises
         --------
-        twitchioc.TwitchIOBException
+        twitchio.TwitchIOBException
             The func is not a coroutine function.
         """
         if not inspect.iscoroutinefunction(func):
