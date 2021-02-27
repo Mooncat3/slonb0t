@@ -24,7 +24,7 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
 
-__title__ = 'twitchio'
+__title__ = 'twitchioc'
 __author__ = 'TwitchIO'
 __license__ = 'MIT'
 __copyright__ = 'Copyright 2017-2021 TwitchIO'
