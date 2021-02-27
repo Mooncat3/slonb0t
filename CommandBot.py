@@ -1129,13 +1129,10 @@ class CommandsBot(commands.Bot, ABC):
                         pripev = [x for x in f.read().split('\n') if len(x) > 1]
                     flag = False
                     for stroka in res:
-                        for strr in stroka.split():
-                            for prip in pripev:
-                                if stroka.find(f'[{prip}') != -1:
-                                    res = res[res.index(stroka) + 1:]
-                                    flag = True
-                                    break
-                            if flag:
+                        for prip in pripev:
+                            if stroka.find(f'[{prip}') != -1:
+                                res = res[res.index(stroka) + 1:]
+                                flag = True
                                 break
                         if flag:
                             break
