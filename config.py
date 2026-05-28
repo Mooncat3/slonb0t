@@ -1,14 +1,16 @@
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
 
-CHAN = "JesusAVGN"
+CHAN = os.getenv("CHAN", "JesusAVGN")
 
-
-BROADCASTER_ID = "34711476"
-OAUTH = "s275j59dh4jsctiazoearlkjl9agjl"
-CLIENT_ID = "gp762nuuoqcoxypju8c569th9wz7q5"
-BOT = "SLONB0T"
+BROADCASTER_ID = os.getenv("BROADCASTER_ID", "34711476")
+OAUTH = os.getenv("OAUTH")
+CLIENT_ID = os.getenv("CLIENT_ID")
+BOT = os.getenv("BOT", "SLONB0T")
 CHANNELS = [f'{CHAN}']
-head = {"Authorization": "04UPxz9f"}
+head = {"Authorization": os.getenv("INTERNAL_API_KEY", "")}
 buferchanged = False
 istopcliprunning = False
 helpUrl = "https://pastebin.com/raw/837UKBqp"
